@@ -18,14 +18,14 @@
 
     <!-- Page Init -->
     <script type="module">
-        import Page from "/src/foundation/Page.js";
-        import PalettePage from "/pages/PalettePage.html.js"
+        import Page from "./src/foundation/Page.js";
+        import PalettePage from "./pages/PalettePage.html.js"
 
         let pageHolder = document.getElementById('app');
 
-        let mainPage = new Page('/pages/MainPage.html', pageHolder);
-        let aboutPage = new Page('/pages/AboutPage.html', pageHolder);
-        let palettePage = new PalettePage('/pages/PalettePage.html', pageHolder);
+        let mainPage = new Page('./pages/MainPage.html', pageHolder);
+        let aboutPage = new Page('./pages/AboutPage.html', pageHolder);
+        let palettePage = new PalettePage('./pages/PalettePage.html', pageHolder);
 
         window.ROUTES = {
             '/': mainPage,

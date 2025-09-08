@@ -1,6 +1,8 @@
 export default class Page {
     constructor(filePath) {
-        this.filePath = filePath;
+        // Определяем правильный путь для GitHub Pages
+        const basePath = window.location.hostname.includes('github.io') ? '/Pureper/' : './';
+        this.filePath = filePath.startsWith('./') ? filePath : basePath + filePath;
     }
 
     get path() {
@@ -13,8 +15,16 @@ export default class Page {
     }
 
     async render(element) {
-        const response = await fetch(this.filePath);
-        const html = await response.text();
-        element.innerHTML = html;
+        try {
+            const response = await fetch(this.filePath);
+            if (!response.ok) {
+                throw new Error(`Failed to load ${this.filePath}: ${response.status}`);
+            }
+            const html = await response.text();
+            element.innerHTML = html;
+        } catch (error) {
+            console.error('Error loading page:', error);
+            element.innerHTML = '<h1>Error loading page</h1>';
+        }
     }
 }

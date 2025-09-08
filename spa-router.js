@@ -5,7 +5,7 @@
 // Определяем среду и тип роутинга
 const IS_GITHUB_PAGES = window.location.hostname.includes('github.io');
 const BASE_PATH = IS_GITHUB_PAGES ? '/Pureper' : '';
-const USE_HASH_ROUTING = !IS_GITHUB_PAGES; // Используем хеш-роутинг в локальной среде
+const USE_HASH_ROUTING = false; // Всегда используем обычную маршрутизацию
 
 function normalizePath(path) {
   // Убираем базовый путь для внутренней маршрутизации
@@ -20,13 +20,19 @@ function getCurrentPath() {
     // В локальной среде читаем путь из хеша
     return window.location.hash.slice(1) || '/';
   } else {
-    // На GitHub Pages используем обычный pathname
+    // Используем обычный pathname
     return normalizePath(window.location.pathname);
   }
 }
 
 function getPage(path) {
   const routes = window.ROUTES;
+  
+  // Проверяем, что routes определен
+  if (!routes) {
+    console.error('Routes not defined');
+    return null;
+  }
   
   // Проверяем точное совпадение маршрута
   if (routes[path]) {
@@ -43,7 +49,7 @@ function navigate(path) {
     // В локальной среде используем хеш
     window.location.hash = path;
   } else {
-    // На GitHub Pages используем history API
+    // Используем history API
     const fullPath = BASE_PATH + path;
     if (location.pathname !== fullPath) {
       history.pushState({}, '', fullPath);
@@ -55,10 +61,20 @@ function navigate(path) {
 async function loadPage(path) {
   const app = document.getElementById('app');
   const page = getPage(path);
-  await page.preLoadJS(app);
-  await page.render(app);
-  await page.postLoadJS(app);
-  window.scrollTo(0, 0);
+  
+  if (!page) {
+    console.error('Page not found for path:', path);
+    return;
+  }
+  
+  try {
+    await page.preLoadJS(app);
+    await page.render(app);
+    await page.postLoadJS(app);
+    window.scrollTo(0, 0);
+  } catch (error) {
+    console.error('Error loading page:', error);
+  }
 }
 
 // Обработчики событий
@@ -69,7 +85,7 @@ if (USE_HASH_ROUTING) {
     loadPage(currentPath);
   });
 } else {
-  // На GitHub Pages слушаем popstate
+  // Слушаем popstate для обычной маршрутизации
   window.addEventListener('popstate', () => {
     const currentPath = getCurrentPath();
     loadPage(currentPath);
@@ -92,20 +108,32 @@ window.addEventListener('DOMContentLoaded', () => {
   console.log('Router: IS_GITHUB_PAGES =', IS_GITHUB_PAGES);
   console.log('Router: USE_HASH_ROUTING =', USE_HASH_ROUTING);
   console.log('Router: BASE_PATH =', BASE_PATH);
+  console.log('Router: location.pathname =', window.location.pathname);
+  console.log('Router: location.search =', window.location.search);
   
   const currentPath = getCurrentPath();
   console.log('Router: current path =', currentPath);
   
-  const routes = window.ROUTES;
-  console.log('Router: available routes =', Object.keys(routes));
+  // Ждем, пока ROUTES будет определен
+  const checkRoutes = () => {
+    const routes = window.ROUTES;
+    if (routes) {
+      console.log('Router: available routes =', Object.keys(routes));
+      
+      if (!routes[currentPath] && currentPath !== '/') {
+        // Если маршрут не найден и это не главная страница,
+        // перенаправляем на главную
+        console.warn(`Unknown route "${currentPath}", redirecting to home`);
+        navigate('/');
+      } else {
+        console.log('Router: loading page for path =', currentPath);
+        loadPage(currentPath);
+      }
+    } else {
+      console.log('Router: waiting for ROUTES to be defined...');
+      setTimeout(checkRoutes, 10);
+    }
+  };
   
-  if (!routes[currentPath] && currentPath !== '/') {
-    // Если маршрут не найден и это не главная страница,
-    // перенаправляем на главную
-    console.warn(`Unknown route "${currentPath}", redirecting to home`);
-    navigate('/');
-  } else {
-    console.log('Router: loading page for path =', currentPath);
-    loadPage(currentPath);
-  }
+  checkRoutes();
 });

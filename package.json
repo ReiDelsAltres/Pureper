@@ -1,0 +1,12 @@
+{
+  "name": "pureper",
+  "version": "1.0.0",
+  "description": "Color palette application",
+  "scripts": {
+    "start": "node serve.js",
+    "dev": "node serve.js"
+  },
+  "keywords": ["color", "palette", "spa"],
+  "author": "",
+  "license": "MIT"
+}
