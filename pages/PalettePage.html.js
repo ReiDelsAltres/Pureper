@@ -1,7 +1,8 @@
 // PalettePage.html.js
 // This script is loaded when PalettePage.html is injected by the SPA router
 import { ColorPalettes, setActualPalette } from "../src/foundation/theme/ColorPalettes.js";
-import Page from "../src/foundation/Page.js";
+// Using globally registered Page (set in src/foundation/globals.js)
+const Page = globalThis.Page;
 
 export default class PalettePage extends Page {
   async postLoadJS(element) {

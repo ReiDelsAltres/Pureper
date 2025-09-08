@@ -1,4 +1,5 @@
-import Component from '../src/foundation/Component.js';
+// Using globally registered Component (set in src/foundation/globals.js)
+const Component = globalThis.Component;
 
 class NavigationDrawer extends Component {
     static get observedAttributes() {

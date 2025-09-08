@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>index.html</title>
 
-        <script type="module" src="spa-router.js"></script>
+    <script type="module" src="spa-router.js"></script>
+    <script type="module" src="src/foundation/globals.js"></script>
 
     <!-- Puppet Init -->
     <link rel="stylesheet" href="src/foundation/theme/Theme.css">
@@ -20,7 +21,7 @@
 
     <!-- Page Init -->
     <script type="module">
-        import Page from "./src/foundation/Page.js";
+        const Page = globalThis.Page;
         import PalettePage from "./pages/PalettePage.html.js"
 
         let pageHolder = document.getElementById('app');
