@@ -29,10 +29,11 @@ export default class Component extends HTMLElement {
           // Корректируем путь к CSS файлу для GitHub Pages
           if (link.rel === 'stylesheet') {
             const href = link.getAttribute('href');
-            if (href && !href.startsWith('http') && !href.startsWith('//')) {
+            if (href && !href.startsWith('http') && !href.startsWith('//') && !href.startsWith('/')) {
+              // Если это относительный путь без префикса, добавляем нужный базовый путь
               const basePath = window.location.hostname.includes('github.io') ? '/Pureper/' : './';
-              const correctedHref = href.startsWith('./') ? href : basePath + href;
-              link.setAttribute('href', correctedHref);
+              const componentDir = fullPath.substring(0, fullPath.lastIndexOf('/') + 1);
+              link.setAttribute('href', componentDir + href);
             }
           }
           shadow.appendChild(link);
