@@ -1,0 +1,9 @@
+{
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.html": "${capture}.html.css, ${capture}.html.js"
+    },
+    "editor.language.colorizedBracketPairs": [
+        
+    ]
+}

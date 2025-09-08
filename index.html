@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index.html</title>
+
+    <!-- Puppet Init -->
+    <link rel="stylesheet" href="src/foundation/theme/Theme.css">
+    <!-- Puppet Init -->
+
+    <!-- Component Init -->
+    <script type="module" src="components/ColorPalette.html.js" defer></script>
+    <script type="module" src="components/NavigationDrawer.html.js" defer></script>
+    <script type="module" src="components/PageLayout.html.js" defer></script>
+    <!-- Component Init -->
+
+    <!-- Page Init -->
+    <script type="module">
+        import Page from "/src/foundation/Page.js";
+        import PalettePage from "/pages/PalettePage.html.js"
+
+        let pageHolder = document.getElementById('app');
+
+        let mainPage = new Page('/pages/MainPage.html', pageHolder);
+        let aboutPage = new Page('/pages/AboutPage.html', pageHolder);
+        let palettePage = new PalettePage('/pages/PalettePage.html', pageHolder);
+
+        window.ROUTES = {
+            '/': mainPage,
+            '/about': aboutPage,
+            '/palette': palettePage
+        }
+    </script>
+    <!-- Page Init -->
+
+    <script type="module">
+        import { initThemeCssVariables } from "./src/foundation/theme/ColorPalettes.js";
+        initThemeCssVariables();
+    </script>
+    <script type="module" src="spa-router.js"></script>
+</head>
+
+<body>
+    <page-layout>
+        <navigation-drawer slot="navigation">
+            <span slot="header">Menu</span>
+            <li><a href="/" data-link>Home</a></li>
+            <li><a href="/palette" data-link>Palettes</a></li>
+            <li><a href="/about" data-link>About</a></li>
+        </navigation-drawer>
+
+        <div slot="main-content">
+            <main id="app"></main>
+        </div>
+    </page-layout>
+</body>
+
+</html>

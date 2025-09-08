@@ -1,0 +1,13 @@
+/* ColorPalettes.css
+   CSS variables for each palette from ColorPalettes.js
+   Usage: add .palette-BASIC, .palette-PASTEL, etc. to <body> or a container
+*/
+
+:root {
+    --color-primary: #FF0000;
+    --color-secondary: #00FF00;
+    --color-additional: #0000FF;
+    --color-info: #FFFF00;
+    --color-warning: #FF00FF;
+    --color-error: #00FFFF;
+}

@@ -1,0 +1,32 @@
+/* PageLayout Component Styles */
+.page-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.page-layout__main-content {
+    flex: 1;
+    transition: margin-left 0.35s cubic-bezier(.4,0,.2,1);
+    margin-left: 0;
+}
+
+
+/* Сдвиг основного контента когда drawer открыт */
+.page-layout__main-content.shifted {
+    margin-left: 280px;
+}
+
+/* Сдвиг для mini drawer (можно скорректировать ширину по желанию) */
+.page-layout__main-content.mini {
+    margin-left: 64px;
+    transition: margin-left 0.35s cubic-bezier(.4,0,.2,1);
+}
+
+@media (max-width: 600px) {
+    .page-layout__main-content.shifted {
+        margin-left: 90vw;
+    }
+    .page-layout__main-content.mini {
+        margin-left: 56px;
+    }
+}
