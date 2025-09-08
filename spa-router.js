@@ -2,9 +2,25 @@
 // SPA Router for Pureper (vanilla JS)
 // Now uses Page class for page loading and script execution
 
-// Определяем среду и тип роутинга
+// Определяем среду и выносим конфигурацию в глобальный объект
 const IS_GITHUB_PAGES = window.location.hostname.includes('github.io');
-const BASE_PATH = IS_GITHUB_PAGES ? '/Pureper' : '';
+window.RouterConfig = {
+  IS_GITHUB_PAGES: IS_GITHUB_PAGES,
+  BASE_PATH: IS_GITHUB_PAGES ? '/Pureper' : '', // For history API
+  ASSET_PATH: IS_GITHUB_PAGES ? '/Pureper/' : './' // For loading resources
+};
+
+// GitHub Pages SPA support
+if (IS_GITHUB_PAGES) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirect = urlParams.get('redirect');
+  if (redirect) {
+    const newUrl = window.location.origin + window.RouterConfig.BASE_PATH + redirect;
+    history.replaceState(null, '', newUrl);
+  }
+}
+
+const BASE_PATH = window.RouterConfig.BASE_PATH;
 const USE_HASH_ROUTING = false; // Всегда используем обычную маршрутизацию
 
 function normalizePath(path) {

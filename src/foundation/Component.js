@@ -7,9 +7,8 @@ export default class Component extends HTMLElement {
     super();
     const shadow = this.attachShadow({ mode: 'open' });
 
-    // Определяем правильный путь для GitHub Pages
-    const basePath = window.location.hostname.includes('github.io') ? '/Pureper/' : './';
-    const fullPath = filePath.startsWith('./') ? filePath : basePath + filePath;
+    const fullPath = filePath.startsWith('./') ? filePath :
+      window.RouterConfig.ASSET_PATH + filePath;
 
     fetch(fullPath)
       .then(response => {
@@ -30,8 +29,6 @@ export default class Component extends HTMLElement {
           if (link.rel === 'stylesheet') {
             const href = link.getAttribute('href');
             if (href && !href.startsWith('http') && !href.startsWith('//') && !href.startsWith('/')) {
-              // Если это относительный путь без префикса, добавляем нужный базовый путь
-              const basePath = window.location.hostname.includes('github.io') ? '/Pureper/' : './';
               const componentDir = fullPath.substring(0, fullPath.lastIndexOf('/') + 1);
               link.setAttribute('href', componentDir + href);
             }

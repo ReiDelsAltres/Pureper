@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>index.html</title>
 
+        <script type="module" src="spa-router.js"></script>
+
     <!-- Puppet Init -->
     <link rel="stylesheet" href="src/foundation/theme/Theme.css">
     <!-- Puppet Init -->
@@ -38,23 +40,7 @@
     <script type="module">
         import { initThemeCssVariables } from "./src/foundation/theme/ColorPalettes.js";
         initThemeCssVariables();
-
-        // GitHub Pages SPA support - только для GitHub Pages
-        if (window.location.hostname.includes('github.io')) {
-            // Обрабатываем перенаправления от 404.html
-            const urlParams = new URLSearchParams(window.location.search);
-            const redirect = urlParams.get('redirect');
-            if (redirect) {
-                // Убираем параметр redirect из URL и переходим к нужному маршруту
-                const newUrl = window.location.origin + '/Pureper' + redirect;
-                history.replaceState(null, null, newUrl);
-                // Также очищаем search параметры из URL в адресной строке
-                const cleanUrl = window.location.origin + window.location.pathname.replace('index.html', '') + redirect;
-                history.replaceState(null, null, cleanUrl);
-            }
-        }
     </script>
-    <script type="module" src="spa-router.js"></script>
 </head>
 
 <body>

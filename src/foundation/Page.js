@@ -1,8 +1,7 @@
 export default class Page {
     constructor(filePath) {
-        // Определяем правильный путь для GitHub Pages
-        const basePath = window.location.hostname.includes('github.io') ? '/Pureper/' : './';
-        this.filePath = filePath.startsWith('./') ? filePath : basePath + filePath;
+        this.filePath = filePath.startsWith('./') ? filePath : 
+            window.RouterConfig.BASE_PATH; + filePath;
     }
 
     get path() {
