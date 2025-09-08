@@ -38,6 +38,18 @@
     <script type="module">
         import { initThemeCssVariables } from "./src/foundation/theme/ColorPalettes.js";
         initThemeCssVariables();
+
+        // GitHub Pages SPA support - только для GitHub Pages
+        if (window.location.hostname.includes('github.io')) {
+            // Обрабатываем перенаправления от 404.html
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirect = urlParams.get('redirect');
+            if (redirect) {
+                // Убираем параметр redirect из URL и переходим к нужному маршруту
+                const newUrl = window.location.origin + window.location.pathname + redirect;
+                history.replaceState(null, null, newUrl);
+            }
+        }
     </script>
     <script type="module" src="spa-router.js"></script>
 </head>

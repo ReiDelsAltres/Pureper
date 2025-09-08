@@ -1,0 +1,39 @@
+# Pureper .gitignore
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
+
+# GitHub settings and workflows
+.github/
+
+# Logs
+*.log
+
+# System files
+*.tmp
+*.swp
+
+# Node/npm (if ever used for tooling)
+node_modules/
+
+# Build output (not used, but for future-proofing)
+dist/
+build/
+
+# Environment files
+.env
+.env.*
+
+# Misc
+*.bak
+*.old
+
+# Ignore coverage and test output (if ever added)
+coverage/
+*.lcov
+
+# Ignore by default: no build artifacts, only source files tracked
