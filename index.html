@@ -46,8 +46,11 @@
             const redirect = urlParams.get('redirect');
             if (redirect) {
                 // Убираем параметр redirect из URL и переходим к нужному маршруту
-                const newUrl = window.location.origin + window.location.pathname + redirect;
+                const newUrl = window.location.origin + '/Pureper' + redirect;
                 history.replaceState(null, null, newUrl);
+                // Также очищаем search параметры из URL в адресной строке
+                const cleanUrl = window.location.origin + window.location.pathname.replace('index.html', '') + redirect;
+                history.replaceState(null, null, cleanUrl);
             }
         }
     </script>
