@@ -7,8 +7,8 @@ Thumbs.db
 # VS Code settings
 .vscode/
 
-# GitHub settings and workflows
-.github/
+# If you have specific workspace settings to ignore, uncomment the next line
+copilot-instructions.md
 
 # Logs
 *.log
