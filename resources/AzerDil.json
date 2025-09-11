@@ -1,0 +1,3932 @@
+{
+  "UseIndex": true,
+  "Questions": [
+    {
+      "Id": 1,
+      "Title": "\u0130\u015Fg\u00FCzar kommunikasiyan\u0131n \u0259sas funksiyalar\u0131na daxildir:",
+      "Answers": [
+        "\u0130nformasiyavericilik ",
+        "Qeyri-verbal kommunikasiya",
+        "Yaz\u0131l\u0131 v\u0259 \u015Fifahi kommunikasiya",
+        "Qanunvericilik",
+        "Nitqin ifad\u0259liliyi"
+      ]
+    },
+    {
+      "Id": 2,
+      "Title": "\u0130\u015Fg\u00FCzar kommunikasiyan\u0131n \u0259sas funksiyalar\u0131na daxildir:",
+      "Answers": [
+        "Interaktivlik",
+        "Nitqin m\u00FCnasibliyi",
+        "Aktiv v\u0259 passiv nitq",
+        "Verball\u0131q",
+        "\u0130nformasiya m\u00FCbadil\u0259sinin ba\u015Flan\u011F\u0131c\u0131"
+      ]
+    },
+    {
+      "Id": 3,
+      "Title": "\u0130\u015Fg\u00FCzar kommunikasiyan\u0131n \u0259sas funksiyalar\u0131na daxildir:",
+      "Answers": [
+        "Perspektivlik",
+        "Nitqin m\u0259ntiqiliyi",
+        " T\u0259\u015Fkil olunmu\u015F v\u0259 spontan nitq",
+        "Qeyri-verball\u0131q",
+        "Yaz\u0131l\u0131 v\u0259 \u015Fifahi nitq"
+      ]
+    },
+    {
+      "Id": 4,
+      "Title": "Kommunikasiya \u015F\u0259rti olaraq ne\u00E7\u0259 m\u0259rh\u0259l\u0259y\u0259 b\u00F6l\u00FCn\u00FCr:",
+      "Answers": [
+        "5",
+        "2",
+        "3",
+        "4",
+        "Heç bir"
+      ]
+    },
+    {
+      "Id": 5,
+      "Title": "Kommunikasiyanın mərhələlərinə daxildir",
+      "Answers": [
+        "İnformasiya mübadiləsinin başlanğıcı",
+        "Quruluş sxeminə görə nitqin növləri:mühazirə, məruzə, çıxış",
+        "Nitqin ifadəliliyi, düzgünlüyü",
+        "İnformasiyavericilik",
+        "Rəsmi və işgüzar sənədlər"
+      ]
+    },
+    {
+      "Id": 6,
+      "Title": "Kommunikasiyan\u0131n m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxildir:",
+      "Answers": [
+        "\u0130deyalar\u0131n s\u00F6z, simvol, m\u0259lumatlarla t\u0259c\u0259ss\u00FCm\u00FC ",
+        "Perspektivlik, informasiyavericilik ",
+        "\u015E\u0259xsi nota, \u015F\u0259xsi m\u00FCraci\u0259tnam\u0259, verbal nota",
+        "Xarici v\u0259 daxili nitq, aktiv v\u0259 passiv nitq",
+        "Nitqin m\u0259ntiqiliyi, \u0259lveri\u015Fliliyi"
+      ]
+    },
+    {
+      "Id": 7,
+      "Title": "Kommunikasiyan\u0131n m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxildir:",
+      "Answers": [
+        "\u0130nformasiyan\u0131n se\u00E7ilmi\u015F rabit\u0259 vasit\u0259sil\u0259 \u00F6t\u00FCr\u00FClm\u0259si",
+        "Nitqin m\u00FCnasibliyi, z\u0259nginliyi",
+        "T\u0259\u015Fkil olunmu\u015F v\u0259 spontan nitq",
+        "Publisistik \u00FCslubun janrlar\u0131 v\u0259 dil \u0259lam\u0259tl\u0259ri. ",
+        "Perspektivlik, informasiyavericilik "
+      ]
+    },
+    {
+      "Id": 8,
+      "Title": "Kommunikasiyan\u0131n m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxildir:",
+      "Answers": [
+        "\u0130nformasiyan\u0131n verbal v\u0259 qeyri-verbal formada q\u0259bul edilm\u0259si",
+        "Perspektivlik, informasiyavericilik, interaktivlik",
+        "Elmi funksional \u00FCslub, istifad\u0259 dair\u0259si v\u0259 janrlar\u0131",
+        "Nitqin m\u0259ntiqiliyi v\u0259 \u0259lveri\u015Fliliyi",
+        "Dan\u0131\u015F\u0131qlar\u0131n yekun s\u0259n\u0259dl\u0259ri: kommyunike, birg\u0259 b\u0259yanat, b\u0259yannam\u0259"
+      ]
+    },
+    {
+      "Id": 9,
+      "Title": "Kommunikasiyan\u0131n m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxildir:",
+      "Answers": [
+        "\u018Fks-\u0259laq\u0259 m\u0259rh\u0259l\u0259si kimi informasiyan\u0131 q\u0259bul ed\u0259nin ona cavab\u0131",
+        "Dan\u0131\u015F\u0131qlar\u0131n yekun s\u0259n\u0259dl\u0259ri: kommyunike, birg\u0259 b\u0259yanat, b\u0259yannam\u0259",
+        "Perspektivlik, informasiyavericilik, interaktivlik",
+        "M\u0259i\u015F\u0259t \u00FCslubu v\u0259 \u0259sas s\u0259ciyy\u0259vi x\u00FCsusiyy\u0259tl\u0259ri",
+        "Sualverm\u0259, s\u00F6hb\u0259t\u0259qo\u015Fulma, cavabverm\u0259"
+      ]
+    },
+    {
+      "Id": 10,
+      "Title": "Kommunikasiyan\u0131n m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "Sualverm\u0259, s\u00F6hb\u0259t\u0259qo\u015Fulma, cavabverm\u0259",
+        "\u0130nformasiya m\u00FCbadil\u0259sinin ba\u015Flan\u011F\u0131c\u0131;",
+        "\u0130deyalar\u0131n s\u00F6z, simvol, m\u0259lumatlarla t\u0259c\u0259ss\u00FCm\u00FC",
+        "\u0130nformasiyan\u0131n se\u00E7ilmi\u015F rabit\u0259 vasit\u0259sil\u0259 \u00F6t\u00FCr\u00FClm\u0259si",
+        "\u0130nformasiyan\u0131n verbal v\u0259 qeyri-verbal formada q\u0259bul edilm\u0259si"
+      ]
+    },
+    {
+      "Id": 11,
+      "Title": "Kommunikasiyan\u0131n m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "\u018Fd\u0259bi dilin r\u0259smi funksional istifad\u0259 dair\u0259si",
+        "\u0130deyalar\u0131n s\u00F6z, simvol, m\u0259lumatlarla t\u0259c\u0259ss\u00FCm\u00FC;",
+        "\u0130nformasiyan\u0131n se\u00E7ilmi\u015F rabit\u0259 vasit\u0259sil\u0259 \u00F6t\u00FCr\u00FClm\u0259si;",
+        "\u0130nformasiyan\u0131n verbal v\u0259 qeyri-verbal formada q\u0259bul edilm\u0259si;",
+        "\u018Fks-\u0259laq\u0259 m\u0259rh\u0259l\u0259si kimi informasiyan\u0131 q\u0259bul ed\u0259nin ona cavab\u0131."
+      ]
+    },
+    {
+      "Id": 12,
+      "Title": "Kommunikasiyan\u0131n m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "Fonetik, leksik v\u0259 qrammatik normalar",
+        "\u0130deyalar\u0131n s\u00F6z, simvol, m\u0259lumatlarla t\u0259c\u0259ss\u00FCm\u00FC",
+        "\u018Fks-\u0259laq\u0259 m\u0259rh\u0259l\u0259si kimi informasiyan\u0131 q\u0259bul ed\u0259nin ona cavab\u0131",
+        "\u0130nformasiyan\u0131n se\u00E7ilmi\u015F rabit\u0259 vasit\u0259sil\u0259 \u00F6t\u00FCr\u00FClm\u0259si",
+        "\u0130nformasiyan\u0131n verbal v\u0259 qeyri-verbal formada q\u0259bul edilm\u0259si"
+      ]
+    },
+    {
+      "Id": 13,
+      "Title": "Kommunikasiyan\u0131n m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "Perspektivlik, informasiyavericilik, interaktivlik",
+        "\u0130deyalar\u0131n s\u00F6z, simvol, m\u0259lumatlarla t\u0259c\u0259ss\u00FCm\u00FC",
+        "\u0130nformasiyan\u0131n se\u00E7ilmi\u015F rabit\u0259 vasit\u0259sil\u0259 \u00F6t\u00FCr\u00FClm\u0259si",
+        "\u0130nformasiyan\u0131n verbal v\u0259 qeyri-verbal formada q\u0259bul edilm\u0259si",
+        "\u0130nformasiya m\u00FCbadil\u0259sinin ba\u015Flan\u011F\u0131c\u0131"
+      ]
+    },
+    {
+      "Id": 14,
+      "Title": "Kommunikasiyan\u0131n m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "Nitqin d\u00FCzg\u00FCnl\u00FCy\u00FC, d\u0259qiqliyi, ayd\u0131nl\u0131\u011F\u0131, s\u0259lisliyi",
+        "\u0130deyalar\u0131n s\u00F6z, simvol, m\u0259lumatlarla t\u0259c\u0259ss\u00FCm\u00FC",
+        "\u0130nformasiyan\u0131n se\u00E7ilmi\u015F rabit\u0259 vasit\u0259sil\u0259 \u00F6t\u00FCr\u00FClm\u0259si;",
+        "\u0130nformasiya m\u00FCbadil\u0259sinin ba\u015Flan\u011F\u0131c\u0131",
+        "\u0130nformasiyan\u0131n verbal v\u0259 qeyri-verbal formada q\u0259bul edilm\u0259si"
+      ]
+    },
+    {
+      "Id": 15,
+      "Title": "Nitq etiketl\u0259rinin n\u00F6vl\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "S\u00F6hb\u0259t\u0259qo\u015Fulma",
+        "M\u00FCraci\u0259t, t\u0259brik",
+        "Alq\u0131\u015Flar v\u0259 qar\u011F\u0131\u015Flar",
+        "Ayr\u0131lma",
+        "G\u00F6r\u00FC\u015Fm\u0259"
+      ]
+    },
+    {
+      "Id": 16,
+      "Title": "Nitq etiketl\u0259rinin n\u00F6vl\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "Nitqin d\u00FCzg\u00FCnl\u00FCy\u00FC",
+        "Alq\u0131\u015Flar v\u0259 qar\u011F\u0131\u015Flar",
+        "M\u00FCraci\u0259t ",
+        "G\u00F6r\u00FC\u015Fm\u0259 v\u0259 ayr\u0131lma",
+        "T\u0259brik"
+      ]
+    },
+    {
+      "Id": 17,
+      "Title": "Nitq etiketl\u0259rinin n\u00F6vl\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "Nitqin ifad\u0259liliyi",
+        "G\u00F6r\u00FC\u015Fm\u0259 v\u0259 ayr\u0131lma",
+        "T\u0259brik",
+        "Alq\u0131\u015Flar v\u0259 qar\u011F\u0131\u015Flar",
+        "M\u00FCraci\u0259t "
+      ]
+    },
+    {
+      "Id": 18,
+      "Title": "Nitq etiketl\u0259rinin n\u00F6vl\u0259rin\u0259 daxildir:",
+      "Answers": [
+        "G\u00F6r\u00FC\u015Fm\u0259 v\u0259 ayr\u0131lma",
+        "Dialoji v\u0259 monoloji nitq",
+        "Nitqin z\u0259nginliyi",
+        "Funksional \u00FCslublar",
+        "S\u00F6hb\u0259t\u0259qo\u015Fulma"
+      ]
+    },
+    {
+      "Id": 19,
+      "Title": "Nitq etiketl\u0259rinin n\u00F6vl\u0259rin\u0259 daxildir:",
+      "Answers": [
+        "G\u00F6r\u00FC\u015Fm\u0259 v\u0259 ayr\u0131lma",
+        "Dialoji v\u0259 monoloji nitq",
+        "Nitqin z\u0259nginliyi",
+        "Funksional \u00FCslublar",
+        "S\u00F6hb\u0259t\u0259qo\u015Fulma"
+      ]
+    },
+    {
+      "Id": 20,
+      "Title": "M\u00FCsahibin nitqin\u0259 n\u0259 zaman m\u00FCdaxil\u0259 oluna bilm\u0259z: ",
+      "Answers": [
+        "M\u0259tl\u0259bl\u0259 he\u00E7 bir \u0259laq\u0259si olmayan bir \u015Feyi soru\u015Fmaq m\u0259qs\u0259dil\u0259",
+        "Dan\u0131\u015Fan b\u0259hs etdiyi m\u0259s\u0259l\u0259d\u0259n uzaqla\u015Fd\u0131qda ",
+        "M\u0259lum olan \u0259\u015Fya v\u0259 hadis\u0259 bar\u0259d\u0259 dan\u0131\u015F\u0131ld\u0131qda",
+        "B\u0259hs olunan m\u0259s\u0259l\u0259 il\u0259 ba\u011Fl\u0131 s\u0259hv\u0259 v\u0259 ya dola\u015F\u0131ql\u0131\u011Fa yol verildikd\u0259 ",
+        "H\u0259r hans\u0131 m\u0259s\u0259l\u0259 bar\u0259d\u0259 uzun-uzad\u0131 dan\u0131\u015F\u0131ld\u0131qda  "
+      ]
+    },
+    {
+      "Id": 21,
+      "Title": "M\u00FCsahibin nitqin\u0259 n\u0259 zaman m\u00FCdaxil\u0259 oluna bilm\u0259z: ",
+      "Answers": [
+        "Deyilmi\u015F v\u0259 ham\u0131ya ayd\u0131n olan m\u0259s\u0259l\u0259 bar\u0259d\u0259 sual verm\u0259k m\u0259qs\u0259dil\u0259",
+        "M\u0259lum olan \u0259\u015Fya v\u0259 hadis\u0259 bar\u0259d\u0259 dan\u0131\u015F\u0131ld\u0131qda",
+        "B\u0259hs olunan m\u0259s\u0259l\u0259 il\u0259 ba\u011Fl\u0131 s\u0259hv\u0259 v\u0259 ya dola\u015F\u0131ql\u0131\u011Fa yol verildikd\u0259",
+        "Dan\u0131\u015Fan b\u0259hs etdiyi m\u0259s\u0259l\u0259d\u0259n uzaqla\u015Fd\u0131qda ",
+        "H\u0259r hans\u0131 m\u0259s\u0259l\u0259 bar\u0259d\u0259 uzun-uzad\u0131 dan\u0131\u015F\u0131ld\u0131qda  "
+      ]
+    },
+    {
+      "Id": 22,
+      "Title": "Diskussiya zaman\u0131 dialoqun s\u0259m\u0259r\u0259li ke\u00E7m\u0259si \u00FC\u00E7\u00FCn t\u0259l\u0259b olunan x\u00FCsusiyy\u0259tl\u0259r\u0259 daxil deyil:",
+      "Answers": [
+        "Kommunikasiyan\u0131n h\u0259m \u015Fifahi, h\u0259m d\u0259 yaz\u0131l\u0131 formas\u0131ndan istifad\u0259 edilm\u0259si",
+        "M\u00FCzakir\u0259y\u0259 \u00E7\u0131xar\u0131lan m\u0259s\u0259l\u0259nin mahiyy\u0259tinin d\u00FCzg\u00FCn anla\u015F\u0131lmas\u0131 ",
+        "M\u00FCzakir\u0259 olunan m\u0259s\u0259l\u0259d\u0259n yay\u0131nmaya yol verilm\u0259m\u0259si ",
+        "\u018Fsasland\u0131rma d\u0259qiq faktlar \u00FCz\u0259rind\u0259 qurulmas\u0131 ",
+        "Adamlar deyil, yaln\u0131z onlar\u0131n ideyalar\u0131 t\u0259nqid olunmas\u0131"
+      ]
+    },
+    {
+      "Id": 23,
+      "Title": "Diskussiya zaman\u0131 dialoqun s\u0259m\u0259r\u0259li ke\u00E7m\u0259si \u00FC\u00E7\u00FCn t\u0259l\u0259b olunan x\u00FCsusiyy\u0259tl\u0259r\u0259 daxil deyil:",
+      "Answers": [
+        "Nitq\u0259 veril\u0259n b\u00FCt\u00FCn t\u0259l\u0259bl\u0259r v\u0259 normalar\u0131n pozulmamas\u0131na m\u00FCtl\u0259q \u015F\u0259kild\u0259 riay\u0259t olunmal\u0131d\u0131r",
+        "T\u0259nqid zaman\u0131 emosiyaya qap\u0131lmamal\u0131, q\u0259z\u0259bl\u0259nm\u0259m\u0259li, t\u0259hqir v\u0259 istehzaya yol verilm\u0259m\u0259lidir",
+        "Diskussiyan\u0131n m\u0259qs\u0259di qalibi m\u00FC\u0259yy\u0259n etm\u0259k deyil, \u00FCmumi raz\u0131l\u0131\u011Fa nail olmaqd\u0131r. ",
+        "\u00C7\u0131x\u0131\u015Flar\u0131n sonunda yekun n\u0259tic\u0259l\u0259r qeyd edilm\u0259lidir",
+        "M\u00F6vqeyinin s\u0259hv oldu\u011Fu s\u00FCbut edilmi\u015F t\u0259r\u0259f opponentinin haql\u0131 oldu\u011Funu etiraf etm\u0259yi bacarmal\u0131d\u0131r"
+      ]
+    },
+    {
+      "Id": 24,
+      "Title": "Hans\u0131 \u00FCnsiyy\u0259t prosesind\u0259 \u0259laq\u0259l\u0259r ikit\u0259rflidir-dialoqludur:",
+      "Answers": [
+        "\u0130\u015Fg\u00FCzar kommunikasiya",
+        "Kommunikasiya ",
+        "Akademik kommunikasiya",
+        "M\u00FChazir\u0259, m\u0259ruz\u0259, \u00E7\u0131x\u0131\u015F",
+        "Verbal v\u0259 qeyri-verbal nitq"
+      ]
+    },
+    {
+      "Id": 25,
+      "Title": "\u201CAz\u0259rbaycan dilind\u0259 i\u015Fg\u00FCzar v\u0259 akademik kommunikasiya\u201D f\u0259nninin m\u0259qs\u0259din\u0259 daxil deyil:",
+      "Answers": [
+        "Qohum dill\u0259rin fonetik, leksik v\u0259 qrammatik qurulu\u015Funu \u00F6yr\u0259nm\u0259k",
+        "\u018Fd\u0259bi dilin \u00FCslublar\u0131n\u0131, aktiv v\u0259 passiv leksikas\u0131n\u0131 bilm\u0259k",
+        "Rabit\u0259 v\u0259 kommunikativ strategiyan\u0131, yarad\u0131c\u0131l\u0131q texnologiyalar\u0131n\u0131 m\u0259nims\u0259m\u0259k",
+        "Dan\u0131\u015F\u0131q etikas\u0131 v\u0259 m\u00FCraci\u0259t etiketl\u0259ri bar\u0259d\u0259 m\u0259lumatlara yiy\u0259l\u0259nm\u0259k",
+        "M\u00FCasir Az\u0259rbaycan dilinin funksional \u00FCslublar\u0131 bar\u0259d\u0259 m\u0259lumatlar\u0131 v\u0259 qaydalar\u0131 \u00F6yr\u0259nm\u0259k"
+      ]
+    },
+    {
+      "Id": 26,
+      "Title": "\u201CAz\u0259rbaycan dilind\u0259 i\u015Fg\u00FCzar v\u0259 akademik kommunikasiya\u201D f\u0259nninin m\u0259qs\u0259din\u0259 daxil deyil:",
+      "Answers": [
+        "\u015Eifahi xalq \u0259d\u0259biyyat\u0131 n\u00FCmun\u0259l\u0259rini \u00F6yr\u0259nm\u0259k, \u015Fiv\u0259l\u0259ri ara\u015Fd\u0131rmaq",
+        "\u0130\u015Fg\u00FCzar \u00FCnsiyy\u0259td\u0259 m\u0259ktublar\u0131n elektron v\u0259 onlayn kommunikasiyalar\u0131 bar\u0259d\u0259 bilikl\u0259ri z\u0259nginl\u0259\u015Fdirm\u0259k",
+        "Orfoepiya v\u0259 orfoqrafiya qaydalar\u0131na \u0259m\u0259l olunmas\u0131n\u0131n mahiyy\u0259tini \u00F6yr\u0259nm\u0259k",
+        "T\u0259\u015Fkil olunmu\u015F nitqin (m\u0259ruz\u0259, \u00E7\u0131x\u0131\u015F v\u0259 s.) \u00F6z\u00FCn\u0259m\u0259xsuslu\u011Funu bilm\u0259k",
+        "Dan\u0131\u015F\u0131q etikas\u0131 v\u0259 m\u00FCraci\u0259t etiketl\u0259ri bar\u0259d\u0259 m\u0259lumatlara yiy\u0259l\u0259nm\u0259k"
+      ]
+    },
+    {
+      "Id": 27,
+      "Title": "YUNESKO-nun t\u0259\u015F\u0259bb\u00FCs\u00FC il\u0259 2000-ci ilin 21 fevral\u0131ndan etibar\u0259n h\u0259r il qeyd edilir:",
+      "Answers": [
+        "Beyn\u0259lxalq ana dili g\u00FCn\u00FC",
+        "\u0130\u015Fg\u00FCzar kommunikasiya g\u00FCn\u00FC",
+        "Beyn\u0259lxalq Dill\u0259r \u0130li",
+        "Beyn\u0259lxalq \u0259lifba g\u00FCn\u00FC",
+        "Az\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan dili g\u00FCn\u00FC"
+      ]
+    },
+    {
+      "Id": 28,
+      "Title": "YUNESKO-nun t\u0259\u015F\u0259bb\u00FCs\u00FC il\u0259  .....etibar\u0259n h\u0259r il \u201CBeyn\u0259lxalq ana dili g\u00FCn\u00FC\u201D qeyd edilir:",
+      "Answers": [
+        "2000-ci il 21 fevral",
+        "2001-ci il 18 iyun",
+        "2001-ci il 9 avqust",
+        "2004-c\u00FC il 12 yanvar",
+        "2013-c\u00FC il  9 aprel"
+      ]
+    },
+    {
+      "Id": 29,
+      "Title": "Hans\u0131 qurumun t\u0259\u015F\u0259bb\u00FCs\u00FC il\u0259  2000-ci ilin 21 fevral\u0131ndan etibar\u0259n h\u0259r il \u201CBeyn\u0259lxalq ana dili g\u00FCn\u00FC\u201D qeyd edilir",
+      "Answers": [
+        "YUNESKO",
+        "Canl\u0131 Dill\u0259r \u0130nstitutu",
+        "BMT",
+        "ARTN",
+        "\u00DCmumd\u00FCnya Sammiti"
+      ]
+    },
+    {
+      "Id": 30,
+      "Title": "BMT Ba\u015F Assambleyas\u0131 2008-ci ili elan etmi\u015Fdir:",
+      "Answers": [
+        "Beyn\u0259lxalq Dill\u0259r \u0130li",
+        "Az\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan dili g\u00FCn\u00FC",
+        "\u0130\u015Fg\u00FCzar kommunikasiya g\u00FCn\u00FC",
+        "Beyn\u0259lxalq ana dili g\u00FCn\u00FC",
+        "Prinsipl\u0259r b\u0259yannam\u0259si"
+      ]
+    },
+    {
+      "Id": 31,
+      "Title": "BMT Ba\u015F Assambleyas\u0131 ne\u00E7\u0259nci ili Beyn\u0259lxalq Dill\u0259r \u0130li elan etmi\u015Fdir?",
+      "Answers": [
+        "2008-ci ili",
+        "2001-ci ili",
+        "2013-c\u00FC ili",
+        "2000-ci ili",
+        "He\u00E7 bir ili"
+      ]
+    },
+    {
+      "Id": 32,
+      "Title": "Hans\u0131 qurum 2008-ci ili Beyn\u0259lxalq Dill\u0259r \u0130li elan etmi\u015Fdir?",
+      "Answers": [
+        "BMT Ba\u015F Assambleyas\u0131",
+        "YUNESKO",
+        "Canl\u0131 Dill\u0259r \u0130nstitutu",
+        "ARTN",
+        "\u00DCmumd\u00FCnya Sammiti"
+      ]
+    },
+    {
+      "Id": 33,
+      "Title": "\u201CD\u00F6vl\u0259t dilinin t\u0259tbiqi i\u015Finin t\u0259kmill\u0259\u015Fdirilm\u0259si haqq\u0131nda\u201D F\u0259rman \u00DCmummili Lider Heyd\u0259r \u018Fliyev t\u0259r\u0259find\u0259n n\u0259 zaman imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "18 iyun 2001-ci il",
+        "21 fevral 2000-ci il",
+        "9 avqust 2001-ci il",
+        "12 yanvar 2004-c\u00FC il",
+        "2008-ci il"
+      ]
+    },
+    {
+      "Id": 34,
+      "Title": "\u201CAz\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan Dili G\u00FCn\u00FCn\u00FCn qeyd edilm\u0259si haqq\u0131nda\u201D f\u0259rman \u00DCmummili Lider Heyd\u0259r \u018Fliyev t\u0259r\u0259find\u0259n n\u0259 zaman imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "9 avqust 2001-ci il ",
+        "30 sentyabr 2002-ci il",
+        "21 fevral 2000-ci il",
+        "2008-ci il",
+        "12 noyabr 1995-ci il"
+      ]
+    },
+    {
+      "Id": 35,
+      "Title": "\u201CAz\u0259rbaycan Respublikas\u0131nda d\u00F6vl\u0259t dili haqq\u0131nda\u201D Qanun \u00DCmummili Lider Heyd\u0259r \u018Fliyev t\u0259r\u0259find\u0259n n\u0259 zaman q\u0259bul edilmi\u015Fdir?",
+      "Answers": [
+        "30 sentyabr 2002-ci il",
+        "12 noyabr 1995-ci il",
+        "21 fevral 2000-ci il",
+        "2008-ci il",
+        "9 avqust 2001-ci il "
+      ]
+    },
+    {
+      "Id": 36,
+      "Title": "\u201CAz\u0259rbaycan Respublikas\u0131nda D\u00F6vl\u0259t Dili haqq\u0131nda\u201D Qanunun t\u0259tbiq edilm\u0259si bar\u0259d\u0259\u201D f\u0259rman \u00DCmummili Lider Heyd\u0259r \u018Fliyev t\u0259r\u0259find\u0259n n\u0259 zaman imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "2 yanvar 2003-c\u00FC il ",
+        "18 iyun 2001-ci il",
+        "12 noyabr 1995-ci il",
+        "21 fevral 2000-ci il",
+        "12 yanvar 2004-c\u00FC il"
+      ]
+    },
+    {
+      "Id": 37,
+      "Title": "Az\u0259rbaycan Respublikas\u0131n\u0131n Konstitusiyas\u0131 referendum yolu il\u0259 n\u0259 zaman q\u0259bul edilmi\u015Fdir?",
+      "Answers": [
+        "12 noyabr 1995-ci il",
+        "21 fevral 2000-ci il",
+        "12 yanvar 2004-c\u00FC il",
+        "2008-ci il",
+        "9 aprel 2013-c\u00FC il"
+      ]
+    },
+    {
+      "Id": 38,
+      "Title": "9 avqust 2001-ci tarixind\u0259 \u00DCmummili Lider Heyd\u0259r \u018Fliyev t\u0259r\u0259find\u0259n hans\u0131 f\u0259rman imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "\u201CAz\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan Dili G\u00FCn\u00FCn\u00FCn qeyd edilm\u0259si haqq\u0131nda\u201D",
+        "\u201CBeyn\u0259lxalq ana dili g\u00FCn\u00FC\u201D",
+        "\u201CAz\u0259rbaycan Respublikas\u0131nda D\u00F6vl\u0259t Dili haqq\u0131nda\u201D Qanunun t\u0259tbiq edilm\u0259si bar\u0259d\u0259\u201D",
+        "\u201CAz\u0259rbaycan Respublikas\u0131nda D\u00F6vl\u0259t Dili haqq\u0131nda\u201D",
+        "\u201CD\u00F6vl\u0259t dilinin t\u0259tbiqi i\u015Finin t\u0259kmill\u0259\u015Fdirilm\u0259si haqq\u0131nda\u201D"
+      ]
+    },
+    {
+      "Id": 39,
+      "Title": "18 iyun 2001-ci il tarixind\u0259 \u00DCmummili Lider Heyd\u0259r \u018Fliyev t\u0259r\u0259find\u0259n hans\u0131 f\u0259rman imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "\u201CD\u00F6vl\u0259t dilinin t\u0259tbiqi i\u015Finin t\u0259kmill\u0259\u015Fdirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan Dili G\u00FCn\u00FCn\u00FCn qeyd edilm\u0259si haqq\u0131nda\u201D",
+        "\u201CBeyn\u0259lxalq ana dili g\u00FCn\u00FC\u201D",
+        "\u201CAz\u0259rbaycan Respublikas\u0131nda d\u00F6vl\u0259t dili haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan dilind\u0259 lat\u0131n qrafikas\u0131 il\u0259 k\u00FCtl\u0259vi n\u0259\u015Frl\u0259rin h\u0259yata ke\u00E7irilm\u0259si haqq\u0131nda\u201D"
+      ]
+    },
+    {
+      "Id": 40,
+      "Title": "30 sentyabr 2002-ci il tarixind\u0259 \u00DCmummili Lider Heyd\u0259r \u018Fliyev t\u0259r\u0259find\u0259n hans\u0131 qanun q\u0259bul edilmi\u015Fdir ?",
+      "Answers": [
+        "\u201CAz\u0259rbaycan Respublikas\u0131nda d\u00F6vl\u0259t dili haqq\u0131nda\u201D",
+        "\u201CD\u00F6vl\u0259t dilinin t\u0259tbiqi i\u015Finin t\u0259kmill\u0259\u015Fdirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan Dili G\u00FCn\u00FCn\u00FCn qeyd edilm\u0259si haqq\u0131nda\u201D",
+        "\u201CBeyn\u0259lxalq ana dili g\u00FCn\u00FC\u201D",
+        "\u201CAz\u0259rbaycan Milli Ensiklopediyas\u0131n\u0131n n\u0259\u015Fri haqq\u0131nda\u201D"
+      ]
+    },
+    {
+      "Id": 41,
+      "Title": "12 yanvar 2004-c\u00FC il tarixind\u0259 Az\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti c\u0259nab \u0130lham \u018Fliyev t\u0259r\u0259find\u0259n hans\u0131 s\u0259r\u0259ncam imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "\u201CAz\u0259rbaycan dilind\u0259 lat\u0131n qrafikas\u0131 il\u0259 k\u00FCtl\u0259vi n\u0259\u015Frl\u0259rin h\u0259yata ke\u00E7irilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan Milli Elml\u0259r Akademiyas\u0131n\u0131n N\u0259simi ad\u0131na Dil\u00E7ilik \u0130nstitutunun maddi-texniki bazas\u0131n\u0131n g\u00FCcl\u0259ndirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CD\u00F6vl\u0259t dilinin t\u0259tbiqi i\u015Finin t\u0259kmill\u0259\u015Fdirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan Dili G\u00FCn\u00FCn\u00FCn qeyd edilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan dilinin elektron m\u0259kanda daha geni\u015F istifad\u0259sinin t\u0259min edilm\u0259si il\u0259 ba\u011Fl\u0131 bir s\u0131ra t\u0259dbirl\u0259r haqq\u0131nda\u201D"
+      ]
+    },
+    {
+      "Id": 42,
+      "Title": "2013-c\u00FC il 9 aprel tarixind\u0259 Az\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti c\u0259nab \u0130lham \u018Fliyev t\u0259r\u0259find\u0259n hans\u0131 s\u0259r\u0259ncam imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "\u201CAz\u0259rbaycan dilinin qloballa\u015Fma \u015F\u0259raitind\u0259 zaman\u0131n t\u0259l\u0259bl\u0259rin\u0259 uy\u011Fun istifad\u0259sin\u0259 v\u0259 \u00F6lk\u0259d\u0259 dil\u00E7iliyin inki\u015Faf\u0131na dair D\u00F6vl\u0259t Proqram\u0131\u201Dn\u0131n t\u0259sdiq edilm\u0259si haqq\u0131nda\u201D ",
+        "\u201CAz\u0259rbaycan Milli Elml\u0259r Akademiyas\u0131n\u0131n N\u0259simi ad\u0131na Dil\u00E7ilik \u0130nstitutunun maddi-texniki bazas\u0131n\u0131n g\u00FCcl\u0259ndirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CD\u00F6vl\u0259t dilinin t\u0259tbiqi i\u015Finin t\u0259kmill\u0259\u015Fdirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan Dili G\u00FCn\u00FCn\u00FCn qeyd edilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan dilinin elektron m\u0259kanda daha geni\u015F istifad\u0259sinin t\u0259min edilm\u0259si il\u0259 ba\u011Fl\u0131 bir s\u0131ra t\u0259dbirl\u0259r haqq\u0131nda\u201D"
+      ]
+    },
+    {
+      "Id": 43,
+      "Title": "2018-ci il 17 iyul tarixind\u0259 Az\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti c\u0259nab \u0130lham \u018Fliyev t\u0259r\u0259find\u0259n hans\u0131 s\u0259r\u0259ncam imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "\u201CAz\u0259rbaycan dilinin elektron m\u0259kanda daha geni\u015F istifad\u0259sinin t\u0259min edilm\u0259si il\u0259 ba\u011Fl\u0131 bir s\u0131ra t\u0259dbirl\u0259r haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan dilinin qloballa\u015Fma \u015F\u0259raitind\u0259 zaman\u0131n t\u0259l\u0259bl\u0259rin\u0259 uy\u011Fun istifad\u0259sin\u0259 v\u0259 \u00F6lk\u0259d\u0259 dil\u00E7iliyin inki\u015Faf\u0131na dair D\u00F6vl\u0259t Proqram\u0131\u201Dn\u0131n t\u0259sdiq edilm\u0259si haqq\u0131nda\u201D ",
+        "\u201CAz\u0259rbaycan Milli Elml\u0259r Akademiyas\u0131n\u0131n N\u0259simi ad\u0131na Dil\u00E7ilik \u0130nstitutunun maddi-texniki bazas\u0131n\u0131n g\u00FCcl\u0259ndirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CD\u00F6vl\u0259t dilinin t\u0259tbiqi i\u015Finin t\u0259kmill\u0259\u015Fdirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan Dili G\u00FCn\u00FCn\u00FCn qeyd edilm\u0259si haqq\u0131nda\u201D"
+      ]
+    },
+    {
+      "Id": 44,
+      "Title": "12 yanvar 2004-c\u00FC il tarixind\u0259 Az\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti c\u0259nab \u0130lham \u018Fliyev t\u0259r\u0259find\u0259n hans\u0131 s\u0259r\u0259ncam imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "\u201CAz\u0259rbaycan Milli Ensiklopediyas\u0131n\u0131n n\u0259\u015Fri haqq\u0131nda\u201D ",
+        "\u201CAz\u0259rbaycan Milli Elml\u0259r Akademiyas\u0131n\u0131n N\u0259simi ad\u0131na Dil\u00E7ilik \u0130nstitutunun maddi-texniki bazas\u0131n\u0131n g\u00FCcl\u0259ndirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CD\u00F6vl\u0259t dilinin t\u0259tbiqi i\u015Finin t\u0259kmill\u0259\u015Fdirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan Dili G\u00FCn\u00FCn\u00FCn qeyd edilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan dilinin elektron m\u0259kanda daha geni\u015F istifad\u0259sinin t\u0259min edilm\u0259si il\u0259 ba\u011Fl\u0131 bir s\u0131ra t\u0259dbirl\u0259r haqq\u0131nda\u201D"
+      ]
+    },
+    {
+      "Id": 45,
+      "Title": "1 noyabr 2018-ci il tarixind\u0259 Az\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti c\u0259nab \u0130lham \u018Fliyev t\u0259r\u0259find\u0259n hans\u0131 s\u0259r\u0259ncam imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "\u201CAz\u0259rbaycan dilinin safl\u0131\u011F\u0131n\u0131n qorunmas\u0131 v\u0259 d\u00F6vl\u0259t dilind\u0259n istifad\u0259nin daha da t\u0259kmill\u0259\u015Fdirilm\u0259si il\u0259 ba\u011Fl\u0131 t\u0259dbirl\u0259r haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan Milli Elml\u0259r Akademiyas\u0131n\u0131n N\u0259simi ad\u0131na Dil\u00E7ilik \u0130nstitutunun maddi-texniki bazas\u0131n\u0131n g\u00FCcl\u0259ndirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CD\u00F6vl\u0259t dilinin t\u0259tbiqi i\u015Finin t\u0259kmill\u0259\u015Fdirilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan \u0259lifbas\u0131 v\u0259 Az\u0259rbaycan Dili G\u00FCn\u00FCn\u00FCn qeyd edilm\u0259si haqq\u0131nda\u201D",
+        "\u201CAz\u0259rbaycan dilinin elektron m\u0259kanda daha geni\u015F istifad\u0259sinin t\u0259min edilm\u0259si il\u0259 ba\u011Fl\u0131 bir s\u0131ra t\u0259dbirl\u0259r haqq\u0131nda\u201D"
+      ]
+    },
+    {
+      "Id": 46,
+      "Title": "\u201CAz\u0259rbaycan dilinin safl\u0131\u011F\u0131n\u0131n qorunmas\u0131 v\u0259 d\u00F6vl\u0259t dilind\u0259n istifad\u0259nin daha da t\u0259kmill\u0259\u015Fdirilm\u0259si il\u0259 ba\u011Fl\u0131 t\u0259dbirl\u0259r haqq\u0131nda\u201D S\u0259r\u0259ncam Az\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti c\u0259nab \u0130lham \u018Fliyev t\u0259r\u0259find\u0259n n\u0259 zaman imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "1 noyabr 2018-ci il",
+        "9 avqust 2001-ci il",
+        "21 fevral 2000-ci il",
+        "9 aprel 2013-c\u00FC il",
+        "12 yanvar 2004-c\u00FC il"
+      ]
+    },
+    {
+      "Id": 47,
+      "Title": "\u201CAz\u0259rbaycan dilind\u0259 lat\u0131n qrafikas\u0131 il\u0259 k\u00FCtl\u0259vi n\u0259\u015Frl\u0259rin h\u0259yata ke\u00E7irilm\u0259si haqq\u0131nda\u201D S\u0259r\u0259ncam Az\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti c\u0259nab \u0130lham \u018Fliyev t\u0259r\u0259find\u0259n n\u0259 zaman imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "12 yanvar 2004-c\u00FC il",
+        "9 aprel 2013-c\u00FC il",
+        "1 noyabr 2018-ci il",
+        "9 avqust 2001-ci il",
+        "21 fevral 2000-ci il"
+      ]
+    },
+    {
+      "Id": 48,
+      "Title": "\u201CAz\u0259rbaycan dilinin qloballa\u015Fma \u015F\u0259raitind\u0259 zaman\u0131n t\u0259l\u0259bl\u0259rin\u0259 uy\u011Fun istifad\u0259sin\u0259 v\u0259 \u00F6lk\u0259d\u0259 dil\u00E7iliyin inki\u015Faf\u0131na dair D\u00F6vl\u0259t Proqram\u0131\u201Dn\u0131n t\u0259sdiq edilm\u0259si haqq\u0131nda\u201D S\u0259r\u0259ncam Az\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti c\u0259nab \u0130lham \u018Fliyev t\u0259r\u0259find\u0259n n\u0259 zaman imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "9 aprel 2013-c\u00FC il ",
+        "12 yanvar 2004-c\u00FC il",
+        "1 noyabr 2018-ci il",
+        "9 avqust 2001-ci il",
+        "21 fevral 2000-ci il"
+      ]
+    },
+    {
+      "Id": 49,
+      "Title": "\u201CAz\u0259rbaycan Milli Ensiklopediyas\u0131n\u0131n n\u0259\u015Fri haqq\u0131nda\u201D S\u0259r\u0259ncam Az\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti c\u0259nab \u0130lham \u018Fliyev t\u0259r\u0259find\u0259n n\u0259 zaman imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "12 yanvar 2004-c\u00FC il",
+        "9 avqust 2001-ci il",
+        "21 fevral 2000-ci il",
+        "9 aprel 2013-c\u00FC il ",
+        "12 noyabr 1995-ci il"
+      ]
+    },
+    {
+      "Id": 50,
+      "Title": "\u201CAz\u0259rbaycan dilinin elektron m\u0259kanda daha geni\u015F istifad\u0259sinin t\u0259min edilm\u0259si il\u0259 ba\u011Fl\u0131 bir s\u0131ra t\u0259dbirl\u0259r haqq\u0131nda\u201D S\u0259r\u0259ncam Az\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti c\u0259nab \u0130lham \u018Fliyev t\u0259r\u0259find\u0259n n\u0259 zaman imzalanm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "17 iyul 2018-ci il ",
+        "12 yanvar 2004-c\u00FC il",
+        "9 avqust 2001-ci il",
+        "21 fevral 2000-ci il",
+        "9 aprel 2013-c\u00FC il "
+      ]
+    },
+    {
+      "Id": 51,
+      "Title": "\u201C\u0130nki\u015Faf etmi\u015F z\u0259ngin dil m\u0259d\u0259niyy\u0259tin\u0259 sahib olan xalq \u0259yilm\u0259zdir, \u00F6lm\u0259zdir, b\u00F6y\u00FCk g\u0259l\u0259c\u0259y\u0259 malikdir\u201D s\u00F6zl\u0259rinin m\u00FC\u0259llifi kimdir?",
+      "Answers": [
+        "Heyd\u0259r \u018Fliyev",
+        "Mustafa Kamal Atat\u00FCrk",
+        "\u0130lham \u018Fliyev",
+        "Demosfen",
+        "Mark Fabiy Kvintilian"
+      ]
+    },
+    {
+      "Id": 52,
+      "Title": "Ritorika s\u00F6z\u00FC hans\u0131 m\u0259nan\u0131 ifad\u0259 edir?",
+      "Answers": [
+        "Natiqlik s\u0259n\u0259ti",
+        "Xalq \u0259d\u0259biyyat\u0131",
+        "\u018Fd\u0259biyyat tarixi",
+        "Nitqin z\u0259nginliyi",
+        "Kommunikasiya"
+      ]
+    },
+    {
+      "Id": 53,
+      "Title": "E.\u0259.VII-IV \u0259srl\u0259rd\u0259 f\u0259aliyy\u0259t g\u00F6st\u0259r\u0259n yunan natiqlik m\u0259kt\u0259binin yetirm\u0259l\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "N\u0259sr\u0259ddin Tusi ",
+        "Aristotel",
+        "Solon",
+        "Kvintilian",
+        "Demosfen"
+      ]
+    },
+    {
+      "Id": 54,
+      "Title": "E.\u0259.VII-IV \u0259srl\u0259rd\u0259 f\u0259aliyy\u0259t g\u00F6st\u0259r\u0259n yunan natiqlik m\u0259kt\u0259binin yetirm\u0259l\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "Firdovsi ",
+        "Kvintilian",
+        "Demosfen",
+        "Hipeorid",
+        "Likurq"
+      ]
+    },
+    {
+      "Id": 55,
+      "Title": "Aristotel natiqlik s\u0259n\u0259tinin elmi \u0259saslar\u0131 bar\u0259d\u0259 hans\u0131 \u0259s\u0259ri yazm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "Ritorika",
+        "Poetika",
+        "Solon qanunlar\u0131",
+        "Loqoqraflar",
+        "\u015Eahnam\u0259"
+      ]
+    },
+    {
+      "Id": 56,
+      "Title": "Aristotelin  e.\u0259. 335-ci ild\u0259 yazd\u0131\u011F\u0131 \u201CRitorika\u201D adl\u0131 \u0259s\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "H\u0259r bir afinal\u0131n\u0131n m\u0259hk\u0259m\u0259d\u0259 \u00F6z h\u00FCququnu m\u00FCdafi\u0259 etm\u0259yi bacarmas\u0131",
+        "Natiqlik s\u0259n\u0259tinin elmi \u0259saslar\u0131n\u0131 verilm\u0259si",
+        "S\u0259n\u0259ti insan f\u0259aliyy\u0259tinin x\u00FCsusi n\u00F6v\u00FC kimi qiym\u0259tl\u0259ndirilm\u0259si",
+        "Natiq nitqinin qurulu\u015Funu, \u00FCslubunu izah\u0131",
+        "Natiq nitqinin orfoepiyas\u0131n\u0131, ifad\u0259lilik vasit\u0259l\u0259rinin izah\u0131"
+      ]
+    },
+    {
+      "Id": 57,
+      "Title": "Aristotelin  e.\u0259. 335-ci ild\u0259 yazd\u0131\u011F\u0131 \u201CRitorika\u201D adl\u0131 \u0259s\u0259rin\u0259 daxildir:",
+      "Answers": [
+        "Nitqin texnikas\u0131, vasit\u0259l\u0259ri v\u0259 priyomlar\u0131",
+        "Nitqin d\u0259qiqliyi, m\u0259ntiqiliyi",
+        "Nitqin formalar\u0131 v\u0259 n\u00F6vl\u0259ri",
+        "\u018Fd\u0259bi dilin funksional \u00FCslublar\u0131",
+        "\u018Fd\u0259bi dilin normalar\u0131"
+      ]
+    },
+    {
+      "Id": 58,
+      "Title": "Aristotelin  e.\u0259. 335-ci ild\u0259 yazd\u0131\u011F\u0131 \u201CRitorika\u201D adl\u0131 \u0259s\u0259rin\u0259 daxildir:",
+      "Answers": [
+        "Natiq \u00FC\u00E7\u00FCn laz\u0131m olan \u015F\u0259xsi keyfiyy\u0259t v\u0259 qabiliyy\u0259t",
+        "\u018Fd\u0259bi dil normas\u0131 v\u0259 izahl\u0131 l\u00FC\u011F\u0259tl\u0259r",
+        "Xarici v\u0259 daxili, aktiv v\u0259 passiv  nitq",
+        "Nitqin d\u00FCzg\u00FCnl\u00FCy\u00FC, z\u0259nginliyi",
+        "M\u0259i\u015F\u0259t \u00FCslubunun \u0259sas s\u0259ciyy\u0259vi x\u00FCsusiyy\u0259tl\u0259ri"
+      ]
+    },
+    {
+      "Id": 59,
+      "Title": "Aristotelin  e.\u0259. 335-ci ild\u0259 yazd\u0131\u011F\u0131 \u201CRitorika\u201D adl\u0131 \u0259s\u0259rin\u0259 daxildir:",
+      "Answers": [
+        "Nitqin t\u0259rtibi prinsipi",
+        "\u018Fd\u0259bi dil normas\u0131 v\u0259 izahl\u0131 l\u00FC\u011F\u0259tl\u0259r",
+        "T\u0259\u015Fkil olunmu\u015F v\u0259 spontan nitq",
+        "Nitqin \u0259lveri\u015Fliliyi",
+        "\u00D6z h\u00FCquqlar\u0131n\u0131 m\u00FCdafi\u0259 etm\u0259k"
+      ]
+    },
+    {
+      "Id": 60,
+      "Title": "Aristotelin x\u00FCsusi olaraq qeyd etdiyi natiqin m\u0259har\u0259tinin \u0259sas c\u0259h\u0259tl\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "Kommunikasiyan\u0131n yaz\u0131l\u0131 v\u0259 \u015Fifahi formalar\u0131 ",
+        "Material\u0131n icad\u0131 v\u0259 onun haz\u0131rlanmas\u0131.",
+        "Plan\u0131n t\u0259rtibi. Material\u0131n plan \u00FCzr\u0259 m\u00FCvafiq formaya sal\u0131nmas\u0131. ",
+        "Material\u0131n \u00F6yr\u0259nilm\u0259si v\u0259 yadda saxlan\u0131lmas\u0131",
+        "Nitqin s\u00F6yl\u0259nilm\u0259si, orfoepiya, intonasiya v\u0259 s. n\u0259z\u0259r\u0259 al\u0131nmas\u0131 "
+      ]
+    },
+    {
+      "Id": 61,
+      "Title": "Q\u0259dim Yunan\u0131standa natiqlik s\u0259n\u0259tinin inki\u015Faf\u0131na g\u00FCcl\u00FC t\u0259sir g\u00F6st\u0259r\u0259n Solon qanunlar\u0131na daxil deyil:",
+      "Answers": [
+        "Natiq nitqinin qurulu\u015Fu, ifad\u0259lilik vasit\u0259l\u0259ri v\u0259 s. geni\u015F \u015F\u0259kild\u0259 izah edilmi\u015Fdir",
+        "H\u0259r bir afinal\u0131 m\u0259hk\u0259m\u0259d\u0259 \u00F6z h\u00FCququnu m\u00FCdafi\u0259 etm\u0259yi bacarmal\u0131 idi",
+        "Afinal\u0131lar h\u00FCquqi bilikl\u0259r\u0259 yiy\u0259l\u0259nm\u0259y\u0259 x\u00FCsusi s\u0259y g\u00F6st\u0259rirdil\u0259r",
+        "Afinal\u0131lar ayd\u0131n, t\u0259sirli, m\u0259ntiqli, s\u00FCbutlu dan\u0131\u015Fa bilm\u0259y\u0259 s\u0259y g\u00F6st\u0259rirdil\u0259r",
+        "V\u0259t\u0259nda\u015Flara loqoqraflar k\u00F6m\u0259k edirdil\u0259r"
+      ]
+    },
+    {
+      "Id": 62,
+      "Title": "Q\u0259dim Yunan\u0131standa f\u0259aliyy\u0259t g\u00F6st\u0259r\u0259n loqoqraflara aid deyil:",
+      "Answers": [
+        "Natiq nitqinin qurulu\u015Funu, \u00FCslubunu, orfoepiyas\u0131n\u0131, ifad\u0259lilik vasit\u0259l\u0259rini v\u0259 s. geni\u015F \u015F\u0259kild\u0259 izah etmi\u015Fdir",
+        "M\u0259hk\u0259m\u0259d\u0259 v\u0259kill\u0259r f\u0259aliyy\u0259t g\u00F6st\u0259rm\u0259diyind\u0259n v\u0259t\u0259nda\u015Flara k\u00F6m\u0259k edirdil\u0259r H\u00FCquqi t\u0259hsil alm\u0131\u015F adamlar idil\u0259r",
+        "X\u00FCsusi muzdla m\u0259hk\u0259m\u0259d\u0259 bax\u0131lacaq i\u015Fin m\u0259zmun v\u0259 mahiyy\u0259ti il\u0259 ba\u011Fl\u0131 nitql\u0259r yaz\u0131rd\u0131lar",
+        "\u0130\u015Fi m\u0259hk\u0259m\u0259y\u0259 d\u00FC\u015F\u0259n afinal\u0131 onlar\u0131n t\u0259rtib etdiyi nitqi \u0259zb\u0259rl\u0259yir v\u0259 m\u0259hk\u0259m\u0259 prosesind\u0259 \u00F6z\u00FCn\u00FC m\u00FCdafi\u0259 edirdi",
+        ""
+      ]
+    },
+    {
+      "Id": 63,
+      "Title": "Q\u0259dim Yunan\u0131standa natiqlik s\u0259n\u0259tinin inki\u015Faf\u0131na g\u00FCcl\u00FC t\u0259sir g\u00F6st\u0259r\u0259n s\u0259b\u0259bl\u0259rd\u0259n biri hesab olunur:",
+      "Answers": [
+        "Solon qanunlar\u0131",
+        "Aristotelin \u201CRitorika\u201D\u0259s\u0259ri",
+        "Demosfenin \u00FCsullar\u0131",
+        "Siseronun \u201CNatiqlik haqq\u0131nda\u201D traktat\u0131",
+        "Kvintilian\u0131n \u201CNatiqlik t\u0259hsili\u201D kitab\u0131"
+      ]
+    },
+    {
+      "Id": 64,
+      "Title": "Q\u0259dim Yunan\u0131standa f\u0259aliyy\u0259t g\u00F6st\u0259r\u0259n g\u00F6rk\u0259mli loqoqraf-natiql\u0259r\u0259 aid edilmir:",
+      "Answers": [
+        "Siseron",
+        "Hiperid",
+        "Esxin",
+        "Trasimax",
+        "Demosfen"
+      ]
+    },
+    {
+      "Id": 65,
+      "Title": "Demosfen\u0259 g\u00F6r\u0259 natiqlik s\u0259n\u0259tind\u0259 \u0259m\u0259l olunmal\u0131 t\u0259l\u0259bl\u0259r\u0259 daxil deyil:",
+      "Answers": [
+        "H\u00FCquqi t\u0259hsil alaraq muzdla nitqin t\u0259rtibi",
+        "Material\u0131n toplanmas\u0131. ",
+        "Nitqin m\u0259zmununun \u00F6yr\u0259nilm\u0259si, m\u0259nims\u0259nilm\u0259si ",
+        "M\u0259zmunun dinl\u0259yicil\u0259r qar\u015F\u0131s\u0131nda s\u00F6yl\u0259nilm\u0259si",
+        "Material\u0131n m\u0259qs\u0259d\u0259uy\u011Fun s\u00F6yl\u0259nilm\u0259si \u00FC\u00E7\u00FCn plan\u0131n t\u0259rtibi"
+      ]
+    },
+    {
+      "Id": 66,
+      "Title": "Roma natiqlik m\u0259kt\u0259binin yeti\u015Fdirm\u0259si olmam\u0131\u015Fd\u0131r:",
+      "Answers": [
+        "Demosfen",
+        "Antoni Mark",
+        "Siseron",
+        "Mark Fabiy Kvintilian",
+        "Qrakxi"
+      ]
+    },
+    {
+      "Id": 67,
+      "Title": "Roma natiqlik m\u0259kt\u0259binin yeti\u015Fdirm\u0259si Mark Fabiy Kvintilian hans\u0131 \u0259s\u0259rin m\u00FC\u0259llifidir?",
+      "Answers": [
+        "\u201CNatiqlik t\u0259hsili\u201Dadl\u0131 12 kitabdan ibar\u0259t \u0259s\u0259r",
+        "\u201CRitorika\u201D \u0259s\u0259ri",
+        "\u201CBrut, yaxud m\u0259\u015Fhur natiqlik haqq\u0131nda\u201D \u0259s\u0259r",
+        "\u201C\u018Fxlaqi-nasiri\u201D \u0259s\u0259ri",
+        "\u201CSolon qanunlar\u0131\u201D \u0259s\u0259ri"
+      ]
+    },
+    {
+      "Id": 68,
+      "Title": "\u201C\u015Eair do\u011Fulurlar, natiq is\u0259 olurlar. Natiqlik s\u0259n\u0259tin\u0259 is\u0259 t\u0259limin k\u00F6m\u0259yi il\u0259 yiy\u0259l\u0259nm\u0259k m\u00FCmk\u00FCnd\u00FCr\u201D s\u00F6zl\u0259ri kim\u0259 m\u0259xsusdur?",
+      "Answers": [
+        "Mark Fabiy Kvintilian",
+        "Antoni Mark",
+        "Mahmud Ka\u015F\u011Fari",
+        "Siseron",
+        "\u018Fbu Reyhan Biruni"
+      ]
+    },
+    {
+      "Id": 69,
+      "Title": "\u015E\u0259rqd\u0259 \u00F6z \u0259s\u0259rl\u0259rind\u0259 s\u00F6z\u0259 y\u00FCks\u0259k qiym\u0259t vermi\u015F \u015Fair v\u0259 filosoflara daxil deyil:",
+      "Answers": [
+        "Demosfen",
+        "Firdovsi",
+        "\u018Fbu Reyhan Biruni",
+        "S\u0259di \u015Eirazi",
+        "Mahmud Ka\u015F\u011Fari"
+      ]
+    },
+    {
+      "Id": 70,
+      "Title": "Nitqin sosial bax\u0131mdan yerin\u0259 yetirdiyi funksiyadan as\u0131l\u0131 olaraq m\u00FC\u0259yy\u0259nl\u0259\u015F\u0259n formalar\u0131na daxil deyil:",
+      "Answers": [
+        "\u0130\u015Fg\u00FCzar natiqlik",
+        "Dini-m\u0259scid(kils\u0259) nitqi",
+        "Akademik natiqlik ",
+        "M\u0259hk\u0259m\u0259 natiqliyi",
+        "Sosial-m\u0259i\u015F\u0259t natiqliyi"
+      ]
+    },
+    {
+      "Id": 71,
+      "Title": "Akademik natiqliyin s\u0259ciyy\u0259vi x\u00FCsusiyy\u0259tl\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "B\u0259dii t\u0259svir v\u0259 ifad\u0259 vasit\u0259l\u0259rind\u0259n geni\u015F \u015F\u0259kild\u0259 istifad\u0259 edilir",
+        "Burada elmiliy\u0259 daha \u00E7ox yer verilir",
+        "H\u0259r bir natiq ona veril\u0259n suallar\u0131 elmi  \u0259saslarla \u015F\u0259hr edir",
+        "M\u00FChazir\u0259 haz\u0131rlanark\u0259n m\u00FCbahis\u0259 do\u011Furan m\u0259s\u0259l\u0259l\u0259r aradan qald\u0131r\u0131lmal\u0131d\u0131r",
+        "\u018Fg\u0259r fakt, s\u00FCbut, d\u0259lil varsa, bu nitqin t\u0259sir g\u00FCc\u00FCn\u00FC art\u0131r\u0131r"
+      ]
+    },
+    {
+      "Id": 72,
+      "Title": "Akademik natiqliyin s\u0259ciyy\u0259vi x\u00FCsusiyy\u0259tl\u0259rin\u0259 daxil deyil:",
+      "Answers": [
+        "Dialektizm v\u0259 varvarizml\u0259rd\u0259n istifad\u0259 oluna bil\u0259r",
+        "M\u00F6vzunun \u0259vv\u0259lc\u0259d\u0259n dinl\u0259yicil\u0259r\u0259 m\u0259lum olmas\u0131d\u0131r",
+        "H\u0259r bir natiq m\u00FChazir\u0259y\u0259 haz\u0131rla\u015Fark\u0259n ona yarad\u0131c\u0131 yana\u015F\u0131r",
+        "H\u0259r hans\u0131 bir ixtisas sahibi haz\u0131rlad\u0131\u011F\u0131 m\u00FChazir\u0259ni dinl\u0259yicil\u0259rin s\u0259viyy\u0259sin\u0259 uy\u011Fun qurmal\u0131d\u0131r",
+        "\u018Fg\u0259r fakt, s\u00FCbut, d\u0259lil varsa, bu nitqin t\u0259sir g\u00FCc\u00FCn\u00FC art\u0131r\u0131r"
+      ]
+    },
+    {
+      "Id": 73,
+      "Title": "Nitq haz\u0131rl\u0131\u011F\u0131n\u0131n \u0259sas m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxil deyil:\u00A0",
+      "Answers": [
+        "Material\u0131n icad\u0131 v\u0259 onun haz\u0131rlanmas\u0131 ",
+        "Nitqin m\u0259qs\u0259dl\u0259rinin m\u00FC\u0259yy\u0259n edilm\u0259si\u00A0",
+        "Auditoriya v\u0259 v\u0259ziyy\u0259tin t\u0259hlili",
+        "Nitqin predmetinin se\u00E7ilib m\u0259hdudla\u015Fd\u0131r\u0131lmas\u0131",
+        "Material toplanmas\u0131"
+      ]
+    },
+    {
+      "Id": 74,
+      "Title": "Nitq haz\u0131rl\u0131\u011F\u0131n\u0131n \u0259sas m\u0259rh\u0259l\u0259l\u0259rin\u0259 daxil deyil:\u00A0",
+      "Answers": [
+        "Natiq \u00FC\u00E7\u00FCn laz\u0131m olan \u015F\u0259xsi keyfiyy\u0259t v\u0259 qabiliyy\u0259t",
+        "Nitqin plan\u0131n\u0131n t\u0259rtib edilm\u0259si",
+        "Auditoriya v\u0259 v\u0259ziyy\u0259tin t\u0259hlili",
+        "Nitq \u00FC\u00E7\u00FCn s\u00F6zl\u0259rin se\u00E7ilm\u0259si",
+        "Ucadan s\u00F6yl\u0259m\u0259nin t\u0259cr\u00FCb\u0259 edilm\u0259si"
+      ]
+    },
+    {
+      "Id": 75,
+      "Title": "Natiql\u0259rin nitqi tamamlamaq \u00FC\u00E7\u00FCn daha tez-tez istifad\u0259 etdiyi metodlara daxil deyil:\u00A0",
+      "Answers": [
+        "Nitqin monotonlu\u011Fu",
+        "\u00C7a\u011F\u0131r\u0131\u015F,yaxud m\u00FCraci\u0259t",
+        "\u0130ll\u00FCstrasiya",
+        "H\u0259v\u0259sl\u0259ndirici  stimul",
+        "\u015E\u0259xsi ist\u0259k"
+      ]
+    },
+    {
+      "Id": 76,
+      "Title": "Natiql\u0259rin nitqi tamamlamaq \u00FC\u00E7\u00FCn daha tez-tez istifad\u0259 etdiyi metodlara daxil deyil:\u00A0",
+      "Answers": [
+        "Epitet, metafora",
+        "Sitat ",
+        "\u00C7a\u011F\u0131r\u0131\u015F,yaxud m\u00FCraci\u0259t",
+        "\u0130ll\u00FCstrasiya",
+        "H\u0259v\u0259sl\u0259ndirici  stimul"
+      ]
+    },
+    {
+      "Id": 77,
+      "Title": ".Dil v\u0259 nitq normalar\u0131 harada \u00F6yr\u0259dilir?",
+      "Answers": [
+        "ham\u0131s\u0131nda",
+        "m\u0259kt\u0259bd\u0259",
+        "h\u0259yatda",
+        "radio v\u0259 televiziya verili\u015Fl\u0259rind\u0259",
+        "q\u0259zet v\u0259 jurnal s\u0259hif\u0259l\u0259rind\u0259"
+      ]
+    },
+    {
+      "Id": 78,
+      "Title": "\u201CAz\u0259rbaycan dilinin izahl\u0131 l\u00FC\u011F\u0259tind\u0259\u201D norma ne\u00E7\u0259 m\u0259nada qeyd edilir?",
+      "Answers": [
+        "2 m\u0259nada",
+        "5 m\u0259nada",
+        "7 m\u0259nada",
+        "4 m\u0259nada",
+        "6 m\u0259nada"
+      ]
+    },
+    {
+      "Id": 79,
+      "Title": ". \u201CNorma konkret tarixi d\u00F6vrd\u0259 kollektiv t\u0259r\u0259find\u0259n q\u0259bulu etiraf olunan, \u00FCslublar aras\u0131nda m\u00FCvafiq \u015F\u0259kild\u0259 paylanan v\u0259 onlar\u0131 t\u0259min ed\u0259n dil faktlar\u0131n\u0131n m\u00FC\u0259yy\u0259n qanun dair\u0259sind\u0259 c\u0259ml\u0259\u015F\u0259n t\u0259zah\u00FCr\u00FCd\u00FCr\u201D-fikrinin m\u00FC\u0259llifini g\u00F6st\u0259rin:",
+      "Answers": [
+        "T.Hac\u0131yev",
+        "\u018F.D\u0259mir\u00E7izad\u0259",
+        "V.Vinoqradov",
+        "\u018F.Abdullayev",
+        "S.C\u0259f\u0259rov"
+      ]
+    },
+    {
+      "Id": 80,
+      "Title": ". \u201CTarixilik norman\u0131n, bir t\u0259r\u0259fd\u0259n, g\u0259l\u0259c\u0259y\u0259 meylind\u0259, o biri t\u0259r\u0259fd\u0259n, ke\u00E7mi\u015F\u0259 ba\u011Flanmas\u0131ndad\u0131r \u201D-fikrinin m\u00FC\u0259llifini g\u00F6st\u0259rin:",
+      "Answers": [
+        "T.Hac\u0131yev",
+        "A.Babayev",
+        "V.Vinoqradov",
+        "\u018F.Abdullayev",
+        "A.Axundov"
+      ]
+    },
+    {
+      "Id": 81,
+      "Title": ". Norma hans\u0131 amill\u0259rl\u0259 m\u00FC\u0259yy\u0259n edilir?",
+      "Answers": [
+        "ham\u0131s\u0131 il\u0259",
+        "he\u00E7 biri il\u0259",
+        "tarixi",
+        "m\u0259d\u0259ni",
+        "ictimai v\u0259 x\u00FCsusi dil\u00E7ilik"
+      ]
+    },
+    {
+      "Id": 82,
+      "Title": ". Dilin \u015F\u00FCurlu normala\u015Fmas\u0131n\u0131n u\u011Furlu\u011Fu hans\u0131 \u015F\u0259rtl\u0259r\u0259 \u0259m\u0259l olunmas\u0131ndan as\u0131l\u0131d\u0131r?",
+      "Answers": [
+        "ham\u0131s\u0131ndan",
+        "normala\u015Fan\u0131n \u0259d\u0259bi dilin sabitl\u0259\u015Fm\u0259sin\u0259 t\u0259sir g\u00F6st\u0259rm\u0259 imkan\u0131",
+        "\u015Fifahi v\u0259 yaz\u0131l\u0131 dil aras\u0131ndak\u0131 f\u0259rqin d\u0259rinl\u0259\u015Fdirilm\u0259si",
+        "normala\u015Fan  variantlar\u0131n saxlan\u0131lmas\u0131 ",
+        "funksional v\u0259 \u00FCslubi f\u0259rql\u0259rin aradan g\u00F6t\u00FCr\u00FClm\u0259sind\u0259n"
+      ]
+    },
+    {
+      "Id": 83,
+      "Title": ". Norman\u0131n \u015F\u00FCurlu sistem\u0259 sal\u0131nmas\u0131 prosesind\u0259 ne\u00E7\u0259 c\u0259h\u0259t bir-biri il\u0259 qar\u015F\u0131l\u0131ql\u0131 \u0259laq\u0259l\u0259ndirilm\u0259lidir?",
+      "Answers": [
+        "3 c\u0259h\u0259t",
+        "6 c\u0259h\u0259t",
+        "9 c\u0259h\u0259t",
+        "10 c\u0259h\u0259t",
+        "7 c\u0259h\u0259t"
+      ]
+    },
+    {
+      "Id": 84,
+      "Title": " Dilin ne\u00E7\u0259 formas\u0131 var?",
+      "Answers": [
+        "2 formas\u0131",
+        "5 formas\u0131",
+        "4 formas\u0131 ",
+        "6 formas\u0131",
+        "8 formas\u0131"
+      ]
+    },
+    {
+      "Id": 85,
+      "Title": " Veril\u0259n x\u00FCsusiyy\u0259tl\u0259rd\u0259n hans\u0131na g\u00F6r\u0259 orfoqrafiya qaydalar\u0131 ba\u015Fqa qayda v\u0259 normalardan f\u0259rql\u0259nir?",
+      "Answers": [
+        "ham\u0131s\u0131na ",
+        "\u00FCmumxalq sor\u011Fusuna \u0259saslan\u0131r",
+        "bu qaydalar ham\u0131 \u00FC\u00E7\u00FCn birdir",
+        "orfoqrafiya yaz\u0131da ikiliyin qar\u015F\u0131s\u0131n\u0131 al\u0131r",
+        "orfoqrafiya qaydalar\u0131n\u0131n \u0259sas\u0131 sabitdir"
+      ]
+    },
+    {
+      "Id": 86,
+      "Title": ". Orfoepiya normalar\u0131n\u0131 m\u00FC\u0259yy\u0259nl\u0259\u015Fdir\u0259rk\u0259n hans\u0131 prinsipl\u0259r\u0259 \u0259saslanmaq laz\u0131md\u0131r?",
+      "Answers": [
+        "ham\u0131s\u0131na",
+        "t\u0259l\u0259ff\u00FCz\u00FCn asanl\u0131\u011F\u0131",
+        "ah\u0259ng qanununun g\u00F6zl\u0259nilm\u0259si",
+        "q\u0259na\u0259t prinsipin\u0259 \u0259m\u0259l etm\u0259k",
+        "dan\u0131\u015F\u0131\u011F\u0131n t\u0259biiliyini qorumaq"
+      ]
+    },
+    {
+      "Id": 87,
+      "Title": ". Fonetik hadis\u0259nin, \u0259sas\u0259n, ne\u00E7\u0259 n\u00F6v\u00FC vard\u0131r?",
+      "Answers": [
+        "5",
+        "7",
+        "8",
+        "11",
+        "9"
+      ]
+    },
+    {
+      "Id": 88,
+      "Title": ".T\u0259l\u0259ff\u00FCz zaman\u0131 proteza hadis\u0259sinin oldu\u011Fu s\u00F6zl\u0259rin c\u0259rg\u0259sini g\u00F6st\u0259rin:",
+      "Answers": [
+        "z\u0259if, poema, Nail\u0259, m\u00FCdafi\u0259",
+        "musiqi, Mirz\u0259, q\u0131rm\u0131z\u0131, ka\u011F\u0131z",
+        "isim, h\u0259kim, me\u015F\u0259, g\u00F6z\u0259l",
+        "qaradinm\u0259z, v\u0259zif\u0259, R\u00F6v\u015F\u0259n, s\u0259hn\u0259",
+        "saat, sonra, hafiz\u0259, dov\u015Fan"
+      ]
+    },
+    {
+      "Id": 89,
+      "Title": ". Hans\u0131 fonetik hadis\u0259 bu s\u00F6zl\u0259rin \u2013yarpaq, p\u0259hriz, m\u0259\u015Fhur, kirpik \u2013h\u0259r birin\u0259 aiddir?",
+      "Answers": [
+        "Metateza",
+        "Eliziya",
+        "Proteza",
+        "Dissimilyasiya",
+        "Assimilyasiya"
+      ]
+    },
+    {
+      "Id": 90,
+      "Title": ". Hans\u0131 fonetik hadis\u0259 sait s\u0259sin ixtisara d\u00FC\u015Fm\u0259si il\u0259 ba\u011Fl\u0131 oldu\u011Fu \u00FC\u00E7\u00FCn onu b\u0259z\u0259n sait d\u00FC\u015F\u00FCm\u00FC d\u0259 adland\u0131r\u0131rlar?",
+      "Answers": [
+        "Eliziya",
+        "Proteza",
+        "Assimilyasiya",
+        "Dissimilyasiya",
+        "Metateza"
+      ]
+    },
+    {
+      "Id": 91,
+      "Title": ". Eyni v\u0259 ya yax\u0131n m\u0259xr\u0259cd\u0259 olan iki s\u0259sd\u0259n biri dig\u0259rin\u0259 t\u0259sir ed\u0259r\u0259k, onu \u00F6z m\u0259xr\u0259cind\u0259n uzaqla\u015Fd\u0131r\u0131r \u2013 bu fonetik hadis\u0259 nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "Dissimilyasiya",
+        "Proteza",
+        "Assimilyasiya",
+        "Metateza",
+        "Eliziya"
+      ]
+    },
+    {
+      "Id": 92,
+      "Title": ". Veril\u0259nl\u0259rd\u0259n hans\u0131 fonetik  hadis\u0259nin n\u00F6vl\u0259rind\u0259n olan yerd\u0259yi\u015Fm\u0259nin dig\u0259r ad\u0131d\u0131r?  ",
+      "Answers": [
+        "Metateza",
+        "Eliziya",
+        "Dissimilyasiya",
+        "Assimilyasiya",
+        "Proteza"
+      ]
+    },
+    {
+      "Id": 93,
+      "Title": ". S\u0259sd\u00FC\u015F\u00FCm\u00FC fonetik hadis\u0259sinin dig\u0259r ad\u0131 nec\u0259dir?",
+      "Answers": [
+        "Eliziya",
+        "Metateza",
+        "Assimilyasiya",
+        "Proteza",
+        "Dissimilyasiya"
+      ]
+    },
+    {
+      "Id": 94,
+      "Title": ". k\u0259s\u0259rli-k\u0259s\u0259rri, yerli-yerri, manatl\u0131q-manatd\u0131\u011F, ism\u0259tli-ism\u0259tdi \u2013 s\u00F6zl\u0259ri hans\u0131 fonetik hadis\u0259nin hans\u0131 n\u00F6v\u00FCn\u0259 aiddir?",
+      "Answers": [
+        "Assimilyasiya",
+        "Metateza",
+        "Proteza",
+        "Eliziya",
+        "Dissimilyasiya"
+      ]
+    },
+    {
+      "Id": 95,
+      "Title": ".Yaz\u0131l\u0131\u015F\u0131 il\u0259 t\u0259l\u0259ff\u00FCz\u00FC f\u0259rql\u0259nm\u0259y\u0259n s\u00F6zl\u0259rin c\u0259rg\u0259sini g\u00F6st\u0259rin:",
+      "Answers": [
+        "Ba\u011Fban, yeni, k\u00FC\u00E7\u0259",
+        "T\u0259nb\u0259l, m\u00FC\u0259llim, t\u0259bi\u0259t",
+        "Otaq, g\u00F6zg\u00FC, z\u0259if",
+        "Doqquz, bitki, ail\u0259",
+        "S\u0259ad\u0259t, toqqa, dostluq"
+      ]
+    },
+    {
+      "Id": 96,
+      "Title": ". Onomastik normalara aiddir:",
+      "Answers": [
+        "Ham\u0131s\u0131",
+        "He\u00E7 biri",
+        "Toponiml\u0259r\u0259 dair normalar",
+        "Antroponiml\u0259r\u0259 dair normalar",
+        "Hidroniml\u0259r\u0259 dair normalar"
+      ]
+    },
+    {
+      "Id": 97,
+      "Title": ". \u018Fd\u0259bi dil normalar\u0131na g\u00F6r\u0259 s\u00F6zyaratma hans\u0131 yolla \u0259m\u0259l\u0259 g\u0259lir?",
+      "Answers": [
+        "Ham\u0131s\u0131",
+        "He\u00E7 biri",
+        "Leksik",
+        "Morfoloji ",
+        "Sintaktik "
+      ]
+    },
+    {
+      "Id": 98,
+      "Title": "Funksional \u00FCslublar\u0131n yaranmas\u0131nda v\u0259 formala\u015Fmas\u0131nda hans\u0131 amill\u0259r x\u00FCsusi  t\u0259sir g\u00F6st\u0259rir? ",
+      "Answers": [
+        "ham\u0131s\u0131",
+        "milli \u0259n\u0259n\u0259",
+        "dini t\u0259bli\u011Fat",
+        "milli m\u0259d\u0259niyy\u0259t",
+        "dil siyas\u0259ti "
+      ]
+    },
+    {
+      "Id": 99,
+      "Title": "Dil\u00E7ilikd\u0259 funksional \u00FCslublardan b\u0259hs ed\u0259n sah\u0259 nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "funksional \u00FCslubiyyat",
+        "funksional \u0259d\u0259biyyat",
+        "funksional psixilogiya",
+        "\u0259d\u0259biyyat\u015F\u00FCnasl\u0131q",
+        "pedaqogika"
+      ]
+    },
+    {
+      "Id": 100,
+      "Title": "XX \u0259srin II yar\u0131s\u0131nda funksional \u00FCslublar\u0131n hans\u0131 n\u00F6vl\u0259ri vard\u0131?",
+      "Answers": [
+        "Ham\u0131s\u0131",
+        "B\u0259dii \u00FCslub",
+        "Elmi \u00FCslub",
+        "R\u0259smi \u00FCslub",
+        "Publisistik \u00FCslub "
+      ]
+    },
+    {
+      "Id": 101,
+      "Title": ".Veril\u0259nl\u0259rd\u0259n hans\u0131 r\u0259smi \u0259d\u0259bi dan\u0131\u015F\u0131q \u00FCslubuna aid deyil?",
+      "Answers": [
+        "Ail\u0259-m\u0259i\u015F\u0259t dan\u0131\u015F\u0131q \u00FCslubu",
+        "M\u00FChazir\u0259 \u00FCslubu",
+        "M\u0259ruz\u0259 \u00FCslubu",
+        "Televiziya \u00FCslubu",
+        "Radio \u00FCslubu."
+      ]
+    },
+    {
+      "Id": 102,
+      "Title": ".Veril\u0259nl\u0259rd\u0259n hans\u0131 qeyri-r\u0259smi \u0259d\u0259bi dan\u0131\u015F\u0131q \u00FCslubuna aiddir?",
+      "Answers": [
+        "\u0130ctimai-k\u00FCtl\u0259vi dan\u0131\u015F\u0131q \u00FCslubu",
+        "Televiziya \u00FCslubu",
+        "Radio \u00FCslubu.",
+        "M\u00FChazir\u0259 \u00FCslubu",
+        "M\u0259ruz\u0259 \u00FCslubu"
+      ]
+    },
+    {
+      "Id": 103,
+      "Title": ".Veril\u0259nl\u0259rd\u0259n hans\u0131 R\u0259smi \u0259d\u0259bi dan\u0131\u015F\u0131q \u00FCslubuna aid deyil?",
+      "Answers": [
+        "\u0130ctimai-k\u00FCtl\u0259vi dan\u0131\u015F\u0131q \u00FCslubu",
+        "M\u00FChazir\u0259 \u00FCslubu",
+        "M\u0259ruz\u0259 \u00FCslubu",
+        "Televiziya \u00FCslubu",
+        "Radio \u00FCslubu"
+      ]
+    },
+    {
+      "Id": 104,
+      "Title": ".Veril\u0259nl\u0259rd\u0259n hans\u0131 Qeyri-r\u0259smi \u0259d\u0259bi dan\u0131\u015F\u0131q \u00FCslubuna aiddir?",
+      "Answers": [
+        "Ail\u0259-m\u0259i\u015F\u0259t dan\u0131\u015F\u0131q \u00FCslubu",
+        "Televiziya \u00FCslubu",
+        "M\u00FChazir\u0259 \u00FCslubu",
+        "M\u0259ruz\u0259 \u00FCslubu",
+        "Radio \u00FCslubu."
+      ]
+    },
+    {
+      "Id": 105,
+      "Title": ".Fikrin b\u0259dii ifad\u0259 v\u0259 t\u0259svir vasit\u0259l\u0259ri il\u0259 ifad\u0259 olunmas\u0131na \u0259d\u0259bi dilin funksional  ... deyilir \u2013 n\u00F6qt\u0259l\u0259rin yerin\u0259 hans\u0131 \u00FCslubun ad\u0131 yaz\u0131lmal\u0131d\u0131r?",
+      "Answers": [
+        "b\u0259dii \u00FCslubu",
+        "epistolyar \u00FCslubu",
+        "ail\u0259-m\u0259i\u015F\u0259t dan\u0131\u015F\u0131q \u00FCslubu",
+        "m\u0259i\u015F\u0259t \u00FCslubu",
+        "r\u0259smi \u00FCslubu"
+      ]
+    },
+    {
+      "Id": 106,
+      "Title": ".B\u0259dii \u00FCslubun hans\u0131 janrlar\u0131 var?",
+      "Answers": [
+        "Ham\u0131s\u0131",
+        "He\u00E7 biri ",
+        "Lirik \u0259s\u0259rl\u0259r",
+        "Epik \u0259s\u0259rl\u0259r",
+        "Dramatik \u0259s\u0259rl\u0259r "
+      ]
+    },
+    {
+      "Id": 107,
+      "Title": ".\u018Fd\u0259bi dilin funksional b\u0259dii \u00FCslubunun ne\u00E7\u0259 mikro\u00FCslubu vard\u0131r? ",
+      "Answers": [
+        "2",
+        "6",
+        "4",
+        "5",
+        "7"
+      ]
+    },
+    {
+      "Id": 108,
+      "Title": " A\u011F\u0131r s\u00F6z, yuxulu torpaq, d\u0259rin z\u0259ka, \u015Firin yuxu \u2013 s\u00F6zl\u0259ri b\u0259dii ifad\u0259 m\u0259nas\u0131na g\u00F6r\u0259 n\u0259dir?",
+      "Answers": [
+        "Epitet",
+        "Metafora",
+        "Simvol",
+        "Anafora",
+        "Litota"
+      ]
+    },
+    {
+      "Id": 109,
+      "Title": ".Litota n\u0259dir?",
+      "Answers": [
+        "ki\u00E7iltm\u0259k, \u0259h\u0259miyy\u0259tsizl\u0259\u015Fdirm\u0259k",
+        "eyni s\u00F6z\u00FCn, ifad\u0259nin t\u0259krar olunmas\u0131",
+        "bir-birin\u0259 zidd iki anlay\u0131\u015F v\u0259 ya v\u0259ziyy\u0259tin qar\u015F\u0131l\u0131ql\u0131 \u015F\u0259kild\u0259 verilm\u0259si",
+        "\u015Fi\u015Firtm\u0259k, \u00FCst\u00FCnl\u00FCk verm\u0259k, b\u00F6y\u00FCtm\u0259k,",
+        "qrammatik ard\u0131c\u0131ll\u0131\u011F\u0131n\u0131n q\u0259sd\u0259n pozulmas\u0131"
+      ]
+    },
+    {
+      "Id": 110,
+      "Title": ".\u0130.\u015E\u0131xl\u0131n\u0131n \u201CD\u0259li K\u00FCr\u201D \u0259s\u0259rinin ad\u0131 b\u0259dii t\u0259svir vasit\u0259si kimi n\u0259dir?",
+      "Answers": [
+        "Epitet",
+        "Metafor",
+        "Metonimiya",
+        "Simvol",
+        "T\u0259\u015Fbeh"
+      ]
+    },
+    {
+      "Id": 111,
+      "Title": ".N\u00FCmun\u0259d\u0259 i\u015Fl\u0259nmi\u015F b\u0259dii t\u0259svir vasit\u0259l\u0259rini g\u00F6st\u0259rin:\nYa\u015F\u0131l k\u00F6yn\u0259yini geyinir me\u015F\u0259,Yaxama qu\u015F kimi qonur b\u0259n\u00F6v\u015F\u0259.\n[1-Epitet],\n[2-T\u0259\u015Fbeh].\n[3-Metafor],\n[4-Simvol],\n[5-\u0022b\u0259dii t\u0259zad\u0022 B\u0259dii t\u0259zad]",
+      "Answers": [
+        "2, 3",
+        "3, 5",
+        "2, 4, 5",
+        "1, 3, 4",
+        "1, 5"
+      ]
+    },
+    {
+      "Id": 112,
+      "Title": " \u201CAnafora\u201D hans\u0131 b\u0259dii ifad\u0259 vasit\u0259sinin bir n\u00F6v\u00FC say\u0131l\u0131r?",
+      "Answers": [
+        "T\u0259kririn",
+        "Kinay\u0259nin",
+        "M\u00FCbali\u011F\u0259nin",
+        "\u0130nversiyan\u0131n",
+        "Simvolun"
+      ]
+    },
+    {
+      "Id": 113,
+      "Title": " M\u0259caz\u0131n bir n\u00F6v\u00FCd\u00FCr. Hans\u0131sa bir s\u00F6zl\u0259 m\u00FC\u0259yy\u0259n fikrin \u00FCst\u00FC\u00F6rt\u00FCl\u00FC \u015F\u0259kild\u0259 ifad\u0259 olunmas\u0131na xidm\u0259t edir:",
+      "Answers": [
+        "Simvol",
+        "Epitet",
+        "T\u0259\u015Fbeh",
+        "Metafor",
+        "Anafora"
+      ]
+    },
+    {
+      "Id": 114,
+      "Title": " Bu b\u0259dii ifad\u0259 vasit\u0259sinin daha k\u0259skin formas\u0131 \u201Ct\u0259riz\u201D, yaxud \u201Csarkazm\u201D adlan\u0131r. S\u00F6hb\u0259t b\u0259dii ifad\u0259 vasit\u0259l\u0259rinin hans\u0131 n\u00F6v\u00FCnd\u0259n gedir?",
+      "Answers": [
+        "Kinay\u0259",
+        "M\u00FCbali\u011F\u0259",
+        "Lilota",
+        "T\u0259zad",
+        "T\u0259krir"
+      ]
+    },
+    {
+      "Id": 115,
+      "Title": " N\u00FCmun\u0259d\u0259 hans\u0131 b\u0259dii t\u0259svir v\u0259 ifad\u0259 vasit\u0259si i\u015Fl\u0259nmi\u015Fdir?\nApar\u0131n, apar\u0131n onu zindana,G\u00F6z da\u011F\u0131 \u00E7\u0259kdirin Az\u0259rbaycana.",
+      "Answers": [
+        "Anafora, metonimiya",
+        "Epitet, kinay\u0259",
+        "Simvol, t\u0259riz",
+        "T\u0259zad, epifora",
+        "Sarkazm, b\u0259dii sual"
+      ]
+    },
+    {
+      "Id": 116,
+      "Title": " Da\u015F q\u0259lbli insanlar\u0131 neyl\u0259rdin, ilahi?\nBizd\u0259 bu soyuq qanlar\u0131 neyl\u0259rdin, ilahi?",
+      "Answers": [
+        "Epitet",
+        "T\u0259\u015Fbeh",
+        "Simvol",
+        "\u0130stiar\u0259",
+        "Anafora "
+      ]
+    },
+    {
+      "Id": 117,
+      "Title": ".Simvol n\u0259dir?",
+      "Answers": [
+        "Bir s\u00F6zl\u0259 m\u00FC\u0259yy\u0259n fikrin \u00FCst\u00FC\u00F6rt\u00FCl\u00FC \u015F\u0259kild\u0259 ifad\u0259 olunmas\u0131d\u0131r.",
+        "Bir \u0259lam\u0259tin b\u00FCt\u00F6v bir anlay\u0131\u015F\u0131 \u0259v\u0259z etm\u0259sidir.",
+        "S\u00F6zl\u0259rin qrammatik ard\u0131c\u0131ll\u0131\u011F\u0131n\u0131n q\u0259sd\u0259n pozulmas\u0131d\u0131r.",
+        "Bir \u0259\u015Fya v\u0259 ya hadis\u0259nin \u0259slind\u0259 oldu\u011Fundan daha z\u0259if, ki\u00E7ik verilm\u0259sidir.",
+        "Bir \u0259\u015Fya v\u0259ya hadis\u0259nin q\u0259sd\u0259n \u0259slind\u0259 oldu\u011Fundan daha g\u00FCcl\u00FC verilm\u0259sidir."
+      ]
+    },
+    {
+      "Id": 118,
+      "Title": ". \u201CK\u00F6\u00E7\u00FCrm\u0259\u201D m\u0259nas\u0131n\u0131 ifad\u0259 ed\u0259n bu b\u0259dii t\u0259svir vasit\u0259sinin ikinci ad\u0131 istiar\u0259dir. S\u00F6hb\u0259t m\u0259caz\u0131n hans\u0131 n\u00F6v\u00FCnd\u0259n gedir?",
+      "Answers": [
+        "Metafor",
+        "T\u0259\u015Fbeh",
+        "Metonimiya",
+        "Epitet",
+        "Simvol"
+      ]
+    },
+    {
+      "Id": 119,
+      "Title": ".Bunlardan biri \u0259ks anlay\u0131\u015Flar\u0131n, v\u0259ziyy\u0259tl\u0259rin qar\u015F\u0131la\u015Fd\u0131r\u0131lmas\u0131 yolu il\u0259 yaran\u0131r:",
+      "Answers": [
+        "T\u0259zad",
+        "Metonimiya",
+        "Epitet",
+        "M\u00FCbali\u011F\u0259",
+        "Litota"
+      ]
+    },
+    {
+      "Id": 120,
+      "Title": ".Me\u015F\u0259l\u0259r! Me\u015F\u0259l\u0259r! Do\u011Frudan da siz\nYayda da, q\u0131\u015Fda da bir bahars\u0131n\u0131z.\nN\u00FCmun\u0259d\u0259ki \u201CMe\u015F\u0259l\u0259r! Me\u015F\u0259l\u0259r!\u201D s\u00F6zl\u0259ri hans\u0131 b\u0259dii ifad\u0259 vasit\u0259sidir?",
+      "Answers": [
+        "Anafora",
+        "Metonimiya",
+        "Epitet",
+        "M\u00FCbali\u011F\u0259",
+        "T\u0259zad"
+      ]
+    },
+    {
+      "Id": 121,
+      "Title": ".Veril\u0259n n\u00FCmun\u0259d\u0259 i\u015Far\u0259l\u0259nmi\u015F s\u00F6z\u00FCn yerind\u0259 \u201C\u015F\u0259h\u0259r\u201D s\u00F6z\u00FC i\u015Fl\u0259n\u0259rs\u0259, hans\u0131 b\u0259dii t\u0259svir vasit\u0259si al\u0131nar?",
+      "Answers": [
+        "Metonimiya",
+        "\u0130nversiya",
+        "Anafora",
+        "Epifora",
+        "Simvol"
+      ]
+    },
+    {
+      "Id": 122,
+      "Title": ". Funksional \u00FCslublar\u0131 yaranma tarixin\u0259 g\u00F6r\u0259 ne\u00E7\u0259 yer\u0259 ay\u0131rmaq olar?",
+      "Answers": [
+        "2",
+        "4",
+        "6",
+        "7",
+        "9"
+      ]
+    },
+    {
+      "Id": 123,
+      "Title": ". Yaz\u0131ya q\u0259d\u0259rki d\u00F6vrl\u0259rd\u0259 hans\u0131 funksional \u00FCslublar olmu\u015Fdur?",
+      "Answers": [
+        "ham\u0131s\u0131",
+        "he\u015F biri",
+        "poetik- \u0259d\u0259bi s\u00F6hb\u0259t",
+        "m\u0259i\u015F\u0259t- \u0259d\u0259bi s\u00F6hb\u0259t",
+        "r\u0259smi - \u0259d\u0259bi s\u00F6hb\u0259t"
+      ]
+    },
+    {
+      "Id": 124,
+      "Title": ". Bunlardan hans\u0131 yaz\u0131ya q\u0259d\u0259rki d\u00F6vrl\u0259rd\u0259 olan funksional \u00FCslublara aid edilmir?",
+      "Answers": [
+        "publisistik \u00FCslub",
+        "ham\u0131s\u0131",
+        "m\u0259i\u015F\u0259t-\u0259d\u0259bi s\u00F6hb\u0259t",
+        "r\u0259smi -\u0259d\u0259bi s\u00F6hb\u0259t",
+        "poetik-\u0259d\u0259bi s\u00F6hb\u0259t"
+      ]
+    },
+    {
+      "Id": 125,
+      "Title": ". Az\u0259rbaycan \u0259d\u0259bi dilinin publisistik \u00FCslubu n\u0259 zamandan f\u0259aliyy\u0259t\u0259 ba\u015Flay\u0131r?",
+      "Answers": [
+        "XIX \u0259srin 70-ci ill\u0259rind\u0259n",
+        "XVI \u0259srin 80-ci ill\u0259rind\u0259n",
+        "XX \u0259srin ilk on illiyind\u0259n",
+        "XV \u0259srdin sonlar\u0131ndan",
+        "XIX \u0259srin 30-cu ill\u0259rind\u0259n"
+      ]
+    },
+    {
+      "Id": 126,
+      "Title": ".\u0130ctimai v\u0259 siyasi m\u0259s\u0259l\u0259l\u0259rin geni\u015F xalq k\u00FCtl\u0259sinin anlayaca\u011F\u0131 \u015F\u0259kild\u0259 izah edilm\u0259si \u0259d\u0259bi dilin ... funksional \u00FCslubu adlan\u0131r \u2013 n\u00F6qt\u0259l\u0259rin yerin\u0259 hans\u0131 \u00FCslubun ad\u0131 yaz\u0131lmal\u0131d\u0131r?",
+      "Answers": [
+        "publisistik funksional \u00FCslubu",
+        "r\u0259smi funksional \u00FCslubu",
+        "elmi funksional \u00FCslubu",
+        "epik funksional \u00FCslubu",
+        "lirik funksional \u00FCslubu"
+      ]
+    },
+    {
+      "Id": 127,
+      "Title": " O\u00E7erk;  felyeton; interv\u00FC; reportaj \u2013 hans\u0131 \u00FCslubun janrlar\u0131d\u0131r?",
+      "Answers": [
+        "publisistik ",
+        "r\u0259smi ",
+        "elmi ",
+        "m\u0259i\u015F\u0259t",
+        "epistolyar"
+      ]
+    },
+    {
+      "Id": 128,
+      "Title": ". Elmi \u00FCslub hans\u0131 sah\u0259ni \u0259hat\u0259 edir?",
+      "Answers": [
+        "Ham\u0131s\u0131n\u0131",
+        "D\u0259rslik",
+        "T\u0259dris vasit\u0259l\u0259ri",
+        "Monoqrafiya",
+        "Elmi v\u0259 metodik jurnal m\u0259qal\u0259l\u0259ri"
+      ]
+    },
+    {
+      "Id": 129,
+      "Title": ". \u0130\u015Fg\u00FCzar dil, d\u0259ft\u0259rxana dili, r\u0259smi-s\u0259n\u0259d \u00FCslubu ad\u0131 il\u0259 tan\u0131nan bu \u00FCslub nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "R\u0259smi \u00FCslub",
+        "Publisistik \u00FCslub",
+        "B\u0259dii \u00FCslub",
+        "Elmi-b\u0259dii \u00FCslub",
+        "Epistolyar \u00FCslub"
+      ]
+    },
+    {
+      "Id": 130,
+      "Title": ". R\u0259smi-i\u015Fg\u00FCzar \u00FCslubun dilin\u0259 aid edilmir: ",
+      "Answers": [
+        "obrazl\u0131l\u0131q",
+        "d\u0259qiqlik",
+        "ard\u0131c\u0131ll\u0131q",
+        "lakoniklik",
+        "inand\u0131r\u0131c\u0131l\u0131q"
+      ]
+    },
+    {
+      "Id": 131,
+      "Title": ".Epistolyar m\u0259tnl\u0259rin (m\u0259ktublar\u0131n) t\u0259rkibi, \u0259sas\u0259n,  ne\u00E7\u0259 komponentd\u0259n ibar\u0259t olur?",
+      "Answers": [
+        "\u00DC\u00E7",
+        "Alt\u0131",
+        "Yeddi",
+        "On",
+        "S\u0259kkiz"
+      ]
+    },
+    {
+      "Id": 132,
+      "Title": ". Funksional \u00FCslublardan hans\u0131 yaln\u0131z yaz\u0131l\u0131 formada olur?",
+      "Answers": [
+        "Epistolyar \u00FCslub",
+        "B\u0259dii \u00FCslub",
+        "R\u0259smi \u00FCslub",
+        "M\u0259i\u015F\u0259t \u00FCslubu",
+        "Elmi-b\u0259dii \u00FCslub"
+      ]
+    },
+    {
+      "Id": 133,
+      "Title": ". M\u0259ktublar\u0131n n\u00F6vl\u0259rin\u0259 aiddir:",
+      "Answers": [
+        "ham\u0131s\u0131",
+        "ail\u0259-m\u0259i\u015F\u0259t m\u0259ktublar\u0131",
+        "a\u00E7\u0131q m\u0259ktublar",
+        "r\u0259smi-i\u015Fg\u00FCzar m\u0259ktublar",
+        "dostluq  m\u0259ktublar\u0131"
+      ]
+    },
+    {
+      "Id": 134,
+      "Title": ". Canl\u0131 xalq dan\u0131\u015F\u0131q dilinin s\u0259rb\u0259stliyi hans\u0131 \u00FCslubda daha \u00E7ox t\u0259zah\u00FCr edir?",
+      "Answers": [
+        "m\u0259i\u015F\u0259t \u00FCslubunda",
+        "elmi \u00FCslubda",
+        "b\u0259dii \u00FCslubda",
+        "epistolyar \u00FCslubda",
+        "publisistik \u00FCslubda"
+      ]
+    },
+    {
+      "Id": 135,
+      "Title": ". Az\u0259rbaycan \u0259d\u0259bi dili tarixind\u0259 h\u0259mi\u015F\u0259 apar\u0131c\u0131 olmu\u015F funksional \u00FCslub:",
+      "Answers": [
+        "b\u0259dii",
+        "elmi",
+        "publisistik ",
+        "m\u0259i\u015F\u0259t",
+        "r\u0259smi-i\u015Fg\u00FCzar"
+      ]
+    },
+    {
+      "Id": 136,
+      "Title": ". Hans\u0131 \u00FCslub standart formalar \u0259sas\u0131nda qurulur v\u0259 f\u0259rdi \u00FCslub \u0259lam\u0259tl\u0259rini, dem\u0259k olar ki, yax\u0131n qoymur? ",
+      "Answers": [
+        "r\u0259smi-i\u015Fg\u00FCzar",
+        "m\u0259i\u015F\u0259t",
+        "publisistik ",
+        "b\u0259dii ",
+        "m\u0259i\u015F\u0259t"
+      ]
+    },
+    {
+      "Id": 137,
+      "Title": ". Verilmi\u015F c\u00FCml\u0259 hans\u0131 \u00FCslubdad\u0131r?\n\u201CNitqin ifad\u0259liliyi dedikd\u0259 \u0259n m\u0259qs\u0259d\u0259uy\u011Fun, \u00FCslub bax\u0131m\u0131ndan \u0259n u\u011Furlu olan dil  vasit\u0259l\u0259rini tap\u0131b  i\u015Fl\u0259tm\u0259k ba\u015Fa d\u00FC\u015F\u00FCl\u00FCr\u201D",
+      "Answers": [
+        "elmi",
+        "m\u0259i\u015F\u0259t",
+        "publisistik",
+        "b\u0259dii",
+        "r\u0259smi-i\u015Fg\u00FCzar"
+      ]
+    },
+    {
+      "Id": 138,
+      "Title": ". Bunlardan biri b\u0259dii \u00FCsluba aid \u0259lam\u0259t deyil:",
+      "Answers": [
+        "termin s\u0131xl\u0131\u011F\u0131",
+        "m\u0259cazilik",
+        "obrazl\u0131l\u0131q",
+        "b\u0259dii t\u0259svir v\u0259 ifad\u0259 vasit\u0259l\u0259rind\u0259n istifad\u0259",
+        "b\u0259z\u0259n dialektizm v\u0259 loru-vulqar s\u00F6zl\u0259rd\u0259n istifad\u0259"
+      ]
+    },
+    {
+      "Id": 139,
+      "Title": ". Daha \u00E7ox elmi \u00FCsluba aid c\u0259h\u0259tl\u0259r:",
+      "Answers": [
+        "d\u0259qiqlik, konkretlik, m\u0259ntiqilik, ard\u0131c\u0131ll\u0131q",
+        "obrazl\u0131l\u0131q, emosionall\u0131q",
+        "m\u0259cazlardan geni\u015F istifad\u0259",
+        "\u00FCmumxalq dilin\u0259 \u0259saslanmaq",
+        "b\u0259dii t\u0259f\u0259kk\u00FCr\u00FCn ifad\u0259si olmaq"
+      ]
+    },
+    {
+      "Id": 140,
+      "Title": ". S\u0259rb\u0259st s\u0259ciyy\u0259 da\u015F\u0131sa da, m\u0259h\u0259lli s\u0259ciyy\u0259 da\u015F\u0131m\u0131r, dialekt\u00FCst\u00FC nitq formas\u0131d\u0131r:",
+      "Answers": [
+        "m\u0259i\u015F\u0259t \u00FCslubu",
+        "b\u0259dii \u00FCslub",
+        "elmi \u00FCslub",
+        "publisistik \u00FCslub",
+        "r\u0259smi-i\u015Fg\u00FCzar \u00FCslub"
+      ]
+    },
+    {
+      "Id": 141,
+      "Title": ". Norman\u0131n yenil\u0259\u015Fm\u0259si, \u00FCmumxalq dili vahidl\u0259rinin \u0259d\u0259bi dil\u0259 g\u0259li\u015Fi hans\u0131 \u00FCslubdan ba\u015Flay\u0131r?",
+      "Answers": [
+        "b\u0259dii",
+        "elmi",
+        "publisistik",
+        "r\u0259smi-i\u015Fg\u00FCzar",
+        "m\u0259i\u015F\u0259t"
+      ]
+    },
+    {
+      "Id": 142,
+      "Title": ". B\u0259dii \u00FCslubun \u0259n az t\u0259sir g\u00F6st\u0259rdiyi \u00FCslublar hans\u0131lard\u0131r?\n[1-Elmi],\n[2-Publisistik],\n[3-Rəsmi-işgüzar],\n[4-Məişət]",
+      "Answers": [
+        "1,3",
+        "2, 4",
+        "3, 4",
+        "1, 2",
+        "2, 3"
+      ]
+    },
+    {
+      "Id": 143,
+      "Title": ". A\u015Fa\u011F\u0131dak\u0131lardan biri m\u0259i\u015F\u0259t \u00FCslubunun \u0259lam\u0259tl\u0259rind\u0259n say\u0131la bilm\u0259z:",
+      "Answers": [
+        "daha \u00E7ox b\u00FCt\u00F6v c\u00FCml\u0259l\u0259rd\u0259n istifad\u0259",
+        "intonasiya, jest-h\u0259r\u0259k\u0259t-mimika",
+        "dialoji nitq \u015F\u0259klind\u0259 olmas\u0131",
+        "s\u0259rb\u0259stlik",
+        "y\u0131\u011Fcaml\u0131q"
+      ]
+    },
+    {
+      "Id": 144,
+      "Title": ". Biri r\u0259smi-i\u015Fg\u00FCzar \u00FCslub \u00FC\u00E7\u00FCn \u0259lam\u0259tdar deyil:",
+      "Answers": [
+        "f\u0259rdi nitq \u00FCns\u00FCrl\u0259rinin, obrazl\u0131 s\u00F6z v\u0259 ifad\u0259l\u0259rin i\u015Fl\u0259nm\u0259si",
+        "fikrin olduqca y\u0131\u011Fcam \u0259hat\u0259 olunmas\u0131",
+        "l\u00FC\u011F\u0259t t\u0259rkibinin y\u0131\u011Fcaml\u0131\u011F\u0131",
+        "sintaksisin m\u0259hdudlu\u011Fu",
+        "arxaik leksikan\u0131n v\u0259 sintaktik konstruksiyalar\u0131n uzun m\u00FCdd\u0259t m\u00FChafiz\u0259 olunmas\u0131"
+      ]
+    },
+    {
+      "Id": 145,
+      "Title": ". Bunlardan ikisi daha \u00E7ox elmi \u00FCslub \u00FC\u00E7\u00FCn \u0259lam\u0259tdard\u0131r:\n[1-M\u0259cazilik],\n[2-Obrazlılıq],\n[3-Mürəkkəb cümlə tiplərindən daha çox istifadə],\n[4-Bədii təsvir və ifadə vasitələrindən istifadə],\n[5-Termin sıxlığı],\n[6-Dialektizm və loru sözlərin işlənməsi]",
+      "Answers": [
+        "3, 5",
+        "1, 6",
+        "2, 4",
+        "4, 5",
+        "4, 6"
+      ]
+    },
+    {
+      "Id": 146,
+      "Title": ". Hans\u0131 x\u00FCsusiyy\u0259t b\u0259dii \u00FCsluba aid edil\u0259 bilm\u0259z?",
+      "Answers": [
+        "T\u0259km\u0259nal\u0131 s\u00F6zl\u0259r \u00FCst\u00FCnl\u00FCk t\u0259\u015Fkil edir.",
+        "M\u0259cazlardan geni\u015F istifad\u0259 olunur.",
+        "\u018Fd\u0259bi-b\u0259dii dil adlan\u0131r.",
+        "Obrazl\u0131, emosional nitq formas\u0131d\u0131r.",
+        "B\u0259dii t\u0259f\u0259kk\u00FCr\u00FCn ifad\u0259sidir."
+      ]
+    },
+    {
+      "Id": 147,
+      "Title": ". Bu \u0259lam\u0259tl\u0259r hans\u0131 \u00FCslubda \u00F6z\u00FCn\u00FC g\u00F6st\u0259rir?\n[1- xalq dan\u0131\u015F\u0131q dilin\u0259 aid s\u00F6zl\u0259rd\u0259n daha \u00E7ox istifad\u0259],\n[2- dialoji nitq formas\u0131n\u0131n daha \u00E7ox i\u015Fl\u0259dilm\u0259si],\n[3- ba\u011Flay\u0131c\u0131 m\u0259zmununun daha \u00E7ox intonasiya il\u0259 \u00E7atd\u0131r\u0131lmas\u0131],\n[4- yar\u0131m\u00E7\u0131q c\u00FCml\u0259l\u0259rin i\u015Fl\u0259dilm\u0259si]",
+      "Answers": [
+        "m\u0259i\u015F\u0259t",
+        "elmi",
+        "b\u0259dii",
+        "r\u0259smi-i\u015Fg\u00FCzar",
+        "publisistik"
+      ]
+    },
+    {
+      "Id": 148,
+      "Title": ". Bu \u00FCslublardan birinin \u0259v\u0259zin\u0259 \u201Cm\u0259tbuat dili\u201D ifad\u0259si d\u0259 i\u015Fl\u0259tm\u0259k m\u00FCmk\u00FCnd\u00FCr:",
+      "Answers": [
+        "publisistik",
+        "r\u0259smi-i\u015Fg\u00FCzar",
+        "elmi",
+        "m\u0259i\u015F\u0259t",
+        "b\u0259dii"
+      ]
+    },
+    {
+      "Id": 149,
+      "Title": ". M\u0259i\u015F\u0259t \u00FCslubu il\u0259 \u0259n \u00E7ox t\u0259masda olan \u00FCslub:",
+      "Answers": [
+        "b\u0259dii",
+        "elmi",
+        "r\u0259smi-i\u015Fg\u00FCzar",
+        "publisistik",
+        "h\u0259m elmi, h\u0259m publisistik "
+      ]
+    },
+    {
+      "Id": 150,
+      "Title": ". R\u0259smi s\u0259n\u0259dl\u0259rin dili \u00FC\u00E7\u00FCn n\u0259 \u0259sas \u015F\u0259rt say\u0131lm\u0131r?",
+      "Answers": [
+        "F\u0259rdi nitq \u00FCns\u00FCrl\u0259ri",
+        "h\u00FCquq m\u0259zmununa malik olmas\u0131",
+        "R\u0259smi \u015F\u0259xsin imzas\u0131",
+        "dil y\u0131\u011Fcaml\u0131\u011F\u0131",
+        "s\u00F6z\u00FCn t\u0259km\u0259nal\u0131l\u0131\u011F\u0131"
+      ]
+    },
+    {
+      "Id": 151,
+      "Title": ". M\u0259tn hans\u0131 \u00FCslubdad\u0131r?\n\u201CDill\u0259rin qohumluq prinsipind\u0259n ba\u015Fqa, bir d\u0259 tipoloji b\u00F6lg\u00FCs\u00FC var. Bu b\u00F6lg\u00FCd\u0259 dild\u0259ki s\u00F6zl\u0259rin morfoloji qurulu\u015Fu \u0259sas g\u00F6t\u00FCr\u00FCl\u00FCr.\u201D",
+      "Answers": [
+        "elmi",
+        "b\u0259dii",
+        "m\u0259i\u015F\u0259t",
+        "publisistik",
+        "r\u0259smi-i\u015Fg\u00FCzar"
+      ]
+    },
+    {
+      "Id": 152,
+      "Title": ".Veril\u0259nl\u0259rd\u0259n hans\u0131 r\u0259smi-i\u015Fg\u00FCzar \u00FCslubun n\u00F6vl\u0259rind\u0259n biri olan diplomatik \u00FCsluba aid olan \u00FCmumi cizgil\u0259r\u0259 aid edilir?",
+      "Answers": [
+        "Ham\u0131s\u0131",
+        "He\u00E7 biri",
+        "Nisbi dayan\u0131ql\u0131l\u0131q ",
+        "Emosional \u00E7alarl\u0131 leksikan\u0131n yoxlu\u011Fu; ",
+        "Haz\u0131r dil \u015Ftamplar\u0131 "
+      ]
+    },
+    {
+      "Id": 153,
+      "Title": ".Dan\u0131\u015F\u0131qlar v\u0259 vizitl\u0259rin yekun s\u0259n\u0259dl\u0259rin\u0259 aiddir:",
+      "Answers": [
+        "Ham\u0131s\u0131",
+        "He\u00E7 biri",
+        "Kommyunike",
+        "Birg\u0259 b\u0259yanat",
+        "B\u0259yannam\u0259"
+      ]
+    },
+    {
+      "Id": 154,
+      "Title": ". Funksional \u00FCslublar\u0131n birind\u0259 f\u0259rdi \u00FCslub \u0259lam\u0259ti, dem\u0259k olar ki, g\u00F6r\u00FCnm\u00FCr:",
+      "Answers": [
+        "r\u0259smi-i\u015Fg\u00FCzar \u00FCslubun",
+        "b\u0259dii \u00FCslubun",
+        "m\u0259i\u015F\u0259t \u00FCslubunun",
+        "publisistik \u00FCslubun",
+        "elmi \u00FCslubun"
+      ]
+    },
+    {
+      "Id": 155,
+      "Title": ". \u0130\u015Fg\u00FCzar s\u0259n\u0259dl\u0259r hans\u0131 x\u00FCsusiyy\u0259ti il\u0259 r\u0259smi s\u0259n\u0259dl\u0259rd\u0259n f\u0259rql\u0259nir?",
+      "Answers": [
+        "x\u00FCsusi d\u00F6vl\u0259t \u0259h\u0259miyy\u0259ti da\u015F\u0131mamas\u0131 il\u0259",
+        "daha \u00E7ox haz\u0131r dil q\u0259libl\u0259ri, standart formalar \u0259sas\u0131nda qurulmas\u0131 il\u0259",
+        "l\u00FC\u011F\u0259t t\u0259rkibi v\u0259 sintaksisinin m\u0259hdudlu\u011Fu, qeyri-\u0259lvanl\u0131\u011F\u0131 il\u0259",
+        "obrazl\u0131l\u0131\u011Fa, emosionall\u0131\u011Fa yol verilm\u0259m\u0259si il\u0259",
+        "fikrin ayd\u0131nl\u0131\u011F\u0131, birm\u0259nal\u0131\u011F\u0131 il\u0259"
+      ]
+    },
+    {
+      "Id": 156,
+      "Title": ". Veril\u0259nl\u0259rd\u0259n hans\u0131 \u0259m\u0259li yaz\u0131lar \u00FC\u00E7\u00FCn s\u0259ciyy\u0259vidir?",
+      "Answers": [
+        "Ham\u0131s\u0131",
+        "H\u0259r bir m\u0259s\u0259l\u0259 ayd\u0131n v\u0259 q\u0131sa izah edilm\u0259lidir.",
+        "\u015Etamp xarakterli x\u00FCsusi t\u0259rkibl\u0259rd\u0259n istifad\u0259 edilir.",
+        "Standart ifad\u0259l\u0259rd\u0259n istifad\u0259 edilm\u0259lidir.",
+        "T\u0259krarlara, obrazl\u0131l\u0131\u011Fa yol verilm\u0259m\u0259lidir."
+      ]
+    },
+    {
+      "Id": 157,
+      "Title": "Logistika bir elm sah\u0259si kimi...",
+      "Answers": [
+        "1950-ci ill\u0259rin \u0259vv\u0259ll\u0259rind\u0259 AB\u015E-da formala\u015Fma\u011Fa ba\u015Flad\u0131",
+        "1920-ci ill\u0259rin sonunda \u0130taliyada formala\u015Fma\u011Fa ba\u015Flad\u0131",
+        "2000-ci ill\u0259rin \u0259vv\u0259ll\u0259rind\u0259 AB\u015E-da formala\u015Fma\u011Fa ba\u015Flad\u0131",
+        "1988-ci ill\u0259rin \u0259vv\u0259ll\u0259rind\u0259 Fransada formala\u015Fma\u011Fa ba\u015Flad\u0131",
+        "1917-1933-c\u00FC ill\u0259rd\u0259 AB\u015E-da formala\u015Fma\u011Fa ba\u015Flad\u0131"
+      ]
+    },
+    {
+      "Id": 158,
+      "Title": "Logistikan\u0131 ne\u00E7\u0259 tarixi inki\u015Faf m\u0259rh\u0259l\u0259sin\u0259 b\u00F6l\u00FCrl\u0259r?",
+      "Answers": [
+        "4",
+        "3",
+        "2",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "Id": 159,
+      "Title": "Hans\u0131 fikir s\u0259hvdir?",
+      "Answers": [
+        "Q\u0259dim Romada loqistikl\u0259r h\u0259rbi i\u015Fl\u0259rl\u0259 m\u0259\u015F\u011Ful olurdular",
+        "Yunan dilind\u0259 loqos \u201Cidrak\u201D, log \u201Ct\u0259f\u0259kk\u00FCr\u201D m\u0259nalar\u0131n\u0131 bildirir",
+        "Logistika 1950-ci ill\u0259rin \u0259vv\u0259lind\u0259 formala\u015Fma\u011Fa ba\u015Flad\u0131",
+        "Logistikan\u0131n \u00FCmumi v\u0259 x\u00FCsusi v\u0259zif\u0259l\u0259ri vard\u0131r",
+        "Logistikan\u0131n tarixi 4 m\u0259rh\u0259l\u0259y\u0259 b\u00F6l\u00FCn\u00FCr"
+      ]
+    },
+    {
+      "Id": 160,
+      "Title": "Sadalananlardan biri Logistikan\u0131n \u00FCmumi v\u0259zif\u0259sidir",
+      "Answers": [
+        "\u018Fsas m\u0259qs\u0259d\u0259 \u00E7atmaq \u00FC\u00E7\u00FCn hans\u0131 i\u015Fl\u0259rin, hans\u0131 ard\u0131c\u0131ll\u0131qla, n\u0259 vaxt v\u0259 harada icra edilm\u0259si",
+        "Y\u00FCkl\u0259rin saxlanmas\u0131 v\u0259 n\u0259qli m\u00FCdd\u0259tinin maksimum azald\u0131lmas\u0131na nail olunmas\u0131",
+        "Tara v\u0259 qabla\u015Fd\u0131r\u0131c\u0131 m\u0259mulatlar\u0131n standartla\u015Fd\u0131r\u0131lmas\u0131",
+        "Material, informasiya, maliyy\u0259, kadr v\u0259 sair ax\u0131nlar\u0131n aras\u0131nda uy\u011Funlu\u011Fun t\u0259min edilm\u0259si",
+        "M\u0259hsulun fiziki b\u00F6l\u00FC\u015Fd\u00FCr\u00FClm\u0259si strategiyas\u0131n\u0131n m\u00FC\u0259yy\u0259nl\u0259\u015Fdirilm\u0259si"
+      ]
+    },
+    {
+      "Id": 161,
+      "Title": "Logistikan\u0131n yar\u0131mb\u00F6lm\u0259l\u0259rin\u0259 aid deyil?",
+      "Answers": [
+        "Axtar\u0131\u015F logistikas\u0131",
+        "Sat\u0131\u015F logistikas\u0131",
+        "Ekoloji logistika",
+        "S\u0259h\u0259r logistikas\u0131",
+        "Ehtiyat logistikas\u0131"
+      ]
+    },
+    {
+      "Id": 162,
+      "Title": "M\u00FC\u0259yy\u0259n bir n\u0259tic\u0259y\u0259, m\u0259qs\u0259d\u0259 \u00E7atma\u011Fa, m\u00FC\u0259yy\u0259n edilmi\u015F m\u0259nb\u0259l\u0259r v\u0259 m\u00FCdd\u0259tl\u0259r\u0259, unikal m\u0259hsul v\u0259 ya xidm\u0259t yaratma\u011Fa y\u00F6n\u0259lmi\u015F bir f\u0259aliyy\u0259tdir",
+      "Answers": [
+        "Layih\u0259",
+        "Ekologiya",
+        "T\u0259dqiqat",
+        "Logistika",
+        "Kommunikasiya"
+      ]
+    },
+    {
+      "Id": 163,
+      "Title": "Layih\u0259nin t\u0259qdimat\u0131nda vacib elementl\u0259rd\u0259n biri deyil",
+      "Answers": [
+        "Layih\u0259nin planla\u015Fd\u0131r\u0131lmas\u0131",
+        "Layih\u0259nin m\u0259zmunu",
+        "Layih\u0259nin m\u0259qs\u0259di",
+        "Layih\u0259 riskl\u0259ri",
+        "Layih\u0259nin aktuall\u0131\u011F\u0131"
+      ]
+    },
+    {
+      "Id": 164,
+      "Title": "Layih\u0259 t\u0259qdimat\u0131nda \u0259n vacib ne\u00E7\u0259 element olmal\u0131d\u0131r?",
+      "Answers": [
+        "9",
+        "7",
+        "6",
+        "10",
+        "5"
+      ]
+    },
+    {
+      "Id": 165,
+      "Title": "Layih\u0259 t\u0259qdimat\u0131 \u00FCmumi q\u0259bul edilmi\u015F formas\u0131na g\u00F6r\u0259 hans\u0131 proqramda haz\u0131rlanmal\u0131d\u0131r? ",
+      "Answers": [
+        "Power Point",
+        "Paint",
+        "Internet",
+        "Excell",
+        "Word"
+      ]
+    },
+    {
+      "Id": 166,
+      "Title": "Logistikan\u0131n perspektiv inki\u015Faf m\u0259rh\u0259l\u0259si ne\u00E7\u0259nci d\u00F6vr\u00FC \u0259hat\u0259 edir?",
+      "Answers": [
+        "4-c\u00FC",
+        "2-ci",
+        "1-ci",
+        "3-c\u00FC",
+        "He\u00E7 birini"
+      ]
+    },
+    {
+      "Id": 167,
+      "Title": "T\u0259qdimat nitqinin prinsipl\u0259ri s\u0131ras\u0131na daxil deyil",
+      "Answers": [
+        "Aktuall\u0131q prinsipi",
+        "K\u0259skinlik prinsipi",
+        "Ard\u0131c\u0131ll\u0131q prinsipi",
+        "G\u00FCcl\u0259ndirm\u0259 prinsipi",
+        "Diqq\u0259t prinsipi"
+      ]
+    },
+    {
+      "Id": 168,
+      "Title": "T\u0259qdimat nitqinin ne\u00E7\u0259 prinsipi var?",
+      "Answers": [
+        "5",
+        "4",
+        "3",
+        "2",
+        "6"
+      ]
+    },
+    {
+      "Id": 169,
+      "Title": "T\u0259qdimat\u0131n b\u00FCt\u00FCn mikroteml\u0259ri \u0259sas m\u00F6vzuya tabe olmal\u0131d\u0131r. Bu t\u0259qdimat nitqinin hans\u0131 prinsipidir?",
+      "Answers": [
+        "Ard\u0131c\u0131ll\u0131q",
+        "Diqq\u0259t",
+        "K\u0259skinlik",
+        "G\u00FCcl\u0259ndirm\u0259",
+        "Effektivlik"
+      ]
+    },
+    {
+      "Id": 170,
+      "Title": "T\u0259qdimatda tama\u015Fa\u00E7\u0131lar t\u0259r\u0259find\u0259n t\u0259klif olunan bir n\u0259tic\u0259, h\u0259r\u0259k\u0259t\u0259 \u00E7a\u011F\u0131r\u0131\u015F v\u0259 t\u00F6vsiyy\u0259l\u0259r olmal\u0131d\u0131r. Deyil\u0259n fikir t\u0259qdimat nitqinin hans\u0131 prinsipin\u0259 aiddir?",
+      "Answers": [
+        "Effektivlik",
+        "G\u00FCcl\u0259ndirm\u0259",
+        "Diqq\u0259t",
+        "Ard\u0131c\u0131ll\u0131q",
+        "K\u0259skinlik"
+      ]
+    },
+    {
+      "Id": 171,
+      "Title": "Logistikan\u0131n I m\u0259rh\u0259l\u0259si hans\u0131 ill\u0259ri \u0259hat\u0259 edir?",
+      "Answers": [
+        "1920-1950",
+        "1950-1970",
+        "1910-1940",
+        "1970-1990",
+        "1930-1980"
+      ]
+    },
+    {
+      "Id": 172,
+      "Title": "T\u0259qdimata diqq\u0259ti art\u0131rmaq \u00FC\u00E7\u00FCn ne\u00E7\u0259 \u00FCsuldan istifad\u0259 olunur? ",
+      "Answers": [
+        "6",
+        "7",
+        "4",
+        "3",
+        "5"
+      ]
+    },
+    {
+      "Id": 173,
+      "Title": "T\u0259qdimatda vacib v\u0259 ya maraql\u0131 bir fikri v\u0259 detallar\u0131n mesaj\u0131n\u0131 gecikdirm\u0259k n\u0259 dem\u0259kdir?",
+      "Answers": [
+        "Avans",
+        "\u00D6d\u0259ni\u015F",
+        "Yumor",
+        "Vokal spiral",
+        "Monoloq"
+      ]
+    },
+    {
+      "Id": 174,
+      "Title": "Hans\u0131 fikir s\u0259hvdir",
+      "Answers": [
+        "T\u0259qdimatda yumor istifad\u0259si yaln\u0131\u015Fd\u0131r",
+        "Monoton duy\u011Fusuz bir t\u0259qdimat diqq\u0259ti c\u0259lb etmir",
+        "T\u0259qdimat nitqi \u00E7evik vasit\u0259l\u0259rd\u0259n istifad\u0259ni vacib edir",
+        "Monoloqun dialoqu v\u0259 dialoq formas\u0131 a\u00E7\u0131q v\u0259 gizli ola bil\u0259r",
+        "Layih\u0259 riski layih\u0259nin \u0259sas elementl\u0259rind\u0259ndir "
+      ]
+    },
+    {
+      "Id": 175,
+      "Title": "T\u00F6vsiy\u0259 olunan t\u0259qdimat\u0131n h\u0259cmi n\u0259 q\u0259d\u0259r olmal\u0131d\u0131r? ",
+      "Answers": [
+        "10 slayd",
+        "20 slayd",
+        "8 slayd",
+        "15 slayd",
+        "5 slayd"
+      ]
+    },
+    {
+      "Id": 176,
+      "Title": "Uy\u011Funlu\u011Fu tamamlay\u0131n \nBir fikir  = bir slayd\nBir slayd  = ?",
+      "Answers": [
+        "1 d\u0259qiq\u0259 ",
+        "5 d\u0259qiq\u0259",
+        "30 d\u0259qiq\u0259",
+        "1 saniy\u0259",
+        "6 d\u0259qiq\u0259"
+      ]
+    },
+    {
+      "Id": 177,
+      "Title": "Po\u00E7t yaz\u0131\u015Fmalar\u0131 il\u0259 ba\u011Fl\u0131 deyil\u0259nl\u0259rd\u0259n hans\u0131 do\u011Fru deyildir?",
+      "Answers": [
+        "Teleqraf g\u00FCnd\u0259lik i\u015Fg\u00FCzar \u00FCnsiyy\u0259td\u0259 \u0259n \u00E7ox yay\u0131lm\u0131\u015F po\u00E7t yaz\u0131\u015Fmas\u0131 n\u00F6v\u00FCd\u00FCr",
+        "S\u0259n\u0259d yaln\u0131z d\u00FCzg\u00FCnl\u00FCy\u00FC yoxland\u0131qdan sonra z\u0259rf\u0259 qoyulur",
+        "Faks v\u0259 telefaks-ka\u011F\u0131z \u00FCz\u0259rind\u0259 q\u0259bul edilmi\u015F faks kanallar\u0131 \u00FCz\u0259rind\u0259 al\u0131nan s\u0259n\u0259din sur\u0259tidir.",
+        "Teleqram m\u0259tnin x\u00FCsusi bir yay\u0131m yolu il\u0259 - ictimai teleqraf \u015F\u0259b\u0259k\u0259si il\u0259  ayr\u0131lm\u0131\u015F m\u00FCxt\u0259lif m\u0259zmunlu s\u0259n\u0259dl\u0259r \u00FC\u00E7\u00FCn \u00FCmumil\u0259\u015Fdirilmi\u015F ad\u0131d\u0131r",
+        ""
+      ]
+    },
+    {
+      "Id": 178,
+      "Title": "Eyni qurum daxilind\u0259, h\u0259m d\u0259 m\u00FCvafiq aparat v\u0259 proqram t\u0259minat\u0131na sahib olan m\u00FCxt\u0259lif t\u0259\u015Fkilatlar aras\u0131nda mesaj \u00F6t\u00FCrm\u0259k \u00FC\u00E7\u00FCn istifad\u0259 olunur. Bu n\u0259dir?",
+      "Answers": [
+        "Elektron po\u00E7t",
+        "M\u0259ktub",
+        "Teleqraf",
+        "Logistika",
+        "Faks"
+      ]
+    },
+    {
+      "Id": 179,
+      "Title": "E-po\u00E7tun \u00FCst\u00FCnl\u00FCkl\u0259rin\u0259 aiddir?",
+      "Answers": [
+        "M\u0259ktubun sur\u0259tl\u0259rini bir ne\u00E7\u0259 al\u0131c\u0131ya d\u0259rhal g\u00F6nd\u0259r\u0259 bilm\u0259k",
+        "Elektron po\u00E7t mesaj\u0131n\u0131n bir ka\u011F\u0131z s\u0259n\u0259dind\u0259n az r\u0259smi olmas\u0131",
+        "Elektron mesajlar\u0131n g\u00F6nd\u0259rilm\u0259si \u00FC\u00E7\u00FCn texniki imkanlar\u0131n olmas\u0131n\u0131n vacibliyi",
+        "G\u0259l\u0259n qutuya d\u0259rhal mesaj g\u00F6nd\u0259r\u0259 v\u0259 q\u0259bul ed\u0259 bilm\u0259m\u0259k",
+        "S\u0259n\u0259dl\u0259rin elektron po\u00E7tla \u00F6t\u00FCr\u00FClm\u0259si zaman\u0131 imzan\u0131n h\u0259qiqiliyini yoxlaya bilm\u0259m\u0259k"
+      ]
+    },
+    {
+      "Id": 180,
+      "Title": "Bir \u00E7ox \u015Firk\u0259td\u0259 e-po\u00E7tun i\u015Fl\u0259nm\u0259si \u00FC\u00E7\u00FCn vahid  korporativ standart m\u00F6vcuddur. Bu nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "Elektron dizayn",
+        "Elektron po\u00E7t",
+        "Server",
+        "M\u0259ktub",
+        "Elektron imza"
+      ]
+    },
+    {
+      "Id": 181,
+      "Title": "Sadalananlardan hans\u0131 elektron po\u00E7tun qurulu\u015Funa daxil deyil?",
+      "Answers": [
+        "Aktuall\u0131q",
+        "Ba\u015Fl\u0131q",
+        "Vida",
+        "Loqotip",
+        "M\u00FCraci\u0259t"
+      ]
+    },
+    {
+      "Id": 182,
+      "Title": "Elektron po\u00E7tun qurulu\u015Fu \u00FCzr\u0259 s\u0131ran\u0131 tamamla\nM\u00F6vzu-Ba\u015Fl\u0131q-M\u00FCraci\u0259t - ?",
+      "Answers": [
+        "M\u0259qs\u0259d",
+        "Vida",
+        "Loqotip",
+        "\u015E\u0259xsi imza",
+        "Veb sayta ke\u00E7id"
+      ]
+    },
+    {
+      "Id": 183,
+      "Title": "Hans\u0131 sah\u0259 doldurulmazsa m\u0259ktub spam kimi q\u0259bul edil\u0259 bil\u0259r?",
+      "Answers": [
+        "M\u00F6vzu",
+        "\u00DCnvan",
+        "\u0130mza",
+        "Ba\u015Fl\u0131q",
+        "M\u00FCraci\u0259t"
+      ]
+    },
+    {
+      "Id": 184,
+      "Title": "Bir m\u0259ktub eyni anda bir ne\u00E7\u0259 al\u0131c\u0131ya g\u00F6nd\u0259ril\u0259rs\u0259, \u00FCnvanlar aras\u0131nda hans\u0131 dur\u011Fu i\u015Far\u0259si qoyulmal\u0131d\u0131r?",
+      "Answers": [
+        "Verg\u00FCl",
+        "N\u00F6qt\u0259",
+        "Nida",
+        "Sual",
+        "M\u00F6t\u0259riz\u0259"
+      ]
+    },
+    {
+      "Id": 185,
+      "Title": "\u0130lk elektron po\u00E7tun g\u00F6nd\u0259rilm\u0259si n\u0259 zaman h\u0259yata ke\u00E7irilmi\u015Fdir?",
+      "Answers": [
+        "1971-ci ild\u0259",
+        "1951-ci ild\u0259 ",
+        "1984-c\u00FC ild\u0259",
+        "1954-c\u00FC ild\u0259",
+        "1961-ci ild\u0259"
+      ]
+    },
+    {
+      "Id": 186,
+      "Title": "\u0130lk elektron po\u00E7tun g\u00F6nd\u0259rilm\u0259si hans\u0131 i\u015Fl\u0259rl\u0259 ba\u011Fl\u0131 h\u0259yata ke\u00E7irilmi\u015Fdir?",
+      "Answers": [
+        "H\u0259rbi",
+        "Siyasi",
+        "M\u00FClki",
+        "\u0130ctimai",
+        "\u0130qtisadi"
+      ]
+    },
+    {
+      "Id": 187,
+      "Title": "\u0130lk e-mailimd\u0259 n\u0259 yazd\u0131\u011F\u0131m\u0131 m\u0259n d\u0259 xat\u0131rlam\u0131ram. Yaln\u0131z aralar\u0131nda bir metr m\u0259saf\u0259 ola iki komp\u00FCter aras\u0131nda h\u0259yata ke\u00E7iril\u0259n fayl transferi idi. Bu fikirl\u0259r kim\u0259 m\u0259xsusdur?",
+      "Answers": [
+        "R. Tomlinson",
+        "D.Counz",
+        "\u015E.Balli",
+        "B.Kurtene",
+        "B.Qeyts"
+      ]
+    },
+    {
+      "Id": 188,
+      "Title": "M\u0259ktubun g\u00F6nd\u0259rildiyi \u00FCnvanla abonentin ad\u0131n\u0131 ay\u0131ran n\u0259dir?",
+      "Answers": [
+        "@",
+        "\u0026",
+        "$",
+        "#",
+        "*"
+      ]
+    },
+    {
+      "Id": 189,
+      "Title": "Serverin m\u0259ktubu k\u00F6\u00E7\u00FCr\u0259c\u0259yi \u015F\u0259xsi kataloq n\u0259dir?",
+      "Answers": [
+        "Abonent",
+        "SMTP",
+        "Po\u00E7t",
+        "POP3",
+        "\u00DCnvan"
+      ]
+    },
+    {
+      "Id": 190,
+      "Title": "Elektron imza il\u0259 ba\u011Fl\u0131 deyil\u0259nl\u0259rd\u0259n hans\u0131 do\u011Fru deyil?",
+      "Answers": [
+        "H\u0259mi\u015F\u0259 eyni imza istifad\u0259 etm\u0259y\u0259 bil\u0259rsiniz",
+        "Elektron imza 5-6 s\u0259tird\u0259n \u00E7ox olmamal\u0131d\u0131r",
+        "Bir s\u0259tird\u0259 i\u015Far\u0259l\u0259rin say\u0131 70-d\u0259n \u00E7ox olmamal\u0131d\u0131r.",
+        "Elektron imza mane\u0259siz bir i\u015F reklam\u0131d\u0131r",
+        "\u0130mzada aforizml\u0259r, sitatlar v\u0259 s. istifad\u0259 olunmamal\u0131d\u0131r."
+      ]
+    },
+    {
+      "Id": 191,
+      "Title": "Elektron imza ne\u00E7\u0259 s\u0259tird\u0259n \u00E7ox olmamal\u0131d\u0131r?",
+      "Answers": [
+        "5-6",
+        "4-5",
+        "1-2",
+        "7-8",
+        "9-10"
+      ]
+    },
+    {
+      "Id": 192,
+      "Title": "D\u0259stin \u00FCmumi qaydalar\u0131na daxil deyil?",
+      "Answers": [
+        "Elektron rabit\u0259ni h\u0259r iki t\u0259r\u0259f tamamlaya bil\u0259r",
+        "M\u0259ktubda h\u0259mi\u015F\u0259 m\u00F6vzunu g\u00F6st\u0259rm\u0259k vacibdir",
+        "Cavab ver\u0259rk\u0259n g\u00F6nd\u0259r\u0259nin orijinal m\u0259ktubunu cavab\u0131n m\u0259tnind\u0259 qeyd etm\u0259k laz\u0131md\u0131r",
+        "Po\u00E7t qutusu m\u00FCt\u0259madi yoxlanmal\u0131d\u0131r",
+        "Elektron po\u00E7ta cavab m\u00FCdd\u0259ti iki g\u00FCnd\u0259n \u00E7ox olmamal\u0131d\u0131r"
+      ]
+    },
+    {
+      "Id": 193,
+      "Title": "Bunlardan hans\u0131 po\u00E7t serveri deyil?",
+      "Answers": [
+        "SAFAR\u0130",
+        "YAHOO",
+        "RAMBLER",
+        "YANDEX",
+        "HOTMA\u0130L"
+      ]
+    },
+    {
+      "Id": 194,
+      "Title": "Elektron \u00FCnvanla i\u015Fl\u0259y\u0259rk\u0259n istifad\u0259 olunan protokollar hans\u0131lard\u0131r?",
+      "Answers": [
+        "SMTP v\u0259 POP3",
+        "MA\u0130L.RU",
+        "YANDEX",
+        "DNS v\u0259 Z\u0130P",
+        "GMA\u0130L"
+      ]
+    },
+    {
+      "Id": 195,
+      "Title": "Elektron po\u00E7tu doldurark\u0259n m\u00FCtl\u0259q doldurulmal\u0131 olan sah\u0259l\u0259rd\u0131n biridir?",
+      "Answers": [
+        "Kim\u0259",
+        "Vida",
+        "M\u00FCraci\u0259t",
+        "\u0130mza",
+        "Loqo"
+      ]
+    },
+    {
+      "Id": 196,
+      "Title": "Elektron imza t\u0259rtibi il\u0259 ba\u011Fl\u0131 uy\u011Funlu\u011Fu tamamlay\u0131n:S\u0259tir-\u0259n \u00E7ox 5,6\u0130\u015Far\u0259 say\u0131-\u0259n \u00E7ox ?",
+      "Answers": [
+        "70",
+        "120",
+        "90",
+        "80",
+        "55"
+      ]
+    },
+    {
+      "Id": 197,
+      "Title": "Elmi auditoriya \u00FC\u00E7\u00FCn n\u0259z\u0259rd\u0259 tutulmu\u015F r\u0259smi v\u0259 kifay\u0259t q\u0259d\u0259r qeyri-adi bir yaz\u0131 t\u0259rzi hans\u0131d\u0131r?",
+      "Answers": [
+        "Akademik yaz\u0131",
+        "B\u0259dii yaz\u0131",
+        "R\u0259smi yaz\u0131",
+        "Qeyri-r\u0259smi yaz\u0131",
+        "Elmi yaz\u0131"
+      ]
+    },
+    {
+      "Id": 198,
+      "Title": "Akademik yaz\u0131n\u0131n n\u00F6vl\u0259rin\u0259 aid deyil",
+      "Answers": [
+        "B\u00FClleten",
+        "M\u0259qal\u0259",
+        "Tezis",
+        "Dissertasiya",
+        "Referat"
+      ]
+    },
+    {
+      "Id": 199,
+      "Title": "Hans\u0131 fikir do\u011Fru deyil?",
+      "Answers": [
+        "Qeyri akademik yaz\u0131 emosional ola bilm\u0259z",
+        "Akademik yaz\u0131n\u0131n strukturu standartd\u0131r",
+        "Giri\u015F paraqraf\u0131 oxucunu m\u00F6vzunun \u00FCmumi xarakteri il\u0259 tan\u0131\u015F edir",
+        "Qeyri-akademik yaz\u0131 akademik auditoriya \u00FC\u00E7\u00FCn n\u0259z\u0259rd\u0259 tutulmay\u0131b",
+        "Akademik yaz\u0131 faktiki s\u00FCbutlardan \u00E7ox as\u0131l\u0131d\u0131r"
+      ]
+    },
+    {
+      "Id": 200,
+      "Title": "Akademik yaz\u0131n\u0131n strukturuna aid deyil",
+      "Answers": [
+        "Metod",
+        "Titul v\u0259r\u0259qi",
+        "M\u00FCnd\u0259ricat",
+        "X\u00FClas\u0259",
+        "Giri\u015F"
+      ]
+    },
+    {
+      "Id": 201,
+      "Title": "Elmi yaz\u0131 i\u015Find\u0259ki \u0259sas fikir v\u0259 tap\u0131nt\u0131lar\u0131 \u00E7atd\u0131ran hiss\u0259 nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "X\u00FClas\u0259",
+        "Titul v\u0259r\u0259qi",
+        "M\u00FCnd\u0259ricat",
+        "Giri\u015F",
+        "N\u0259tic\u0259"
+      ]
+    },
+    {
+      "Id": 202,
+      "Title": "\u018Fsas hiss\u0259d\u0259 t\u0259hlil olunan fikirl\u0259r hans\u0131 hiss\u0259d\u0259 \u00FCmumil\u0259\u015Fdirilir?",
+      "Answers": [
+        "N\u0259tic\u0259",
+        "Giri\u015F",
+        "X\u00FClas\u0259",
+        "M\u00FCnd\u0259ricat",
+        "\u018Flav\u0259l\u0259r"
+      ]
+    },
+    {
+      "Id": 203,
+      "Title": "T\u0259dqiqat\u0131n m\u0259qs\u0259di v\u0259 obyekti akademik yaz\u0131n\u0131n hans\u0131 hiss\u0259sind\u0259 \u00F6z \u0259ksini tap\u0131r?",
+      "Answers": [
+        "Giri\u015F",
+        "X\u00FClas\u0259",
+        "N\u0259tic\u0259",
+        "\u018Flav\u0259l\u0259r",
+        "M\u00FCnad\u0259ricat"
+      ]
+    },
+    {
+      "Id": 204,
+      "Title": "Tezisin yekunu olub, akademik i\u015Fin b\u00FCt\u00FCn m\u0259qamlar\u0131n\u0131 q\u0131sa \u015F\u0259kild\u0259 g\u00F6st\u0259r\u0259n akademik yaz\u0131 n\u00F6v\u00FC hans\u0131d\u0131r?",
+      "Answers": [
+        "X\u00FClas\u0259",
+        "Tezis",
+        "M\u0259qal\u0259",
+        "Avtoreferat",
+        "Dissertasiya"
+      ]
+    },
+    {
+      "Id": 205,
+      "Title": "\u0130nternetd\u0259 axtar\u0131\u015F \u00FC\u00E7\u00FCn \u0259sas vasit\u0259 say\u0131l\u0131r. M\u0259tnin \u0259sas m\u0259\u011Fzini \u00F6z\u00FCnd\u0259 \u0259ks etdirir. Bu n\u0259dir?",
+      "Answers": [
+        "A\u00E7ar s\u00F6z",
+        "Metod",
+        "Layih\u0259",
+        "X\u00FClas\u0259",
+        "Tezis"
+      ]
+    },
+    {
+      "Id": 206,
+      "Title": "Planlanan t\u0259dqiqat i\u015Finin, d\u0259rslik, monoqrafiyan\u0131n kim t\u0259r\u0259find\u0259n, harada, n\u0259 vaxt apar\u0131laca\u011F\u0131 v\u0259 q\u0131sa m\u0259zmunu bar\u0259d\u0259 m\u0259lumatlar\u0131 \u0259ks etdir\u0259n s\u0259n\u0259d adlan\u0131r?",
+      "Answers": [
+        "Annotasiya",
+        "X\u00FClas\u0259",
+        "Tezis",
+        "M\u0259qal\u0259",
+        "Avtoreferat"
+      ]
+    },
+    {
+      "Id": 207,
+      "Title": "Ba\u015Fqas\u0131n\u0131n \u0259s\u0259rini \u00F6z \u0259s\u0259ri kimi verm\u0259 nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "Plagiat",
+        "Metod",
+        "A\u00E7ar s\u00F6z",
+        "Tezis",
+        "M\u0259qal\u0259"
+      ]
+    },
+    {
+      "Id": 208,
+      "Title": "Biri akademik yaz\u0131 n\u00F6v\u00FCd\u00FCr",
+      "Answers": [
+        "Monoqrafiya",
+        "M\u00FCqavil\u0259",
+        "\u018Friz\u0259",
+        "Aray\u0131\u015F",
+        "Elan"
+      ]
+    },
+    {
+      "Id": 209,
+      "Title": "Ali m\u0259kt\u0259bl\u0259rd\u0259 ixtisas m\u00FC\u0259lliml\u0259rinin r\u0259hb\u0259rliyi alt\u0131nda t\u0259dris plan\u0131na uy\u011Fun g\u00F6r\u00FCl\u0259n m\u00FCst\u0259qil elmi-metodik i\u015F nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "Kurs i\u015Fi",
+        "Akademik tezis",
+        "Monoqrafiya",
+        "Burax\u0131l\u0131\u015F i\u015Fi",
+        "Referat"
+      ]
+    },
+    {
+      "Id": 210,
+      "Title": "Biri referat\u0131n funksiyalar\u0131 s\u0131ras\u0131nda deyil",
+      "Answers": [
+        "Ekspressiv",
+        "Informativ",
+        "Indikativ",
+        "Axtar\u0131\u015F",
+        "Siqnalverici"
+      ]
+    },
+    {
+      "Id": 211,
+      "Title": "T\u0259hsilin bakalavriat s\u0259viyy\u0259sind\u0259 T\u0259dris plan\u0131n\u0131 tam yerin\u0259 yetirm\u0259kd\u0259 olan t\u0259l\u0259b\u0259nin IV kursun \u0259vv\u0259lind\u0259 kafedran\u0131n birind\u0259n m\u00F6vzu g\u00F6t\u00FCrm\u0259si hans\u0131 akademik yaz\u0131 n\u00F6v\u00FC say\u0131l\u0131r?",
+      "Answers": [
+        "Burax\u0131l\u0131\u015F i\u015Fi",
+        "Kurs i\u015Fi",
+        "Referat",
+        "M\u0259qal\u0259",
+        "Tezis"
+      ]
+    },
+    {
+      "Id": 212,
+      "Title": "Annotasiyan\u0131n strukturuna aid olmayan\u0131 g\u00F6st\u0259rin",
+      "Answers": [
+        "\u0130xtisas v\u0259 qrup n\u00F6mr\u0259si",
+        "M\u00FC\u0259llifin ad\u0131 v\u0259 soyad\u0131",
+        "Oxucu dair\u0259sinin \u00FCnvan\u0131",
+        "Kitab\u0131n, n\u0259\u015Friyyat\u0131n ad\u0131",
+        "Kitab\u0131n yaz\u0131lma m\u0259qs\u0259di"
+      ]
+    },
+    {
+      "Id": 213,
+      "Title": "Referat\u0131n struktur ard\u0131c\u0131ll\u0131\u011F\u0131n\u0131 tamamlay\u0131n\nTitul v\u0259r\u0259qi- M\u00FCnd\u0259ricat - ?",
+      "Answers": [
+        "Giri\u015F",
+        "\u018Flav\u0259",
+        "N\u0259tic\u0259",
+        "F\u0259sill\u0259r",
+        "\u018Fd\u0259biyyat"
+      ]
+    },
+    {
+      "Id": 214,
+      "Title": "Referat\u0131n m\u00F6vzusunun a\u00E7\u0131l\u0131\u015F\u0131n\u0131 t\u0259qdim ed\u0259n hiss\u0259 nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "\u018Fsas hiss\u0259",
+        "M\u00FCnd\u0259ricat",
+        "\u018Flav\u0259",
+        "N\u0259tic\u0259",
+        "F\u0259sill\u0259r"
+      ]
+    },
+    {
+      "Id": 215,
+      "Title": "Burax\u0131l\u0131\u015F i\u015Finin t\u0259rtib qaydalar\u0131 \u00FC\u00E7\u00FCn ard\u0131c\u0131ll\u0131\u011F\u0131 tamamlay\u0131n. N\u0259tic\u0259 v\u0259 t\u0259klifl\u0259r - ?",
+      "Answers": [
+        "\u0130stifad\u0259 olunmu\u015F \u0259d\u0259biyyat",
+        "M\u00FCnd\u0259ricat",
+        "\u018Fsas hiss\u0259",
+        "Titul v\u0259r\u0259qi",
+        "\u018Flav\u0259 m\u0259lumat"
+      ]
+    },
+    {
+      "Id": 216,
+      "Title": "H\u0259r hans\u0131 m\u0259s\u0259l\u0259 il\u0259 ba\u011Fl\u0131, bir v\u0259 ya bir ne\u00E7\u0259 kitab, monoqrafiya, yaxud da ilkin m\u0259nb\u0259l\u0259r \u0259sas\u0131nda q\u0131sa v\u0259 d\u0259qiq icmal m\u0259zmununu \u0259ks etdir\u0259n yaz\u0131 n\u00F6v\u00FC nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "Referat",
+        "Monoqrafiya",
+        "Tezis",
+        "M\u0259qal\u0259",
+        "Burax\u0131l\u0131\u015F i\u015Fi"
+      ]
+    },
+    {
+      "Id": 217,
+      "Title": "Burax\u0131l\u0131\u015F i\u015Fi yaz\u0131lark\u0259n s\u0259trl\u0259raras\u0131 interval n\u0259 q\u0259d\u0259r olmal\u0131d\u0131r?",
+      "Answers": [
+        "1,5",
+        "1",
+        "0,5",
+        "2",
+        "2,5"
+      ]
+    },
+    {
+      "Id": 218,
+      "Title": "Elmi m\u0259tnin son hiss\u0259si nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "N\u0259tic\u0259",
+        "Giri\u015F",
+        "\u018Flav\u0259",
+        "M\u00FCnd\u0259ricat",
+        "\u018Fd\u0259biyyat"
+      ]
+    },
+    {
+      "Id": 219,
+      "Title": "T\u0259dqiqat metodunun g\u00F6st\u0259rildiyi hiss\u0259 hans\u0131d\u0131r?",
+      "Answers": [
+        "Giri\u015F",
+        "X\u00FClas\u0259",
+        "N\u0259tic\u0259",
+        "F\u0259sill\u0259r",
+        "\u018Fd\u0259biyyat"
+      ]
+    },
+    {
+      "Id": 220,
+      "Title": "Hans\u0131 terminin \u0259sas m\u0259nas\u0131 \u201Co\u011Furlanm\u0131\u015F\u201D dem\u0259kdir?",
+      "Answers": [
+        "Plagiat",
+        "X\u00FClas\u0259",
+        "Tezis",
+        "Annotasiya",
+        "Metod"
+      ]
+    },
+    {
+      "Id": 221,
+      "Title": "Referat\u0131n ne\u00E7\u0259 funksiyas\u0131 vard\u0131r?",
+      "Answers": [
+        "5",
+        "4",
+        "6",
+        "3",
+        "2"
+      ]
+    },
+    {
+      "Id": 222,
+      "Title": "Burax\u0131l\u0131\u015F i\u015Finin haz\u0131rlanma ard\u0131c\u0131ll\u0131\u011F\u0131nda m\u00F6vzunun se\u00E7ilm\u0259si m\u0259rh\u0259l\u0259sind\u0259n sonra hans\u0131 m\u0259rh\u0259l\u0259 g\u0259lir?",
+      "Answers": [
+        "M\u00F6vzuya dair elmi faktlar\u0131n toplanmas\u0131",
+        "\u018Fld\u0259 olunan informasiyan\u0131n t\u0259hlili",
+        "Ir\u0259li s\u00FCr\u00FCl\u0259n m\u00FCdd\u0259alar\u0131n s\u00FCbuta yetirilm\u0259si",
+        "M\u00F6vzunun se\u00E7ilm\u0259si m\u0259rh\u0259l\u0259si",
+        "\u018Fd\u0259biyyat siyah\u0131s\u0131n\u0131n t\u0259hlili"
+      ]
+    },
+    {
+      "Id": 223,
+      "Title": "Bakalavriat s\u0259viyy\u0259si t\u0259l\u0259b\u0259l\u0259rinin Yekun D\u00F6vl\u0259t Attestasiya formalar\u0131ndan biridir",
+      "Answers": [
+        "Burax\u0131l\u0131\u015F i\u015Fi",
+        "M\u0259qal\u0259",
+        "Dissertasiya",
+        "Monoqrafiya",
+        "Avtoreferat"
+      ]
+    },
+    {
+      "Id": 224,
+      "Title": "Akademik yaz\u0131 n\u00F6vl\u0259rind\u0259n biri deyil",
+      "Answers": [
+        "Etimadnam\u0259",
+        "Burax\u0131l\u0131\u015F i\u015Fi",
+        "Avtoreferat",
+        "Dissertasiya",
+        "Monoqrafiya"
+      ]
+    },
+    {
+      "Id": 225,
+      "Title": "Yaz\u0131dak\u0131 f\u0259sill\u0259r v\u0259 onlara aid hiss\u0259l\u0259r, yaz\u0131n\u0131n hans\u0131 hiss\u0259sind\u0259 g\u00F6st\u0259rilir?",
+      "Answers": [
+        "M\u00FCnd\u0259ricat",
+        "X\u00FClas\u0259",
+        "Giri\u015F",
+        "M\u0259nb\u0259l\u0259r",
+        "N\u0259tic\u0259"
+      ]
+    },
+    {
+      "Id": 226,
+      "Title": "Biri Akademik yaz\u0131d\u0131r:",
+      "Answers": [
+        "Monoqrafiya",
+        "T\u0259rc\u00FCmeyi-hal",
+        "B\u00FClleten",
+        "Konvensiya",
+        "Etimadnam\u0259"
+      ]
+    },
+    {
+      "Id": 227,
+      "Title": "Monoloji nitq n\u0259 dem\u0259kdir?        ",
+      "Answers": [
+        "Fikrin bir n\u0259f\u0259r t\u0259r\u0259find\u0259n geni\u015F v\u0259 ya m\u00FCxt\u0259s\u0259r ifad\u0259si ",
+        "\u0130ki v\u0259 daha artlq \u015F\u0259xsin bir \u2013biri il\u0259 m\u00FCzakir\u0259si",
+        "Yaz\u0131l\u0131 formada t\u0259qdim olunan nitq",
+        "M\u0259ktubla\u015Fma formasinda olan yaz\u0131l\u0131 nitq",
+        "\u018Fm\u0259li yaz\u0131 n\u00FCmun\u0259si"
+      ]
+    },
+    {
+      "Id": 228,
+      "Title": "Mikrodialoq n\u0259dir?",
+      "Answers": [
+        "Bir nec\u0259 n\u0259f\u0259rin q\u0131sa m\u00FCkalim\u0259si",
+        "T\u0259k \u015F\u0259xsin monoloqu",
+        "Mimik h\u0259r\u0259k\u0259tl\u0259r",
+        "S\u0259sin tempi",
+        "C\u00FCml\u0259l\u0259rin m\u00FCr\u0259kk\u0259bliyi"
+      ]
+    },
+    {
+      "Id": 229,
+      "Title": "Makrodialoq n\u0259dir?",
+      "Answers": [
+        "B\u00FCt\u00F6vl\u00FCkd\u0259 b\u0259dii \u0259s\u0259rl\u0259rin qurlu\u015Funu \u0259hat\u0259 edir",
+        "Ayr\u0131-ayr\u0131 ki\u00E7ik h\u0259cmli \u0259s\u0259rl\u0259ri \u0259hat\u0259 edir",
+        "Dialoq, povest, hekay\u0259 dilidir",
+        "\u00C7\u0131x\u0131\u015F ed\u0259nin nitqidir",
+        "Elmi \u0259s\u0259rl\u0259rin dilidir"
+      ]
+    },
+    {
+      "Id": 230,
+      "Title": "Yaz\u0131l\u0131 v\u0259 \u015Fifahi \u0259d\u0259bi dil aras\u0131ndak\u0131 f\u0259rqli c\u0259h\u0259tl\u0259rd\u0259n biri s\u0259hv verilmi\u015Fdir:",
+      "Answers": [
+        "Yaz\u0131l\u0131 \u0259d\u0259bi dil m\u00FC\u0259yy\u0259n vasit\u0259 olmadan fikri g\u0259l\u0259c\u0259k n\u0259sl\u0259 \u00E7atd\u0131ra bilmir, \u015Fifahi \u0259d\u0259bi dil is\u0259 bu funksiyan\u0131 yerin\u0259 yetir\u0259 bilir",
+        "Yaz\u0131l\u0131 \u0259d\u0259bi dilin ifad\u0259 vasit\u0259l\u0259ri h\u0259rf v\u0259 yaz\u0131, \u015Fifahi \u0259d\u0259bi dilin ifad\u0259 vasit\u0259l\u0259ri is\u0259  s\u0259s v\u0259 s\u00F6zd\u00FCr",
+        "Yaz\u0131l\u0131 \u0259d\u0259bi dild\u0259 terminl\u0259r daha \u00E7ox i\u015Fl\u0259dilir, \u015Fifahid\u0259 is\u0259 ham\u0131ya ayd\u0131n, \u00FCmumi\u015Fl\u0259k s\u00F6zl\u0259r\u0259 geni\u015F yer verilir",
+        "Yaz\u0131l\u0131 \u0259d\u0259bi dilin tempi a\u015Fa\u011F\u0131d\u0131r, z\u0259ifdir, \u015Fifahi \u0259d\u0259bi dilin tempi is\u0259 daha s\u00FCr\u0259tlidir ",
+        "Yaz\u0131l\u0131 \u0259d\u0259bi dild\u0259 b\u00FCt\u00F6v, m\u00FCr\u0259kk\u0259b c\u00FCml\u0259l\u0259r\u0259 daha geni\u015F yer verilir, \u015Fifahi \u0259d\u0259bi dild\u0259 is\u0259 yar\u0131m\u00E7\u0131q c\u00FCml\u0259l\u0259r\u0259, q\u0131sa replikalara "
+      ]
+    },
+    {
+      "Id": 231,
+      "Title": "Kommunikasiya prosesinin hans\u0131 formalar\u0131 var?",
+      "Answers": [
+        "Yaz\u0131l\u0131 v\u0259 \u015Fifahi ",
+        "\u0130ctimai-siyasi",
+        "Elmi-siyasi ",
+        "Orfoepik",
+        "Orfoqrafik "
+      ]
+    },
+    {
+      "Id": 232,
+      "Title": "Qurulu\u015F sxemin\u0259 g\u00F6r\u0259 monoloji nitqin n\u00F6vl\u0259rind\u0259n biri s\u0259hv verilmi\u015Fdir:",
+      "Answers": [
+        "M\u00FCtali\u0259",
+        "\u00C7\u0131x\u0131\u015F",
+        "M\u0259ruz\u0259",
+        "M\u00FChazir\u0259",
+        "M\u0259lumat"
+      ]
+    },
+    {
+      "Id": 233,
+      "Title": "Biri monoloji nitqin formas\u0131 deyil:",
+      "Answers": [
+        "Funksional",
+        "T\u0259sviri",
+        "T\u0259bli\u011Fi",
+        "\u0130nand\u0131rma",
+        "Daxili"
+      ]
+    },
+    {
+      "Id": 234,
+      "Title": "Professorun auditoriyada oxudu\u011Fu m\u00FChazir\u0259 nitqin hans\u0131 n\u00F6v\u00FCn\u0259 aiddir?",
+      "Answers": [
+        "\u015Eifahi ",
+        "B\u0259dii",
+        "Yaz\u0131l\u0131",
+        "Siyasi",
+        "Dialoji"
+      ]
+    },
+    {
+      "Id": 235,
+      "Title": "Biri dialoji nitqin formas\u0131 deyil:",
+      "Answers": [
+        "Xarici v\u0259 daxili dialoq ",
+        "Monoloji dialoq ",
+        "S\u00F6hb\u0259t v\u0259 dan\u0131\u015F\u0131q dialoqu",
+        "M\u00FCsahib\u0259 dialoqu",
+        "M\u00FCzakir\u0259 dialoqu"
+      ]
+    },
+    {
+      "Id": 236,
+      "Title": "M\u00FChazir\u0259 natiqliyin hans\u0131 t\u0259zah\u00FCr formalar\u0131ndan biridir?",
+      "Answers": [
+        "Akademik natiqlik",
+        "M\u0259hk\u0259m\u0259 natiqliyi",
+        "Siyasi natiqlik",
+        "M\u0259i\u015F\u0259t natiqliyi",
+        "Dini natiqlik"
+      ]
+    },
+    {
+      "Id": 237,
+      "Title": "M\u0259ruz\u0259 deyil\u0259nd\u0259 n\u0259 ba\u015Fa d\u00FC\u015F\u00FCl\u00FCr?",
+      "Answers": [
+        "Bir m\u00F6vzu haqq\u0131nda \u0259vv\u0259ld\u0259n hazirlan\u0131b s\u00F6yl\u0259nil\u0259n nitq",
+        "\u0130nsan\u0131n \u00F6z-\u00F6z\u00FCn\u0259 fikirl\u0259\u015Fm\u0259si, dan\u0131\u015Fmas\u0131 prosesi",
+        "R\u0259smi s\u0259n\u0259dl\u0259rin haz\u0131rlanmas\u0131 qaydas\u0131",
+        "Q\u0259tnam\u0259 formas\u0131",
+        "Yaz\u0131l\u0131 nitqin ifad\u0259 vasit\u0259l\u0259ri"
+      ]
+    },
+    {
+      "Id": 238,
+      "Title": "Daxili nitq n\u0259dir?",
+      "Answers": [
+        "T\u0259l\u0259ff\u00FCz edilm\u0259y\u0259n, s\u0259ssiz nitq ",
+        "R\u0259smi v\u0259 ictimai t\u0259dbirl\u0259rd\u0259 s\u00F6yl\u0259n\u0259n nitq",
+        "Konkret v\u0259 y\u0131\u011Fcam nitq",
+        "Spontan nitq",
+        "Dioloji formada olan nitq"
+      ]
+    },
+    {
+      "Id": 239,
+      "Title": "Aktiv nitq n\u0259dir?",
+      "Answers": [
+        "Kommunikatorun nitqi",
+        "Dinl\u0259yicinin nitqi",
+        "Xarici v\u0259 daxili nitq",
+        "Spontan nitq",
+        "Dioloji nitq"
+      ]
+    },
+    {
+      "Id": 240,
+      "Title": "T\u0259\u015Fkil olunmam\u0131\u015F, b\u0259dah\u0259t\u0259n s\u00F6yl\u0259n\u0259n nitq nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "Spontan",
+        "\u0130nterpretasiya",
+        "B\u0259dii",
+        "\u0130ntonasiya",
+        "M\u00FCsahib\u0259"
+      ]
+    },
+    {
+      "Id": 241,
+      "Title": "Passiv nitq hansidir?",
+      "Answers": [
+        "Dinl\u0259yicinin nitqi",
+        "Soyl\u0259yicinin nitqi",
+        "Natiqin nitqi",
+        "Daxili nitq",
+        "Musahib\u0259"
+      ]
+    },
+    {
+      "Id": 242,
+      "Title": "Spontan nitq n\u0259dir?",
+      "Answers": [
+        "B\u0259dah\u0259t\u0259n s\u00F6yl\u0259n\u0259n nitq",
+        "T\u0259\u015Fkil olunmu\u015F nitq                                      ",
+        "M\u00FC\u0259llimin m\u00FChazir\u0259si",
+        "M\u0259hk\u0259m\u0259 natiqliyi",
+        "Planla\u015Fd\u0131r\u0131lm\u0131\u015F nitq "
+      ]
+    },
+    {
+      "Id": 243,
+      "Title": "Yaz\u0131n\u0131n ba\u015Fl\u0131ca x\u00FCsusiyy\u0259ti hans\u0131d\u0131r?",
+      "Answers": [
+        "Qal\u0131c\u0131 v\u0259 s\u0259n\u0259d xarakterli olmas\u0131",
+        "Nitqin inki\u015Faf\u0131n\u0131 art\u0131rmas\u0131",
+        "Orfoepiyan\u0131n inki\u015Faf\u0131",
+        "Fonetikan\u0131n inki\u015Faf\u0131",
+        "\u00DCslubiyyat\u0131n inki\u015Faf\u0131"
+      ]
+    },
+    {
+      "Id": 244,
+      "Title": "\u015Eifahi nitqin ifad\u0259 vasit\u0259l\u0259ri hans\u0131lard\u0131r?",
+      "Answers": [
+        "S\u0259s v\u0259 s\u00F6z",
+        "H\u0259rf v\u0259 yaz\u0131",
+        "M\u0259tn v\u0259 s\u0259rti i\u015Far\u0259l\u0259r",
+        "\u0130smin hallar\u0131",
+        "Dur\u011Fu i\u015Far\u0259l\u0259ri"
+      ]
+    },
+    {
+      "Id": 245,
+      "Title": "Yaz\u0131l\u0131 nitqin ifad\u0259 vasit\u0259l\u0259ri hans\u0131lard\u0131r?",
+      "Answers": [
+        "H\u0259rf v\u0259 yaz\u0131",
+        "Natiqin \u00E7\u0131x\u0131\u015F\u0131",
+        "Dinl\u0259yicinin nitqi",
+        "Spontan fikir",
+        "M\u00FCsahib\u0259 v\u0259 dialoq"
+      ]
+    },
+    {
+      "Id": 246,
+      "Title": "Akademik nitqin n\u00F6vl\u0259ri hans\u0131lard\u0131r?",
+      "Answers": [
+        "Monoloji v\u0259 dialoji",
+        "M\u0259i\u015F\u0259t-\u0259d\u0259bi",
+        "B\u0259dii funksional",
+        "F\u0259rdi ",
+        "K\u00FCtl\u0259vi"
+      ]
+    },
+    {
+      "Id": 247,
+      "Title": "Dialoji nitqin ne\u00E7\u0259 formas\u0131 var?",
+      "Answers": [
+        "5",
+        "3",
+        "6",
+        "4",
+        "2"
+      ]
+    },
+    {
+      "Id": 248,
+      "Title": "T\u0259l\u0259b olunan s\u00F6zl\u0259rin, ifad\u0259l\u0259rin c\u00FCml\u0259d\u0259 m\u0259ntiq, m\u0259na v\u0259 m\u0259zmun bax\u0131mdan yerind\u0259 i\u015Fl\u0259nm\u0259si kommunikasiyada nitq\u0259 veril\u0259n hans\u0131 t\u0259l\u0259bdir? ",
+      "Answers": [
+        "D\u0259qiqlik",
+        "D\u00FCzg\u00FCnl\u00FCk",
+        "\u0130fad\u0259lilik",
+        "Konkretlik",
+        "Ayd\u0131nl\u0131q"
+      ]
+    },
+    {
+      "Id": 249,
+      "Title": "Fonetik, leksik, qrammatik qayda-qanunlara \u0259m\u0259l olunmas\u0131 nitq\u0259 veril\u0259n hans\u0131 t\u0259l\u0259bdir?  ",
+      "Answers": [
+        "D\u00FCzg\u00FCnl\u00FCk",
+        "M\u00FCnasiblik",
+        "Y\u0131\u011Fcaml\u0131q",
+        "D\u0259qiqlik",
+        "\u0130fad\u0259lilik"
+      ]
+    },
+    {
+      "Id": 250,
+      "Title": "Nitqin uy\u011Fun, u\u011Furlu, effektli, yard\u0131c\u0131 olmas\u0131 kommunikasiyada nitq\u0259 veril\u0259n hans\u0131 t\u0259l\u0259bdir?",
+      "Answers": [
+        "\u0130fad\u0259lilik",
+        "T\u0259mizlik",
+        "Z\u0259nginlik",
+        "M\u0259ntiqilik",
+        "D\u00FCr\u00FCstluk"
+      ]
+    },
+    {
+      "Id": 251,
+      "Title": "Nitqin z\u0259nginliyinin ba\u015Fl\u0131ca meyar\u0131 n\u0259dir?            ",
+      "Answers": [
+        "Geni\u015F s\u00F6z ehtiyat\u0131na malik olmaq",
+        "D\u00FCzg\u00FCn yaz\u0131 qaydas\u0131",
+        "Jest-mimikadan d\u00FCzg\u00FCn istifad\u0259 qaydas\u0131",
+        "Natiqin c\u0131x\u0131\u015F\u0131",
+        "M\u0259i\u015F\u0259t \u00FCslubunda dan\u0131\u015F\u0131q"
+      ]
+    },
+    {
+      "Id": 252,
+      "Title": "Nitqin orijinall\u0131\u011F\u0131 nec\u0259 ba\u015Fa d\u00FC\u015F\u00FClm\u0259lidir?",
+      "Answers": [
+        "Nitqin \u00F6z\u00FCn\u0259m\u0259xsuslu\u011Fu",
+        "Nitqin elmiliyi",
+        "Nitqin laz\u0131ml\u0131l\u0131\u011F\u0131",
+        "Nitqin m\u0259qs\u0259di",
+        "Kommunikativliyi"
+      ]
+    },
+    {
+      "Id": 253,
+      "Title": "Biri nitqin t\u0259mizliyin\u0259 aid edil\u0259 bilm\u0259z:",
+      "Answers": [
+        "Dan\u0131\u015F\u0131lacaq material\u0131 \u0259vv\u0259lc\u0259d\u0259n haz\u0131rlamaq",
+        "M\u0259h\u0259lli s\u00F6zl\u0259r\u0259, \u015Fiv\u0259l\u0259r\u0259 yol verm\u0259m\u0259k",
+        "\u018Fcn\u0259bi s\u00F6zl\u0259rin l\u00FCzumsuz i\u015Fl\u0259nm\u0259m\u0259si",
+        "T\u00FCfeyli s\u00F6zl\u0259rd\u0259n nitqd\u0259 istifad\u0259 etm\u0259m\u0259k",
+        "Vulqar v\u0259 loru  s\u00F6zl\u0259r\u0259 yol verm\u0259m\u0259k"
+      ]
+    },
+    {
+      "Id": 254,
+      "Title": "Hans\u0131 m\u0259d\u0259ni nitqin t\u0259l\u0259bi deyil?",
+      "Answers": [
+        "Dialekt v\u0259 loru s\u00F6zl\u0259rd\u0259n istifad\u0259 etm\u0259k",
+        "Nitqd\u0259 \u0259cn\u0259bi s\u00F6zl\u0259r\u0259 yol verm\u0259m\u0259k",
+        "Nitqin t\u0259mizliyin\u0259 h\u0259mi\u015F\u0259 \u0259m\u0259l etm\u0259k",
+        "Fikrin ifad\u0259liliyini t\u0259min etm\u0259k",
+        "B\u0259dii ifad\u0259 vasit\u0259l\u0259rind\u0259n s\u0259m\u0259r\u0259li istifad\u0259 etm\u0259k"
+      ]
+    },
+    {
+      "Id": 255,
+      "Title": "Nitqin ifad\u0259liliyini yaradan vasit\u0259l\u0259r hans\u0131lard\u0131r?",
+      "Answers": [
+        "Z\u0259rbi-m\u0259s\u0259l\u0259l\u0259r, aforizml\u0259r",
+        "Kutl\u0259vi informasiya vasit\u0259l\u0259ri",
+        "R\u0259smi statuslar",
+        "\u00DCnsiyy\u0259t aktlar\u0131",
+        "Kommunikasiya"
+      ]
+    },
+    {
+      "Id": 256,
+      "Title": "Hans\u0131 fikir s\u0259hvdir?",
+      "Answers": [
+        "D\u00FCzg\u00FCn nitqd\u0259 d\u0259qiqlik olmaya da bil\u0259r",
+        "Z\u0259ngin dil m\u00FCk\u0259mm\u0259l nitqin \u0259sas\u0131d\u0131r",
+        "Nitq sad\u0259, ayd\u0131n, d\u0259qiq olmal\u0131d\u0131r",
+        "G\u00F6z\u0259l nitq \u00FC\u00E7\u00FCn ifad\u0259lilik \u0259sas \u015F\u0259rtl\u0259rd\u0259n biridir",
+        "Nitq dil\u0259 \u0259saslan\u0131r, onun \u0259sas\u0131nda meydana \u00E7\u0131x\u0131r"
+      ]
+    },
+    {
+      "Id": 257,
+      "Title": "Biri nitqin z\u0259nginliyini t\u0259min ed\u0259n amil deyil:",
+      "Answers": [
+        "Sad\u0259lik",
+        "Sinonimlik",
+        "Leksik r\u0259ngar\u0259nglik",
+        "\u0130ntonasiya",
+        "S\u00F6z ehtiyyat\u0131"
+      ]
+    },
+    {
+      "Id": 258,
+      "Title": "B\u0259dii \u00FCslubda kobud s\u0259sl\u0259ns\u0259 d\u0259, fikri daha ayd\u0131n ifad\u0259 etm\u0259k m\u0259qs\u0259dil\u0259 m\u0259cazi m\u0259nada i\u015Fl\u0259dil\u0259n b\u0259sit v\u0259 adi dan\u0131\u015F\u0131q s\u00F6z v\u0259 ifad\u0259l\u0259ri nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "Loru s\u00F6zl\u0259r",
+        "Jarqonlar",
+        "Dialektl\u0259r",
+        "\u015Eiv\u0259l\u0259r",
+        "T\u00FCfeyli s\u00F6zl\u0259r"
+      ]
+    },
+    {
+      "Id": 259,
+      "Title": "Fikrin ifad\u0259si zaman\u0131 laz\u0131mi s\u00F6z tapmad\u0131qda i\u015Fl\u0259dil\u0259n, ad\u0131n\u0131 s\u0259n de, can\u0131m s\u0259n\u0259 desin, zadd\u0131, ad\u0131 n\u0259dir, \u015Feydir v\u0259 s., m\u0259tnl\u0259 \u0259laq\u0259si olmayan yersiz s\u00F6z v\u0259 ifad\u0259l\u0259r nec\u0259 adlan\u0131r?",
+      "Answers": [
+        "T\u00FCfeyli s\u00F6zl\u0259r",
+        "D\u0259d\u0259-baba s\u00F6zl\u0259r  ",
+        "Jarqonlar",
+        "Arqo",
+        "Loru s\u00F6zl\u0259r "
+      ]
+    },
+    {
+      "Id": 260,
+      "Title": "Nitqd\u0259 qaba, kobud v\u0259 qeyri-\u0259d\u0259bi, s\u00F6y\u00FC\u015F s\u0259ciyy\u0259li s\u00F6zl\u0259r n\u0259 adlan\u0131r?",
+      "Answers": [
+        "Vulqar s\u00F6zl\u0259r",
+        "Al\u0131nma s\u00F6zl\u0259r",
+        "Jarqonlar",
+        "T\u0259svir vasit\u0259l\u0259ri",
+        "Leksik s\u00F6zl\u0259r"
+      ]
+    },
+    {
+      "Id": 261,
+      "Title": "M\u00FC\u0259yy\u0259n \u0259razi il\u0259 h\u00FCdudlanm\u0131\u015F yerli \u0259halinin \u00FCmumxalq dili n\u0259 adlan\u0131r?",
+      "Answers": [
+        "Dialekt s\u00F6zl\u0259r",
+        "Loru s\u00F6zl\u0259r",
+        "\u00DCmumi\u015Fl\u0259k s\u00F6zl\u0259r",
+        "Jarqonlar",
+        "Kobud ifad\u0259l\u0259r"
+      ]
+    },
+    {
+      "Id": 262,
+      "Title": "Nitqin m\u00FCnasibliyini \u015F\u0259rtl\u0259ndir\u0259n amill\u0259r i\u00E7\u0259risind\u0259 a\u015Fa\u011F\u0131dak\u0131lardan biri s\u0259hvdir:",
+      "Answers": [
+        "Dialekt v\u0259 jarqonlar\u0131n c\u00FCml\u0259d\u0259 istifad\u0259si",
+        "M\u00F6vzunun m\u0259zmununa uy\u011Fun dil material\u0131n\u0131n se\u00E7ilm\u0259si ",
+        "Dil vasit\u0259l\u0259rinin nitqin m\u0259qam v\u0259 \u015F\u0259raitin\u0259 uy\u011Funlu\u011Fu",
+        "Nitq \u00FCslubundan as\u0131l\u0131 olaraq, dil vasit\u0259l\u0259rinin m\u0259qs\u0259d\u0259uy\u011Funlu\u011Fu ",
+        "Dil material\u0131n\u0131n natiqin \u015F\u0259xsiyy\u0259tin\u0259, savad\u0131na, d\u00FCnyag\u00F6r\u00FC\u015F\u00FCn\u0259, s\u0259n\u0259tin\u0259 uy\u011Funlu\u011Fu"
+      ]
+    },
+    {
+      "Id": 263,
+      "Title": "M\u00FC\u0259yy\u0259n t\u0259b\u0259q\u0259nin v\u0259 ya m\u0259hdud bir qrupun i\u015Fl\u0259tdiyi, \u00F6z aralar\u0131nda dan\u0131\u015F\u0131\u011F\u0131n mahiyy\u0259tini dig\u0259rl\u0259rind\u0259n gizli saxlad\u0131qlar\u0131, ba\u015Fqalar\u0131n\u0131n ba\u015Fa d\u00FC\u015Fm\u0259diyi \u015F\u0259rti s\u00F6z v\u0259 ya ifad\u0259l\u0259r n\u0259 adlan\u0131r?",
+      "Answers": [
+        "Arqo",
+        "Jarqon",
+        "Loru s\u00F6zl\u0259r",
+        "Dialekt s\u00F6zl\u0259r",
+        "Vulqar s\u00F6zl\u0259r"
+      ]
+    },
+    {
+      "Id": 264,
+      "Title": "Tabu v\u0259 evfemizml\u0259rd\u0259n n\u0259 zaman istifd\u0259 olunur?",
+      "Answers": [
+        "Nitqd\u0259 m\u00FCnasiblik yaratmaq \u00FC\u00E7\u00FCn",
+        "Nitqd\u0259 z\u0259nginlik yaratmaq \u00FC\u00E7\u00FCn",
+        "Nitqd\u0259 t\u0259mizlik yaratmaq \u00FC\u00E7\u00FCn",
+        "Nitqd\u0259 d\u00FCzg\u00FCnluk yaratmaq \u00FC\u00E7\u00FCn",
+        "Nitqd\u0259 d\u0259qiqlik yaratmaq \u00FC\u00E7\u00FCn"
+      ]
+    },
+    {
+      "Id": 265,
+      "Title": "Hans\u0131 nitqd\u0259 jest v\u0259 mimikadan daha \u00E7ox istifad\u0259 olunur?",
+      "Answers": [
+        "\u015Eifahi nitqd\u0259",
+        "Yaz\u0131l\u0131 nitqd\u0259",
+        "Daxili nitqd\u0259",
+        "Spontan nitq",
+        "Akademik nitq"
+      ]
+    },
+    {
+      "Id": 266,
+      "Title": "Daxili nitq n\u0259dir?",
+      "Answers": [
+        "T\u0259l\u0259ff\u00FCz olunmayan s\u0259ssiz nitqdir",
+        "S\u0259sli nitqdir",
+        "E\u015Fidil\u0259n s\u0259sli nitqdir",
+        "S\u00F6yl\u0259nil\u0259n nitqdir",
+        "T\u0259l\u0259ff\u00FCz olunan s\u0259sli nitqdir"
+      ]
+    },
+    {
+      "Id": 267,
+      "Title": "Yanl\u0131\u015F fikri se\u00E7in:",
+      "Answers": [
+        "\u00DCslubiyyat\u0131n ritorika il\u0259 he\u00E7 bir \u0259laq\u0259si yoxdur",
+        "Nitq f\u0259rdi-psixi, dil is\u0259 ictimai hadis\u0259dir",
+        "M\u0259ruz\u0259, \u00E7\u0131x\u0131\u015F, m\u00FChazir\u0259 v\u0259 s. monoloji nitqin formalar\u0131d\u0131r",
+        "\u018Fd\u0259bi dilin normalar\u0131 m\u00FCtl\u0259q deyil, d\u0259yi\u015Fk\u0259ndir",
+        "Yaz\u0131l\u0131 nitq s\u0259rb\u0259st v\u0259 m\u00FCf\u0259ss\u0259l bir \u00FCnsiyy\u0259t formas\u0131d\u0131r"
+      ]
+    },
+    {
+      "Id": 268,
+      "Title": "Verilmi\u015F m\u0259tn \u0259m\u0259li yaz\u0131n\u0131n hans\u0131 n\u00F6v\u00FCn\u0259 aiddir? M\u0259n, Filoloji fak\u00FClt\u0259nin IV kurs t\u0259l\u0259b\u0259si Qas\u0131mova G\u00FClnar \u018Fli q\u0131z\u0131, r\u0259fiq\u0259m \u018Fliyeva Sona \u0130slam q\u0131z\u0131ndan oxumaq \u00FC\u00E7\u00FCn \u201CD\u0259li K\u00FCr\u201D \u0259s\u0259rini ald\u0131m.",
+      "Answers": [
+        "Q\u0259bz",
+        "F\u0259rman",
+        "\u0130zahat      ",
+        "Akt",
+        "Etibarnam\u0259      "
+      ]
+    },
+    {
+      "Id": 269,
+      "Title": "Biri r\u0259smi \u00FCslubun q\u0259dim n\u00F6v\u00FCn\u00FCn ad\u0131d\u0131r:       ",
+      "Answers": [
+        "F\u0259rman",
+        "Xasiyy\u0259tnam\u0259",
+        "\u018Friz\u0259",
+        "Aray\u0131\u015F",
+        "Raport"
+      ]
+    },
+    {
+      "Id": 270,
+      "Title": "Bir m\u0259lumat\u0131 m\u00FCzakir\u0259 etdikd\u0259n sonra m\u00FC\u0259yy\u0259n n\u0259tic\u0259y\u0259 g\u0259lm\u0259k, q\u0259rar verm\u0259k \u0259m\u0259li yaz\u0131n\u0131n hans\u0131 n\u00F6v\u00FCn\u0259 aiddir?",
+      "Answers": [
+        "F\u0259rman",
+        "Aray\u0131\u015F",
+        "Raport",
+        "\u018Friz\u0259",
+        "Elan "
+      ]
+    },
+    {
+      "Id": 271,
+      "Title": "\u04D8riz\u04D9 yazark\u04D9n laz\u0131m olan qaydalardan biri s\u04D9hvdir:",
+      "Answers": [
+        "\u018Friz\u04D9y\u04D9 m\u00F6h\u00FCr vurulmal\u0131d\u0131r",
+        "\u04D8riz\u04D9nin m\u04D9zmunu q\u0131sa, faktlar is\u04D9 konkret olmal\u0131d\u0131r",
+        "\u04D8riz\u04D9ni \u04D9riz\u04D9 ver\u04D9n \u00F6z x\u04D9tti il\u04D9 yazmal\u0131d\u0131r",
+        "V\u04D9r\u04D9qin ortas\u0131nda ba\u015F h\u04D9rfi b\u00F6y\u00FCk olmaqla \u201C\u018Friz\u04D9\u201D s\u00F6z\u00FC yaz\u0131lmal\u0131d\u0131r",
+        "V\u04D9r\u04D9qin sa\u011F t\u04D9r\u04D9find\u04D9 \u04D9vv\u04D9lind\u04D9n \u04D9riz\u04D9nin ba\u015Fl\u0131\u011F\u0131, y\u04D9ni kim\u04D9 v\u04D9 kimd\u04D9n yaz\u0131ld\u0131\u011F\u0131 qeyd olunmal\u0131d\u0131r"
+      ]
+    },
+    {
+      "Id": 272,
+      "Title": "F\u0259rman haq\u0131\u0131ndak\u0131 fikirl\u0259rd\u0259n biri s\u0259hvdir:",
+      "Answers": [
+        "Yerli icra orqanlar\u0131n\u0131n t\u0259sdiq etdiyi s\u0259n\u0259d",
+        "Prezidentin \u00F6z s\u0259lahiyy\u0259tl\u0259ri daxilind\u0259 q\u0259bul etdiyi akt",
+        "\u00DCmumi h\u00FCquqi normalar\u0131, qaydalar\u0131 m\u00FC\u0259yy\u0259n ed\u0259n s\u0259n\u0259d",
+        "H\u00FCquq normas\u0131n\u0131 konkret hadis\u0259y\u0259 t\u0259tbiq ed\u0259n akt",
+        "D\u00F6vl\u0259tin b\u00FCt\u00FCn \u0259razisind\u0259 h\u00FCquqi q\u00FCvv\u0259d\u0259 olan s\u0259n\u0259d "
+      ]
+    },
+    {
+      "Id": 273,
+      "Title": "H.\u0130.Mirz\u0259yev\u0259 general-leytenant ali h\u0259rbi r\u00FCtb\u0259sinin verilm\u0259si haqq\u0131nda     Az\u0259rbaycan Respublikas\u0131 Prezidentinin     ................Az\u0259rbaycan Respublikas\u0131 Konstitusiyas\u0131n\u0131n 109-cu madd\u0259sinin 24-c\u00FC b\u0259ndini r\u0259hb\u0259r tutaraq q\u0259rara al\u0131ram:General-mayor Hikm\u0259t \u0130zz\u0259t o\u011Flu Mirz\u0259yev\u0259 general-leytenant ali h\u0259rbi r\u00FCtb\u0259si verilsin.\u0130lham \u018FliyevAz\u0259rbaycan Respublikas\u0131n\u0131n PrezidentiBak\u0131 \u015F\u0259h\u0259ri, 17 oktyabr 2020-ci il.Yuxar\u0131dak\u0131 m\u0259tnd\u0259 n\u00F6qt\u0259l\u0259rin yerin\u0259 hans\u0131 r\u0259smi d\u00F6vl\u0259t s\u0259n\u0259dinin n\u00F6vu yaz\u0131lmal\u0131d\u0131r?",
+      "Answers": [
+        "S\u0259r\u0259ncam",
+        "F\u0259rman",
+        "\u018Fmr",
+        "Akt",
+        "Qanun"
+      ]
+    },
+    {
+      "Id": 274,
+      "Title": "F\u0259rman hans\u0131 \u00FCslubun n\u00F6v\u00FC hesab olunur?",
+      "Answers": [
+        "R\u0259smi",
+        "M\u0259i\u015F\u0259t",
+        "\u0130\u015Fg\u00FCzar",
+        "B\u0259dii",
+        "F\u0259rdi"
+      ]
+    },
+    {
+      "Id": 275,
+      "Title": "F\u0259rman s\u00F6z\u00FC farsca hans\u0131 m\u0259nan\u0131 da\u015F\u0131y\u0131r?",
+      "Answers": [
+        "\u201CBuyurmaq, \u0259mr etm\u0259k\u201D",
+        "\u201CSoz verm\u0259k, yaratmaq\u201D",
+        "\u201CQayda-qanun\u201D",
+        "\u201CXalq\u0131n rifah\u0131\u201D",
+        "\u201CT\u0259sdiq edir\u0259m\u201D"
+      ]
+    },
+    {
+      "Id": 276,
+      "Title": "F\u0259rman\u0131n strukturuna a\u015Fa\u011F\u0131dak\u0131lardan biri aid deyil: ",
+      "Answers": [
+        "Nazirl\u0259r kabinetinin q\u0259rar\u0131",
+        "D\u00F6vl\u0259tin gerbi, s\u0259n\u0259d n\u00F6v\u00FCn\u00FCn ad\u0131",
+        "Ba\u015Fl\u0131q, m\u0259zmun",
+        "\u0130mza, t\u0259rtib olundu\u011Fu yer",
+        "Tarix"
+      ]
+    },
+    {
+      "Id": 277,
+      "Title": "Az\u0259rbaycan\u0131n birinci Konstitusiyas\u0131 \u00DCmumaz\u0259rbaycan Sovetl\u0259r qurultay\u0131nda n\u0259 zaman q\u0259bul edilmi\u015Fdir?",
+      "Answers": [
+        "1921-ci il may\u0131n 19-da",
+        "1925-ci il martin 19-da",
+        "1921-ci il noyabr\u0131n 12-d\u0259",
+        "1928-ci il aprelin 8-d\u0259",
+        "1921-ci il iyulun 30-da "
+      ]
+    },
+    {
+      "Id": 278,
+      "Title": " Az\u0259rbaycan Respublikas\u0131n\u0131n Konstitusiya G\u00FCn\u00FC\u00A0hans\u0131 tarixd\u0259 qeyd olunur?",
+      "Answers": [
+        "12 noyabr",
+        "8 noyabr",
+        "26 aprel",
+        "9 may",
+        "18 oktyabr"
+      ]
+    },
+    {
+      "Id": 279,
+      "Title": "Az\u0259rbaycan\u0131n yeni Konstitusiyas\u0131 ne\u00E7\u0259 b\u00F6lm\u0259, ne\u00E7\u0259 f\u0259sil v\u0259 ne\u00E7\u0259 madd\u0259d\u0259n ibr\u0259tdir?",
+      "Answers": [
+        "5 b\u00F6lm\u0259, 12 f\u0259sil v\u0259 158 madd\u0259d\u0259n",
+        "8 b\u00F6lm\u0259, 16 f\u0259sil v\u0259 158 madd\u0259d\u0259n",
+        "3 b\u00F6lm\u0259, 16 f\u0259sil v\u0259 122 madd\u0259d\u0259n",
+        "5 b\u00F6lm\u0259, 18 f\u0259sil v\u0259 122 madd\u0259d\u0259n",
+        "4 b\u00F6lm\u0259, 12 f\u0259sil v\u0259 158 madd\u0259d\u0259n"
+      ]
+    },
+    {
+      "Id": 280,
+      "Title": "Az\u0259rbaycan Respublikas\u0131n\u0131n Konstitusiya g\u00FCn\u00FC hans\u0131 tarixd\u0259 v\u0259 kimin s\u0259r\u0259ncam\u0131 il\u0259 t\u0259sdiq edildi?",
+      "Answers": [
+        "1996-c\u0131 il fevral\u0131n 6-da Ulu \u00D6nd\u0259r Heyd\u0259r \u018Fliyev t\u0259r\u0259find\u0259n",
+        "1998-ci il noyabrin 12- d\u0259 Nazirl\u0259r Kabineti t\u0259r\u0259find\u0259n",
+        "1998- ci il oktyabr\u0131n 5-d\u0259 Birinci Vitse prezident t\u0259r\u0259find\u0259n",
+        "2000-ci il iyulun 14 d\u0259 Milli M\u0259clis t\u0259r\u0259find\u0259n",
+        "2002-ci il sentyabr\u0131n 17 d\u0259 Xalq Hakimiyy\u0259ti t\u0259r\u0259find\u0259n"
+      ]
+    },
+    {
+      "Id": 281,
+      "Title": "R\u0259smi d\u00F6vl\u0259t s\u0259n\u0259dl\u0259ri hans\u0131lard\u0131r?",
+      "Answers": [
+        "Konstitusiya, f\u0259rman, s\u0259r\u0259ncam, qanun",
+        "M\u00FCqavil\u0259, sazi\u015F, \u0259riz\u0259, bildiri\u015F",
+        "F\u0259rman, etibarnam\u0259, t\u00F6hm\u0259t, annotasiya",
+        "Aray\u0131\u015F, s\u0259r\u0259ncam, sazi\u015F",
+        "Bildiri\u015F, q\u0259bz, t\u0259r\u0259fda\u015Fl\u0131q"
+      ]
+    },
+    {
+      "Id": 282,
+      "Title": "M\u04D9zmununa g\u00F6r\u04D9 m\u00FCqavil\u04D9nin hans\u0131 n\u00F6vl\u04D9ri var?",
+      "Answers": [
+        "S\u00FClh, \u04D9m\u04D9k, ticar\u04D9t",
+        "Geni\u015F, sazi\u015F, \u0259mr",
+        "M\u00FCr\u04D9kk\u04D9b, sad\u0259",
+        "T\u00F6hm\u0259t, imza, orden",
+        "X\u0259b\u0259rdarl\u0131q, m\u0259lumat"
+      ]
+    },
+    {
+      "Id": 283,
+      "Title": " ...., \u04D9sas\u04D9n, idar\u04D9, t\u04D9\u015Fkilat v\u04D9 m\u00FC\u04D9ssis\u04D9l\u04D9rd\u04D9 q\u04D9bah\u04D9t ed\u04D9n\u04D9 h\u04D9min q\u04D9bah\u04D9ti bir daha t\u04D9krar etm\u04D9m\u04D9si \u00FC\u00E7\u00FCn veril\u04D9n yaz\u0131l\u0131 v\u04D9 \u015Fifahi g\u00F6st\u04D9ri\u015F dem\u04D9kdir.",
+      "Answers": [
+        "X\u04D9b\u04D9rdarl\u0131q",
+        "\u018Friz\u04D9",
+        "Annotasiya",
+        "Sifari\u015F",
+        "T\u00F6hm\u04D9t"
+      ]
+    },
+    {
+      "Id": 284,
+      "Title": "Bu ifad\u0259l\u0259rd\u0259n birini \u0259riz\u0259y\u0259 d\u0259rk\u0259nar kimi verm\u0259k olmaz:",
+      "Answers": [
+        "Fikirl\u0259\u015Filsin",
+        "M\u00FCzakir\u0259 edilsin",
+        "\u0130\u015F\u0259 g\u00F6t\u00FCr\u00FCls\u00FCn",
+        "N\u0259z\u0259r\u0259 al\u0131ns\u0131n",
+        "M\u00FCkafatland\u0131r\u0131ls\u0131n"
+      ]
+    },
+    {
+      "Id": 285,
+      "Title": "Az\u04D9riqazbank \u04D9halinin n\u04D9z\u04D9rin\u04D9 \u00E7atd\u0131r\u0131r ki, \u04D9man\u04D9tl\u04D9r\u04D9 veril\u04D9n orta illik g\u04D9lir 10 faizd\u04D9n 30 faiz\u04D9 qald\u0131r\u0131lm\u0131\u015Fd\u0131r. Az\u04D9riqazbank Verilmi\u015F n\u00FCmun\u04D9nin hans\u0131 \u04D9m\u04D9li yaz\u0131 n\u00F6v\u00FCn\u04D9 aid oldu\u011Funu g\u00F6st\u04D9rin:",
+      "Answers": [
+        "Bildiri\u015F",
+        "Elan",
+        "Etibarnam\u04D9",
+        "Teleqram",
+        "Aray\u0131\u015F"
+      ]
+    },
+    {
+      "Id": 286,
+      "Title": "R\u04D9smi s\u04D9n\u04D9dl\u04D9rin x\u00FCsusiyy\u04D9tl\u04D9rin\u04D9 aid deyil:",
+      "Answers": [
+        "Fikrin ikim\u04D9nal\u0131l\u0131\u011F\u0131",
+        "Dilin maksimum m\u00FCk\u04D9mm\u04D9lliyi",
+        "Dilin y\u0131\u011Fcaml\u0131\u011F\u0131",
+        "Fikrin h\u00FCquqi c\u04D9h\u04D9td\u04D9n \u04D9sasl\u0131l\u0131\u011F\u0131",
+        "M\u00FC\u04D9yy\u04D9n \u00FCslubda yaz\u0131lmas\u0131"
+      ]
+    },
+    {
+      "Id": 287,
+      "Title": "Konstitusiya s\u00F6z\u00FCn\u00FCn h\u0259rfi m\u0259nas\u0131 n\u0259dir?",
+      "Answers": [
+        "\u201CQurmaq, yaratmaq, \u0259sas\u0131n\u0131 qoymaq\u201D",
+        "\u201CT\u0259kan verm\u0259k, istifad\u0259 etm\u0259k\u201D",
+        "\u201C\u018Fmr etm\u0259k, icaz\u0259 verm\u0259k, yoxlamaq\u201D",
+        "\u201CT\u0259sdiq etm\u0259k, t\u0259sbit etm\u0259k\u201D",
+        "\u201C\u0130dar\u0259 etm\u0259k, t\u0259\u015Fkilat\u00E7\u0131l\u0131q etm\u0259k\u201D"
+      ]
+    },
+    {
+      "Id": 288,
+      "Title": "Az\u0259rbaycan Respublikas\u0131n\u0131n d\u00F6vl\u0259t dili Az\u0259rbaycan Respublikas\u0131 Konstitusiyas\u0131n\u0131n 21-ci madd\u0259sinin 1-ci hiss\u0259sin\u0259 m\u00FCvafiq olaraq Az\u0259rbaycan dilidir. D\u00F6vl\u0259t dilini bilm\u0259k h\u0259r bir Az\u0259rbaycan Respublikas\u0131 v\u0259t\u0259nda\u015F\u0131n\u0131n borcudur.M\u0259tn hans\u0131 \u00FCsluba aiddir? ",
+      "Answers": [
+        "R\u0259smi",
+        "B\u0259dii",
+        "Elmi",
+        "M\u0259i\u015F\u0259t",
+        "Publisistik"
+      ]
+    },
+    {
+      "Id": 289,
+      "Title": "Az\u0259rbaycan Respublikas\u0131n\u0131n T\u0259rt\u0259r rayonunun Madagiz k\u0259ndinin Suqovu\u015Fan k\u0259ndi adland\u0131r\u0131lmas\u0131 haqq\u0131nda Az\u0259rbaycan Respublikas\u0131n\u0131n ..........Az\u0259rbaycan Respublikas\u0131n\u0131n Milli M\u0259clisi Az\u0259rbaycan Respublikas\u0131 Konstitusiyas\u0131n\u0131n 95-ci madd\u0259sinin I hiss\u0259sinin 3-c\u00FC b\u0259ndin\u0259 \u0259sas\u0259n q\u0259rara al\u0131r:Az\u0259rbaycan Respublikas\u0131n\u0131n T\u0259rt\u0259r rayonunun \u00C7ayl\u0131 k\u0259nd inzibati \u0259razi dair\u0259si t\u0259rkibind\u0259ki Madagiz k\u0259ndi Suqovu\u015Fan k\u0259ndi adland\u0131r\u0131ls\u0131n.\u0130lham \u018FliyevAz\u0259rbaycan Respublikas\u0131n\u0131n Prezidenti Bak\u0131 \u015F\u0259h\u0259ri, 6 oktyabr 2020-ci il.Yuxar\u0131dak\u0131 m\u0259tnd\u0259 n\u00F6qt\u0259l\u0259rin yerin\u0259 hans\u0131 r\u0259smi d\u00F6vl\u0259t s\u0259n\u0259dinin n\u00F6vu yaz\u0131lmal\u0131d\u0131r?",
+      "Answers": [
+        "Qanun",
+        "S\u0259r\u0259ncam",
+        "F\u0259rman",
+        "\u018Fmr",
+        "Akt"
+      ]
+    },
+    {
+      "Id": 290,
+      "Title": "R\u0259smi d\u00F6vl\u0259t s\u0259n\u0259dinin a\u015Fa\u011F\u0131dak\u0131 n\u00F6vl\u0259rind\u0259n hans\u0131lar\u0131 d\u00F6vl\u0259t ba\u015F\u00E7\u0131s\u0131-prezident imzalay\u0131r?",
+      "Answers": [
+        "F\u0259rman, s\u0259r\u0259ncam",
+        "F\u0259rman, raport",
+        "S\u0259r\u0259ncam, v\u0259kal\u0259tnam\u0259",
+        "S\u0259r\u0259ncam, akt",
+        "Akt, protokol  "
+      ]
+    },
+    {
+      "Id": 291,
+      "Title": "S\u0259r\u0259ncamlar m\u0259zmunca ne\u00E7\u0259 yer\u0259 b\u00F6l\u00FCn\u00FCr?",
+      "Answers": [
+        "2",
+        "4",
+        "5",
+        "3",
+        "6"
+      ]
+    },
+    {
+      "Id": 292,
+      "Title": "S\u00F6z\u00FCn \u00E7oxsa \u0259g\u0259r, \u00E7al\u0131\u015F az olsun,  Y\u00FCz s\u00F6z\u00FCn yerind\u0259 bir k\u0259lm\u0259 qals\u0131n (Nizami) \u2013\u015Fairin bu beytind\u0259 nitq\u0259 veril\u0259n hans\u0131 t\u0259l\u0259bi g\u00F6r\u0259 bilirik?",
+      "Answers": [
+        "Nitqin z\u0259nginliyini",
+        "Nitqin y\u0131\u011Fcaml\u0131\u011F\u0131n\u0131",
+        "Nitqin ayd\u0131nl\u0131\u011F\u0131n\u0131",
+        "Nitqin t\u0259mizliyini",
+        "Ntqin d\u00FCzg\u00FCnl\u00FCy\u00FCn\u00FC"
+      ]
+    },
+    {
+      "Id": 293,
+      "Title": "Nitq m\u0259d\u0259niyy\u0259tinin ham\u0131 \u00FC\u00E7\u00FCn vacib olan \u0259sas \u015F\u0259rti n\u0259dir?",
+      "Answers": [
+        "Nitqin d\u00FCzg\u00FCnl\u00FCy\u00FC",
+        "Nitqin h\u0259r\u0259k\u0259rtliliyi",
+        "Nitqin emosionall\u0131\u011F\u0131",
+        "Nitqin elmiliyi",
+        "Nitqin t\u0259biiliyi"
+      ]
+    },
+    {
+      "Id": 294,
+      "Title": "Nitqd\u0259 m\u0259h\u0259lli dialektl\u0259r\u0259 v\u0259 yerli \u015Fiv\u0259l\u0259r\u0259 m\u0259xsus dan\u0131\u015F\u0131q t\u0259rzin\u0259 yol verilirs\u0259, m\u0259d\u0259ni nitqin hans\u0131 t\u0259l\u0259bi pozulur?",
+      "Answers": [
+        "T\u0259mizliyi",
+        "S\u0259lisliyi",
+        "D\u0259qiqliyi",
+        "Ayd\u0131nl\u0131\u011F\u0131",
+        "M\u00FCnasibliyi"
+      ]
+    },
+    {
+      "Id": 295,
+      "Title": " ....... nitq\u0259 yiy\u0259l\u0259nm\u0259k \u00FC\u00E7\u00FCn qrammatikan\u0131n qaydalar\u0131n\u0131 bilm\u0259kd\u0259n \u0259lav\u0259, \u0259d\u0259bi dilin dig\u0259r normalar\u0131na da riay\u0259t etm\u0259k laz\u0131md\u0131r. N\u00F6qt\u0259l\u0259rin yerin\u0259 hans\u0131 s\u00F6z qoyulmal\u0131d\u0131r ?",
+      "Answers": [
+        "D\u00FCzg\u00FCn",
+        "Z\u0259ngin",
+        "Ayd\u0131n",
+        "\u0130fad\u0259li",
+        "T\u0259miz"
+      ]
+    },
+    {
+      "Id": 296,
+      "Title": "Hans\u0131 terminl\u0259r r\u0259smi \u00FCslubun terminl\u0259ri s\u0131ras\u0131na daxil deyil? ",
+      "Answers": [
+        "Deduksiya, induksiya",
+        "B\u0259yannam\u0259, b\u0259yanat ",
+        "S\u0259r\u0259ncam, \u0259mr ",
+        "M\u00FCqavil\u0259, nota ",
+        "Ultimatum, f\u0259rman"
+      ]
+    },
+    {
+      "Id": 297,
+      "Title": ".T\u0259rc\u00FCmeyi-hal s\u00F6z\u00FCn\u00FCn m\u0259nas\u0131 deyil:",
+      "Answers": [
+        "H\u0259yat\u0131n ax\u0131n\u0131",
+        "Geri \u00E7evirm\u0259",
+        "T\u0259krar etm\u0259",
+        "S\u00FCr\u0259t",
+        "V\u0259ziyy\u0259t"
+      ]
+    },
+    {
+      "Id": 298,
+      "Title": ".CV haz\u0131rlayark\u0259n hans\u0131 m\u0259lumatlara diqq\u0259t yetirilmir:",
+      "Answers": [
+        "Xarici g\u00F6r\u00FCn\u00FC\u015F",
+        "T\u0259hsil",
+        "\u0130\u015F t\u0259cr\u00FCb\u0259si",
+        "X\u00FCsusiyy\u0259tl\u0259r",
+        "Sosial aktivlik"
+      ]
+    },
+    {
+      "Id": 299,
+      "Title": ".\u018Friz\u0259 s\u00F6z\u00FCn\u00FCn ne\u00E7\u0259 m\u0259nas\u0131 var?",
+      "Answers": [
+        "2",
+        "3",
+        "4",
+        "1",
+        "5"
+      ]
+    },
+    {
+      "Id": 300,
+      "Title": ".\u0130zahat s\u00F6z\u00FCn\u00FCn m\u0259nas\u0131:",
+      "Answers": [
+        "\u015E\u0259rh etm\u0259k",
+        "\u018Fmr etm\u0259k",
+        "Bildirm\u0259k",
+        "X\u00FClas\u0259",
+        "T\u0259l\u0259b etm\u0259k"
+      ]
+    },
+    {
+      "Id": 301,
+      "Title": ".\u018Fmr s\u00F6z\u00FCn\u00FCn m\u0259nas\u0131:",
+      "Answers": [
+        "H\u00F6km",
+        "Xahi\u015F",
+        "N\u0259\u015Fr",
+        "\u0130zahat",
+        "M\u00FCraci\u0259t"
+      ]
+    },
+    {
+      "Id": 302,
+      "Title": ".Nizamnam\u0259 n\u0259dir?",
+      "Answers": [
+        "H\u00FCquqi akt",
+        "Vergi",
+        "\u00C7\u0131xar\u0131\u015F",
+        "Protokol",
+        "M\u00FCqavil\u0259"
+      ]
+    },
+    {
+      "Id": 303,
+      "Title": ".T\u0259\u015F\u0259bb\u00FCs m\u0259ktublar\u0131 ne\u00E7\u0259 qrupa b\u00F6l\u00FCn\u00FCr?",
+      "Answers": [
+        "2",
+        "3",
+        "5",
+        "4",
+        "6"
+      ]
+    },
+    {
+      "Id": 304,
+      "Title": ".Cavab t\u0259l\u0259b ed\u0259n m\u0259ktub deyil:",
+      "Answers": [
+        "X\u0259b\u0259rdarl\u0131q m\u0259ktubu",
+        "Sor\u011Fu m\u0259ktubu",
+        "T\u0259klif m\u0259ktubu ",
+        "\u015Eikay\u0259t m\u0259ktubu",
+        "M\u00FCraci\u0259t m\u0259ktubu"
+      ]
+    },
+    {
+      "Id": 305,
+      "Title": ".Cavab t\u0259l\u0259b etm\u0259y\u0259n m\u0259ktub deyil:",
+      "Answers": [
+        "Sor\u011Fu m\u0259ktubu",
+        "Xat\u0131rlatma m\u0259ktubu",
+        "X\u0259b\u0259rdarl\u0131q m\u0259ktubu ",
+        "Bildiri\u015F m\u0259ktubu",
+        "T\u0259sdiq m\u0259ktubu"
+      ]
+    },
+    {
+      "Id": 306,
+      "Title": ".T\u00F6hm\u0259t hans\u0131 m\u0259nan\u0131 verir:",
+      "Answers": [
+        "M\u0259z\u0259mm\u0259t ",
+        "\u00D6hd\u0259sin\u0259 g\u00F6t\u00FCrm\u0259",
+        "T\u0259rtib etm\u0259",
+        "T\u0259\u015Fkil etm\u0259",
+        "Anla\u015Fma"
+      ]
+    },
+    {
+      "Id": 307,
+      "Title": ".V\u0259kal\u0259tnam\u0259 n\u0259 \u00FC\u00E7\u00FCn verilir?",
+      "Answers": [
+        "Qiym\u0259tli  \u0259\u015Fyan\u0131 almaq v\u0259ya istifad\u0259 etm\u0259k \u00FC\u00E7\u00FCn ",
+        "Qiym\u0259tli \u0259\u015Fyaya zamin olmaq \u00FC\u00E7\u00FCn",
+        "Qiym\u0259tli \u0259\u015Fayadan imtina etm\u0259k \u00FC\u00E7\u00FCn",
+        "M\u00FCtt\u0259himin azad edilm\u0259si \u00FC\u00E7\u00FCn",
+        "H\u00FCquqi m\u00FCnasib\u0259tl\u0259ri t\u0259min etm\u0259k \u00FC\u00E7\u00FCn"
+      ]
+    },
+    {
+      "Id": 308,
+      "Title": ".M\u00FCqavil\u0259nin n\u00F6v\u00FC deyil:",
+      "Answers": [
+        "Pretenziya m\u00FCqavil\u0259si",
+        "S\u00FClh m\u00FCqavil\u0259si",
+        "Ticar\u0259t m\u00FCqavil\u0259si",
+        "T\u0259hsil m\u00FCqavil\u0259si",
+        "\u0130car\u0259 m\u00FCqavil\u0259si"
+      ]
+    },
+    {
+      "Id": 309,
+      "Title": ".Aray\u0131\u015F hans\u0131 m\u0259qs\u0259dl\u0259 verilmir?",
+      "Answers": [
+        "\u015E\u0259xsi ir\u0259li \u00E7\u0259km\u0259k m\u0259qs\u0259di il\u0259",
+        "\u015E\u0259xsin kimliyi t\u0259sdiq etm\u0259k",
+        "\u015E\u0259xsin harda ya\u015Fad\u0131\u011F\u0131n\u0131 t\u0259sdiq etm\u0259k",
+        "\u015E\u0259xsin harda t\u0259hsil ald\u0131\u011F\u0131n\u0131 t\u0259sdiq etm\u0259k",
+        "\u015E\u0259xsin harda i\u015Fl\u0259diyini t\u0259sdiq etm\u0259k"
+      ]
+    },
+    {
+      "Id": 310,
+      "Title": ".Bildiri\u015F xarakterli yaz\u0131 formas\u0131 deyil:",
+      "Answers": [
+        "Qaim\u0259",
+        "Anons",
+        "Afi\u015Fa",
+        "Reklam",
+        "Elan"
+      ]
+    },
+    {
+      "Id": 311,
+      "Title": ".\u0130\u015Fg\u00FCzar m\u0259ktublar \u00FCz\u0259rind\u0259 qeyd edilir:",
+      "Answers": [
+        "Ham\u0131s\u0131",
+        "\u015Eirk\u0259tin emblemi",
+        "\u015Eirk\u0259tin tam ad\u0131",
+        "Po\u00E7t \u00FCnvan\u0131",
+        "\u015Eirk\u0259tin telefonlar\u0131"
+      ]
+    },
+    {
+      "Id": 312,
+      "Title": ".Q\u0259bzin t\u0259rtib edilm\u0259 s\u0259b\u0259bi:",
+      "Answers": [
+        "\u0130dar\u0259l\u0259rd\u0259n v\u0259ya x\u00FCsusi \u015F\u0259xsl\u0259rd\u0259n birinin pul qiym\u0259tli \u015Fey, ald\u0131\u011F\u0131n\u0131 t\u0259sdiq ed\u0259n s\u0259n\u0259d",
+        "\u015E\u0259xsin \u0259ld\u0259 etdiyi m\u00FCkafat",
+        "Sat\u0131lan mallar\u0131n siyah\u0131s\u0131",
+        "T\u0259\u015Fkilat\u0131n verdiyi status",
+        "T\u0259hvil al\u0131nan s\u0259n\u0259dl\u0259rin siyah\u0131s\u0131"
+      ]
+    },
+    {
+      "Id": 313,
+      "Title": ".Akt m\u0259zmununa g\u00F6r\u0259 ne\u00E7\u0259 n\u00F6v\u0259 b\u00F6l\u00FCn\u00FCr?",
+      "Answers": [
+        "4",
+        "6",
+        "2",
+        "3",
+        "5"
+      ]
+    },
+    {
+      "Id": 314,
+      "Title": ".M\u0259zmununa g\u00F6r\u0259 akt\u0131n n\u00F6v\u00FC deyil:",
+      "Answers": [
+        "Hesabat akt\u0131",
+        "Cinay\u0259t akt\u0131",
+        "D\u00F6vl\u0259t akt\u0131",
+        "Fakt\u0131 a\u00E7maq \u00FC\u00E7\u00FCn m\u00FC\u0259yy\u0259n edil\u0259n akt",
+        "Yoxlama akt\u0131"
+      ]
+    },
+    {
+      "Id": 315,
+      "Title": ".Borcluya qar\u015F\u0131ya t\u0259l\u0259b:",
+      "Answers": [
+        "Pretenziya",
+        "Q\u0259bz",
+        "Qaim\u0259",
+        "Elan",
+        "Bildiri\u015F"
+      ]
+    },
+    {
+      "Id": 316,
+      "Title": ".X\u0259b\u0259rdarl\u0131q n\u0259 \u00FC\u00E7\u00FCn edilir?",
+      "Answers": [
+        "Q\u0259bah\u0259t\u0131n t\u0259krar edilm\u0259m\u0259si \u00FC\u00E7\u00FCn",
+        "Borcun qaytar\u0131lmas\u0131 \u00FC\u00E7\u00FCn",
+        "C\u0259rim\u0259nin verilm\u0259si \u00FC\u00E7\u00FCn",
+        "Ziyan\u0131n \u00F6d\u0259nilm\u0259si \u00FC\u00E7\u00FCn",
+        "\u018Fmlak\u0131n h\u0259bs edilm\u0259si \u00FC\u00E7\u00FCn"
+      ]
+    },
+    {
+      "Id": 317,
+      "Title": ".Akademik yaz\u0131n\u0131n n\u00F6vl\u0259ri hans\u0131lard\u0131r?",
+      "Answers": [
+        "ham\u0131s\u0131",
+        "tezis",
+        "m\u0259qal\u0259",
+        "dissertasiya",
+        "monoqrafiya"
+      ]
+    },
+    {
+      "Id": 318,
+      "Title": ".Akademik yaz\u0131 n\u00F6v\u00FC deyil",
+      "Answers": [
+        "s\u0259r\u0259ncam",
+        "tezis",
+        "m\u0259qal\u0259",
+        "dissertasiya",
+        "avtoreferat"
+      ]
+    },
+    {
+      "Id": 319,
+      "Title": ".Tezisin \u0259sas funksiyas\u0131 n\u0259dir?",
+      "Answers": [
+        "n\u0259yi k\u0259\u015Ff etdiyimizi g\u00F6st\u0259rm\u0259k",
+        "t\u0259dqiqat metodunu g\u00F6st\u0259rm\u0259k",
+        "x\u00FClas\u0259ni g\u00F6st\u0259rm\u0259k",
+        "n\u0259tic\u0259ni g\u00F6st\u0259rm\u0259k",
+        "i\u015Fin aktuall\u0131\u011F\u0131n\u0131 g\u00F6st\u0259rm\u0259k"
+      ]
+    },
+    {
+      "Id": 320,
+      "Title": ".Tezisin m\u0259zmun sxem ard\u0131c\u0131ll\u0131\u011F\u0131n\u0131 g\u00F6st\u0259rin \n[1-problemi bildirin],\n[2-tap\u0131nt\u0131n\u0131zdan sonra onunla n\u0259yi \u0259ld\u0259 edil\u0259 bil\u0259c\u0259yini s\u00F6yl\u0259yin],\n[3-problemin v\u0259 onu h\u0259ll etm\u0259yin \u0259h\u0259miyy\u0259tini s\u00F6yl\u0259yin],\n[4-tapd\u0131\u011F\u0131n\u0131z h\u0259ll yolu il\u0259 n\u0259y\u0259 nail olma\u011F\u0131n m\u00FCmk\u00FCnl\u00FCy\u00FCn\u00FC s\u00F6yl\u0259yin]",
+      "Answers": [
+        "1,3,4,2",
+        "1,2,3,4",
+        "2,4,3,1",
+        "3,2,4,1",
+        "---\u0422\u043E\u0447\u043D\u043E \u043D\u0435 \u044D\u0442\u043E\u0442---"
+      ]
+    },
+    {
+      "Id": 321,
+      "Title": ".Tezis ne\u00E7\u0259 s\u00F6zd\u0259n ibar\u0259t olur?",
+      "Answers": [
+        "100-500",
+        "500-1000",
+        "1000-1500",
+        "1500-2000",
+        "---\u0422\u043E\u0447\u043D\u043E \u043D\u0435 \u044D\u0442\u043E\u0442---"
+      ]
+    },
+    {
+      "Id": 322,
+      "Title": ".Tezisin h\u0259cmini n\u0259 d\u0259yi\u015F\u0259 bilir?",
+      "Answers": [
+        "m\u00F6vzu v\u0259 n\u0259\u015Friyyat\u0131n t\u0259l\u0259bi",
+        "sxem v\u0259 qrafikl\u0259r",
+        "paraqraf",
+        "n\u0259tic\u0259",
+        "i\u015Fin aktuall\u0131\u011F\u0131"
+      ]
+    },
+    {
+      "Id": 323,
+      "Title": ".Elmi tezis yazark\u0259n a\u015Fag\u0131dak\u0131lardan hans\u0131na ehtiyac yoxdur?",
+      "Answers": [
+        "heç biri",
+        "sxem",
+        "cədvəl",
+        "qrafik",
+        "düstur"
+      ]
+    },
+    {
+      "Id": 324,
+      "Title": ".X\u00FClas\u0259 ne\u00E7\u0259 paraqrafdan ibar\u0259t olmal\u0131d\u0131r?",
+      "Answers": [
+        "bir",
+        "iki ",
+        "\u00FC\u00E7",
+        "be\u015F",
+        "alt\u0131"
+      ]
+    },
+    {
+      "Id": 325,
+      "Title": ".X\u00FClas\u0259 ne\u00E7\u0259 s\u00F6z\u00FC ke\u00E7m\u0259m\u0259lidir?",
+      "Answers": [
+        "100-250",
+        "50-100",
+        "250-350",
+        "350-400",
+        "200-250"
+      ]
+    },
+    {
+      "Id": 326,
+      "Title": ".\u2019Giri\u015Fd\u0259\u2019t\u0259dqiqat i\u015Finin hans\u0131 hiss\u0259l\u0259ri g\u00F6st\u0259rilir?",
+      "Answers": [
+        "ham\u0131s\u0131",
+        "m\u0259qs\u0259d",
+        "aktuall\u0131q",
+        "elmi yenilik",
+        "metod"
+      ]
+    },
+    {
+      "Id": 327,
+      "Title": ".T\u0259dqiqat metodunda n\u0259l\u0259r a\u00E7\u0131qlan\u0131r?",
+      "Answers": [
+        "apar\u0131lm\u0131\u015F t\u0259cr\u00FCb\u0259 v\u0259 n\u0259tic\u0259",
+        "elmi yenilik",
+        "elmi \u0259d\u0259biyyat",
+        "n\u0259tic\u0259",
+        "bloq-sxeml\u0259r"
+      ]
+    },
+    {
+      "Id": 328,
+      "Title": ".\u201DN\u0259tic\u0259 hiss\u0259sind\u0259\u201Dn\u0259 qeyd edilir?",
+      "Answers": [
+        "nailiyy\u0259t v\u0259 s\u0259m\u0259r\u0259lilik",
+        "x\u00FClas\u0259 v\u0259 \u00FCst\u00FCnl\u00FCk",
+        "metod v\u0259 \u00FCst\u00FCnl\u00FCk",
+        "m\u0259lumat v\u0259 siyah\u0131",
+        "t\u0259cr\u00FCb\u0259 v\u0259 x\u00FClas\u0259"
+      ]
+    },
+    {
+      "Id": 329,
+      "Title": ".Tezisl\u0259 m\u0259qal\u0259nin f\u0259rqi n\u0259dir?",
+      "Answers": [
+        "h\u0259cmi",
+        "n\u0259tic\u0259si",
+        "metod",
+        "\u0259d\u0259biyyat siyah\u0131s\u0131",
+        "elmi problemi"
+      ]
+    },
+    {
+      "Id": 330,
+      "Title": ".M\u0259qal\u0259nin h\u0259cmi ne\u00E7\u0259 s\u0259hif\u0259 olur?",
+      "Answers": [
+        "5-25",
+        "10-30",
+        "15-20",
+        "5-30 ",
+        "3-10"
+      ]
+    },
+    {
+      "Id": 331,
+      "Title": ".A\u00E7ar s\u00F6zl\u0259r ne\u00E7\u0259 s\u00F6zd\u0259n ibar\u0259t olur",
+      "Answers": [
+        "1-5",
+        "5-15",
+        "7-14",
+        "2-8",
+        "8-12"
+      ]
+    },
+    {
+      "Id": 332,
+      "Title": ".M\u0259qal\u0259nin h\u0259cmi ne\u00E7\u0259 s\u00F6zd\u0259n \u00E7ox olmamal\u0131d\u0131r?",
+      "Answers": [
+        "7000 s\u00F6zd\u0259n \u00E7ox ol\u00E7mmal\u0131d\u0131r",
+        "5000 s\u00F6zd\u0259n \u00E7ox olmamal\u0131d\u0131r",
+        "10000 s\u00F6zd\u0259n \u00E7ox olmamal\u0131d\u0131r",
+        "6000 s\u00F6zd\u0259n \u00E7ox olmamal\u0131d\u0131r",
+        "4000 s\u00F6zd\u0259n \u00E7ox olmamal\u0131d\u0131r"
+      ]
+    },
+    {
+      "Id": 333,
+      "Title": ".Elmi d\u0259r\u0259c\u0259 almaq \u00FC\u00E7\u00FCn t\u0259rtib edil\u0259n elmi t\u0259dqiqat \u0259s\u0259ri hans\u0131d\u0131r?",
+      "Answers": [
+        "dissertasiya",
+        "m\u0259qal\u0259",
+        "tezis",
+        "\u0259mr",
+        "f\u0259rman"
+      ]
+    },
+    {
+      "Id": 334,
+      "Title": ".Dissertasiyan\u0131n h\u0259cmi ne\u00E7\u0259 s\u0259hif\u0259 olur?",
+      "Answers": [
+        "120-250",
+        "60-250",
+        "100-250",
+        "80-100",
+        "90-180"
+      ]
+    },
+    {
+      "Id": 335,
+      "Title": ".Elmi d\u0259r\u0259c\u0259 v\u0259 elmi adlar\u0131 ver\u0259n yegan\u0259 qurum hans\u0131d\u0131r?",
+      "Answers": [
+        "Ali Attestasiya Kommisyas\u0131",
+        "Nazirl\u0259r kabineti",
+        "Prezident aparat\u0131",
+        "T\u0259hsil nazirliyi",
+        "D\u00F6vl\u0259t imtahan m\u0259rk\u0259zi"
+      ]
+    },
+    {
+      "Id": 336,
+      "Title": ".Avtoreferat s\u00F6z\u00FCn\u00FCn m\u0259nas\u0131 n\u0259dir?",
+      "Answers": [
+        "bildirm\u0259k.",
+        "\u0259mr edir\u0259m",
+        "izah edir\u0259m",
+        "\u00F6yr\u0259tm\u0259k",
+        "yenilik"
+      ]
+    },
+    {
+      "Id": 337,
+      "Title": ".Monoqrafiya s\u00F6z\u00FCn\u00FCn m\u0259nas\u0131 n\u0259dir?",
+      "Answers": [
+        "yaz\u0131ram",
+        "yenilik",
+        "inki\u015Faf",
+        "\u00F6yr\u0259tm\u0259k",
+        "izah etm\u0259k"
+      ]
+    },
+    {
+      "Id": 338,
+      "Title": ".M\u0259d\u0259niyy\u0259tl\u0259raras\u0131 \u00FCnsiyy\u0259t f\u0259nni harda yarad\u0131lm\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "AB\u015E",
+        "Kanada",
+        "Avstraliya",
+        "Fransa",
+        "\u0130taliya"
+      ]
+    },
+    {
+      "Id": 339,
+      "Title": ".AB\u015E h\u00F6k\u00FCm\u0259ti t\u0259r\u0259find\u0259n xaricd\u0259 xidm\u0259t haqq\u0131nda akt n\u0259 vaxt q\u0259bul edilib?",
+      "Answers": [
+        "1946",
+        "1954",
+        "1948",
+        "1939",
+        "1952"
+      ]
+    },
+    {
+      "Id": 340,
+      "Title": ".M\u0259d\u0259niyy\u0259tl\u0259r aras\u0131 m\u00FCnasib\u0259t ne\u00E7\u0259 tipd\u0259 t\u0259zah\u00FCr edir?",
+      "Answers": [
+        "3",
+        "4",
+        "2",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "Id": 341,
+      "Title": ".Beyn\u0259lxalq i\u015F etiketinin \u0259sas x\u00FCsusiyy\u0259ti hans\u0131d\u0131r?",
+      "Answers": [
+        "\u015Eifahi olmayan davran\u0131\u015F f\u0259rqi",
+        "\u018Fyl\u0259nc\u0259  f\u0259rqi",
+        "Heyranl\u0131q f\u0259rqi",
+        "Geyim f\u0259rqi",
+        "Rabit\u0259 f\u0259rqi"
+      ]
+    },
+    {
+      "Id": 342,
+      "Title": ".Yaponlar \u00F6z\u00FC haqq\u0131nda dan\u0131\u015Fark\u0259n nec\u0259 i\u015Far\u0259 edirl\u0259r?",
+      "Answers": [
+        "Burnuna",
+        "Sin\u0259sin\u0259",
+        "G\u00F6z\u00FCn\u0259",
+        "\u018Flin\u0259",
+        "Aln\u0131na"
+      ]
+    },
+    {
+      "Id": 343,
+      "Title": ".Bir amerikal\u0131 \u00FC\u00E7\u00FCn \u015F\u0259xsi \u00FCnsiyy\u0259t sah\u0259si ne\u00E7\u0259 sm-dir?",
+      "Answers": [
+        "60",
+        "75",
+        "50",
+        "55",
+        "80"
+      ]
+    },
+    {
+      "Id": 344,
+      "Title": ".\u0130ngilisl\u0259r hans\u0131 tonda dan\u0131\u015Fma\u011Fa \u00FCst\u00FCnl\u00FCk verir?",
+      "Answers": [
+        "Sakit tonda",
+        "Ucadan",
+        "Orta tonda",
+        "P\u0131\u00E7\u0131lt\u0131 il\u0259",
+        "S\u00FCr\u0259tl\u0259"
+      ]
+    },
+    {
+      "Id": 345,
+      "Title": ".\u018Fl s\u0131xma harda q\u0259bul edilmir?",
+      "Answers": [
+        "Yaponyada",
+        "Fransada",
+        "\u00C7ind\u0259",
+        "\u0130taliyada",
+        "Afrikada"
+      ]
+    },
+    {
+      "Id": 346,
+      "Title": ".Harda 15 d\u0259f\u0259 \u0259yilm\u0259k harda salamlama \u00FC\u00E7\u00FCn kifay\u0259tdir?",
+      "Answers": [
+        "Yaponyada",
+        "Amerikada",
+        "Koreyada",
+        "\u0130spanyada",
+        "Ukrainada"
+      ]
+    },
+    {
+      "Id": 347,
+      "Title": ".H\u00F6rm\u0259tli insanlar harada 90 d\u0259f\u0259 t\u0259zim edil\u0259r\u0259k salamlan\u0131r?",
+      "Answers": [
+        "Yaponya",
+        "Rusiya",
+        "\u018Fr\u0259b \u00F6lk\u0259l\u0259ri",
+        "\u0130sve\u00E7r\u0259d\u0259",
+        "\u0130rlandada"
+      ]
+    },
+    {
+      "Id": 348,
+      "Title": ".Yaz\u0131l\u0131 materiallar n\u0259 \u00FC\u00E7\u00FCn \u00F6nc\u0259d\u0259n t\u0259rc\u00FCm\u0259\u00E7iy\u0259 t\u0259qdim edilm\u0259lidir?",
+      "Answers": [
+        "Terminl\u0259ri izah etm\u0259k \u00FC\u00E7\u00FCn ",
+        "T\u0259r\u0259fda\u015Flar\u0131n reaksiyas\u0131n\u0131 n\u0259z\u0259r\u0259 almaq \u00FC\u00E7\u00FCn",
+        "Material\u0131 t\u0259rc\u00FCm\u0259 etm\u0259k \u00FC\u00E7\u00FCn",
+        "Stat g\u0259tirm\u0259k \u00FC\u00E7\u00FCn",
+        "T\u0259rc\u00FCm\u0259ni yadda saxlamaq \u00FC\u00E7\u00FCn"
+      ]
+    },
+    {
+      "Id": 349,
+      "Title": ".\u201DZaman puldur\u201D ifad\u0259sinin m\u00FC\u0259llifi olan Franklin hans\u0131 xalqa m\u0259nsubdur?",
+      "Answers": [
+        "AB\u015E",
+        "Fransa",
+        "\u0130taliya",
+        "\u0130ngilt\u0259r\u0259",
+        "\u0130rlandiya"
+      ]
+    },
+    {
+      "Id": 350,
+      "Title": ".Teleqraf sor\u011Fusuna cavab ne\u00E7\u0259 g\u00FCn \u0259rzind\u0259 verilm\u0259lidir?",
+      "Answers": [
+        "3",
+        "4",
+        "6",
+        "7",
+        "10"
+      ]
+    },
+    {
+      "Id": 351,
+      "Title": ".\u0130\u015Fg\u00FCzar \u00FCslubun formala\u015Fma prosesi ne\u00E7\u0259nci \u0259srd\u0259n ba\u015Flam\u0131\u015Fd\u0131r?",
+      "Answers": [
+        "XVI",
+        "XVII",
+        "XIV",
+        "XX",
+        "XIX"
+      ]
+    },
+    {
+      "Id": 352,
+      "Title": ".Xidm\u0259ti s\u0259n\u0259dl\u0259r n\u0259yi \u0259ks etdirir?",
+      "Answers": [
+        "\u0130dar\u0259nin f\u0259aliyy\u0259tini",
+        "S\u0259n\u0259din s\u00FCr\u0259tini",
+        "Hesabat \u0259m\u0259liyyat\u0131n\u0131",
+        "Kommersiya s\u0259n\u0259dl\u0259rini",
+        "\u015E\u0259xsi s\u0259n\u0259dl\u0259ri"
+      ]
+    },
+    {
+      "Id": 353,
+      "Title": ".Hans\u0131 \u00FCslubun l\u00FC\u011F\u0259t t\u0259rkibi y\u0131\u011Fcam, sintaksisi m\u0259hduddur?",
+      "Answers": [
+        "R\u0259smi-i\u015Fguzar",
+        "M\u0259i\u015F\u0259t",
+        "Publisistik",
+        "Elmi ",
+        "B\u0259dii"
+      ]
+    },
+    {
+      "Id": 354,
+      "Title": ".Hans\u0131 \u00FCslubun \u015Fifahi formas\u0131 olmur?",
+      "Answers": [
+        "R\u0259smi-i\u015Fguzar",
+        "B\u0259dii",
+        "Elmi",
+        "Publisistik",
+        "M\u0259i\u015F\u0259t"
+      ]
+    },
+    {
+      "Id": 355,
+      "Title": ".Az\u0259rbaycan\u0131n beyn\u0259lxalq al\u0259md\u0259 imicinin y\u00FCks\u0259lm\u0259sind\u0259 n\u0259yin olduqca m\u00FChim \u0259h\u0259miyy\u0259ti var?",
+      "Answers": [
+        "\u0130\u015Fguzar yaz\u0131\u015Fmalar\u0131n",
+        "S\u0259n\u0259dl\u0259rin",
+        "M\u00FCqavil\u0259l\u0259rin",
+        "\u0130katenin",
+        "Siyas\u0259tin"
+      ]
+    },
+    {
+      "Id": 356,
+      "Title": ".Az\u0259rbaycanda i\u015Fguzar \u00FCslubun inki\u015Faf\u0131 n\u0259 vaxt z\u0259ifl\u0259mi\u015Fdi?",
+      "Answers": [
+        "Sovet d\u00F6vr\u00FCnd\u0259",
+        "M\u00FCst\u0259qillik d\u00F6vr\u00FCnd\u0259",
+        "X\u0259tai d\u00F6vr\u00FCnd\u0259",
+        "Cumhuriyy\u0259t d\u00F6vr\u00FCnd\u0259",
+        "M\u00FCasir d\u00F6vrd\u0259"
+      ]
+    },
+    {
+      "Id": 357,
+      "Title": ".Dil\u00E7il\u0259r t\u0259r\u0259find\u0259n i\u015Fguzar \u00FCslub hans\u0131 formalarda adland\u0131r\u0131l\u0131r?",
+      "Answers": [
+        "Ham\u0131s\u0131",
+        "\u0130\u015Fguzar \u00FCslub",
+        "R\u0259smi uslub",
+        "Qanunlar\u0131n dili",
+        "R\u0259smi s\u0259n\u0259d dili"
+      ]
+    }
+  ]
+}

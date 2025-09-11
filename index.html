@@ -6,34 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>index.html</title>
 
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+
     <script type="module" src="spa-router.js"></script>
     <script type="module" src="src/foundation/globals.js"></script>
+    <script type="module" src="src/foundation/KatexUtils.js"></script>
 
     <!-- Puppet Init -->
+    <link rel="stylesheet" href="index.html.css">
     <link rel="stylesheet" href="src/foundation/theme/Theme.css">
     <!-- Puppet Init -->
 
     <!-- Component Init -->
+    <script type="module" src="components/ReButton.html.js" defer></script>
     <script type="module" src="components/ColorPalette.html.js" defer></script>
     <script type="module" src="components/NavigationDrawer.html.js" defer></script>
     <script type="module" src="components/PageLayout.html.js" defer></script>
+    <script type="module" src="components/SvgIcon.html.js" defer></script>
     <!-- Component Init -->
 
     <!-- Page Init -->
     <script type="module">
         const Page = globalThis.Page;
         import PalettePage from "./pages/PalettePage.html.js"
+        import MathPage from "./pages/MathPage.html.js"
+        import SubjectsPage from "./pages/SubjectsPage.html.js"
+        import ButtonsPage from "./pages/ButtonsPage.html.js"
 
         let pageHolder = document.getElementById('app');
 
         let mainPage = new Page('./pages/MainPage.html', pageHolder);
         let aboutPage = new Page('./pages/AboutPage.html', pageHolder);
         let palettePage = new PalettePage('./pages/PalettePage.html', pageHolder);
+        let iconsPage = new Page('./pages/IconsPage.html', pageHolder);
+        let mathPage = new MathPage('./pages/MathPage.html', pageHolder);
+        let subjectsPage = new SubjectsPage('./pages/SubjectsPage.html', pageHolder);
+        let buttonsPage = new ButtonsPage('./pages/ButtonsPage.html', pageHolder);
 
         window.ROUTES = {
             '/': mainPage,
             '/about': aboutPage,
-            '/palette': palettePage
+            '/palette': palettePage,
+            '/icons': iconsPage,
+            '/math': mathPage,
+            '/subjects': subjectsPage,
+            '/buttons': buttonsPage
         }
     </script>
     <!-- Page Init -->
@@ -42,18 +60,67 @@
         import { initThemeCssVariables } from "./src/foundation/theme/ColorPalettes.js";
         initThemeCssVariables();
     </script>
+
+    <!-- KaTeX JavaScript -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx" crossorigin="anonymous"></script>
+    <!-- Auto-render extension for automatic rendering -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    
+    <!-- Initialize KaTeX after DOM is loaded -->
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize KaTeX auto-rendering
+            if (globalThis.KatexUtils) {
+                globalThis.KatexUtils.initAutoRender();
+            }
+        });
+
+        // Also initialize on route changes for SPA
+        window.addEventListener('popstate', () => {
+            setTimeout(() => {
+                if (globalThis.KatexUtils) {
+                    globalThis.KatexUtils.initAutoRender();
+                }
+            }, 100);
+        });
+    </script>
 </head>
 
 <body>
     <page-layout>
         <navigation-drawer slot="navigation">
             <span slot="header">Menu</span>
-            <li><a href="/" data-link>Home</a></li>
-            <li><a href="/palette" data-link>Palettes</a></li>
-            <li><a href="/about" data-link>About</a></li>
+            <li><a href="/" data-link>
+                <svg-icon icon="home" size="sm" color="primary"></svg-icon> 
+                <span class="open">Home</span></a>
+            </li>
+            <li><a href="/subjects" data-link>
+                <svg-icon icon="star" size="sm" color="success"></svg-icon> 
+                <span class="open">Предметы</span></a>
+            </li>
+            <li><a href="/palette" data-link>
+                <svg-icon icon="palette" size="sm" color="secondary"></svg-icon> 
+                <span class="open">Палитры</span></a>
+            </li>
+            <li><a href="/icons" data-link>
+                <svg-icon icon="search" size="sm" color="tertiary"></svg-icon> 
+                <span class="open">Иконки</span></a>
+            </li>
+            <li><a href="/math" data-link>
+                <svg-icon icon="user" size="sm" color="warning"></svg-icon> 
+                <span class="open">Математика</span></a>
+            </li>
+            <li><a href="/buttons" data-link>
+                <svg-icon icon="search" size="sm" color="info"></svg-icon> 
+                <span class="open">Кнопки</span></a>
+            </li>
+            <li><a href="/about" data-link>
+                <svg-icon icon="user" size="sm" color="info"></svg-icon> 
+                <span class="open">About</span></a>
+            </li>
         </navigation-drawer>
 
-        <div slot="main-content">
+        <div class="main_content" slot="main-content">
             <main id="app"></main>
         </div>
     </page-layout>

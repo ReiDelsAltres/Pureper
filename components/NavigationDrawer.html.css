@@ -3,9 +3,9 @@
 .m3-navigation-drawer {
     width: 280px;
     max-width: 90vw;
-    background: var(--color-primary, #fff);
-    color: var(--color-secondary, #1a1c1e);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.18), 0 1.5px 4px rgba(0,0,0,0.10);
+    background: var(--surface-dark);
+    color: var(--color-text-primary-contrast);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18), 0 1.5px 4px rgba(0, 0, 0, 0.10);
     /*border-radius: 20px 20px 20px 20px;*/
     padding: 20px 0 12px 0;
     display: flex;
@@ -15,13 +15,10 @@
     left: 0;
     top: 0;
     z-index: 1200;
-    transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.2s, width 0.35s cubic-bezier(.4,0,.2,1);
+    transition: transform 0.35s cubic-bezier(.4, 0, .2, 1), box-shadow 0.2s, width 0.35s cubic-bezier(.4, 0, .2, 1);
     will-change: transform, box-shadow, width;
     overflow-y: auto;
-    border-right: 1px solid var(--color-additional, #e0e0e0);
 }
-
-/* Removed 'close' state styles: only 'mini' and 'open' remain */
 
 /* Mini: visible, narrow */
 .m3-navigation-drawer.mini {
@@ -29,18 +26,17 @@
     min-width: 56px;
     max-width: 72px;
     transform: translateX(0);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
     overflow-x: hidden;
 }
+
 .m3-navigation-drawer.mini .m3-navigation-drawer__header {
     opacity: 0;
     pointer-events: none;
-    height: 0;
+    /*height: 0;*/
     padding: 0;
 }
-.m3-navigation-drawer.mini .m3-navigation-drawer__list {
-    padding-top: 12px;
-}
+
 .m3-navigation-drawer.mini ::slotted(*) {
     justify-content: center;
     padding-left: 0 !important;
@@ -52,22 +48,24 @@
 .m3-navigation-drawer.open {
     width: 280px;
     transform: translateX(0);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22), 0 2px 8px rgba(0, 0, 0, 0.12);
     opacity: 1;
 }
+
 .m3-navigation-drawer__header {
     font-size: 1.35rem;
     font-weight: 600;
     letter-spacing: 0.01em;
     padding: 0 28px 18px 28px;
-    color: var(--color-info, #1976d2);
-    user-select: none;
+    color: var(--color-primary, #1976d2);
 }
+
 .m3-navigation-drawer__list {
     list-style: none;
     margin: 0;
     padding: 0;
 }
+
 ::slotted(*:not([slot])) {
     display: flex;
     align-items: center;
@@ -83,17 +81,19 @@
     color: inherit;
     position: relative;
 }
+
 ::slotted(*:not([slot]):hover),
 ::slotted(*:not([slot]):focus),
 ::slotted(.active:not([slot])) {
-    background: var(--color-warning, #fbc02d);
+    background: var(--color-primary-black);
     color: var(--color-error, #d32f2f);
 }
+
 ::slotted(svg:not([slot])),
 ::slotted(i:not([slot])) {
     margin-right: 18px;
     font-size: 1.6rem;
-    color: var(--md-sys-color-primary, #6750a4);
+    color: var(--color-primary, #6750a4);
     flex-shrink: 0;
 }
 
@@ -104,15 +104,18 @@
         padding-left: 0;
         padding-right: 0;
     }
+
     .m3-navigation-drawer.mini {
         width: 56px;
         min-width: 48px;
         max-width: 64px;
     }
+
     .m3-navigation-drawer__header {
         padding-left: 18px;
         padding-right: 18px;
     }
+
     ::slotted(*) {
         padding-left: 18px;
         padding-right: 18px;

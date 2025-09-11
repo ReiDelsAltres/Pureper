@@ -10,51 +10,30 @@
   font-size: small;
 }
 
-.title {
-  text-align: center;
-  color: #1b1b1b;
-}
-
-.heading {
-  font-weight: bold;
-  letter-spacing: 7px;
-  font-size: 1.5rem;
-  position: relative;
-  margin-bottom: 6px;
-}
-
-.heading::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: #e8e8e8;
-  z-index: -1;
-  filter: blur(50px);
-  height: 50px;
-}
-
 .color {
   padding: 10px 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  color: var(--color-text-primary, #000000);
 }
 
 .hex {
   text-align: end;
   font-family: monospace;
   text-transform: uppercase;
+  color: var(--color-text-secondary, #666666);
 }
 
 .border {
-  color: var(--night-rider);
+  color: var(--color-text-primary, #000000);
   padding: 10px 10px;
   text-align: center;
 }
 
 .border span {
   border-radius: 5px;
-  color: var(--ch-white);
+  color: var(--color-text-primary-contrast, #ffffff);
   padding: 2px 4px;
-  background-color: var(--night-rider);
+  background-color: var(--color-primary, #000000);
 }

@@ -21,6 +21,13 @@ export default class Page {
             }
             const html = await response.text();
             element.innerHTML = html;
+            
+            // Auto-render KaTeX after page content is loaded
+            setTimeout(() => {
+                if (globalThis.KatexUtils) {
+                    globalThis.KatexUtils.autoRender(element);
+                }
+            }, 50);
         } catch (error) {
             console.error('Error loading page:', error);
             element.innerHTML = '<h1>Error loading page</h1>';

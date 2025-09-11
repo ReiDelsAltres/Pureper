@@ -1,18 +1,95 @@
 // ColorPalettes.js
 // Static color palettes for use in the application
-import SimpleColorPalette from "./SimpleColorPalette.js";
+import SuperColorPalette from "./SuperColorPalette.js";
 
 export const ColorPalettes = {
-    BASIC: new SimpleColorPalette('#264653', '#2a9d8f', '#e9c46a', '#f4a261', '#e76f51', '#e63946'),
-    PASTEL: new SimpleColorPalette('#a3c9a8', '#f7d9c4', '#f6eac2', '#b5ead7', '#ffb7b2', '#c7ceea'),
-    MATERIAL: new SimpleColorPalette('#1976d2', '#388e3c', '#fbc02d', '#0288d1', '#f57c00', '#d32f2f'),
-    DARK: new SimpleColorPalette('#22223b', '#4a4e69', '#9a8c98', '#c9ada7', '#f2e9e4', '#22223b'),
-    LIGHT: new SimpleColorPalette('#f1faee', '#a8dadc', '#457b9d', '#1d3557', '#ffb4a2', '#e63946'),
-    DARK_VIOLET: new SimpleColorPalette('#231942', '#5e548e', '#9f86c0', '#be95c4', '#e0b1cb', '#ffb4a2')
+    BASIC: new SuperColorPalette({
+        primary: '#264653',
+        primaryLight: '#3e6b5c',
+        primaryBlack: '#1d3a42',
+        textPrimary: '#1d3a42',
+        textPrimaryContrast: '#ffffff',
+
+        secondary: '#2a9d8f',
+        secondaryLight: '#4db3a6',
+        secondaryBlack: '#1f7a6b',
+        textSecondary: '#264653',
+        textSecondaryContrast: '#ffffff',
+
+        tertiary: '#f4a261',
+        tertiaryLight: '#f7b584',
+        tertiaryBlack: '#d1843e',
+        textTertiary: '#999999',
+        textTertiaryContrast: '#1d3a42',
+
+        additional: '#e9c46a',
+        additionalLight: '#f0d084',
+        additionalBlack: '#c7a854',
+        textAdditional: '#757575',
+        textAdditionalContrast: '#1d3a42',
+
+        info: '#f4a261',
+        textInfoContrast: '#1d3a42',
+        success: '#2a9d8f',
+        textSuccessContrast: '#ffffff',
+        warning: '#e76f51',
+        textWarningContrast: '#ffffff',
+        error: '#e63946',
+        textErrorContrast: '#ffffff',
+
+        text: '#c1c1c4',
+        textDisabled: '#cccccc',
+
+        surface: '#32333d',
+        surfaceLight: '#ffffff',
+        surfaceDark: '#1d3a42',
+    }),
+
+    MUD_BLAZOR: new SuperColorPalette({
+        primary: '#594ae2',
+        primaryLight: '#7b6ff1',
+        primaryBlack: '#3a2e7b',
+        textPrimary: '#212121',
+        textPrimaryContrast: '#fff',
+
+        secondary: '#ff4081',
+        secondaryLight: '#ff79b0',
+        secondaryBlack: '#c60055',
+        textSecondary: '#757575',
+        textSecondaryContrast: '#fff',
+
+        tertiary: '#ffc107',
+        tertiaryLight: '#fff350',
+        tertiaryBlack: '#c79100',
+        textTertiary: '#e0e0e0',
+        textTertiaryContrast: '#fff',
+
+        additional: '#00bcd4',
+        additionalLight: '#62efff',
+        additionalBlack: '#008ba3',
+        textAdditional: '#bdbdbd',
+        textAdditionalContrast: '#fff',
+
+        info: '#2196f3',
+        textInfoContrast: '#fff',
+        success: '#4caf50',
+        textSuccessContrast: '#fff',
+        warning: '#ff9800',
+        textWarningContrast: '#fff',
+        error: '#f44336',
+        textErrorContrast: '#fff',
+
+        text: '#c1c1c4',
+        textDisabled: '#9e9e9e',
+
+        surface: '#32333d',
+        surfaceLight: '#fff',
+        surfaceDark: '#27272f',
+    })
 };
 
 // ActualPalette always points to the currently active palette
-export let ActualPalette = ColorPalettes.BASIC;
+export let ActualPalette = ColorPalettes.MUD_BLAZOR;
 
 
 export function setActualPalette(paletteName) {
@@ -33,25 +110,20 @@ export function initThemeCssVariables() {
 // Update CSS variables in .theme according to the palette
 export function setThemeCssVariables(palette) {
     const root = document.querySelector('.theme');
-        if (!palette) return;
-        // Remove previous dynamic theme sheet if exists
-        if (window.dynamicThemeSheet && document.adoptedStyleSheets) {
-            document.adoptedStyleSheets = document.adoptedStyleSheets.filter(s => s !== window.dynamicThemeSheet);
-        }
-        // Create new CSSStyleSheet
-        const sheet = new CSSStyleSheet();
-        sheet.replaceSync(`:root {
-            --color-primary: ${palette.primary};
-            --color-secondary: ${palette.secondary};
-            --color-additional: ${palette.additional};
-            --color-info: ${palette.info};
-            --color-warning: ${palette.warning};
-            --color-error: ${palette.error};
+    if (!palette) return;
+    // Remove previous dynamic theme sheet if exists
+    if (window.dynamicThemeSheet && document.adoptedStyleSheets) {
+        document.adoptedStyleSheets = document.adoptedStyleSheets.filter(s => s !== window.dynamicThemeSheet);
+    }
+    // Create new CSSStyleSheet
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(`:root {
+            ${palette.toCSSVariables()}
         }`);
-        if (document.adoptedStyleSheets) {
-            document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
-            window.dynamicThemeSheet = sheet;
-        } /*else {
+    if (document.adoptedStyleSheets) {
+        document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+        window.dynamicThemeSheet = sheet;
+    } /*else {
             // Fallback for browsers without adoptedStyleSheets
             const prev = document.getElementById('dynamic-theme-vars');
             if (prev) prev.remove();

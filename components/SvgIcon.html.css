@@ -1,0 +1,92 @@
+/* SvgIcon Component Styles */
+.svg-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.svg-icon {
+  width: var(--svg-size, 24px);
+  height: var(--svg-size, 24px);
+  fill: var(--svg-fill, var(--color-text, currentColor));
+  stroke: var(--svg-stroke, none);
+  stroke-width: var(--svg-stroke-width, 0);
+  transition: fill 0.2s ease, stroke 0.2s ease;
+  flex-shrink: 0;
+}
+
+/* Responsive sizes */
+.svg-icon.size-xs {
+  width: 12px;
+  height: 12px;
+}
+
+.svg-icon.size-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.svg-icon.size-md {
+  width: 24px;
+  height: 24px;
+}
+
+.svg-icon.size-lg {
+  width: 32px;
+  height: 32px;
+}
+
+.svg-icon.size-xl {
+  width: 48px;
+  height: 48px;
+}
+
+/* Theme color classes */
+.svg-icon.color-primary {
+  fill: var(--color-primary);
+}
+
+.svg-icon.color-secondary {
+  fill: var(--color-secondary);
+}
+
+.svg-icon.color-tertiary {
+  fill: var(--color-tertiary);
+}
+
+.svg-icon.color-success {
+  fill: var(--color-success);
+}
+
+.svg-icon.color-warning {
+  fill: var(--color-warning);
+}
+
+.svg-icon.color-error {
+  fill: var(--color-error);
+}
+
+.svg-icon.color-info {
+  fill: var(--color-info);
+}
+
+.svg-icon.color-text {
+  fill: var(--color-text);
+}
+
+/* Hover effects */
+.svg-icon.hover-enabled:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+  transition: opacity 0.2s ease, transform 0.2s ease, fill 0.2s ease;
+}
+
+/* Clickable state */
+.svg-icon.clickable {
+  cursor: pointer;
+}
+
+.svg-icon.clickable:active {
+  transform: scale(0.95);
+}

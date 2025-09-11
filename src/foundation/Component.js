@@ -42,6 +42,13 @@ export default class Component extends HTMLElement {
         }
 
         this.init();
+        
+        // Auto-render KaTeX in component after initialization
+        setTimeout(() => {
+          if (globalThis.KatexUtils) {
+            globalThis.KatexUtils.autoRender(shadow);
+          }
+        }, 50);
       })
       .catch(error => {
         console.error('Error loading component:', error);

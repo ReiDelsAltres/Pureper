@@ -1,0 +1,34 @@
+.subject-page {
+    display: block;
+    margin-left: 8px;
+
+    background-color: var(--surface-dark);
+    color: var(--color-text-primary);
+
+    border-radius: 20px;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--color-primary);
+}
+
+.page-title {
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    margin-top: 0;
+    color: var(--color-text);
+    opacity: 0.8;
+}
+
+.page-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem 1.5rem;
+    /* row-gap col-gap */
+    align-items: start;
+    justify-content: start;
+}

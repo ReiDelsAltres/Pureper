@@ -27,4 +27,8 @@ export default class IColorPalette {
     addColor(color) {
         throw new Error('Method not implemented.');
     }
+
+    toCSSVariables() {
+        throw new Error('Method not implemented.');
+    }
 }

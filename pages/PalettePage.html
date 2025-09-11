@@ -1,33 +1,48 @@
-<!-- PalettePage.html: Example secondary page for SPA router -->
-<h2 style="grid-column: 1 / -1; text-align:center;">All Color Palettes</h2>
-<div id="palettes-list"></div>
-
-<style>
-    #palettes-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-        gap: 32px 32px;
-        align-items: start;
-        margin-top: 2rem;
-    }
-
-    color-palette {
-        display: block;
-        min-height: 350px;
-        margin-bottom: 0;
-    }
-
-    .palette-title {
-        margin: 0 0 8px 0;
-        font-size: 1.2rem;
-        font-weight: 600;
-        text-align: center;
-        letter-spacing: 1px;
-        border-radius: 8px;
-        transition: box-shadow 0.18s, background 0.18s, color 0.18s;
-    }
-
-    .palette-title.active {
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
-    }
-</style>
+<!-- PalettePage.html: Modern color palette selection page -->
+<!-- Use absolute path from site root so it doesn't resolve to /PalettePage.html.css -->
+<link rel="stylesheet" href="pages/PalettePage.html.css">
+<div class="palette-page">
+    <div class="page-header">
+        <h1 class="page-title">Цветовые Палитры</h1>
+        <p class="page-subtitle">Выберите идеальную палитру для вашего проекта</p>
+    </div>
+    <main role="main">
+        <div id="palettes-list" class="color-palette-container" aria-label="Выбор палитры">
+            <button type="button" class="palette-btn" data-palette="MUD_BLAZOR" 
+            aria-label="Выбрать палитру MUD_BLAZOR">
+                <span class="palette-label">Mud Blazor</span>
+                <color-palette palette="MUD_BLAZOR"></color-palette>
+            </button>
+            <button type="button" class="palette-btn" data-palette="BASIC" 
+            aria-label="Выбрать палитру BASIC">
+                <span class="palette-label">Basic</span>
+                <color-palette palette="BASIC"></color-palette>
+            </button>
+            <button type="button" class="palette-btn" data-palette="PASTEL" 
+            aria-label="Выбрать палитру PASTEL">
+                <span class="palette-label">Pastel</span>
+                <color-palette palette="PASTEL"></color-palette>
+            </button>
+            <button type="button" class="palette-btn" data-palette="MATERIAL" 
+            aria-label="Выбрать палитру MATERIAL">
+                <span class="palette-label">Material</span>
+                <color-palette palette="MATERIAL"></color-palette>
+            </button>
+            <button type="button" class="palette-btn" data-palette="DARK" 
+            aria-label="Выбрать палитру DARK">
+                <span class="palette-label">Dark</span>
+                <color-palette palette="DARK"></color-palette>
+            </button>
+            <button type="button" class="palette-btn" data-palette="LIGHT" 
+            aria-label="Выбрать палитру LIGHT">
+                <span class="palette-label">Light</span>
+                <color-palette palette="LIGHT"></color-palette>
+            </button>
+            <button type="button" class="palette-btn" data-palette="DARK_VIOLET"
+                aria-label="Выбрать палитру DARK VIOLET">
+                <span class="palette-label">Dark_violet</span>
+                <color-palette palette="DARK_VIOLET"></color-palette>
+            </button>
+        </div>
+    </main>
+</div>
