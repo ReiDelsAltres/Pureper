@@ -1,3 +1,5 @@
+import { Host } from "./worker/Host.js";
+
 export default class Fetcher {
     static async fetchText(url: string): Promise<string> {
         const response = await this.internalFetch(url);
@@ -11,6 +13,9 @@ export default class Fetcher {
     }
 
     private static async internalFetch(url: string): Promise<Response> {
+        if (url.includes(Host.getHostPrefix())) {
+            url = url.replace(Host.getHostPrefix(), '');
+        }
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
