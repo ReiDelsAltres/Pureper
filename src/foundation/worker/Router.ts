@@ -4,6 +4,7 @@ declare global {
     RouterConfig?: { ASSET_PATH: string };
   }
 }
+import { AnyConstructor } from "../component_api/mixin/Proto";
 import Page from "../component_api/Page";
 import UniHtml from "../component_api/UniHtml.js";
 import { ServiceWorkerGlobalScope } from "./api/ServiceWorkerGlobalScope";
@@ -15,7 +16,7 @@ export interface Route<T extends UniHtml = UniHtml> {
   route: string;
   path: string;
 
-  pageFactory: () => T;
+  pageFactory: (hash?: string) => T;
 }
 export enum AccessType {
   OFFLINE,
@@ -87,7 +88,7 @@ export abstract class Router {
   public static normalizeRoute(route: string): string {
     return route;
   }
-  public static async registerRoute<T extends UniHtml>(path: string, route: string, pageFactory: () => T,
+  public static async registerRoute<T extends UniHtml>(path: string, route: string, pageFactory: (hash?: string) => T,
     inheritedRoute?: Route): Promise<Route> {
 
     let prepRoute = route

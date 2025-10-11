@@ -3,6 +3,6 @@
 import Page from '../foundation/component_api/Page.js';
 
 export default class SubjectPage extends Page {
-  async postLoadJS(element) {
+  async postLoad(element) {
   }
 }

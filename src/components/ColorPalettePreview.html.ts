@@ -6,7 +6,7 @@ export default class ColorPalettePreview extends Component {
     static get observedAttributes() {
         return ['palette'];
     }
-    protected preLoadJS(holder: IElementHolder): Promise<void> {
+    protected preLoad(holder: IElementHolder): Promise<void> {
         this._updateColors(holder);
         this.onAttributeChangedCallback((name, oldValue, newValue) => {
             if (name === 'palette' && oldValue !== newValue) {

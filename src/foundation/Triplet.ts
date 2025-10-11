@@ -1,6 +1,6 @@
 import { EmptyConstructor } from "./api/EmptyConstructor.js";
 import Fetcher from "./Fetcher.js";
-import UniHtml  from "./component_api/UniHtml.js";
+import UniHtml from "./component_api/UniHtml.js";
 import { Router } from "./worker/Router.js";
 import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
@@ -8,7 +8,7 @@ import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
 
 export default class Triplet<T extends UniHtml> implements ITriplet {
-    private uni?: AnyConstructor;
+    private uni?: typeof UniHtml;
     private readonly access: AccessType;
 
     public readonly html?: string;
@@ -46,17 +46,17 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         if (this.js)
             await ServiceWorker.addToCache(this.js);
         if (this.additionalFiles.size > 0) {
-            for (const [type,filePath] of this.additionalFiles) {
+            for (const [type, filePath] of this.additionalFiles) {
                 await ServiceWorker.addToCache(filePath);
             }
         }
     }
-    
+
 
     public async register(type: "router" | "markup", name: string): Promise<boolean> {
         if (!this.uni) {
             switch (type) {
-                case "router": 
+                case "router":
                     this.uni = Page;
                     break;
                 case "markup":
@@ -73,7 +73,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
             return link;
         }
 
-        for (const [type,filePath] of this.additionalFiles) {
+        for (const [type, filePath] of this.additionalFiles) {
             if (type !== 'light-dom') continue;
             if (!filePath.endsWith(".css")) continue;
 
@@ -83,19 +83,22 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
             console.info(`[Triplet]: Additional light-dom CSS file '${filePath}' added to document head.`);
         }
 
-        const spClass = this.uni.prototype;
-        const that = this;
-        spClass.init = function () {
+
+        let that = this;
+        let ori = class extends this.uni {
+        };
+        let proto = ori.prototype as any;
+        proto.init = function () {
             const fullPath = that.html!.startsWith('./') ? that.html :
                 (window as any).RouterConfig.ASSET_PATH + that.html;
             return Fetcher.fetchText(fullPath);
-        };
-        spClass._postInit = async function (preHtml: string): Promise<string> {
+        }
+        proto._postInit = async function (preHtml: string): Promise<string> {
             if (that.css) {
                 const link = createLink(that.css);
                 preHtml = link.outerHTML + "\n" + preHtml;
             }
-            for (const [type,filePath] of that.additionalFiles) {
+            for (const [type, filePath] of that.additionalFiles) {
                 if (!filePath.endsWith(".css")) continue;
                 if (type !== 'light-dom') {
                     const link = createLink(filePath);
@@ -104,15 +107,16 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
             }
             return preHtml;
         }
-
         if (type === "router") {
-            var reg = Router.registerRoute(this.html!, name, () => new spClass.constructor);
+            var reg = Router.registerRoute(this.html!, name, (hash) => {
+                return new ori();
+            });
 
-            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}'.`);
+            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}' by class ${ori}.`);
             return reg.then(() => true).catch(() => false);
         } else if (type === "markup") {
             if (customElements.get(name)) throw new Error(`Custom element '${name}' is already defined.`);
-            customElements.define(name, spClass.constructor as CustomElementConstructor);
+            customElements.define(name, ori.prototype.constructor as CustomElementConstructor);
 
             console.info(`[Triplet]: Custom element '${name}' defined.`);
             return Promise.resolve(true);
@@ -136,7 +140,7 @@ export enum AccessType {
 }
 
 export class TripletBuilder<T extends UniHtml> implements ITriplet {
-    public uni?: AnyConstructor;
+    public uni?: AnyConstructor<UniHtml>;
     public access: AccessType = AccessType.BOTH;
 
     public readonly additionalFiles: Map<string, string> = new Map();
@@ -151,7 +155,7 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
         return new TripletBuilder(html, css, js);
     }
 
-    public withUni(cls: AnyConstructor): TripletBuilder<T> {
+    public withUni(cls: AnyConstructor<UniHtml>): TripletBuilder<T> {
         this.uni = cls;
         return this;
     }

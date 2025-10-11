@@ -1,6 +1,6 @@
 import Page from '../foundation/component_api/Page.js';
 export default class MathPage extends Page {
-    async postLoadJS(element) {
+    async postLoad(element) {
         // Настройка обработчиков событий для тестовых кнопок
         this.setupTestButtons(element);
         // Принудительный рендеринг KaTeX для этой страницы

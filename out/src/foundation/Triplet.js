@@ -64,14 +64,16 @@ export default class Triplet {
             document.head.appendChild(link);
             console.info(`[Triplet]: Additional light-dom CSS file '${filePath}' added to document head.`);
         }
-        const spClass = this.uni.prototype;
-        const that = this;
-        spClass.init = function () {
+        let that = this;
+        let ori = class extends this.uni {
+        };
+        let proto = ori.prototype;
+        proto.init = function () {
             const fullPath = that.html.startsWith('./') ? that.html :
                 window.RouterConfig.ASSET_PATH + that.html;
             return Fetcher.fetchText(fullPath);
         };
-        spClass._postInit = async function (preHtml) {
+        proto._postInit = async function (preHtml) {
             if (that.css) {
                 const link = createLink(that.css);
                 preHtml = link.outerHTML + "\n" + preHtml;
@@ -87,14 +89,16 @@ export default class Triplet {
             return preHtml;
         };
         if (type === "router") {
-            var reg = Router.registerRoute(this.html, name, () => new spClass.constructor);
-            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}'.`);
+            var reg = Router.registerRoute(this.html, name, (hash) => {
+                return new ori();
+            });
+            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}' by class ${ori}.`);
             return reg.then(() => true).catch(() => false);
         }
         else if (type === "markup") {
             if (customElements.get(name))
                 throw new Error(`Custom element '${name}' is already defined.`);
-            customElements.define(name, spClass.constructor);
+            customElements.define(name, ori.prototype.constructor);
             console.info(`[Triplet]: Custom element '${name}' defined.`);
             return Promise.resolve(true);
         }

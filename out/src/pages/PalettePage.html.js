@@ -3,7 +3,7 @@
 import { setActualPalette } from "../foundation/theme/ColorPalettes.js";
 import Page from '../foundation/component_api/Page.js';
 export default class PalettePage extends Page {
-    async postLoadJS(element) {
+    async postLoad(element) {
         const container = document.getElementById('palettes-list');
         if (!container)
             return;

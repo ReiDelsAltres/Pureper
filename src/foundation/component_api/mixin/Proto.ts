@@ -55,7 +55,7 @@ interface ClassHolder<T extends Constructor = any> {
     class: T;
     instance: Lazy<InstanceType<T>>;
 }
-export type AnyConstructor = Constructor | AbstractConstructor | ConcreteConstructor | LazyConstructor;
+export type AnyConstructor<T = {}> = Constructor<T> | LazyConstructor<T>;
 
 export type Constructor<T = {}> = (new (...args: any[]) => T);
 export type LazyConstructor<T = {}> = (new () => T);

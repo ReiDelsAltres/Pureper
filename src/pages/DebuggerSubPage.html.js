@@ -3,6 +3,7 @@ import Page from '../foundation/component_api/Page.js';
 export default class DebuggerSubPage extends Page {
 
     constructor() {
+        super();
         this.currentComponent = null;
         this.componentConfig = {};
         this.isOptionsOpen = false;
@@ -10,8 +11,8 @@ export default class DebuggerSubPage extends Page {
         this.componentRegistry = null; // Will be loaded from JSON
     }
 
-    async postLoadJS(element) {
-        await super.postLoadJS(element);
+    async postLoad(element) {
+        await super.postLoad(element);
         await this.loadComponentRegistry();
         
         this.initializeDebugger();

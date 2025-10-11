@@ -1,14 +1,16 @@
 import Page from '../foundation/component_api/Page.js';
+import Fetcher from '../foundation/Fetcher.js';
 
 export default class DebuggerPage extends Page {
     constructor() {
+        super();
         this.componentRegistry = {};
     }
-    async preLoadJS() {
-        await super.preLoadJS();
+    async preLoad() {
+        await super.preLoad();
         this.componentRegistry = await Fetcher.fetchJSON('./data/componentRegistry.json');
     }
-    async postLoadJS(element) {
-        await super.postLoadJS(element);
+    async postLoad(element) {
+        await super.postLoad(element);
     }
 }

@@ -3,7 +3,7 @@ import UniHtml from "../component_api/UniHtml.js";
 import { Class, Mixined } from "./mixin/Proto.js";
 
 export default interface Component extends Mixined,HTMLElement, UniHtml {}
-export default abstract class Component extends Class(HTMLElement).extend(UniHtml).build() implements IUniHtmlComponent {
+export default class Component extends Class(HTMLElement).extend(UniHtml).build() implements IUniHtmlComponent {
     private _attributeChangedCallbacks?: ((name: string, oldValue: any, newValue: any) => void)[];
     constructor() {
         super();
