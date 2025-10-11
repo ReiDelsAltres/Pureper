@@ -42,9 +42,10 @@ export class Router {
         let found = this.findRoute(route);
         let page = this.createPage(found);
         page.load(document.getElementById('app'));
+        const normalizedRoute = Router.normalizeRoute(route);
         // Only update location if running in a window context
         if (typeof window !== "undefined" && window.location) {
-            window.history.pushState(page, '', found.route);
+            window.history.pushState(page, '', normalizedRoute);
         }
     }
     static tryRouteTo(route) {
@@ -58,10 +59,22 @@ export class Router {
         }
     }
     static findRoute(route) {
-        let found = ROUTES.find(r => r.route === route);
+        const normalizedRoute = Router.normalizeRoute(route);
+        let found = ROUTES.find(r => r.route === normalizedRoute);
         if (!found)
-            throw new Error(`[Router]: Route not found: ${route}`);
+            throw new Error(`[Router]: Route not found: ${normalizedRoute}`);
         return found;
+    }
+    /**
+     * Normalize route for GitHub Pages with /Pureper/ base path
+     */
+    static normalizeRoute(route) {
+        // If running on GitHub Pages with /Pureper/ prefix, strip it
+        const prefix = (window.RouterConfig && window.RouterConfig.ASSET_PATH) || "/";
+        if (prefix !== "/" && route.startsWith(prefix)) {
+            return route.slice(prefix.length - 1) || "/";
+        }
+        return route;
     }
     static async registerRoute(path, route, pageFactory, inheritedRoute) {
         let prepRoute = route;

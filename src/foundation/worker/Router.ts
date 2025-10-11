@@ -1,3 +1,9 @@
+// Add RouterConfig type to window for TypeScript
+declare global {
+  interface Window {
+    RouterConfig?: { ASSET_PATH: string };
+  }
+}
 import Page from "../component_api/Page";
 import UniHtml from "../component_api/UniHtml.js";
 import { ServiceWorkerGlobalScope } from "./api/ServiceWorkerGlobalScope";
@@ -54,10 +60,11 @@ export abstract class Router {
     let page: UniHtml = this.createPage(found);
 
     page.load(document.getElementById('app')!);
+    const normalizedRoute = Router.normalizeRoute(route);
 
     // Only update location if running in a window context
     if (typeof window !== "undefined" && window.location) {
-      window.history.pushState(page, '', found.route);
+      window.history.pushState(page, '', normalizedRoute);
     }
   }
   public static tryRouteTo(route: string): boolean {
@@ -72,9 +79,22 @@ export abstract class Router {
 
 
   public static findRoute(route: string): Route {
-    let found = ROUTES.find(r => r.route === route);
-    if (!found) throw new Error(`[Router]: Route not found: ${route}`);
+    const normalizedRoute = Router.normalizeRoute(route);
+    let found = ROUTES.find(r => r.route === normalizedRoute);
+    if (!found) throw new Error(`[Router]: Route not found: ${normalizedRoute}`);
     return found;
+  }
+
+  /**
+   * Normalize route for GitHub Pages with /Pureper/ base path
+   */
+  public static normalizeRoute(route: string): string {
+    // If running on GitHub Pages with /Pureper/ prefix, strip it
+    const prefix = (window.RouterConfig && window.RouterConfig.ASSET_PATH) || "/";
+    if (prefix !== "/" && route.startsWith(prefix)) {
+      return route.slice(prefix.length - 1) || "/";
+    }
+    return route;
   }
   public static async registerRoute<T extends UniHtml>(path: string, route: string, pageFactory: () => T,
     inheritedRoute?: Route): Promise<Route> {

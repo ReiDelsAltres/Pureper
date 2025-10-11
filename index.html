@@ -7,6 +7,17 @@
 
     <title>Purper</title>
 
+    <script>
+        // Set RouterConfig.ASSET_PATH for GitHub Pages or local
+        (function() {
+            var path = "/";
+            var ghMatch = window.location.pathname.match(/^\/(.+?)\//);
+            if (ghMatch && ghMatch[1] && window.location.hostname.endsWith("github.io")) {
+                path = "/" + ghMatch[1] + "/";
+            }
+            window.RouterConfig = { ASSET_PATH: path };
+        })();
+    </script>
     <script type="module" defer>
         import { rewriteDomLinks } from "./out/src/redirectRules.js";
 
