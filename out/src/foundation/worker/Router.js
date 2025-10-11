@@ -1,3 +1,4 @@
+import { Host } from "./Host.js";
 const globals = self;
 export var AccessType;
 (function (AccessType) {
@@ -35,17 +36,16 @@ export class Router {
     }
     static legacyRouteTo(route) {
         if (window.location.pathname !== route) {
-            window.location.replace(route);
+            window.location.replace(Host.getHostPrefix() + route);
         }
     }
     static routeTo(route) {
         let found = this.findRoute(route);
         let page = this.createPage(found);
         page.load(document.getElementById('app'));
-        const normalizedRoute = Router.normalizeRoute(route);
         // Only update location if running in a window context
         if (typeof window !== "undefined" && window.location) {
-            window.history.pushState(page, '', normalizedRoute);
+            window.history.pushState(page, '', Host.getHostPrefix() + found.route);
         }
     }
     static tryRouteTo(route) {
@@ -65,15 +65,7 @@ export class Router {
             throw new Error(`[Router]: Route not found: ${normalizedRoute}`);
         return found;
     }
-    /**
-     * Normalize route for GitHub Pages with /Pureper/ base path
-     */
     static normalizeRoute(route) {
-        // If running on GitHub Pages with /Pureper/ prefix, strip it
-        const prefix = (window.RouterConfig && window.RouterConfig.ASSET_PATH) || "/";
-        if (prefix !== "/" && route.startsWith(prefix)) {
-            return route.slice(prefix.length - 1) || "/";
-        }
         return route;
     }
     static async registerRoute(path, route, pageFactory, inheritedRoute) {
