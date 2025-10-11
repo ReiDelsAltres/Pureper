@@ -1,5 +1,5 @@
 import IElementHolder from "../foundation/api/ElementHolder.js";
-import { UniHtmlComponent } from "../foundation/component_api/UniHtml.js";
+import Component from "../foundation/component_api/Component.js";
 
 /**
  * Типы для системы иконок
@@ -26,7 +26,7 @@ interface IconConfig {
  * Универсальный компонент SVG иконок с поддержкой тем и интерактивности
  * Поддерживает предустановленные иконки, кастомные SVG пути и полные SVG элементы
  */
-export default class SvgIcon extends UniHtmlComponent {
+export default class SvgIcon extends Component {
     private svgElement: SVGSVGElement | null = null;
     private containerElement: HTMLElement | null = null;
     

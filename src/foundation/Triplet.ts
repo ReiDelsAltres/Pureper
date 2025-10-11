@@ -1,11 +1,14 @@
 import { EmptyConstructor } from "./api/EmptyConstructor.js";
 import Fetcher from "./Fetcher.js";
-import UniHtml, { UniHtmlCompleted } from "./component_api/UniHtml.js";
+import UniHtml  from "./component_api/UniHtml.js";
 import { Router } from "./worker/Router.js";
 import ServiceWorker from "./worker/ServiceWorker.js";
+import Page from "./component_api/Page.js";
+import Component from "./component_api/Component.js";
+import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
 
 export default class Triplet<T extends UniHtml> implements ITriplet {
-    private readonly uni: EmptyConstructor<T>;
+    private uni?: AnyConstructor;
     private readonly access: AccessType;
 
     public readonly html?: string;
@@ -50,8 +53,17 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
     }
     
 
-    public register(type: "router" | "markup", name: string): void {
-        if (!this.uni) throw new Error("[Triplet]: UniHtml component not provided.");
+    public async register(type: "router" | "markup", name: string): Promise<boolean> {
+        if (!this.uni) {
+            switch (type) {
+                case "router": 
+                    this.uni = Page;
+                    break;
+                case "markup":
+                    this.uni = Component;
+                    break;
+            }
+        }
 
         function createLink(cssPath: string): HTMLLinkElement {
             const link = document.createElement('link');
@@ -94,18 +106,18 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         }
 
         if (type === "router") {
-            Router.registerRoute(this.html!, name, () => new spClass.constructor);
+            var reg = Router.registerRoute(this.html!, name, () => new spClass.constructor);
 
             console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}'.`);
-            //throw new Error("Triplet: Router type registration not implemented.");
-
+            return reg.then(() => true).catch(() => false);
         } else if (type === "markup") {
             if (customElements.get(name)) throw new Error(`Custom element '${name}' is already defined.`);
             customElements.define(name, spClass.constructor as CustomElementConstructor);
 
             console.info(`[Triplet]: Custom element '${name}' defined.`);
-
+            return Promise.resolve(true);
         }
+        return Promise.resolve(false);
     }
 
 }
@@ -124,7 +136,7 @@ export enum AccessType {
 }
 
 export class TripletBuilder<T extends UniHtml> implements ITriplet {
-    public uni: EmptyConstructor<T> = UniHtml as EmptyConstructor<T>;
+    public uni?: AnyConstructor;
     public access: AccessType = AccessType.BOTH;
 
     public readonly additionalFiles: Map<string, string> = new Map();
@@ -139,7 +151,7 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
         return new TripletBuilder(html, css, js);
     }
 
-    public withUni(cls: EmptyConstructor<T>): TripletBuilder<T> {
+    public withUni(cls: AnyConstructor): TripletBuilder<T> {
         this.uni = cls;
         return this;
     }

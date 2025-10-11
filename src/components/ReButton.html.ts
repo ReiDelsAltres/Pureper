@@ -1,7 +1,8 @@
 import IElementHolder from '../foundation/api/ElementHolder.js';
-import { UniHtmlComponent } from '../foundation/component_api/UniHtml.js';
+import Component from '../foundation/component_api/Component.js';
+import { Router } from '../foundation/worker/Router.js';
 
-export default class ReButton extends UniHtmlComponent {
+export default class ReButton extends Component {
     private button?: HTMLButtonElement;
     private iconSlot?: HTMLElement;
 
@@ -131,9 +132,10 @@ export default class ReButton extends UniHtmlComponent {
             return;
         }
 
-        // Если это ссылка с data-link, используем SPA навигацию
+        //Если это ссылка с data-link, используем SPA навигацию
         /*const href = this.getAttribute('href');
         if (href && this.hasAttribute('data-link')) {
+            event.preventDefault();
             Router.routeTo(href);
         }*/
 

@@ -1,3 +1,4 @@
+import Lazy from "../../../foundation/api/Lazy.js";
 class ClassBuilder {
     constructor(base) {
         this.base = base;
@@ -12,7 +13,17 @@ class ClassBuilder {
         this.base = class extends this.base {
             constructor(...args) {
                 super(...args);
-                Object.assign(this, new extend(...args));
+                var map = {};
+                var classHolder = { class: extend, instance: new Lazy(() => new extend(...args)) };
+                if (!this.hasOwnProperty('super'))
+                    this.super = map;
+                this.super[extend.name] = classHolder;
+                if (!this.hasOwnProperty('getMixin')) {
+                    this.getMixin = function (ctor) {
+                        return this.super?.[ctor.name];
+                    };
+                }
+                Object.assign(this, classHolder.instance.get());
             }
         };
         return this;

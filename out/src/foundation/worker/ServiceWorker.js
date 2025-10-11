@@ -1,8 +1,3 @@
-/**
- * Service Worker for Pureper SPA
- * Handles client-side routing by intercepting navigation requests
- * and serving index.html for all SPA routes
- */
 const swSelf = self;
 // Автоматически генерируем CACHE_NAME из base.json
 //import base from '../../../data/base.json';
@@ -13,6 +8,17 @@ const STATIC_ASSETS = [
     '/index.html'
     // '/offline.html' // Uncomment if you add offline.html
 ];
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../out/src/foundation/worker/ServiceWorker.js', { type: 'module' })
+            .then((registration) => {
+            console.log('ServiceWorker registration successful:', registration.scope);
+        })
+            .catch((error) => {
+            console.error('ServiceWorker registration failed:', error);
+        });
+    });
+}
 /**
  * Install event - cache static assets
  */

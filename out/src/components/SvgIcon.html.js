@@ -1,9 +1,9 @@
-import { UniHtmlComponent } from "../foundation/component_api/UniHtml.js";
+import Component from "../foundation/component_api/Component.js";
 /**
  * Универсальный компонент SVG иконок с поддержкой тем и интерактивности
  * Поддерживает предустановленные иконки, кастомные SVG пути и полные SVG элементы
  */
-export default class SvgIcon extends UniHtmlComponent {
+export default class SvgIcon extends Component {
     constructor() {
         super(...arguments);
         this.svgElement = null;

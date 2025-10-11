@@ -1,4 +1,4 @@
-import Page from '../src/foundation/component_api/Page.js';
+import Page from '../foundation/component_api/Page.js';
 export default class DebuggerSubPage extends Page {
     constructor() {
         this.currentComponent = null;

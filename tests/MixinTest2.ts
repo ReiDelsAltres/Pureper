@@ -1,4 +1,4 @@
-import { Class } from "../src/foundation/component_api/mixin/Proto";
+import { Class, Mixined } from "../src/foundation/component_api/mixin/Proto.ts";
 class Base {
     baseProp = "base";
     baseMethod() {
@@ -34,9 +34,14 @@ class MixinTest extends Class(Base)
     .extend(Super1)
     .extend(Super2)
     .extendAbstract(AbstractSuper).build() {
+        constructor() {
+            super();
+        }
+    test() {;
+    }
 }
 
-interface MixinTest extends Super1, Super2, AbstractSuper {}
+interface MixinTest extends Mixined,Super1, Super2, AbstractSuper {}
 
 let mixinInstance = new MixinTest();
 mixinInstance.baseMethod(); // Outputs: base
@@ -50,5 +55,5 @@ mixinInstance.superAbstractMethod = function() {
 }
 mixinInstance.superAbstractMethod(); // Outputs: superAbstract
 
-
+console.log((mixinInstance as any).super); // Outputs: inheritance map
 console.log(mixinInstance);

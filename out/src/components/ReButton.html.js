@@ -1,5 +1,5 @@
-import { UniHtmlComponent } from '../foundation/component_api/UniHtml.js';
-export default class ReButton extends UniHtmlComponent {
+import Component from '../foundation/component_api/Component.js';
+export default class ReButton extends Component {
     static get observedAttributes() {
         return [
             'variant', 'size', 'color', 'icon', 'disabled',
@@ -106,9 +106,10 @@ export default class ReButton extends UniHtmlComponent {
             event.stopPropagation();
             return;
         }
-        // Если это ссылка с data-link, используем SPA навигацию
+        //Если это ссылка с data-link, используем SPA навигацию
         /*const href = this.getAttribute('href');
         if (href && this.hasAttribute('data-link')) {
+            event.preventDefault();
             Router.routeTo(href);
         }*/
         // Эмитируем кастомное событие

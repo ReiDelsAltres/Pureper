@@ -1,7 +1,8 @@
 import Fetcher from "./Fetcher.js";
-import UniHtml from "./component_api/UniHtml.js";
 import { Router } from "./worker/Router.js";
 import ServiceWorker from "./worker/ServiceWorker.js";
+import Page from "./component_api/Page.js";
+import Component from "./component_api/Component.js";
 export default class Triplet {
     constructor(builder) {
         this.additionalFiles = new Map();
@@ -36,9 +37,17 @@ export default class Triplet {
             }
         }
     }
-    register(type, name) {
-        if (!this.uni)
-            throw new Error("[Triplet]: UniHtml component not provided.");
+    async register(type, name) {
+        if (!this.uni) {
+            switch (type) {
+                case "router":
+                    this.uni = Page;
+                    break;
+                case "markup":
+                    this.uni = Component;
+                    break;
+            }
+        }
         function createLink(cssPath) {
             const link = document.createElement('link');
             link.rel = 'stylesheet';
@@ -78,16 +87,18 @@ export default class Triplet {
             return preHtml;
         };
         if (type === "router") {
-            Router.registerRoute(this.html, name, () => new spClass.constructor);
+            var reg = Router.registerRoute(this.html, name, () => new spClass.constructor);
             console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}'.`);
-            //throw new Error("Triplet: Router type registration not implemented.");
+            return reg.then(() => true).catch(() => false);
         }
         else if (type === "markup") {
             if (customElements.get(name))
                 throw new Error(`Custom element '${name}' is already defined.`);
             customElements.define(name, spClass.constructor);
             console.info(`[Triplet]: Custom element '${name}' defined.`);
+            return Promise.resolve(true);
         }
+        return Promise.resolve(false);
     }
 }
 export var AccessType;
@@ -102,7 +113,6 @@ export class TripletBuilder {
         this.html = html;
         this.css = css;
         this.js = js;
-        this.uni = UniHtml;
         this.access = AccessType.BOTH;
         this.additionalFiles = new Map();
     }

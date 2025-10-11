@@ -1,57 +1,99 @@
 import Page from "../component_api/Page";
-import UniHtml from "../component_api/UniHtml";
+import UniHtml from "../component_api/UniHtml.js";
 import { ServiceWorkerGlobalScope } from "./api/ServiceWorkerGlobalScope";
 
 const globals = self as any as ServiceWorkerGlobalScope;
 
 export interface Route<T extends UniHtml = UniHtml> {
-    route: string;
-    path: string;
+  route: string;
+  path: string;
 
-    pageFactory: () => T;
+  pageFactory: () => T;
 }
 export enum AccessType {
-    OFFLINE,
-    ONLINE,
-    BOTH
+  OFFLINE,
+  ONLINE,
+  BOTH
 }
 
-export let ROUTES: Route[] = [];
-export let TO_CACHE: string[] = [];
+export const ROUTES: Route[] = [];
+export const TO_CACHE: string[] = [];
 
 export abstract class Router {
-    public static registerRoute<T extends UniHtml>(path: string, route: string, pageFactory: () => T,
-        inheritedRoute?: Route): Route {
-
-        let prepRoute = route
-        let fullRoute = inheritedRoute ? inheritedRoute.route + prepRoute : prepRoute;
-
-        let routeObj: Route = { route: fullRoute, path, pageFactory };
-
-        ROUTES.push(routeObj);
-        console.log(`[Router]: Registered route: ${fullRoute} -> ${path}`);
-
-        return routeObj;
+  public static savePersistedRoute(route: string) {
+    try {
+      sessionStorage.setItem("spa:persisted-route", route);
+    } catch (error) {
+      console.warn("[Router Init]: Unable to access sessionStorage.", error);
     }
-
-    public static routeTo(route: string) {
-        let found: Route = this.findRoute(route);
-        let page: UniHtml = this.createPage(found);
-
-        page.load(document.getElementById('app')!);
-
-        globals.location.href = found.route;
+  }
+  public static getPersistedRoute(): string | null {
+    try {
+      return sessionStorage.getItem("spa:persisted-route");
+    } catch (error) {
+      console.warn("[Router Init]: Unable to access sessionStorage.", error);
+      return null;
     }
-
-    public static findRoute(route: string): Route {
-        let found = ROUTES.find(r => r.route === route);
-        if (!found) throw new Error(`[Router]: Route not found: ${route}`);
-        return found;
+  }
+  public static clearPersistedRoute() {
+    try {
+      sessionStorage.removeItem("spa:persisted-route");
+    } catch (error) {
+      console.warn("[Router Init]: Unable to clear persisted route.", error);
     }
+  }
 
-    private static createPage(route: Route): UniHtml {
-        return route.pageFactory();
+
+  public static legacyRouteTo(route: string) {
+    if (window.location.pathname !== route) {
+      window.location.replace(route);
     }
+  }
+  public static routeTo(route: string) {
+    let found: Route = this.findRoute(route);
+    let page: UniHtml = this.createPage(found);
+
+    page.load(document.getElementById('app')!);
+
+    // Only update location if running in a window context
+    if (typeof window !== "undefined" && window.location) {
+      window.history.pushState(page, '', found.route);
+    }
+  }
+  public static tryRouteTo(route: string): boolean {
+    try {
+      this.routeTo(route);
+      return true;
+    } catch (error) {
+      console.warn(`[Router]: Failed to route to ${route}.`, error);
+      return false;
+    }
+  }
+
+
+  public static findRoute(route: string): Route {
+    let found = ROUTES.find(r => r.route === route);
+    if (!found) throw new Error(`[Router]: Route not found: ${route}`);
+    return found;
+  }
+  public static async registerRoute<T extends UniHtml>(path: string, route: string, pageFactory: () => T,
+    inheritedRoute?: Route): Promise<Route> {
+
+    let prepRoute = route
+    let fullRoute = inheritedRoute ? inheritedRoute.route + prepRoute : prepRoute;
+
+    let routeObj: Route = { route: fullRoute, path, pageFactory };
+
+    ROUTES.push(routeObj);
+    console.log(`[Router]: Registered route: ${fullRoute} -> ${path}`);
+
+    return Promise.resolve(routeObj);
+  }
+
+
+  private static createPage(route: Route): UniHtml {
+    return route.pageFactory();
+  }
 }
 
 document.addEventListener('click', e => {

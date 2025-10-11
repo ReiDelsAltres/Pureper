@@ -2,13 +2,7 @@
  * Universal SPA component base for pages and elements.
  * Use static factory methods for instantiation.
  */
-export default class UniHtml extends HTMLElement {
-    /**
-     * Protected constructor. Use static factory methods to instantiate.
-     */
-    constructor() {
-        super();
-    }
+export default class UniHtml {
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
@@ -68,61 +62,6 @@ export default class UniHtml extends HTMLElement {
         renderTarget.innerHTML = holder.element.innerHTML;
         holder.element = this;
         return Promise.resolve();
-    }
-}
-export class UniHtmlComponent extends UniHtml {
-    onConnected() {
-    }
-    onDisconnected() {
-    }
-    onMoved() {
-    }
-    onAdopted() {
-    }
-    onAttributeChanged(name, oldValue, newValue) {
-    }
-    onAttributeChangedCallback(callback) {
-        this._attributeChangedCallbacks = this._attributeChangedCallbacks ?? [];
-        this._attributeChangedCallbacks.push(callback);
-    }
-    /**
-     * @deprecated Use onConnected instead.
-     */
-    connectedCallback() {
-        this.attachShadow({ mode: 'open' });
-        const wrapper = document.createElement('div');
-        this.onConnected();
-        this.load(wrapper);
-    }
-    render(element, renderTarget) {
-        super.render(element, renderTarget);
-        this.shadowRoot.appendChild(renderTarget);
-        return Promise.resolve();
-    }
-    /**
-     * @deprecated Use onDisconnected instead.
-     */
-    disconnectedCallback() {
-        this.onDisconnected();
-    }
-    /**
-     * @deprecated Use onMoved instead.
-     */
-    connectedMoveCallback() {
-        this.onMoved();
-    }
-    /**
-     * @deprecated Use onAdopted instead.
-     */
-    adoptedCallback() {
-        this.onAdopted();
-    }
-    /**
-     * @deprecated Use onAttributeChanged instead.
-     */
-    attributeChangedCallback(name, oldValue, newValue) {
-        this.onAttributeChanged(name, oldValue, newValue);
-        this._attributeChangedCallbacks?.forEach(cb => cb(name, oldValue, newValue));
     }
 }
 //# sourceMappingURL=UniHtml.js.map

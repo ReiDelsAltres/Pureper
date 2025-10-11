@@ -1,8 +1,8 @@
 import IElementHolder from "../foundation/api/ElementHolder.js";
+import Component from "../foundation/component_api/Component.js";
 import { ActualPalette, ColorPalettes } from "../foundation/theme/ColorPalettes.js";
-import { UniHtmlComponent } from "../foundation/component_api/UniHtml.js";
 
-export default class ColorPalettePreview extends UniHtmlComponent {
+export default class ColorPalettePreview extends Component {
     static get observedAttributes() {
         return ['palette'];
     }

@@ -1,7 +1,7 @@
-import Page from '../src/foundation/component_api/Page.js';
+import Page from '../foundation/component_api/Page.js';
 export default class ButtonsPage extends Page {
-    constructor(filePath, pageHolder) {
-        super(filePath, pageHolder);
+    constructor() {
+        super();
         this.colorIndex = 0;
         this.variantIndex = 0;
         this.colors = ['primary', 'secondary', 'tertiary', 'success', 'warning', 'error', 'info'];

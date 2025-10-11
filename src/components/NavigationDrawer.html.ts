@@ -1,9 +1,9 @@
 import IElementHolder from '../foundation/api/ElementHolder.js';
-import { UniHtmlComponent } from '../foundation/component_api/UniHtml.js';
+import Component from '../foundation/component_api/Component.js';
 
 type DrawerState = 'mini' | 'open';
 
-export default class NavigationDrawer extends UniHtmlComponent {
+export default class NavigationDrawer extends Component {
     static get observedAttributes() {
         return [
             "state", "default-state"

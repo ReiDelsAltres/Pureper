@@ -3,7 +3,6 @@
  * Handles client-side routing by intercepting navigation requests
  * and serving index.html for all SPA routes
  */
-
 import type { ExtendableEvent } from './api/ExtendableEvent';
 import type { FetchEvent } from './api/FetchEvent';
 import type { ExtendableMessageEvent } from './api/ExtendableMessageEvent';
@@ -25,6 +24,18 @@ const STATIC_ASSETS: string[] = [
     '/index.html'
     // '/offline.html' // Uncomment if you add offline.html
 ];
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../out/src/foundation/worker/ServiceWorker.js', { type: 'module' })
+            .then((registration) => {
+                console.log('ServiceWorker registration successful:', registration.scope);
+            })
+            .catch((error) => {
+                console.error('ServiceWorker registration failed:', error);
+            });
+    });
+}
+
 /**
  * Install event - cache static assets
  */
@@ -53,7 +64,7 @@ swSelf.addEventListener('install', (event: ExtendableEvent) => {
  */
 swSelf.addEventListener('activate', (event: ExtendableEvent) => {
     console.log('ServiceWorker: Activating...');
-    
+
     event.waitUntil(
         caches.keys()
             .then((cacheNames: string[]) => {
@@ -78,12 +89,12 @@ swSelf.addEventListener('activate', (event: ExtendableEvent) => {
  */
 swSelf.addEventListener('fetch', (event: FetchEvent) => {
     const url = new URL(event.request.url);
-    
+
     // Only handle requests from the same origin
     if (url.origin !== swSelf.location.origin) {
         return;
     }
-    
+
     // Handle navigation requests (HTML pages)
     if (event.request.mode === 'navigate') {
         event.respondWith(handleNavigationRequest(event.request));
@@ -164,26 +175,26 @@ async function handleAssetRequest(request: Request): Promise<Response> {
         if (cachedResponse) {
             return cachedResponse;
         }
-        
+
         // Fallback to network
         const networkResponse = await fetch(request);
-        
+
         // Cache successful responses
         if (networkResponse.ok) {
             const cache = await caches.open(CACHE_NAME);
             cache.put(request, networkResponse.clone());
         }
-        
+
         return networkResponse;
     } catch (error) {
         console.error('ServiceWorker: Asset request failed:', error);
-        
+
         // Try to serve from cache as last resort
         const cachedResponse = await caches.match(request);
         if (cachedResponse) {
             return cachedResponse;
         }
-        
+
         return new Response('Network error', { status: 503 });
     }
 }
@@ -233,7 +244,7 @@ swSelf.addEventListener('message', (event: ExtendableMessageEvent) => {
  * Client-side helper for interacting with the Service Worker
  */
 
-export default class ServiceWorker { 
+export default class ServiceWorker {
     /**
      * Sends a message to the service worker to cache a specific URL.
      * @param url The URL of the resource to cache.

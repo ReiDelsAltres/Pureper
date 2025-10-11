@@ -105,3 +105,4 @@ window.addEventListener('DOMContentLoaded', () => {
     checkRoutes();
 });
 //# sourceMappingURL=Router.js.map
+//# sourceMappingURL=Router.js.map

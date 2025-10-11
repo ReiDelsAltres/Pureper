@@ -7,8 +7,7 @@
 
     <title>Purper</title>
 
-    <!-- Service Worker Registration -->
-    <script type="module">
+    <script type="module" defer>
         import { rewriteDomLinks } from "./out/src/redirectRules.js";
 
         const runRewrite = () => rewriteDomLinks(document);
@@ -22,10 +21,10 @@
         window.addEventListener("spa:navigated", runRewrite);
         window.addEventListener("popstate", runRewrite);
     </script>
-    <script type="module">
+    <script type="module" defer>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./src/foundation/worker/ServiceWorker.js', { type: 'module' })
+                navigator.serviceWorker.register('../out/src/foundation/worker/ServiceWorker.js', { type: 'module' })
                     .then((registration) => {
                         console.log('ServiceWorker registration successful:', registration.scope);
                     })
@@ -35,10 +34,7 @@
             });
         }
     </script>
-    <!-- Page Init -->
     <script type="module" data-src="index.html.ts" defer></script>
-    <!-- Page Init -->
-    <script type="module" data-src="src/foundation/Triplet.f.ts" defer></script>
 
     <!-- KaTeX CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
@@ -105,7 +101,7 @@
 
 <body>
     <page-layout>
-        <navigation-drawer slot="navigation">
+        <navigation-drawer slot="drawer">
             <span slot="header">Menu</span>
             <re-button variant="text" icon="home" size="sm" color="primary" full-width href="/" data-link>
                 <span class="onlyin-open">Home</span>

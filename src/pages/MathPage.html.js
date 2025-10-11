@@ -1,4 +1,4 @@
-import Page from '../src/foundation/component_api/Page.js';
+import Page from '../foundation/component_api/Page.js';
 
 export default class MathPage extends Page {
     async postLoadJS(element) {

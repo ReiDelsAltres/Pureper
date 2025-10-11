@@ -1,7 +1,6 @@
-import Page from '../src/foundation/component_api/Page.js';
+import Page from '../foundation/component_api/Page.js';
 export default class DebuggerPage extends Page {
-    constructor(templatePath) {
-        super(templatePath);
+    constructor() {
         this.componentRegistry = {};
     }
     async preLoadJS() {

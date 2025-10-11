@@ -1,5 +1,5 @@
-import { UniHtmlComponent } from '../foundation/component_api/UniHtml.js';
-export default class NavigationDrawer extends UniHtmlComponent {
+import Component from '../foundation/component_api/Component.js';
+export default class NavigationDrawer extends Component {
     static get observedAttributes() {
         return [
             "state", "default-state"
