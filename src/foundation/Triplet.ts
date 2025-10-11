@@ -96,7 +96,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         if (type === "router") {
             Router.registerRoute(this.html!, name, () => new spClass.constructor);
 
-            console.info(`[Triplet]: Router route '${name}' registered for path '${this.html}'.`);
+            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}'.`);
             //throw new Error("Triplet: Router type registration not implemented.");
 
         } else if (type === "markup") {

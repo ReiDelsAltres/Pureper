@@ -44,3 +44,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Write deployed URL to env.js
+        run: echo "export const URL = '${{ steps.deployment.outputs.page_url }}';" > src/env.js
