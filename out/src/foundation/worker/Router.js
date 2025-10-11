@@ -1,0 +1,64 @@
+const globals = self;
+export var AccessType;
+(function (AccessType) {
+    AccessType[AccessType["OFFLINE"] = 0] = "OFFLINE";
+    AccessType[AccessType["ONLINE"] = 1] = "ONLINE";
+    AccessType[AccessType["BOTH"] = 2] = "BOTH";
+})(AccessType || (AccessType = {}));
+export let ROUTES = [];
+export let TO_CACHE = [];
+export class Router {
+    static registerRoute(path, route, pageFactory, inheritedRoute) {
+        let prepRoute = route;
+        let fullRoute = inheritedRoute ? inheritedRoute.route + prepRoute : prepRoute;
+        let routeObj = { route: fullRoute, path, pageFactory };
+        ROUTES.push(routeObj);
+        console.log(`[Router]: Registered route: ${fullRoute} -> ${path}`);
+        return routeObj;
+    }
+    static routeTo(route) {
+        let found = this.findRoute(route);
+        let page = this.createPage(found);
+        page.load(document.getElementById('app'));
+        globals.location.href = found.route;
+    }
+    static findRoute(route) {
+        let found = ROUTES.find(r => r.route === route);
+        if (!found)
+            throw new Error(`[Router]: Route not found: ${route}`);
+        return found;
+    }
+    static createPage(route) {
+        return route.pageFactory();
+    }
+}
+document.addEventListener('click', e => {
+    const target = e.target;
+    if (target) {
+        const link = target.closest('a[data-link]') ?? target.closest('re-button[data-link]');
+        if (link) {
+            e.preventDefault();
+            Router.routeTo(link.getAttribute('href'));
+        }
+    }
+});
+// Initial load
+window.addEventListener('DOMContentLoaded', () => {
+    // Добавляем отладочную информацию
+    console.log('[Router]: DOMContentLoaded');
+    console.log('[Router]: hostname =', window.location.hostname);
+    //console.log('[Router]: IS_GITHUB_PAGES =', IS_GITHUB_PAGES);
+    //console.log('[Router]: USE_HASH_ROUTING =', USE_HASH_ROUTING);
+    //console.log('[Router]: BASE_PATH =', BASE_PATH);
+    console.log('[Router]: location.pathname =', window.location.pathname);
+    console.log('[Router]: location.search =', window.location.search);
+    // Ждем, пока ROUTES будет определен
+    const checkRoutes = () => {
+        const routes = ROUTES;
+        if (routes) {
+            console.log('[Router]: available routes =', routes.map(r => r.route).join(', '));
+        }
+    };
+    checkRoutes();
+});
+//# sourceMappingURL=Router.js.map

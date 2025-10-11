@@ -7,8 +7,9 @@
     {
       "type": "msedge",
       "request": "launch",
-      "name": "Launch Edge against localhost",
-      "url": "file:///C:/Projects/Purper/index.html",
+      "name": "Watch",
+      "preLaunchTask": "tsc: watch - tsconfig.json",
+      "url": "http://127.0.0.1:5500",
       "webRoot": "${workspaceFolder}"
     }
   ]

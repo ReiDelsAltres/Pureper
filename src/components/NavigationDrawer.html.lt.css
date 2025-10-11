@@ -1,0 +1,6 @@
+navigation-drawer .onlyin-open {
+  display: var(--onlyin-open-display, initial);
+}
+navigation-drawer .onlyin-mini {
+  display: var(--onlyin-mini-display, none);
+}

@@ -1,0 +1,79 @@
+.drawer {
+    display: flex;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    width: 280px;
+    height: 100vh;
+
+    padding: 20px 0 12px 0;
+    flex-direction: column;
+
+    z-index: 1200;
+
+    background: var(--surface-dark);
+    color: var(--color-text-primary-contrast);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18), 0 1.5px 4px rgba(0, 0, 0, 0.10);
+
+    transition: transform 0.35s cubic-bezier(.4, 0, .2, 1), box-shadow 0.2s, width 0.35s cubic-bezier(.4, 0, .2, 1);
+    will-change: transform, box-shadow, width;
+    overflow-y: auto;
+}
+
+:host([state="open"]) .drawer {
+    width: 280px;
+    transform: translateX(0);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22), 0 2px 8px rgba(0, 0, 0, 0.12);
+    opacity: 1;
+}
+:host([state="mini"]) .drawer {
+    width: 80px;
+}
+:host([state="mini"]) .drawer > .header {
+    color: transparent;
+    
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.header {
+    font-size: 1.35rem;
+    font-weight: 600;
+
+    text-align: left;
+
+    letter-spacing: 0.01em;
+
+    padding: 0 28px 18px 28px;
+    color: var(--color-primary);
+}
+
+.list {
+    display: grid;
+    list-style: none;
+
+    align-items: start;
+
+    margin: 0;
+    padding: 0;
+}
+.list ::slotted(*) {
+
+    text-align: start;
+    align-items: start;
+    justify-content: start;
+}
+
+:host {
+  --onlyin-open-display: initial;
+  --onlyin-mini-display: none;
+}
+:host([state="mini"]) {
+  --onlyin-open-display: none;
+  --onlyin-mini-display: initial;
+}
+/*
+:host(:not([state="mini"])) { display: none; }
+:host(:not([state="open"])) { display: none; }*/

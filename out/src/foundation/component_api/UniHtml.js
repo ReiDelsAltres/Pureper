@@ -1,0 +1,128 @@
+/**
+ * Universal SPA component base for pages and elements.
+ * Use static factory methods for instantiation.
+ */
+export default class UniHtml extends HTMLElement {
+    /**
+     * Protected constructor. Use static factory methods to instantiate.
+     */
+    constructor() {
+        super();
+    }
+    /**
+     * Unified component lifecycle entrypoint.
+     * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
+     * @param element Target container (usually shadowRoot.host)
+     */
+    async load(element) {
+        const preHtml = await this.init();
+        const html = await this._postInit(preHtml);
+        const localRoot = document.createElement('div');
+        localRoot.innerHTML = html;
+        const holder = { element: localRoot };
+        // ВАЖНО: preLoad() вызывается ДО монтирования в DOM/Shadow DOM.
+        // Для компонентов (UniHtmlComponent) на этом этапе ещё нельзя полагаться на this.shadowRoot —
+        // используйте переданный localRoot для подготовки DOM, данных и навешивания обработчиков.
+        // Это предпочтительный этап инициализации для компонентов.
+        await this.preLoad(holder);
+        // render() отвечает за помещение содержимого из localRoot в конечную цель (renderTarget).
+        // В UniHtmlComponent.render() после вызова базового render() происходит добавление wrapper в shadowRoot.
+        await this.render(holder, element);
+        // postLoad() вызывается ПОСЛЕ render(). Для компонентов к этому моменту содержимое уже добавлено
+        // внутрь shadowRoot, и можно безопасно работать с this.shadowRoot, измерениями layout и т.п.
+        await this.postLoad(holder);
+    }
+    async _postInit(html) {
+        return Promise.resolve(html);
+    }
+    /**
+     * Component initialization (HTML loading).
+     * Overridden by factory methods or subclasses.
+     * @returns HTML content for rendering
+     * @throws Error if not implemented
+     */
+    async init() {
+        throw new Error("Method not implemented.");
+    }
+    /**
+     * Hook before rendering (e.g., data preparation).
+     * Для компонентов вызывается до появления содержимого в Shadow DOM, this.shadowRoot может быть недоступен.
+     * РЕКОМЕНДАЦИЯ: предпочитайте выполнять основную подготовку, поиск элементов, навешивание обработчиков
+     * на узлы из localRoot именно здесь; затем render() вставит их в целевой контейнер/теневой DOM.
+     */
+    async preLoad(holder) { }
+    /**
+     * Hook after rendering (e.g., event binding).
+     * Для компонентов вызывается после того, как содержимое вставлено в shadowRoot (см. UniHtmlComponent.render()).
+     * Используйте этот этап только когда необходим доступ к реально смонтированному DOM (layout/measurements,
+     * интеграции, требующие присутствия в документе). В остальных случаях предпочитайте preLoad().
+     */
+    async postLoad(holder) { }
+    /**
+     * Main rendering step. By default, simply inserts HTML into the container.
+     * Override in subclasses for custom rendering logic.
+     * @param element Target container
+     * @param html HTML content
+     */
+    async render(holder, renderTarget) {
+        renderTarget.innerHTML = holder.element.innerHTML;
+        holder.element = this;
+        return Promise.resolve();
+    }
+}
+export class UniHtmlComponent extends UniHtml {
+    onConnected() {
+    }
+    onDisconnected() {
+    }
+    onMoved() {
+    }
+    onAdopted() {
+    }
+    onAttributeChanged(name, oldValue, newValue) {
+    }
+    onAttributeChangedCallback(callback) {
+        this._attributeChangedCallbacks = this._attributeChangedCallbacks ?? [];
+        this._attributeChangedCallbacks.push(callback);
+    }
+    /**
+     * @deprecated Use onConnected instead.
+     */
+    connectedCallback() {
+        this.attachShadow({ mode: 'open' });
+        const wrapper = document.createElement('div');
+        this.onConnected();
+        this.load(wrapper);
+    }
+    render(element, renderTarget) {
+        super.render(element, renderTarget);
+        this.shadowRoot.appendChild(renderTarget);
+        return Promise.resolve();
+    }
+    /**
+     * @deprecated Use onDisconnected instead.
+     */
+    disconnectedCallback() {
+        this.onDisconnected();
+    }
+    /**
+     * @deprecated Use onMoved instead.
+     */
+    connectedMoveCallback() {
+        this.onMoved();
+    }
+    /**
+     * @deprecated Use onAdopted instead.
+     */
+    adoptedCallback() {
+        this.onAdopted();
+    }
+    /**
+     * @deprecated Use onAttributeChanged instead.
+     */
+    attributeChangedCallback(name, oldValue, newValue) {
+        this.onAttributeChanged(name, oldValue, newValue);
+        this._attributeChangedCallbacks?.forEach(cb => cb(name, oldValue, newValue));
+    }
+}
+//# sourceMappingURL=UniHtml.js.map

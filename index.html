@@ -1,7 +1,142 @@
 <!DOCTYPE html>
-<html>
-    <head><title>TypeScript Hello Web</title></head>
-    <body>
-        <script src="out//hello.js"></script>
-    </body>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Purper</title>
+
+    <!-- Service Worker Registration -->
+    <script type="module">
+        import { rewriteDomLinks } from "/out/src/redirectRules.js";
+
+        const runRewrite = () => rewriteDomLinks(document);
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", runRewrite, { once: true });
+        } else {
+            runRewrite();
+        }
+
+        window.addEventListener("spa:navigated", runRewrite);
+        window.addEventListener("popstate", runRewrite);
+    </script>
+    <script type="module">
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./src/foundation/worker/ServiceWorker.js', { type: 'module' })
+                    .then((registration) => {
+                        console.log('ServiceWorker registration successful:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.error('ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+    <!-- Page Init -->
+    <script type="module" data-src="index.html.ts" defer></script>
+    <!-- Page Init -->
+    <script type="module" data-src="src/foundation/Triplet.f.ts" defer></script>
+
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+
+    <script type="module" src="src/foundation/KatexUtils.js" defer></script>
+
+    <!-- Puppet Init -->
+    <link rel="stylesheet" href="index.html.css">
+    <link rel="stylesheet" href="src/foundation/theme/Theme.css">
+    <!-- Puppet Init -->
+
+    <!-- <triplet-set 
+        html="components/ColorPalette.html" 
+        css="components/ColorPalette.html.css"
+        js="components/ColorPalette.html.js">
+    </triplet-set> -->
+    <!-- Component Init -->
+    <!-- <script type="module" src="components/ReButton.html.js" defer></script> -->
+    <!-- <script type="module" src="components/ColorPalette.html.js" defer></script> -->
+    <!-- <triplet-set 
+        html="components/NavigationDrawer.html" 
+        css="components/NavigationDrawer.html.css"
+        js="components/NavigationDrawer.html.js">
+    </triplet-set> -->
+    <!-- <script type="module" src="components/NavigationDrawer.html.js" defer></script> -->
+    <!--<script type="module" src="components/PageLayout.html.js" defer></script> -->
+    <!-- <script type="module" src="components/SvgIcon.html.js" defer></script> -->
+    <!-- Component Init -->
+
+    <script type="module">
+        import { initThemeCssVariables } from "./src/foundation/theme/ColorPalettes.js";
+        initThemeCssVariables();
+    </script>
+
+    <!-- KaTeX JavaScript -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"
+        integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx"
+        crossorigin="anonymous"></script>
+    <!-- Auto-render extension for automatic rendering -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+        crossorigin="anonymous"></script>
+
+    <!-- Initialize KaTeX after DOM is loaded -->
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize KaTeX auto-rendering
+            if (globalThis.KatexUtils) {
+                globalThis.KatexUtils.initAutoRender();
+            }
+        });
+
+        // Also initialize on route changes for SPA
+        window.addEventListener('popstate', () => {
+            setTimeout(() => {
+                if (globalThis.KatexUtils) {
+                    globalThis.KatexUtils.initAutoRender();
+                }
+            }, 100);
+        });
+    </script>
+</head>
+
+<body>
+    <page-layout>
+        <navigation-drawer slot="navigation">
+            <span slot="header">Menu</span>
+            <re-button variant="text" icon="home" size="sm" color="primary" full-width href="/" data-link>
+                <span class="onlyin-open">Home</span>
+            </re-button>
+            <re-button variant="text" icon="star" size="sm" color="success" full-width href="/subjects" data-link>
+                <span class="onlyin-open">Предметы</span>
+            </re-button>
+            <re-button variant="text" icon="palette" size="sm" color="secondary" full-width href="/palettes" data-link>
+                <span class="onlyin-open">Палитры</span>
+            </re-button>
+            <re-button variant="text" icon="search" size="sm" color="tertiary" full-width href="/icons" data-link>
+                <span class="onlyin-open">Иконки</span>
+            </re-button>
+            <re-button variant="text" icon="user" size="sm" color="warning" full-width href="/maths" data-link>
+                <span class="onlyin-open">Математика</span>
+            </re-button>
+            <re-button variant="text" icon="search" size="sm" color="info" full-width href="/buttons" data-link>
+                <span class="onlyin-open">Кнопки</span>
+            </re-button>
+            <re-button variant="text" icon="settings" size="sm" color="error" full-width href="/debugger" data-link>
+                <span class="onlyin-open">Debugger</span>
+            </re-button>
+            <re-button variant="text" icon="user" size="sm" color="info" full-width href="/about" data-link>
+                <span class="onlyin-open">About</span>
+            </re-button>
+        </navigation-drawer>
+
+        <div class="main_content" slot="main-content">
+            <main id="app"></main>
+        </div>
+    </page-layout>
+</body>
+
 </html>

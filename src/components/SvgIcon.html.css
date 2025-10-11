@@ -1,0 +1,144 @@
+/* SvgIcon Component Styles */
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.svg-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  position: relative;
+}
+
+.svg-icon {
+  width: var(--svg-size, 24px);
+  height: var(--svg-size, 24px);
+  fill: var(--svg-fill, var(--color-text, currentColor));
+  stroke: var(--svg-stroke, none);
+  stroke-width: var(--svg-stroke-width, 0);
+  transition: 
+    fill 0.2s ease, 
+    stroke 0.2s ease, 
+    transform 0.2s ease,
+    opacity 0.2s ease;
+  flex-shrink: 0;
+  transform: rotate(var(--svg-rotation, 0deg));
+  transform-origin: center;
+}
+
+/* Responsive sizes */
+.svg-icon.size-xs {
+  width: 12px;
+  height: 12px;
+}
+
+.svg-icon.size-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.svg-icon.size-md {
+  width: 24px;
+  height: 24px;
+}
+
+.svg-icon.size-lg {
+  width: 32px;
+  height: 32px;
+}
+
+.svg-icon.size-xl {
+  width: 48px;
+  height: 48px;
+}
+
+/* Theme color classes */
+.svg-icon.color-primary {
+  fill: var(--color-primary);
+}
+
+.svg-icon.color-secondary {
+  fill: var(--color-secondary);
+}
+
+.svg-icon.color-tertiary {
+  fill: var(--color-tertiary);
+}
+
+.svg-icon.color-success {
+  fill: var(--color-success);
+}
+
+.svg-icon.color-warning {
+  fill: var(--color-warning);
+}
+
+.svg-icon.color-error {
+  fill: var(--color-error);
+}
+
+.svg-icon.color-info {
+  fill: var(--color-info);
+}
+
+.svg-icon.color-text {
+  fill: var(--color-text);
+}
+
+/* Hover effects */
+.svg-icon.hover-enabled:hover {
+  opacity: 0.8;
+  transform: scale(1.05) rotate(var(--svg-rotation, 0deg));
+}
+
+/* Clickable state */
+.svg-icon.clickable {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.svg-icon.clickable:focus {
+  outline: 2px solid var(--color-primary, #007acc);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.svg-icon.clickable:active {
+  transform: scale(0.95) rotate(var(--svg-rotation, 0deg));
+}
+
+/* Animation states */
+.svg-icon.loading {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Accessibility improvements */
+.svg-icon[role="button"] {
+  border-radius: 4px;
+}
+
+.svg-icon[role="button"]:focus-visible {
+  outline: 2px solid var(--color-primary, #007acc);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .svg-icon {
+    stroke-width: 1;
+    stroke: currentColor;
+  }
+}

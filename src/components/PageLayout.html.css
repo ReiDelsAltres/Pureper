@@ -1,0 +1,19 @@
+/* PageLayout Component Styles */
+#page-layout {
+    display: flex;
+}
+
+#drawer {}
+
+#drawer:hover {}
+
+#page {
+    flex: 1;
+    transition: margin-left 0.35s cubic-bezier(.4, 0, .2, 1);
+
+    margin: 8px;
+}
+
+#drawer:hover + #page {
+    margin-left: 280px;
+}

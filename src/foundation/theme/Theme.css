@@ -1,0 +1,80 @@
+/* ColorPalettes.css
+   CSS variables for each palette from ColorPalettes.js
+   Usage: add .palette-BASIC, .palette-PASTEL, etc. to <body> or a container
+*/
+
+:root {
+    /* Primary */
+    --color-primary: #FF0000;
+    --color-primary-distinctive: #FF0000;
+    --color-primary-light: #FF6666;
+    --color-primary-black: #AA0000;
+
+    --color-text-primary: #FF0000;
+    --color-text-primary-contrast: #FFFFFF;
+
+    /* Secondary */
+    --color-secondary: #00FF00;
+    --color-secondary-distinctive: #00FF00;
+    --color-secondary-light: #66FF66;
+    --color-secondary-black: #00AA00;
+    
+    --color-text-secondary: #CCCCCC;
+    --color-text-secondary-contrast: #000000;
+
+    /* Tertiary */
+    --color-tertiary: #FFFF00;
+    --color-tertiary-distinctive: #FFFF00;
+    --color-tertiary-light: #FFFF66;
+    --color-tertiary-black: #AAAA00;
+
+    --color-text-tertiary: #AAAAAA;
+    --color-text-tertiary-contrast: #000000;
+
+    /* Additional Colors */
+    --color-additional: #0000FF;
+    --color-additional-distinctive: #0000FF;
+    --color-additional-light: #6666FF;
+    --color-additional-black: #0000AA;
+
+    --color-text-additional: #888888;
+    --color-text-additional-contrast: #FFFFFF;
+
+    /* Utility Colors */
+    --color-info: #FFFF00;
+    --color-text-info-contrast: #000000;
+
+    --color-success: #00FF00;
+    --color-text-success-contrast: #000000;
+
+    --color-warning: #FF00FF;
+    --color-text-warning-contrast: #FFFFFF;
+
+    --color-error: #00FFFF;
+    --color-text-error-contrast: #000000;
+
+    --color-text: #c1c1c4;
+    --color-text-disabled: #555555;
+
+    /*Surface color*/
+    --surface: #32333d;
+    --surface-light: #FFFFFF;
+    --surface-dark: #1E1E1E;
+
+    /*Wrapped*/
+    --page-background: var(--surface);
+    --page-primary: var(--color-primary-black);
+
+    --color-surface: var(--surface);
+    --color-surface-light: var(--surface-light);
+    --color-surface-dark: var(--surface-dark);
+
+    --color-primary-container: color-mix(in srgb, var(--color-primary) 20%, black);
+    --color-secondary-container: color-mix(in srgb, var(--color-secondary) 20%, black);
+    --color-tertiary-container: color-mix(in srgb, var(--color-tertiary) 20%, black);
+    --color-additional-container: color-mix(in srgb, var(--color-additional) 20%, black);
+    --color-success-container: color-mix(in srgb, var(--color-success) 20%, black);
+    --color-warning-container: color-mix(in srgb, var(--color-warning) 20%, black);
+    --color-error-container: color-mix(in srgb, var(--color-error) 20%, black);
+    --color-info-container: color-mix(in srgb, var(--color-info) 20%, black);
+}

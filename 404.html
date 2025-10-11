@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pureper</title>
+    <script>
+        // GitHub Pages SPA redirect
+        // Сохраняем текущий путь и перенаправляем на index.html
+        const path = window.location.pathname;
+        const search = window.location.search;
+        const hash = window.location.hash;
+        
+        // Убираем /Pureper из пути для сохранения
+        const cleanPath = path.replace('/Pureper', '');
+        
+        // Перенаправляем на index.html с сохранением пути в параметрах
+        window.location.replace(
+            window.location.origin + '/Pureper/index.html' + 
+            '?redirect=' + encodeURIComponent(cleanPath + search + hash)
+        );
+    </script>
+</head>
+<body>
+    <p>Redirecting...</p>
+</body>
+</html>
