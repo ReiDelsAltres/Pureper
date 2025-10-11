@@ -15,7 +15,7 @@ export class Host {
     static getHostPrefix() {
         switch (this.getHostType()) {
             case HostType.GITHUB_PAGES:
-                return '/Purper';
+                return '/Pureper';
             case HostType.LOCAL:
             default:
                 return '';
