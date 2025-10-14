@@ -39,18 +39,19 @@ export class Router {
             window.location.replace(Host.getHostPrefix() + route);
         }
     }
-    static routeTo(route) {
+    static routeTo(route, hash) {
         let found = this.findRoute(route);
-        let page = this.createPage(found);
+        let page = this.createPage(found, hash);
         page.load(document.getElementById('app'));
         // Only update location if running in a window context
+        var hashPath = hash ? `?${hash}` : '';
         if (typeof window !== "undefined" && window.location) {
-            window.history.pushState(page, '', Host.getHostPrefix() + found.route);
+            window.history.pushState(page, '', Host.getHostPrefix() + found.route + hashPath);
         }
     }
-    static tryRouteTo(route) {
+    static tryRouteTo(route, hash) {
         try {
-            this.routeTo(route);
+            this.routeTo(route, hash);
             return true;
         }
         catch (error) {
@@ -76,8 +77,8 @@ export class Router {
         console.log(`[Router]: Registered route: ${fullRoute} -> ${path}`);
         return Promise.resolve(routeObj);
     }
-    static createPage(route) {
-        return route.pageFactory();
+    static createPage(route, hash) {
+        return route.pageFactory(hash);
     }
 }
 document.addEventListener('click', e => {
@@ -86,7 +87,8 @@ document.addEventListener('click', e => {
         const link = target.closest('a[data-link]') ?? target.closest('re-button[data-link]');
         if (link) {
             e.preventDefault();
-            Router.routeTo(link.getAttribute('href'));
+            const parts = link.getAttribute('href').split('?');
+            Router.routeTo(parts[0], parts[1] ? parts[1] : null);
         }
     }
 });

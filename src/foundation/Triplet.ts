@@ -8,7 +8,7 @@ import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
 
 export default class Triplet<T extends UniHtml> implements ITriplet {
-    private uni?: typeof UniHtml;
+    private uni?: AnyConstructor<UniHtml>;
     private readonly access: AccessType;
 
     public readonly html?: string;
@@ -86,6 +86,9 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
 
         let that = this;
         let ori = class extends this.uni {
+            constructor(hash?: string) {
+                super(hash);
+            }
         };
         let proto = ori.prototype as any;
         proto.init = function () {
@@ -109,7 +112,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         }
         if (type === "router") {
             var reg = Router.registerRoute(this.html!, name, (hash) => {
-                return new ori();
+                return new ori(hash) as UniHtml;
             });
 
             console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}' by class ${ori}.`);

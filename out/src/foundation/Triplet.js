@@ -66,6 +66,9 @@ export default class Triplet {
         }
         let that = this;
         let ori = class extends this.uni {
+            constructor(hash) {
+                super(hash);
+            }
         };
         let proto = ori.prototype;
         proto.init = function () {
@@ -90,7 +93,7 @@ export default class Triplet {
         };
         if (type === "router") {
             var reg = Router.registerRoute(this.html, name, (hash) => {
-                return new ori();
+                return new ori(hash);
             });
             console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}' by class ${ori}.`);
             return reg.then(() => true).catch(() => false);

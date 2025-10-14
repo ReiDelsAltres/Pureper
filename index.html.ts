@@ -6,7 +6,6 @@ import PalettePage from "./src/pages/PalettePage.html.js"
 import MathPage from "./src/pages/MathPage.html.js"
 import SubjectsPage from "./src/pages/SubjectsPage.html.js"
 import ButtonsPage from "./src/pages/ButtonsPage.html.js"
-import DebuggerSubPage from "./src/pages/DebuggerSubPage.html.js"
 
 import NavigationDrawer from "./src/components/NavigationDrawer.html.js";
 import ColorPalettePreview from "./src/components/ColorPalettePreview.html.js";
@@ -14,6 +13,7 @@ import SvgIcon from "./src/components/SvgIcon.html.js";
 import ReButton from "./src/components/ReButton.html.js";
 import DebuggerPage from "./src/pages/DebuggerPage.html.js";
 import SubjectPage from "./src/pages/SubjectsPage.html.js";
+import DynamicPage from "./src/pages/DynamicPage.html.js";
 
 export default class Index {
     public static async initialize(): Promise<void> {
@@ -140,6 +140,14 @@ const SUBJECT_PAGE: Promise<boolean> = TripletBuilder.create(
     .withUni(SubjectPage)
     .build()
     .register("router", "/subjects");
+const DYNAMIC_PAGE: Promise<boolean> = TripletBuilder.create(
+    "./src/pages/DynamicPage.html",
+    "./src/pages/DynamicPage.html.css",
+    "./src/pages/DynamicPage.html.js")
+    .withAccess(AccessType.BOTH)
+    .withUni(DynamicPage)
+    .build()
+    .register("router", "/dynamic");
 
 
 Index.initialize().then(() => {

@@ -9,6 +9,7 @@ import SvgIcon from "./src/components/SvgIcon.html.js";
 import ReButton from "./src/components/ReButton.html.js";
 import DebuggerPage from "./src/pages/DebuggerPage.html.js";
 import SubjectPage from "./src/pages/SubjectsPage.html.js";
+import DynamicPage from "./src/pages/DynamicPage.html.js";
 export default class Index {
     static async initialize() {
         await Promise.all([
@@ -87,6 +88,11 @@ const SUBJECT_PAGE = TripletBuilder.create("./src/pages/SubjectPage.html", "./sr
     .withUni(SubjectPage)
     .build()
     .register("router", "/subjects");
+const DYNAMIC_PAGE = TripletBuilder.create("./src/pages/DynamicPage.html", "./src/pages/DynamicPage.html.css", "./src/pages/DynamicPage.html.js")
+    .withAccess(AccessType.BOTH)
+    .withUni(DynamicPage)
+    .build()
+    .register("router", "/dynamic");
 Index.initialize().then(() => {
     let persistedRoute = Router.getPersistedRoute();
     if (persistedRoute) {

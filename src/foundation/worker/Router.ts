@@ -57,20 +57,21 @@ export abstract class Router {
       window.location.replace(Host.getHostPrefix() + route);
     }
   }
-  public static routeTo(route: string) {
+  public static routeTo(route: string,hash?: string) {
     let found: Route = this.findRoute(route);
-    let page: UniHtml = this.createPage(found);
+    let page: UniHtml = this.createPage(found, hash);
 
     page.load(document.getElementById('app')!);
 
     // Only update location if running in a window context
+    var hashPath : string = hash ? `?${hash}` : '';
     if (typeof window !== "undefined" && window.location) {
-      window.history.pushState(page, '', Host.getHostPrefix() + found.route);
+      window.history.pushState(page, '', Host.getHostPrefix() + found.route + hashPath);
     }
   }
-  public static tryRouteTo(route: string): boolean {
+  public static tryRouteTo(route: string,hash?: string): boolean {
     try {
-      this.routeTo(route);
+      this.routeTo(route, hash);
       return true;
     } catch (error) {
       console.warn(`[Router]: Failed to route to ${route}.`, error);
@@ -103,8 +104,8 @@ export abstract class Router {
   }
 
 
-  private static createPage(route: Route): UniHtml {
-    return route.pageFactory();
+  private static createPage(route: Route,hash?: string): UniHtml {
+    return route.pageFactory(hash);
   }
 }
 
@@ -114,7 +115,8 @@ document.addEventListener('click', e => {
     const link = target.closest('a[data-link]') ?? target.closest('re-button[data-link]');
     if (link) {
       e.preventDefault();
-      Router.routeTo(link.getAttribute('href')!);
+      const parts : string[] = link.getAttribute('href').split('?');
+      Router.routeTo(parts[0], parts[1] ? parts[1] : null);
     }
   }
 });
