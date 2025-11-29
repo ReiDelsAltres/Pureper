@@ -1,0 +1,5 @@
+paper-component  paper-component {
+    --loc-paper-background-color: color-mix(in srgb, var(--paper-background-color) 95%, black);
+    /*--loc-paper-background-color: color-mix(in srgb,
+            var(--loc-paper-background-color, --paper-background-color), 70%, black);*/
+}

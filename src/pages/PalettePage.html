@@ -1,48 +1,19 @@
-<!-- PalettePage.html: Modern color palette selection page -->
-<!-- Use absolute path from site root so it doesn't resolve to /PalettePage.html.css -->
-<link rel="stylesheet" href="pages/PalettePage.html.css">
 <div class="palette-page">
     <div class="page-header">
         <h1 class="page-title">Цветовые Палитры</h1>
         <p class="page-subtitle">Выберите идеальную палитру для вашего проекта</p>
     </div>
     <main role="main">
-        <div id="palettes-list" class="color-palette-container" aria-label="Выбор палитры">
-            <button type="button" class="palette-btn" data-palette="MUD_BLAZOR" 
-            aria-label="Выбрать палитру MUD_BLAZOR">
-                <span class="palette-label">Mud Blazor</span>
-                <color-palette palette="MUD_BLAZOR"></color-palette>
-            </button>
-            <button type="button" class="palette-btn" data-palette="BASIC" 
-            aria-label="Выбрать палитру BASIC">
-                <span class="palette-label">Basic</span>
-                <color-palette palette="BASIC"></color-palette>
-            </button>
-            <button type="button" class="palette-btn" data-palette="PASTEL" 
-            aria-label="Выбрать палитру PASTEL">
-                <span class="palette-label">Pastel</span>
-                <color-palette palette="PASTEL"></color-palette>
-            </button>
-            <button type="button" class="palette-btn" data-palette="MATERIAL" 
-            aria-label="Выбрать палитру MATERIAL">
-                <span class="palette-label">Material</span>
-                <color-palette palette="MATERIAL"></color-palette>
-            </button>
-            <button type="button" class="palette-btn" data-palette="DARK" 
-            aria-label="Выбрать палитру DARK">
-                <span class="palette-label">Dark</span>
-                <color-palette palette="DARK"></color-palette>
-            </button>
-            <button type="button" class="palette-btn" data-palette="LIGHT" 
-            aria-label="Выбрать палитру LIGHT">
-                <span class="palette-label">Light</span>
-                <color-palette palette="LIGHT"></color-palette>
-            </button>
-            <button type="button" class="palette-btn" data-palette="DARK_VIOLET"
-                aria-label="Выбрать палитру DARK VIOLET">
-                <span class="palette-label">Dark_violet</span>
-                <color-palette palette="DARK_VIOLET"></color-palette>
-            </button>
+        <div class="color-palette-container" aria-label="Выбор палитры">
+            <re-button variant="outlined" class="blazor-theme">
+                <color-palette class="blazor-theme"></color-palette>
+            </re-button>
+            <re-button variant="outlined" class="brass-theme">
+                <color-palette class="brass-theme"></color-palette>
+            </re-button>
+            <re-button variant="outlined" class="chess-theme">
+                <color-palette class="chess-theme"></color-palette>
+            </re-button>
         </div>
     </main>
 </div>

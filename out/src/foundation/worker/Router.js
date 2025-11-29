@@ -42,8 +42,7 @@ export class Router {
     static routeTo(route, hash) {
         let found = this.findRoute(route);
         let page = this.createPage(found, hash);
-        page.load(document.getElementById('app'));
-        // Only update location if running in a window context
+        page.load(document.getElementById('page'));
         var hashPath = hash ? `?${hash}` : '';
         if (typeof window !== "undefined" && window.location) {
             window.history.pushState(page, '', Host.getHostPrefix() + found.route + hashPath);

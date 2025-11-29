@@ -1,8 +1,13 @@
-<nav class="drawer">
-    <div class="header">
-        <slot name="header">Menu</slot>
-    </div>
+<div class="menu">
+    <h2>Menu</h2>
     <div class="list" role="list">
         <slot></slot>
     </div>
-</nav>
+</div>
+<div class="separator"></div>
+<div class="submenu">
+    <h3>Submenu</h3>
+    <div class="list" role="list">
+        <slot name="sub"></slot>
+    </div>
+</div>

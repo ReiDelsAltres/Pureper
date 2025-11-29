@@ -35,16 +35,15 @@ export default class Component extends Class(HTMLElement).extend(UniHtml).build(
      */
     private connectedCallback(): void {
         this.attachShadow({ mode: 'open' });
-        const wrapper = document.createElement('div');
 
         this.onConnected();
         
-        this.load(wrapper);
+        this.load(this.shadowRoot);
     }
-    protected render(element: IElementHolder, renderTarget: HTMLElement): Promise<void> {
+    protected render(element: IElementHolder, renderTarget: HTMLElement | ShadowRoot): Promise<void> {
         (this.getMixin(UniHtml)?.instance.get() as any).render(element, renderTarget);
         //super.render(element, renderTarget);
-        this.shadowRoot!.appendChild(renderTarget);
+        //this.shadowRoot!.appendChild(renderTarget);
         return Promise.resolve();
     }
     /**

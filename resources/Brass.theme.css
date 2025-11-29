@@ -1,0 +1,98 @@
+.brass-theme {
+    /* Primary */
+    --color-primary: #264653;
+    --color-primary-distinctive: #5a47ff;
+    --color-primary-light: #3e6b5c;
+    --color-primary-black: #1d3a42;
+
+    --color-text-primary: var(--color-primary);
+    --color-text-primary-contrast: #fff;
+
+    /* Secondary */
+    --color-secondary: #2a9d8f;
+    --color-secondary-distinctive: #cc1854;
+    --color-secondary-light: #4db3a6;
+    --color-secondary-black: #1f7a6b;
+    
+    --color-text-secondary: var(--color-secondary);
+    --color-text-secondary-contrast: #fff;
+
+    /* Tertiary */
+    --color-tertiary: #f4a261;
+    --color-tertiary-distinctive: #19a98c;
+    --color-tertiary-light: #f7b584;
+    --color-tertiary-black: #d1843e;
+
+    --color-text-tertiary: var(--color-tertiary);
+    --color-text-tertiary-contrast: #fff;
+
+    /* Additional Colors */
+    --color-additional: #e9c46a;
+    --color-additional-distinctive: #264f78;
+    --color-additional-light: #f0d084;
+    --color-additional-black: #c7a854;
+
+    --color-text-additional: var(--color-additional);
+    --color-text-additional-contrast: #fff;
+
+    /* Utility Colors */
+    --color-info: #f4a261;
+    --color-text-info-contrast: #fff;
+
+    --color-success: #2a9d8f;
+    --color-text-success-contrast: #fff;
+
+    --color-warning: #e76f51;
+    --color-text-warning-contrast: #fff;
+
+    --color-error: #e63946;
+    --color-text-error-contrast: #fff;
+
+    --color-text: #c1c1c4;
+    --color-text-disabled: #cccccc;
+
+    /*Surface color*/
+    --surface: #32333d;
+    --surface-light: #fff;
+    --surface-dark: #1d3a42;
+
+    /*Wrapped*/
+    --app-background-size: auto;
+    --app-background-position: auto;
+    --app-background-image: none;
+    --app-background-color: var(--surface);
+
+    --app-bars-background-size: none;
+    --app-bars-background-position: none;
+    --app-bars-background-image: none;
+    --app-bars-background-color: var(--surface-dark);
+
+
+    --paper-background-size: auto;
+    --paper-background-position: auto;
+    --paper-background-image: none;
+    --paper-background-color: none;
+
+    --paper-border-top-left-radius: none;
+    --paper-border-top-right-radius: none;
+    --paper-border-bottom-left-radius: none;
+    --paper-border-bottom-right-radius: none;
+
+    --paper-border-style: none;
+    --paper-border-color: none;
+
+    --page-primary: var(--color-primary-black);
+
+    --color-surface: var(--surface);
+    --color-surface-light: var(--surface-light);
+    --color-surface-dark: var(--surface-dark);
+
+    --color-primary-container: color-mix(in srgb, var(--color-primary) 20%, black);
+    --color-secondary-container: color-mix(in srgb, var(--color-secondary) 20%, black);
+    --color-tertiary-container: color-mix(in srgb, var(--color-tertiary) 20%, black);
+    --color-additional-container: color-mix(in srgb, var(--color-additional) 20%, black);
+    --color-success-container: color-mix(in srgb, var(--color-success) 20%, black);
+    --color-warning-container: color-mix(in srgb, var(--color-warning) 20%, black);
+    --color-error-container: color-mix(in srgb, var(--color-error) 20%, black);
+    --color-info-container: color-mix(in srgb, var(--color-info) 20%, black);
+}

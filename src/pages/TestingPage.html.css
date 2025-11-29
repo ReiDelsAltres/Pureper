@@ -1,0 +1,12 @@
+/* Testing page intentionally empty — no custom styles */
+
+paper-component.testing-page {
+  display: block;
+  padding: 16px;
+}
+
+.testing-page .testing-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}

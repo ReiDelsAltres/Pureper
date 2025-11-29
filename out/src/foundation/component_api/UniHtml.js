@@ -59,7 +59,13 @@ export default class UniHtml {
      * @param html HTML content
      */
     async render(holder, renderTarget) {
-        renderTarget.innerHTML = holder.element.innerHTML;
+        while (renderTarget.firstChild) {
+            renderTarget.removeChild(renderTarget.firstChild);
+        }
+        const children = Array.from(holder.element.childNodes);
+        for (const child of children) {
+            renderTarget.appendChild(child);
+        }
         holder.element = this;
         return Promise.resolve();
     }

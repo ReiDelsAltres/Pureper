@@ -1,9 +1,34 @@
 body {
+    display: block;
+
+    min-height: 100vh;
+    
+
     margin: 0;
     padding: 0;
 
-    background-color: var(--surface);
     color: var(--color-primary);
+
+    background-size: var(--app-background-size);
+    background-position: var(--app-background-position);
+    background-image: var(--app-background-image);
+    background-color: var(--app-background-color);
+}
+
+navigation-drawer[state="open"] + #page {
+    margin-left: 288px;
+}
+navigation-drawer[state="mini"] + #page {
+    margin-left: 88px;
+}
+#page {
+    display: block;
+    position: relative;
+
+    margin: 8px;
+    padding: 20px;
+
+    transition: margin-left 0.35s cubic-bezier(.4, 0, .2, 1);
 }
 
 a:-webkit-any-link {

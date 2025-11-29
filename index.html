@@ -7,6 +7,11 @@
 
     <title>Pureper</title>
 
+    <link rel="stylesheet" href="resources/Blazor.theme.css" />
+    <link rel="stylesheet" href="resources/Brass.theme.css" />
+    <link rel="stylesheet" href="resources/Chess.theme.css" />
+    <link rel="stylesheet" href="resources/Empty.theme.css" />
+
     <script type="module" defer>
         import { rewriteDomLinks } from "./out/src/redirectRules.js";
 
@@ -21,20 +26,11 @@
         window.addEventListener("spa:navigated", runRewrite);
         window.addEventListener("popstate", runRewrite);
     </script>
-    <script type="module" defer>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('../out/src/foundation/worker/ServiceWorker.js', { type: 'module' })
-                    .then((registration) => {
-                        console.log('ServiceWorker registration successful:', registration.scope);
-                    })
-                    .catch((error) => {
-                        console.error('ServiceWorker registration failed:', error);
-                    });
-            });
-        }
-    </script>
     <script type="module" data-src="index.html.ts" defer></script>
+    <script type="module" defer>
+        import { init } from "./out/src/foundation/Theme.js";
+        init();
+    </script>
 
     <!-- KaTeX CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
@@ -44,7 +40,6 @@
 
     <!-- Puppet Init -->
     <link rel="stylesheet" href="index.html.css">
-    <link rel="stylesheet" href="src/foundation/theme/Theme.css">
     <!-- Puppet Init -->
 
     <!-- <triplet-set 
@@ -64,11 +59,6 @@
     <!--<script type="module" src="components/PageLayout.html.js" defer></script> -->
     <!-- <script type="module" src="components/SvgIcon.html.js" defer></script> -->
     <!-- Component Init -->
-
-    <script type="module">
-        import { initThemeCssVariables } from "./src/foundation/theme/ColorPalettes.js";
-        initThemeCssVariables();
-    </script>
 
     <!-- KaTeX JavaScript -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"
@@ -100,42 +90,31 @@
 </head>
 
 <body>
-    <page-layout>
-        <navigation-drawer slot="drawer">
-            <span slot="header">Menu</span>
-            <re-button variant="text" icon="home" size="sm" color="primary" full-width href="/" data-link>
-                <span class="onlyin-open">Home</span>
-            </re-button>
-            <re-button variant="text" icon="star" size="sm" color="success" full-width href="/subjects" data-link>
-                <span class="onlyin-open">Предметы</span>
-            </re-button>
-            <re-button variant="text" icon="palette" size="sm" color="secondary" full-width href="/palettes" data-link>
-                <span class="onlyin-open">Палитры</span>
-            </re-button>
-            <re-button variant="text" icon="search" size="sm" color="tertiary" full-width href="/icons" data-link>
-                <span class="onlyin-open">Иконки</span>
-            </re-button>
-            <re-button variant="text" icon="user" size="sm" color="warning" full-width href="/maths" data-link>
-                <span class="onlyin-open">Математика (KaTeX)</span>
-            </re-button>
-            <re-button variant="text" icon="search" size="sm" color="info" full-width href="/buttons" data-link>
-                <span class="onlyin-open">Кнопки</span>
-            </re-button>
-            <re-button variant="text" icon="settings" size="sm" color="error" full-width href="/debugger" data-link>
-                <span class="onlyin-open">Debugger</span>
-            </re-button>
-            <re-button variant="text" icon="user" size="sm" color="info" full-width href="/about" data-link>
-                <span class="onlyin-open">About</span>
-            </re-button>
-            <re-button variant="text" icon="user" size="sm" color="info" full-width href="/dynamic?id=5&id2=10" data-link>
-                <span class="onlyin-open">About</span>
-            </re-button>
-        </navigation-drawer>
+    <navigation-drawer side="top">
+        <re-button variant="text" icon="home" size="sm" color="primary" full-width href="/" 
+        data-link>
+            <span class="onlyin-open">Home</span>
+        </re-button>
+        <re-button variant="text" icon="chess-king" size="sm" color="tertiary" full-width href="/chess"
+            data-link>
+            <span class="onlyin-open">Шахматы</span>
+        </re-button>
 
-        <div class="main_content" slot="main-content">
-            <main id="app"></main>
-        </div>
-    </page-layout>
+        <re-button variant="text" icon="palette" size="sm" color="secondary" full-width href="/palettes"
+            data-link slot="sub">
+            <span class="onlyin-open">Палитры</span>
+        </re-button>
+        <re-button variant="text" icon="info" size="sm" color="additional" full-width href="/testing"
+            data-link slot="sub">
+            <span class="onlyin-open">Testing</span>
+        </re-button>
+        <re-button variant="text" icon="settings" size="sm" color="error" full-width href="/debugger"
+            data-link slot="sub">
+            <span class="onlyin-open">Debugger</span>
+        </re-button>
+    </navigation-drawer>
+    <div id="page">
+    </div>
 </body>
 
 </html>

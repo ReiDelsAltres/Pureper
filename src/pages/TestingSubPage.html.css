@@ -1,0 +1,6 @@
+.testing-subpage {
+display: block;
+  padding: 16px;
+}
+.testing-subpage .content { margin-top: 12px; }
+.testing-subpage #hash { font-weight: bold; color: var(--color-secondary, #444); }

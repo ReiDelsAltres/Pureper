@@ -18,6 +18,11 @@ export default class Triplet {
         const isOnline = await ServiceWorker.isOnline();
         if (this.access === AccessType.NONE)
             return false;
+        if (this.access === AccessType.BOTH) {
+            await this.cache();
+            return true;
+        }
+        ;
         if (this.access === AccessType.OFFLINE && isOnline)
             return false;
         if (this.access === AccessType.ONLINE && !isOnline)

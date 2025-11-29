@@ -61,9 +61,8 @@ export abstract class Router {
     let found: Route = this.findRoute(route);
     let page: UniHtml = this.createPage(found, hash);
 
-    page.load(document.getElementById('app')!);
+    page.load(document.getElementById('page')!);
 
-    // Only update location if running in a window context
     var hashPath : string = hash ? `?${hash}` : '';
     if (typeof window !== "undefined" && window.location) {
       window.history.pushState(page, '', Host.getHostPrefix() + found.route + hashPath);

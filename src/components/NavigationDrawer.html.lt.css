@@ -1,6 +1,12 @@
 navigation-drawer .onlyin-open {
-  display: var(--onlyin-open-display, initial);
+  max-height: var(--onlyin-open-height, auto);
+  max-width: var(--onlyin-open-width, auto);
+  opacity: var(--onlyin-open-opacity, 1);
+  transition: all 0.35s cubic-bezier(.4, 0, .2, 1);
 }
 navigation-drawer .onlyin-mini {
-  display: var(--onlyin-mini-display, none);
+  max-height: var(--onlyin-mini-height, 0);
+  max-width: var(--onlyin-mini-width, 0);
+  opacity: var(--onlyin-mini-opacity, 0);
+  transition: all 0.35s cubic-bezier(.4, 0, .2, 1);
 }

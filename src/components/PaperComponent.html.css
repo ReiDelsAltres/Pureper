@@ -1,0 +1,68 @@
+:host {
+    display: block;
+
+    padding: 8px;
+    margin: 8px;
+
+    min-width: min-content;
+    max-width: fit-content;
+
+    background-color: var(--loc-paper-background-color, --paper-background-color);
+
+    border-style: var(--paper-border-style);
+    border-color: var(--paper-border-color);
+
+    border-top-left-radius: var(--paper-border-top-left-radius);
+    border-top-right-radius: var(--paper-border-top-right-radius);
+    border-bottom-left-radius: var(--paper-border-bottom-left-radius);
+    border-bottom-right-radius: var(--paper-border-bottom-right-radius);
+
+    color: var(--loc-paper-color, --color-primary);
+}
+
+:host(:not([simple="true"])) {
+    background-size: var(--paper-background-size);
+    background-position: var(--paper-background-position);
+    background-image: var(--paper-background-image);
+}
+
+:host([hover="true"]) {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+:host([hover="true"]:hover) {
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+:host([color="primary"]) {
+    --loc-paper-color: var(--color-primary);
+}
+
+:host([color="secondary"]) {
+    --loc-paper-color: var(--color-secondary);
+}
+
+:host([color="tertiary"]) {
+    --loc-paper-color: var(--color-tertiary);
+}
+
+:host([color="additional"]) {
+    --loc-paper-color: var(--color-additional);
+}
+
+:host([color="info"]) {
+    --loc-paper-color: var(--color-info);
+}
+
+:host([color="success"]) {
+    --loc-paper-color: var(--color-success);
+}
+
+:host([color="warning"]) {
+    --loc-paper-color: var(--color-warning);
+}
+
+:host([color="error"]) {
+    --loc-paper-color: var(--color-error);
+}

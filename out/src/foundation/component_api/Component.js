@@ -23,14 +23,13 @@ export default class Component extends Class(HTMLElement).extend(UniHtml).build(
      */
     connectedCallback() {
         this.attachShadow({ mode: 'open' });
-        const wrapper = document.createElement('div');
         this.onConnected();
-        this.load(wrapper);
+        this.load(this.shadowRoot);
     }
     render(element, renderTarget) {
         (this.getMixin(UniHtml)?.instance.get()).render(element, renderTarget);
         //super.render(element, renderTarget);
-        this.shadowRoot.appendChild(renderTarget);
+        //this.shadowRoot!.appendChild(renderTarget);
         return Promise.resolve();
     }
     /**

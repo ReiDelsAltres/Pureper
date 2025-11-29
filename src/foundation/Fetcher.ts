@@ -16,7 +16,10 @@ export default class Fetcher {
         if (url.includes(Host.getHostPrefix())) {
             url = url.replace(Host.getHostPrefix(), '');
         }
-        const response = await fetch(url);
+        if (url.startsWith('./')) {
+            url = url.replace('./', '/');
+        }
+        const response = await fetch(url, { cache: 'default' });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

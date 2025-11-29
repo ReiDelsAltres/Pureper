@@ -18,7 +18,7 @@ export default class UniHtml {
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
      * @param element Target container (usually shadowRoot.host)
      */
-    public async load(element: HTMLElement) {
+    public async load(element: HTMLElement | ShadowRoot): Promise<void> {
         const preHtml: string = await this.init();
         const html: string = await this._postInit(preHtml);
 
@@ -73,8 +73,16 @@ export default class UniHtml {
      * @param element Target container
      * @param html HTML content
      */
-    protected async render(holder: IElementHolder, renderTarget: HTMLElement): Promise<void> {
-        renderTarget.innerHTML = holder.element.innerHTML;
+    protected async render(holder: IElementHolder, renderTarget: HTMLElement | ShadowRoot): Promise<void> {
+        while (renderTarget.firstChild) {
+            renderTarget.removeChild(renderTarget.firstChild);
+        }
+
+        const children = Array.from(holder.element.childNodes);
+        for (const child of children) {
+            renderTarget.appendChild(child);
+        }
+        
         (holder as any).element = this;
         return Promise.resolve();
     }

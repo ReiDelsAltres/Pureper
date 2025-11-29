@@ -1,0 +1,105 @@
+.chess-theme {
+    /* Primary - light squares */
+    --color-primary: #111111;
+    --color-primary-distinctive: #5d5d5d;
+    --color-primary-light: #838383;
+    --color-primary-black: #000000;
+
+    --color-text-primary: var(--color-primary);
+    --color-text-primary-contrast: white;
+
+    /* Secondary - dark squares */
+    --color-secondary: var(--color-primary);
+    --color-secondary-distinctive: var(--color-primary-distinctive);
+    --color-secondary-light: var(--color-primary-light);
+    --color-secondary-black: var(--color-primary-black);
+
+    --color-text-secondary: var(--color-secondary);
+    --color-text-secondary-contrast: white;
+
+    /* Tertiary - accent highlight */
+    --color-tertiary: var(--color-primary);
+    --color-tertiary-distinctive: var(--color-primary-distinctive);
+    --color-tertiary-light: var(--color-primary-light);
+    --color-tertiary-black: var(--color-primary-black);
+
+    --color-text-tertiary: var(--color-tertiary);
+    --color-text-tertiary-contrast: white;
+
+    /* Additional Colors */
+    --color-additional: var(--color-primary);
+    --color-additional-distinctive: var(--color-primary-distinctive);
+    --color-additional-light: var(--color-primary-light);
+    --color-additional-black: var(--color-primary-black);
+
+    --color-text-additional: var(--color-additional);
+    --color-text-additional-contrast: white;
+
+    /* Utility Colors */
+    --color-info: var(--color-primary);
+    --color-text-info-contrast: white;
+
+    --color-success: var(--color-primary);
+    --color-text-success-contrast: white;
+
+    --color-warning: var(--color-primary);
+    --color-text-warning-contrast: white;
+
+    --color-error: var(--color-primary);
+    --color-text-error-contrast: white;
+
+    --color-text: var(--color-primary);
+    --color-text-disabled: #8a8a8a;
+
+    /* Surface colors */
+    --surface: #e5e6ea;
+    --surface-light: #ffffff;
+    --surface-dark: var(--surface);
+
+    /* Wrapped */
+    --app-background-size: 50px 50px;
+    --app-background-position: 0 0, 25px 25px, 25px 0, 0 25px;
+    --app-background-image:
+        linear-gradient(45deg, #000 25%, transparent 25%,
+            transparent 75%, #000 75%, #000),
+        linear-gradient(45deg, #000 25%, transparent 25%,
+            transparent 75%, #000 75%, #000),
+        linear-gradient(45deg, #fff 25%, transparent 25%,
+            transparent 75%, #fff 75%, #fff),
+        linear-gradient(45deg, #fff 25%, transparent 25%,
+            transparent 75%, #fff 75%, #fff);
+    --app-background-color: var(--surface);
+
+    --paper-background-size: auto;
+    --paper-background-position: auto;
+    --paper-background-image: none;
+    --paper-background-color: var(--surface);
+
+    --paper-border-top-left-radius: none;
+    --paper-border-top-right-radius: none;
+    --paper-border-bottom-left-radius: none;
+    --paper-border-bottom-right-radius: none;
+
+    --paper-border-style: none;
+    --paper-border-color: none;
+
+    --app-bars-background-size: none;
+    --app-bars-background-position: none;
+    --app-bars-background-image: none;
+    --app-bars-background-color: var(--surface-dark);
+
+    --page-primary: var(--color-secondary);
+
+    --color-surface: var(--surface);
+    --color-surface-light: var(--surface-light);
+    --color-surface-dark: var(--surface-dark);
+
+    --color-primary-container: color-mix(in srgb, var(--color-primary) 30%, white);
+    --color-secondary-container: color-mix(in srgb, var(--color-secondary) 30%, white);
+    --color-tertiary-container: color-mix(in srgb, var(--color-tertiary) 25%, white);
+    --color-additional-container: color-mix(in srgb, var(--color-additional) 25%, white);
+    --color-success-container: color-mix(in srgb, var(--color-success) 20%, white);
+    --color-warning-container: color-mix(in srgb, var(--color-warning) 20%, white);
+    --color-error-container: color-mix(in srgb, var(--color-error) 20%, white);
+    --color-info-container: color-mix(in srgb, var(--color-info) 20%, white);
+}

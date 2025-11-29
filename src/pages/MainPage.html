@@ -1,138 +1,29 @@
-<!-- MainPage.html: Главная страница -->
-<div class="main-page">
-    <div class="welcome-section">
-        <h1>
-            <svg-icon icon="star" size="lg" color="primary"></svg-icon>
-            Добро пожаловать в Pureper
-        </h1>
-        <p>Современная SPA с компонентной архитектурой</p>
-        
-        <div class="quick-links">
-            <re-button href="/subjects" data-link icon="star" color="success">
-                Предметы обучения
-            </re-button>
-            <re-button href="/buttons" data-link variant="outlined" icon="search" color="info">
-                Компонент re-button
-            </re-button>
-            <re-button href="/palette" data-link variant="text" icon="palette" color="primary">
-                Палитры цветов
-            </re-button>
-            <re-button href="/icons" data-link variant="outlined" icon="search" color="secondary">
-                SVG Иконки
-            </re-button>
-            <re-button href="/math" data-link icon="user" color="warning">
-                Математика с KaTeX
-            </re-button>
-        </div>
-        
-        <div class="math-preview">
-            <h3>Пример математических формул:</h3>
-            <p>Квадратное уравнение: $ax^2 + bx + c = 0$</p>
-            <div class="display-math">
-                $$x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}$$
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-.main-page {
-    padding: 3rem 2rem;
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.welcome-section h1 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    color: var(--color-primary);
-    font-size: 2.2rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-}
-
-.welcome-section p {
-    color: var(--color-text);
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    opacity: 0.8;
-}
-
-.quick-links {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-}
-
-.quick-links a,
-.quick-links custButton {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.8rem 1.2rem;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-}
-
-/* Стили для обычных ссылок (если остались) */
-.quick-links a {
-    background: var(--color-primary);
-    color: var(--color-text-primary-contrast, white);
-}
-
-.quick-links a:hover {
-    background: var(--color-primary-light);
-    transform: translateY(-2px);
-}
-
-.quick-links a:hover svg-icon {
-    --svg-fill: var(--color-text-primary-contrast, white);
-}
-
-.quick-links a:hover svg-icon {
-    --svg-fill: var(--color-text-primary-contrast, white);
-}
-
-.math-preview {
-    margin-top: 3rem;
-    padding: 2rem;
-    background: var(--color-surface, #f5f5f5);
-    border-radius: 12px;
-    border: 1px solid var(--color-outline, #e0e0e0);
-}
-
-.math-preview h3 {
-    color: var(--color-primary);
-    margin-bottom: 1rem;
-}
-
-.math-preview p {
-    color: var(--color-on-surface);
-    margin-bottom: 1rem;
-}
-
-.display-math {
-    text-align: center;
-    padding: 1rem;
-    background: var(--color-background, white);
-    border-radius: 8px;
-    margin: 1rem 0;
-}
-
-@media (max-width: 768px) {
-    .welcome-section h1 {
-        font-size: 1.8rem;
-    }
-    
-    .quick-links {
-        flex-direction: column;
-        align-items: center;
-    }
-}
-</style>
+<paper-component>
+    <img class="logo" src="resources/svg_logo.svg">
+    <paper-component>
+        <paper-component hover="true" color="success">
+            <p>Добро пожаловать в Chessfield — ваш универсальный помощник для игры
+                в шахматы онлайн и офлайн!</p>
+        </paper-component>
+    </paper-component>
+    <section class="blocks">
+        <paper-component hover="true" simple="true">
+            <p>Добро пожаловать в Chessfield — ваш универсальный помощник для игры
+                в шахматы онлайн и офлайн!</p>
+        </paper-component>
+        <paper-component hover="true" color="secondary">
+            <p>Добро пожаловать в Chessfield — ваш универсальный помощник для игры
+                в шахматы онлайн и офлайн!</p>
+        </paper-component>
+        <paper-component hover="true" color="tertiary">
+            <p>Добро пожаловать в Chessfield — ваш универсальный помощник для игры
+                в шахматы онлайн и офлайн!</p>
+        </paper-component>
+    </section>
+    <section class="board">
+        <paper-component>
+            <chess-board>
+            </chess-board>
+        </paper-component>
+    </section>
+</paper-component>
