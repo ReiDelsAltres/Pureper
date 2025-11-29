@@ -1,61 +1,33 @@
-name: Publish package to npm
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Node.js Package
 
 on:
-  push:
-    # publish when a version tag is pushed, e.g. v1.2.3
-    tags:
-      - 'v*.*.*'
-  workflow_dispatch: {}
+  release:
+    types: [created]
 
 jobs:
   build:
-    name: Build (verify package)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: 20
+      - run: npm ci
+      - run: npm test
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Show dry-run package contents
-        run: npm pack --dry-run
-
-  publish:
-    name: Publish to npm
+  publish-npm:
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js for publish
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          registry-url: 'https://registry.npmjs.org'
-          always-auth: true
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Publish package
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.PUREPER_NPM_ACCESS_TOKEN }}
-        run: |
-          # fails if NPM_TOKEN is not configured in the repository secrets
-          npm publish --access public
+          NODE_AUTH_TOKEN: ${{secrets.PUREPER_NPM_ACCESS_TOKEN}}
