@@ -4,8 +4,10 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+  push:
+    # publish when a version tag is pushed, e.g. v1.2.3
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -31,3 +33,4 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.PUREPER_NPM_ACCESS_TOKEN}}
+
