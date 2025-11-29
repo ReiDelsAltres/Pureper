@@ -1,0 +1,1 @@
+{"version":3,"file":"Fetcher.d.ts","sourceRoot":"","sources":["../../src/foundation/Fetcher.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,OAAO,OAAO;WACX,SAAS,CAAC,GAAG,EAAE,MAAM,GAAG,OAAO,CAAC,MAAM,CAAC;WAKvC,SAAS,CAAC,GAAG,EAAE,MAAM,GAAG,OAAO,CAAC,GAAG,CAAC;mBAM5B,aAAa;CAOrC"}

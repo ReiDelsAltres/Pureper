@@ -8,7 +8,6 @@ import { AnyConstructor } from "../component_api/mixin/Proto";
 import Page from "../component_api/Page";
 import UniHtml from "../component_api/UniHtml.js";
 import { ServiceWorkerGlobalScope } from "./api/ServiceWorkerGlobalScope";
-import { Host } from "./Host.js";
 
 const globals = self as any as ServiceWorkerGlobalScope;
 

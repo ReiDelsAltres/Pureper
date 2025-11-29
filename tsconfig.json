@@ -1,15 +1,26 @@
 {
   "compilerOptions": {
+    "allowArbitraryExtensions": true,
+
     "target": "ES2020",
     "module": "ES2020",
 
-    "allowJs": true,
-    "outDir": "out",
+    "lib": [
+      "es2023",
+      "DOM"
+    ],
+        
+    "declaration": true,
+    "declarationMap": true,
+
+    "outDir": "./out",
+
+    //"resolveJsonModule": true,
+    "rewriteRelativeImportExtensions": true,
+
     "sourceMap": true
   },
-  "exclude": [
-    "tests",
-    "out"
-  ]
+  "include": ["./src"],
+  "exclude": [ "./test"]
 }
 

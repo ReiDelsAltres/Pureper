@@ -1,4 +1,3 @@
-import { EmptyConstructor } from "./api/EmptyConstructor.js";
 import Fetcher from "./Fetcher.js";
 import UniHtml from "./component_api/UniHtml.js";
 import { Router } from "./worker/Router.js";

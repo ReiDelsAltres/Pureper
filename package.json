@@ -1,0 +1,37 @@
+{
+  "name": "pureper",
+  "version": "0.1.1",
+  "description": "Minimal library extracted from the Pureper SPA foundation — utilities and base classes for components/pages.",
+  "type": "module",
+  "main": "out/src/index.js",
+  "module": "out/src/index.js",
+  "types": "out/src/index.d.ts",
+  "files": [
+    "out",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "prepack": "tsc",
+    "types:check": "tsc --noEmit",
+
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
+    "test": "npx tsc -p tests/tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ReiDelsAltres/Pureper.git"
+  },
+  "publishConfig": {
+    "@ReiDelsAltres:registry": "https://npm.pkg.github.com"
+  },
+  "keywords": [
+    "spa",
+    "components",
+    "typescript"
+  ],
+  "author": "ReiDelsAltres",
+  "license": "MIT"
+}

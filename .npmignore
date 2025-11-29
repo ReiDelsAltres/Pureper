@@ -1,0 +1,10 @@
+# Ignore everything by default; package.json 'files' keeps only what should be published
+*
+!out/
+!src/
+!README.md
+!LICENSE
+
+# Explicitly ensure tests folder(s) are excluded from published package
+test/
+tests/

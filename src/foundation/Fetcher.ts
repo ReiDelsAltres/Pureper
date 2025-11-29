@@ -1,5 +1,3 @@
-import { Host } from "./worker/Host.js";
-
 export default class Fetcher {
     static async fetchText(url: string): Promise<string> {
         const response = await this.internalFetch(url);
