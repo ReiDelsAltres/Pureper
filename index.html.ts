@@ -230,7 +230,7 @@ const CHESS_HISTORY_PAGE: Triplet<UniHtml> = TripletBuilder.create(
 
 
 Index.initialize().then(() => {
-    let persistedRoute: string | null = Router.getPersistedRoute();
+    let persistedRoute: URL | null = Router.getPersistedRoute();
 
     if (persistedRoute) {
         Router.clearPersistedRoute();
@@ -238,7 +238,7 @@ Index.initialize().then(() => {
     }
 
     else {
-        Router.tryRouteTo("/");
+        Router.tryRouteTo(new URL("/", window.location.origin));
     }
 }).catch(error => {
     console.error("Error during initialization:", error);

@@ -6,6 +6,7 @@ import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
+import "./UrlExtensions.js";
 
 export default class Triplet<T extends UniHtml> implements ITriplet {
     private uni?: AnyConstructor<UniHtml>;
@@ -56,6 +57,15 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         }
     }
 
+    private createLink(cssPath: string): HTMLLinkElement {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        ///
+        link.href = cssPath;
+        ///
+        return link;
+    }
+
 
     public async register(type: "router" | "markup", name: string): Promise<boolean> {
         if (!this.uni) {
@@ -69,54 +79,37 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
             }
         }
 
-        function createLink(cssPath: string): HTMLLinkElement {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = cssPath.startsWith('./') ? cssPath :
-                (window as any).RouterConfig.ASSET_PATH + cssPath;
-            return link;
-        }
-
         for (const [type, filePath] of this.additionalFiles) {
             if (type !== 'light-dom') continue;
             if (!filePath.endsWith(".css")) continue;
 
-            const link = createLink(filePath);
+            const link = this.createLink(filePath);
             document.head.appendChild(link);
 
             console.info(`[Triplet]: Additional light-dom CSS file '${filePath}' added to document head.`);
         }
 
+        let ori = this.createInjectedClass(this.uni);
 
-        let that = this;
-        let ori = class extends this.uni {
-            constructor(hash?: string) {
-                super(hash);
-            }
-        };
-        let proto = ori.prototype as any;
-        proto.init = function () {
-            const fullPath = that.html!.startsWith('./') ? that.html :
-                (window as any).RouterConfig.ASSET_PATH + that.html;
-            return Fetcher.fetchText(fullPath);
-        }
-        proto._postInit = async function (preHtml: string): Promise<string> {
-            if (that.css) {
-                const link = createLink(that.css);
-                preHtml = link.outerHTML + "\n" + preHtml;
-            }
-            for (const [type, filePath] of that.additionalFiles) {
-                if (!filePath.endsWith(".css")) continue;
-                if (type !== 'light-dom') {
-                    const link = createLink(filePath);
-                    preHtml = link.outerHTML + "\n" + preHtml;
-                }
-            }
-            return preHtml;
-        }
         if (type === "router") {
-            var reg = Router.registerRoute(this.html!, name, (hash) => {
-                return new ori(hash) as UniHtml;
+            var reg = Router.registerRoute(this.html!, name, (search) => {
+                const paramNames = (() => {
+                    const ctor = this.uni.prototype.constructor;
+                    const fnStr = ctor.toString();
+                    const argsMatch = fnStr.match(/constructor\s*\(([^)]*)\)/);
+                    if (!argsMatch) return [];
+                    return argsMatch[1].split(',').map(s => s.trim()).filter(Boolean);
+                })();
+
+
+                const args = paramNames.map(name => {
+                    const string = search?.get(name);
+
+                    return search?.get(name)
+                });
+                const unn : UniHtml = new ori(...args);
+
+                return unn;
             });
 
             console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}' by class ${ori}.`);
@@ -129,6 +122,36 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
             return Promise.resolve(true);
         }
         return Promise.resolve(false);
+    }
+    private createInjectedClass(c: AnyConstructor<UniHtml>): any {
+        let that = this;
+        let ori = class extends c {
+            constructor(...args: any[]) {
+                super(...args);
+            }
+        };
+        let proto = ori.prototype as any;
+        proto._init = async function () {
+            ///
+            const fullPath = that.html!;
+            ///
+            return Fetcher.fetchText(fullPath);
+        }
+        proto._postInit = async function (preHtml: string): Promise<string> {
+            if (that.css) {
+                const link = that.createLink(that.css);
+                preHtml = link.outerHTML + "\n" + preHtml;
+            }
+            for (const [type, filePath] of that.additionalFiles) {
+                if (!filePath.endsWith(".css")) continue;
+                if (type !== 'light-dom') {
+                    const link = that.createLink(filePath);
+                    preHtml = link.outerHTML + "\n" + preHtml;
+                }
+            }
+            return preHtml;
+        }
+        return ori;
     }
 
 }
@@ -159,7 +182,11 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
     ) { }
 
     public static create<T extends UniHtml>(html?: string, css?: string, js?: string): TripletBuilder<T> {
-        return new TripletBuilder(html, css, js);
+        let urlHtml: URL = html ? new URL(html, window.location.origin) : null;
+        let urlCss: URL = css ? new URL(css, window.location.origin) : null;
+        let urlJs: URL = js ? new URL(js, window.location.origin) : null;
+
+        return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
     }
 
     public withUni(cls: AnyConstructor<UniHtml>): TripletBuilder<T> {
@@ -171,7 +198,8 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
         return this;
     }
     public withLightDOMCss(css: string): TripletBuilder<T> {
-        this.additionalFiles.set('light-dom', css);
+        let urlCss: URL = css ? new URL(css, window.location.origin) : null;
+        this.additionalFiles.set('light-dom', urlCss?.href);
         return this;
     }
 

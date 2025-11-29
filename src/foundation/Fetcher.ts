@@ -13,12 +13,6 @@ export default class Fetcher {
     }
 
     private static async internalFetch(url: string): Promise<Response> {
-        if (url.includes(Host.getHostPrefix())) {
-            url = url.replace(Host.getHostPrefix(), '');
-        }
-        if (url.startsWith('./')) {
-            url = url.replace('./', '/');
-        }
         const response = await fetch(url, { cache: 'default' });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

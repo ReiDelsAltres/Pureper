@@ -3,6 +3,7 @@ import { Router } from "./worker/Router.js";
 import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
+import "./UrlExtensions.js";
 export default class Triplet {
     constructor(builder) {
         this.additionalFiles = new Map();
@@ -42,6 +43,14 @@ export default class Triplet {
             }
         }
     }
+    createLink(cssPath) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        ///
+        link.href = cssPath;
+        ///
+        return link;
+    }
     async register(type, name) {
         if (!this.uni) {
             switch (type) {
@@ -53,52 +62,32 @@ export default class Triplet {
                     break;
             }
         }
-        function createLink(cssPath) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = cssPath.startsWith('./') ? cssPath :
-                window.RouterConfig.ASSET_PATH + cssPath;
-            return link;
-        }
         for (const [type, filePath] of this.additionalFiles) {
             if (type !== 'light-dom')
                 continue;
             if (!filePath.endsWith(".css"))
                 continue;
-            const link = createLink(filePath);
+            const link = this.createLink(filePath);
             document.head.appendChild(link);
             console.info(`[Triplet]: Additional light-dom CSS file '${filePath}' added to document head.`);
         }
-        let that = this;
-        let ori = class extends this.uni {
-            constructor(hash) {
-                super(hash);
-            }
-        };
-        let proto = ori.prototype;
-        proto.init = function () {
-            const fullPath = that.html.startsWith('./') ? that.html :
-                window.RouterConfig.ASSET_PATH + that.html;
-            return Fetcher.fetchText(fullPath);
-        };
-        proto._postInit = async function (preHtml) {
-            if (that.css) {
-                const link = createLink(that.css);
-                preHtml = link.outerHTML + "\n" + preHtml;
-            }
-            for (const [type, filePath] of that.additionalFiles) {
-                if (!filePath.endsWith(".css"))
-                    continue;
-                if (type !== 'light-dom') {
-                    const link = createLink(filePath);
-                    preHtml = link.outerHTML + "\n" + preHtml;
-                }
-            }
-            return preHtml;
-        };
+        let ori = this.createInjectedClass(this.uni);
         if (type === "router") {
-            var reg = Router.registerRoute(this.html, name, (hash) => {
-                return new ori(hash);
+            var reg = Router.registerRoute(this.html, name, (search) => {
+                const paramNames = (() => {
+                    const ctor = this.uni.prototype.constructor;
+                    const fnStr = ctor.toString();
+                    const argsMatch = fnStr.match(/constructor\s*\(([^)]*)\)/);
+                    if (!argsMatch)
+                        return [];
+                    return argsMatch[1].split(',').map(s => s.trim()).filter(Boolean);
+                })();
+                const args = paramNames.map(name => {
+                    const string = search?.get(name);
+                    return search?.get(name);
+                });
+                const unn = new ori(...args);
+                return unn;
             });
             console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}' by class ${ori}.`);
             return reg.then(() => true).catch(() => false);
@@ -111,6 +100,37 @@ export default class Triplet {
             return Promise.resolve(true);
         }
         return Promise.resolve(false);
+    }
+    createInjectedClass(c) {
+        let that = this;
+        let ori = class extends c {
+            constructor(...args) {
+                super(...args);
+            }
+        };
+        let proto = ori.prototype;
+        proto._init = async function () {
+            ///
+            const fullPath = that.html;
+            ///
+            return Fetcher.fetchText(fullPath);
+        };
+        proto._postInit = async function (preHtml) {
+            if (that.css) {
+                const link = that.createLink(that.css);
+                preHtml = link.outerHTML + "\n" + preHtml;
+            }
+            for (const [type, filePath] of that.additionalFiles) {
+                if (!filePath.endsWith(".css"))
+                    continue;
+                if (type !== 'light-dom') {
+                    const link = that.createLink(filePath);
+                    preHtml = link.outerHTML + "\n" + preHtml;
+                }
+            }
+            return preHtml;
+        };
+        return ori;
     }
 }
 export var AccessType;
@@ -129,7 +149,10 @@ export class TripletBuilder {
         this.additionalFiles = new Map();
     }
     static create(html, css, js) {
-        return new TripletBuilder(html, css, js);
+        let urlHtml = html ? new URL(html, window.location.origin) : null;
+        let urlCss = css ? new URL(css, window.location.origin) : null;
+        let urlJs = js ? new URL(js, window.location.origin) : null;
+        return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
     }
     withUni(cls) {
         this.uni = cls;
@@ -140,7 +163,8 @@ export class TripletBuilder {
         return this;
     }
     withLightDOMCss(css) {
-        this.additionalFiles.set('light-dom', css);
+        let urlCss = css ? new URL(css, window.location.origin) : null;
+        this.additionalFiles.set('light-dom', urlCss?.href);
         return this;
     }
     build() {

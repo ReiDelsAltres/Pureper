@@ -16,7 +16,7 @@ export interface Route<T extends UniHtml = UniHtml> {
   route: string;
   path: string;
 
-  pageFactory: (hash?: string) => T;
+  pageFactory: (search?: URLSearchParams) => T;
 }
 export enum AccessType {
   OFFLINE,
@@ -28,16 +28,17 @@ export const ROUTES: Route[] = [];
 export const TO_CACHE: string[] = [];
 
 export abstract class Router {
-  public static savePersistedRoute(route: string) {
+  public static savePersistedRoute(url: URL) {
     try {
-      sessionStorage.setItem("spa:persisted-route", route);
+      sessionStorage.setItem("spa:persisted-route", url.toJSON());
     } catch (error) {
       console.warn("[Router Init]: Unable to access sessionStorage.", error);
     }
   }
-  public static getPersistedRoute(): string | null {
+  public static getPersistedRoute(): URL | null {
     try {
-      return sessionStorage.getItem("spa:persisted-route");
+      const item = sessionStorage.getItem("spa:persisted-route");
+      return item ? URL.parse(item) : null;
     } catch (error) {
       console.warn("[Router Init]: Unable to access sessionStorage.", error);
       return null;
@@ -53,42 +54,34 @@ export abstract class Router {
 
 
   public static legacyRouteTo(route: string) {
+    let url = new URL(route, window.location.origin);
     if (window.location.pathname !== route) {
-      window.location.replace(Host.getHostPrefix() + route);
+      window.location.replace(url.href);
     }
   }
-  public static routeTo(route: string,hash?: string) {
-    let found: Route = this.findRoute(route);
-    let page: UniHtml = this.createPage(found, hash);
-
-    page.load(document.getElementById('page')!);
-
-    var hashPath : string = hash ? `?${hash}` : '';
-    if (typeof window !== "undefined" && window.location) {
-      window.history.pushState(page, '', Host.getHostPrefix() + found.route + hashPath);
-    }
-  }
-  public static tryRouteTo(route: string,hash?: string): boolean {
+  public static tryRouteTo(url: URL) {
     try {
-      this.routeTo(route, hash);
-      return true;
+      const found: Route = this.tryFindRoute(url);
+      const page: UniHtml = this.createPage(found, url.searchParams);
+
+      page.load(document.getElementById('page')!);
+
+      if (typeof window !== "undefined" && window.location) {
+        window.history.pushState(page, '', url.href);
+      }
     } catch (error) {
-      console.warn(`[Router]: Failed to route to ${route}.`, error);
-      return false;
+      console.error("[Router]: Unable to route to ", url.href, error);
     }
   }
-
-
-  public static findRoute(route: string): Route {
-    const normalizedRoute = Router.normalizeRoute(route);
-    let found = ROUTES.find(r => r.route === normalizedRoute);
-    if (!found) throw new Error(`[Router]: Route not found: ${normalizedRoute}`);
+  public static tryFindRoute(url: URL): Route {
+    const found = ROUTES.find(r => r.route === url.pathname);
+    if (!found) {
+      throw new Error(`[Router]: Route not found: ${url.pathname}`);
+    }
     return found;
   }
-  public static normalizeRoute(route: string): string {
-    return route;
-  }
-  public static async registerRoute<T extends UniHtml>(path: string, route: string, pageFactory: (hash?: string) => T,
+
+  public static async registerRoute<T extends UniHtml>(path: string, route: string, pageFactory: (search?: URLSearchParams) => T,
     inheritedRoute?: Route): Promise<Route> {
 
     let prepRoute = route
@@ -103,8 +96,8 @@ export abstract class Router {
   }
 
 
-  private static createPage(route: Route,hash?: string): UniHtml {
-    return route.pageFactory(hash);
+  private static createPage(route: Route, search?: URLSearchParams): UniHtml {
+    return route.pageFactory(search);
   }
 }
 
@@ -114,27 +107,17 @@ document.addEventListener('click', e => {
     const link = target.closest('a[data-link]') ?? target.closest('re-button[data-link]');
     if (link) {
       e.preventDefault();
-      const parts : string[] = link.getAttribute('href').split('?');
-      Router.routeTo(parts[0], parts[1] ? parts[1] : null);
+      const url : URL = new URL(link.getAttribute('href')!, window.location.origin);
+      Router.tryRouteTo(url);
     }
   }
 });
-// Initial load
-window.addEventListener('DOMContentLoaded', () => {
-  // Добавляем отладочную информацию
-  console.log('[Router]: DOMContentLoaded');
-  console.log('[Router]: hostname =', window.location.hostname);
-  //console.log('[Router]: IS_GITHUB_PAGES =', IS_GITHUB_PAGES);
-  //console.log('[Router]: USE_HASH_ROUTING =', USE_HASH_ROUTING);
-  //console.log('[Router]: BASE_PATH =', BASE_PATH);
-  console.log('[Router]: location.pathname =', window.location.pathname);
-  console.log('[Router]: location.search =', window.location.search);
 
-  // Ждем, пока ROUTES будет определен
+window.addEventListener('DOMContentLoaded', () => {
   const checkRoutes = () => {
     const routes = ROUTES;
     if (routes) {
-      console.log('[Router]: available routes =', routes.map(r => r.route).join(', '));
+      console.log('[Init] [Router]: available routes =', routes.map(r => r.route).join(', '));
     }
   };
 

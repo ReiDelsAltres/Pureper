@@ -1,4 +1,6 @@
 import { Router } from "./src/foundation/worker/Router.js";
 
-Router.savePersistedRoute(window.location.pathname);
+let fff = window.location;
+
+Router.savePersistedRoute(new URL(window.location.href));
 Router.legacyRouteTo("index.html");

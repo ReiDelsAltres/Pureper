@@ -19,7 +19,7 @@ export default class UniHtml {
      * @param element Target container (usually shadowRoot.host)
      */
     public async load(element: HTMLElement | ShadowRoot): Promise<void> {
-        const preHtml: string = await this.init();
+        const preHtml: string = await this._init();
         const html: string = await this._postInit(preHtml);
 
         const localRoot = document.createElement('div');
@@ -41,16 +41,9 @@ export default class UniHtml {
     }
 
     private async _postInit(html: string): Promise<string> {
-        return Promise.resolve(html);
+        throw new Error("Method not implemented.");
     }
-
-    /**
-     * Component initialization (HTML loading).
-     * Overridden by factory methods or subclasses.
-     * @returns HTML content for rendering
-     * @throws Error if not implemented
-     */
-    private async init(): Promise<string> {
+    private async _init(): Promise<string> {
         throw new Error("Method not implemented.");
     }
     /**

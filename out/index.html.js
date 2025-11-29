@@ -149,7 +149,7 @@ Index.initialize().then(() => {
         Router.tryRouteTo(persistedRoute);
     }
     else {
-        Router.tryRouteTo("/");
+        Router.tryRouteTo(new URL("/", window.location.origin));
     }
 }).catch(error => {
     console.error("Error during initialization:", error);
