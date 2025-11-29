@@ -24,7 +24,7 @@
     "url": "git+https://github.com/ReiDelsAltres/Pureper.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com/ReiDelsAltres"
   },
   "keywords": [
     "spa",
