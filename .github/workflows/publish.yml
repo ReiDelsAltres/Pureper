@@ -34,5 +34,5 @@ jobs:
           npm config set @rei_dels_altres:registry https://npm.pkg.github.com
           npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
 
