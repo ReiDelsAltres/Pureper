@@ -1,5 +1,5 @@
 {
-  "name": "@reidelsaltres/pureper",
+  "name": "@rei_dels_altres/pureper",
   "version": "0.1.14",
   "description": "Minimal library extracted from the Pureper SPA foundation — utilities and base classes for components/pages.",
   "type": "module",
@@ -24,7 +24,7 @@
     "url": "git+https://github.com/ReiDelsAltres/Pureper.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "@ReiDelsAltres:registry": "https://npm.pkg.github.com"
   },
   "keywords": [
     "spa",
