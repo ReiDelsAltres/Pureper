@@ -8,8 +8,7 @@
     "lib": [
       "es2023",
       "DOM",
-      "DOM.Iterable",
-      "WebWorker"
+      "DOM.Iterable"
     ],
 
     "allowJs": true,
