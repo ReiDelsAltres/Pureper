@@ -12,25 +12,39 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      # NPM_TOKEN must be created in the repository (Actions secrets) — used for npmjs.org
+      NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+      # GITHUB_TOKEN is provided automatically by GitHub Actions; we set it explicitly for clarity
+      PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      #- run: npm test
 
+      - name: Install dependencies
+        run: npm ci
 
-      #Публикация в npmjs.org
-      - run:
-          npm publish --registry=https://registry.npmjs.org/
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+      - name: Prepare .npmrc (use repository .npmrc then inject tokens)
+        # copy the repo .npmrc which contains scope+registry lines, then append
+        # explicit token lines so npm always has concrete auth tokens present
+        run: |
+          cp .npmrc ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${PACKAGES_TOKEN}" >> ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=${NPM_ACCESS_TOKEN}" >> ~/.npmrc
 
-      # Публикация в GitHub Packages
-      - run: |
-          npm publish --registry=https://npm.pkg.github.com/
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      - name: Publish to npmjs.org
+        # This step uses the NPM_TOKEN environment variable (from secrets.NPM_TOKEN)
+        run: npm publish --registry=https://registry.npmjs.org/ --access public
+
+      - name: Publish to GitHub Packages
+        # package.json has a publishConfig set to publish to https://npm.pkg.github.com
+        # copying the same .npmrc ensures //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN} is honoured
+        run: npm publish
 
