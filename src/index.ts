@@ -9,7 +9,7 @@ export { default as UniHtml } from './foundation/component_api/UniHtml.js';
 export { default as Page } from './foundation/component_api/Page.js';
 export { default as Component } from './foundation/component_api/Component.js';
 
-export { default as Triplet } from './foundation/Triplet.js';
+export { default as Triplet, TripletBuilder, AccessType } from './foundation/Triplet.js';
 
 export { default as Fetcher } from './foundation/Fetcher.js';
 
