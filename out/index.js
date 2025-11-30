@@ -1,11 +1,11 @@
-export { default as Lazy } from './foundation/api/Lazy';
-export * from './foundation/component_api/mixin/Proto';
-export { default as UniHtml } from './foundation/component_api/UniHtml';
-export { default as Page } from './foundation/component_api/Page';
-export { default as Component } from './foundation/component_api/Component';
-export { default as Triplet } from './foundation/Triplet';
-export { default as Fetcher } from './foundation/Fetcher';
-export { Router } from './foundation/worker/Router';
-export { default as ServiceWorker } from './foundation/worker/ServiceWorker';
-export * from './foundation/Theme';
+export { default as Lazy } from './foundation/api/Lazy.js';
+export * from './foundation/component_api/mixin/Proto.js';
+export { default as UniHtml } from './foundation/component_api/UniHtml.js';
+export { default as Page } from './foundation/component_api/Page.js';
+export { default as Component } from './foundation/component_api/Component.js';
+export { default as Triplet } from './foundation/Triplet.js';
+export { default as Fetcher } from './foundation/Fetcher.js';
+export { Router } from './foundation/worker/Router.js';
+export { default as ServiceWorker } from './foundation/worker/ServiceWorker.js';
+export * from './foundation/Theme.js';
 //# sourceMappingURL=index.js.map

@@ -1,6 +1,7 @@
 import UniHtml from "../component_api/UniHtml.js";
 import { Class } from "./mixin/Proto.js";
 export default class Component extends Class(HTMLElement).extend(UniHtml).build() {
+    _attributeChangedCallbacks;
     constructor() {
         super();
     }

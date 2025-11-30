@@ -5,8 +5,13 @@ import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import "./UrlExtensions.js";
 export default class Triplet {
+    uni;
+    access;
+    html;
+    css;
+    js;
+    additionalFiles = new Map();
     constructor(builder) {
-        this.additionalFiles = new Map();
         this.html = builder.html;
         this.css = builder.css;
         this.js = builder.js;
@@ -141,12 +146,16 @@ export var AccessType;
     AccessType[AccessType["BOTH"] = 3] = "BOTH";
 })(AccessType || (AccessType = {}));
 export class TripletBuilder {
+    html;
+    css;
+    js;
+    uni;
+    access = AccessType.BOTH;
+    additionalFiles = new Map();
     constructor(html, css, js) {
         this.html = html;
         this.css = css;
         this.js = js;
-        this.access = AccessType.BOTH;
-        this.additionalFiles = new Map();
     }
     static create(html, css, js) {
         let urlHtml = html ? new URL(html, window.location.origin) : null;

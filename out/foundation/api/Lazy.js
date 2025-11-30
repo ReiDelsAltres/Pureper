@@ -1,4 +1,6 @@
 export default class Lazy {
+    factory;
+    _value;
     constructor(factory) {
         this.factory = factory;
     }

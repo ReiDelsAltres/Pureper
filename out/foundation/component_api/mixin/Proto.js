@@ -1,5 +1,6 @@
 import Lazy from "../../../foundation/api/Lazy.js";
 class ClassBuilder {
+    base;
     constructor(base) {
         this.base = base;
     }
