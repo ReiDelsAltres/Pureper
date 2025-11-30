@@ -21,16 +21,15 @@ jobs:
       - run: npm ci
       #- run: npm test
 
-            # Публикация в GitHub Packages
-      - run: |
+      - name: Publish to GitHub Packages
+        run: |
           npm config set //npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}
           npm publish --scope=@git --registry=https://npm.pkg.github.com
         env:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
 
-
-       #Публикация в npmjs.org
-      - run: |
+      - name: Publish to npmjs.org
+        run: |
           npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}
           npm publish --scope=@npm --registry=https://registry.npmjs.org
         env:
