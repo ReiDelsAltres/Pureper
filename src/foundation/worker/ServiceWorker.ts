@@ -26,7 +26,7 @@ const STATIC_ASSETS: string[] = [
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('../out/src/foundation/worker/ServiceWorker.js', { type: 'module' })
+        navigator.serviceWorker.register('../../../out/foundation/worker/ServiceWorker.js', { type: 'module' })
             .then((registration) => {
                 console.log('ServiceWorker registration successful:', registration.scope);
             })
