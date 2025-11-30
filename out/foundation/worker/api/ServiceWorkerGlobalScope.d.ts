@@ -1,7 +1,7 @@
-import { Clients } from './Clients';
-import { ExtendableEvent } from './ExtendableEvent';
-import { FetchEvent } from './FetchEvent';
-import { ExtendableMessageEvent } from './ExtendableMessageEvent';
+import { Clients } from './Clients.js';
+import { ExtendableEvent } from './ExtendableEvent.js';
+import { FetchEvent } from './FetchEvent.js';
+import { ExtendableMessageEvent } from './ExtendableMessageEvent.js';
 export interface ServiceWorkerGlobalScope {
     skipWaiting(): Promise<void>;
     clients: Clients;
