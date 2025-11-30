@@ -1,6 +1,5 @@
 import UniHtml from "./component_api/UniHtml.js";
 import { AnyConstructor } from "./component_api/mixin/Proto.js";
-import "./UrlExtensions.js";
 export default class Triplet<T extends UniHtml> implements ITriplet {
     private uni?;
     private readonly access;

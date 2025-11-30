@@ -3,7 +3,6 @@ import { Router } from "./worker/Router.js";
 import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
-import "./UrlExtensions.js";
 export default class Triplet {
     uni;
     access;

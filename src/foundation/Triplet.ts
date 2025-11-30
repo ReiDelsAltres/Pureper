@@ -5,7 +5,6 @@ import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
-import "./UrlExtensions.js";
 
 export default class Triplet<T extends UniHtml> implements ITriplet {
     private uni?: AnyConstructor<UniHtml>;
