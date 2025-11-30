@@ -1,13 +1,4 @@
-// Add RouterConfig type to window for TypeScript
-declare global {
-  interface Window {
-    RouterConfig?: { ASSET_PATH: string };
-  }
-}
 import UniHtml from "../component_api/UniHtml.js";
-import { ServiceWorkerGlobalScope } from "./api/ServiceWorkerGlobalScope.js";
-
-const globals = self as any as ServiceWorkerGlobalScope;
 
 export interface Route<T extends UniHtml = UniHtml> {
   route: string;
@@ -56,14 +47,14 @@ export abstract class Router {
       window.location.replace(url.href);
     }
   }
-  public static tryRouteTo(url: URL) {
+  public static tryRouteTo(url: URL, pushState: boolean = true) {
     try {
       const found: Route = this.tryFindRoute(url);
       const page: UniHtml = this.createPage(found, url.searchParams);
 
       page.load(document.getElementById('page')!);
 
-      if (typeof window !== "undefined" && window.location) {
+      if (pushState && typeof window !== "undefined" && window.location) {
         window.history.pushState(page, '', url.href);
       }
     } catch (error) {
@@ -92,12 +83,12 @@ export abstract class Router {
     return Promise.resolve(routeObj);
   }
 
-
   private static createPage(route: Route, search?: URLSearchParams): UniHtml {
     return route.pageFactory(search);
   }
 }
 
+//For SPA navigation
 document.addEventListener('click', e => {
   const target = e.target as Element | null;
   if (target) {
@@ -107,6 +98,16 @@ document.addEventListener('click', e => {
       const url : URL = new URL(link.getAttribute('href')!, window.location.origin);
       Router.tryRouteTo(url);
     }
+  }
+});
+
+//For back/forward navigation
+window.addEventListener('popstate', e => {
+  try {
+    const url = new URL(window.location.href);
+    Router.tryRouteTo(url, false);
+  } catch (error) {
+    console.error('[Router] (popstate): failed to route to current location', error);
   }
 });
 
