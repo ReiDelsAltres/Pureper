@@ -22,12 +22,16 @@ jobs:
       #- run: npm test
 
             # Публикация в GitHub Packages
-      - run: npm publish
+      - run: |
+          npm config set //npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}
+          npm publish
         env:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
 
 
        #Публикация в npmjs.org
-      - run: npm publish --registry=https://registry.npmjs.org/
+      - run: |
+          npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}
+          npm publish
         env:
           NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
