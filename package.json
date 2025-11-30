@@ -29,10 +29,6 @@
     "url": "https://github.com/ReiDelsAltres/Pureper/issues"
   },
   "homepage": "https://github.com/ReiDelsAltres/Pureper#readme",
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
-  },
   "keywords": [
     "spa",
     "components",
