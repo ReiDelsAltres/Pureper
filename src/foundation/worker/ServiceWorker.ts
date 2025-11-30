@@ -5,8 +5,6 @@
  */
 import type { ExtendableEvent } from './api/ExtendableEvent.js';
 import type { FetchEvent } from './api/FetchEvent.js';
-import type { ExtendableMessageEvent } from './api/ExtendableMessageEvent.js';
-import type { Clients } from './api/Clients.js';
 import type { ServiceWorkerGlobalScope } from './api/ServiceWorkerGlobalScope.js';
 
 // Type assertion for Service Worker context
@@ -17,16 +15,13 @@ const swSelf = self;
 //import base from '../../../data/base.json';
 const CACHE_NAME = `pureper-v1`;
 
-const BASE_PATH = '/Pureper'; // GitHub Pages base path
-const IS_GITHUB_PAGES = swSelf.location.hostname.includes('github.io');
-
 const STATIC_ASSETS: string[] = [
     '/index.html'
 ];
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('serviceWorker.js', { type: 'module' })
+        navigator.serviceWorker.register('./serviceWorker.js', { type: 'module' })
             .then((registration) => {
                 console.log('ServiceWorker registration successful:', registration.scope);
             })
