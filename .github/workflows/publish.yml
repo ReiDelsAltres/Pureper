@@ -23,9 +23,9 @@ jobs:
 
 
       # Публикация в npmjs.org
-      - run: npm publish --registry=https://registry.npmjs.org/
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+      #- run: npm publish --registry=https://registry.npmjs.org/
+       # env:
+        #  NODE_AUTH_TOKEN: secrets.NPM_ACCESS_TOKEN
 
       # Публикация в GitHub Packages
       - run: npm publish
