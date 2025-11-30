@@ -24,10 +24,10 @@ jobs:
             # Публикация в GitHub Packages
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
 
 
        #Публикация в npmjs.org
       - run: npm publish --registry=https://registry.npmjs.org/
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+          NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
