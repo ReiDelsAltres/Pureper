@@ -23,6 +23,13 @@
     "type": "git",
     "url": "git+https://github.com/ReiDelsAltres/Pureper.git"
   },
+  "bugs": {
+    "url": "https://github.com/ReiDelsAltres/Pureper/issues"
+  },
+  "homepage": "https://github.com/ReiDelsAltres/Pureper#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "keywords": [
     "spa",
     "components",
