@@ -8,17 +8,20 @@
     "lib": [
       "es2023",
       "DOM",
-      "DOM.Iterable"
+      "DOM.Iterable",
+      "WebWorker"
     ],
-        
-    "declaration": true,
-    "declarationMap": true,
+
+    "allowJs": true,
+    "checkJs": true,
 
     "outDir": "./out",
 
     //"resolveJsonModule": true,
     "rewriteRelativeImportExtensions": true,
 
+    "declaration": true,
+    "declarationMap": true,
     "sourceMap": true
   },
   "include": ["./src"],
