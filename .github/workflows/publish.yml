@@ -44,7 +44,7 @@ jobs:
         # scope's registry so `npm publish` pushes to github's package registry.
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> ~/.npmrc
-          npm config set @rei_dels_altres:registry https://npm.pkg.github.com
+          npm config set @ReiDelsAltres:registry https://npm.pkg.github.com
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
