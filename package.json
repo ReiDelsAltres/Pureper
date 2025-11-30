@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/ReiDelsAltres/Pureper#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://npm.pkg.github.com"
   },
   "keywords": [
     "spa",
