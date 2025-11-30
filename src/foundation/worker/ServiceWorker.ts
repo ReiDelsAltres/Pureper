@@ -3,11 +3,11 @@
  * Handles client-side routing by intercepting navigation requests
  * and serving index.html for all SPA routes
  */
-import type { ExtendableEvent } from './api/ExtendableEvent';
-import type { FetchEvent } from './api/FetchEvent';
-import type { ExtendableMessageEvent } from './api/ExtendableMessageEvent';
-import type { Clients } from './api/Clients';
-import type { ServiceWorkerGlobalScope } from './api/ServiceWorkerGlobalScope';
+import type { ExtendableEvent } from './api/ExtendableEvent.js';
+import type { FetchEvent } from './api/FetchEvent.js';
+import type { ExtendableMessageEvent } from './api/ExtendableMessageEvent.js';
+import type { Clients } from './api/Clients.js';
+import type { ServiceWorkerGlobalScope } from './api/ServiceWorkerGlobalScope.js';
 
 // Type assertion for Service Worker context
 declare let self: ServiceWorkerGlobalScope
