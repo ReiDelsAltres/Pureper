@@ -37,6 +37,5 @@
   "author": "ReiDelsAltres",
   "license": "MIT",
   "dependencies": {
-    "npmrc-replace-env": "^1.1.4"
   }
 }

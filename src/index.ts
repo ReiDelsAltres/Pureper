@@ -1,5 +1,5 @@
 // Public package entry — re-export foundation APIs
-export { default as ElementHolder } from './foundation/api/ElementHolder';
+export { default as IElementHolder } from './foundation/api/ElementHolder';
 export { default as EmptyConstructor } from './foundation/api/EmptyConstructor';
 export { default as Lazy } from './foundation/api/Lazy';
 
