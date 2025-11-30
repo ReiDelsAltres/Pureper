@@ -1,6 +1,6 @@
 {
   "name": "@rei_dels_altres/pureper",
-  "version": "0.1.28",
+  "version": "0.1.29",
   "description": "Minimal library extracted from the Pureper SPA foundation — utilities and base classes for components/pages.",
   "type": "module",
   "main": "out/src/index.js",
@@ -15,7 +15,6 @@
   "scripts": {
     "publish:npm": "npm publish --registry=https://registry.npmjs.org/",
     "publish:gh": "npm publish --registry=https://npm.pkg.github.com/",
-
     "prepack": "tsc",
     "types:check": "tsc --noEmit",
     "build": "tsc -p tsconfig.json",
