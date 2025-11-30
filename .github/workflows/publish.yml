@@ -43,7 +43,7 @@ jobs:
         # (or use a PAT stored in a secret if you prefer) and set the package
         # scope's registry so `npm publish` pushes to github's package registry.
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> ~/.npmrc
           npm config set @rei_dels_altres:registry https://npm.pkg.github.com
           npm publish
         env:
