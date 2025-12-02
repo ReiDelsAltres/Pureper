@@ -5,19 +5,20 @@ import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
+import PHTMLParser from "./PHTMLParser.js";
 
 export default class Triplet<T extends UniHtml> implements ITriplet {
     private uni?: AnyConstructor<UniHtml>;
     private readonly access: AccessType;
 
-    public readonly html?: string;
+    public readonly markup?: string;
     public readonly css?: string;
     public readonly js?: string;
 
     public readonly additionalFiles: Map<string, string> = new Map();
 
     public constructor(builder: TripletBuilder<T>) {
-        this.html = builder.html;
+        this.markup = builder.markup;
         this.css = builder.css;
         this.js = builder.js;
 
@@ -42,8 +43,8 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
     }
 
     public async cache(): Promise<void> {
-        if (this.html)
-            await ServiceWorker.addToCache(this.html);
+        if (this.markup)
+            await ServiceWorker.addToCache(this.markup);
         if (this.css)
             await ServiceWorker.addToCache(this.css);
         if (this.js)
@@ -90,7 +91,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         let ori = this.createInjectedClass(this.uni);
 
         if (type === "router") {
-            var reg = Router.registerRoute(this.html!, name, (search) => {
+            var reg = Router.registerRoute(this.markup!, name, (search) => {
                 const paramNames = (() => {
                     const ctor = this.uni.prototype.constructor;
                     const fnStr = ctor.toString();
@@ -110,7 +111,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
                 return unn;
             });
 
-            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}' by class ${ori}.`);
+            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.markup}' by class ${ori}.`);
             return reg.then(() => true).catch(() => false);
         } else if (type === "markup") {
             if (customElements.get(name)) throw new Error(`Custom element '${name}' is already defined.`);
@@ -131,9 +132,16 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         let proto = ori.prototype as any;
         proto._init = async function () {
             ///
-            const fullPath = that.html!;
+            const fullPath = that.markup!;
+            var markup = "";
+            if (fullPath.endsWith(".phtml")) {
+                const parser = new PHTMLParser();
+                markup = parser.parse(await Fetcher.fetchText(fullPath), this);
+            } else {
+                markup = await Fetcher.fetchText(fullPath);
+            }
             ///
-            return Fetcher.fetchText(fullPath);
+            return markup;
         }
         proto._postInit = async function (preHtml: string): Promise<string> {
             if (that.css) {
@@ -155,7 +163,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
 }
 
 interface ITriplet {
-    readonly html?: string;
+    readonly markup?: string;
     readonly css?: string;
     readonly js?: string;
 }
@@ -174,19 +182,19 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
     public readonly additionalFiles: Map<string, string> = new Map();
 
     private constructor(
-        public readonly html?: string,
+        public readonly markup?: string,
         public readonly css?: string,
         public readonly js?: string
     ) { }
 
-    public static create<T extends UniHtml>(html?: string, css?: string, js?: string): TripletBuilder<T> {
-        let urlHtml: URL = html ? new URL(html, window.location.origin) : null;
+    public static create<T extends UniHtml>(markup?: string, css?: string, js?: string): TripletBuilder<T> {
+        let urlHtml: URL = markup ? new URL(markup, window.location.origin) : null;
         let urlCss: URL = css ? new URL(css, window.location.origin) : null;
         let urlJs: URL = js ? new URL(js, window.location.origin) : null;
 
         return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
     }
-
+    
     public withUni(cls: AnyConstructor<UniHtml>): TripletBuilder<T> {
         this.uni = cls;
         return this;
