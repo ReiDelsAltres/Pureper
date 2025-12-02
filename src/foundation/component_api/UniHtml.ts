@@ -13,12 +13,15 @@ import IElementHolder from "../api/ElementHolder.js";
  * Use static factory methods for instantiation.
  */
 export default class UniHtml {
+    private originalLocation: HTMLElement | ShadowRoot;
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
      * @param element Target container (usually shadowRoot.host)
      */
     public async load(element: HTMLElement | ShadowRoot): Promise<void> {
+        this.originalLocation = element;
+
         const preHtml: string = await this._init();
         const html: string = await this._postInit(preHtml);
 
@@ -38,6 +41,11 @@ export default class UniHtml {
         // postLoad() вызывается ПОСЛЕ render(). Для компонентов к этому моменту содержимое уже добавлено
         // внутрь shadowRoot, и можно безопасно работать с this.shadowRoot, измерениями layout и т.п.
         await this.postLoad(holder);
+    }
+
+    //NEW
+    public async reload(element: HTMLElement | ShadowRoot = this.originalLocation): Promise<void> {
+        return this.load(element);
     }
 
     private async _postInit(html: string): Promise<string> {
