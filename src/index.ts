@@ -10,7 +10,7 @@ export { default as Page } from './foundation/component_api/Page.js';
 export { default as Component } from './foundation/component_api/Component.js';
 
 export { default as Triplet, TripletBuilder, AccessType } from './foundation/Triplet.js';
-export { ReComponent, RePage, getRegisteredTriplets, initializeAllTriplets } from './foundation/TripletDecorator.js';
+export { ReComponent, RePage } from './foundation/TripletDecorator.js';
 
 export { default as Fetcher } from './foundation/Fetcher.js';
 
