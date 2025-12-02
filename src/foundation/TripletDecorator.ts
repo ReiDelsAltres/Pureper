@@ -1,6 +1,6 @@
 import { AccessType, TripletBuilder } from "./Triplet.js"
 
-export function Component(html? : string, css?: string, js?: string, access?: AccessType, name?: string) {
+export function ReComponent(html? : string, css?: string, js?: string, access?: AccessType, name?: string) {
     return (ctor: Function) => {
         const triplet = TripletBuilder.create(html, css, js)
         .withUni(ctor as any)
@@ -10,7 +10,7 @@ export function Component(html? : string, css?: string, js?: string, access?: Ac
         triplet.register("markup", name)
     }
 }
-export function Page(html? : string, css?: string, js?: string, access?: AccessType, path?: string) {
+export function RePage(html? : string, css?: string, js?: string, access?: AccessType, path?: string) {
     return (ctor: Function) => {
         const triplet = TripletBuilder.create(html, css, js)
         .withUni(ctor as any)
@@ -21,6 +21,4 @@ export function Page(html? : string, css?: string, js?: string, access?: AccessT
     }
 }
 
-
-@Page()
 class myFirstPlugin {}
