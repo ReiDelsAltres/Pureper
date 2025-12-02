@@ -1,4 +1,3 @@
-const globals = self;
 export var AccessType;
 (function (AccessType) {
     AccessType[AccessType["OFFLINE"] = 0] = "OFFLINE";
@@ -40,12 +39,12 @@ export class Router {
             window.location.replace(url.href);
         }
     }
-    static tryRouteTo(url) {
+    static tryRouteTo(url, pushState = true) {
         try {
             const found = this.tryFindRoute(url);
             const page = this.createPage(found, url.searchParams);
             page.load(document.getElementById('page'));
-            if (typeof window !== "undefined" && window.location) {
+            if (pushState && typeof window !== "undefined" && window.location) {
                 window.history.pushState(page, '', url.href);
             }
         }
@@ -72,6 +71,7 @@ export class Router {
         return route.pageFactory(search);
     }
 }
+//For SPA navigation
 document.addEventListener('click', e => {
     const target = e.target;
     if (target) {
@@ -81,6 +81,16 @@ document.addEventListener('click', e => {
             const url = new URL(link.getAttribute('href'), window.location.origin);
             Router.tryRouteTo(url);
         }
+    }
+});
+//For back/forward navigation
+window.addEventListener('popstate', e => {
+    try {
+        const url = new URL(window.location.href);
+        Router.tryRouteTo(url, false);
+    }
+    catch (error) {
+        console.error('[Router] (popstate): failed to route to current location', error);
     }
 });
 window.addEventListener('DOMContentLoaded', () => {

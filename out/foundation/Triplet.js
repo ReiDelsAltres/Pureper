@@ -3,15 +3,16 @@ import { Router } from "./worker/Router.js";
 import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
+import PHTMLParser from "./PHTMLParser.js";
 export default class Triplet {
     uni;
     access;
-    html;
+    markup;
     css;
     js;
     additionalFiles = new Map();
     constructor(builder) {
-        this.html = builder.html;
+        this.markup = builder.markup;
         this.css = builder.css;
         this.js = builder.js;
         this.additionalFiles = builder.additionalFiles;
@@ -35,8 +36,8 @@ export default class Triplet {
         return true;
     }
     async cache() {
-        if (this.html)
-            await ServiceWorker.addToCache(this.html);
+        if (this.markup)
+            await ServiceWorker.addToCache(this.markup);
         if (this.css)
             await ServiceWorker.addToCache(this.css);
         if (this.js)
@@ -77,7 +78,7 @@ export default class Triplet {
         }
         let ori = this.createInjectedClass(this.uni);
         if (type === "router") {
-            var reg = Router.registerRoute(this.html, name, (search) => {
+            var reg = Router.registerRoute(this.markup, name, (search) => {
                 const paramNames = (() => {
                     const ctor = this.uni.prototype.constructor;
                     const fnStr = ctor.toString();
@@ -93,7 +94,7 @@ export default class Triplet {
                 const unn = new ori(...args);
                 return unn;
             });
-            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.html}' by class ${ori}.`);
+            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.markup}' by class ${ori}.`);
             return reg.then(() => true).catch(() => false);
         }
         else if (type === "markup") {
@@ -115,9 +116,17 @@ export default class Triplet {
         let proto = ori.prototype;
         proto._init = async function () {
             ///
-            const fullPath = that.html;
+            const fullPath = that.markup;
+            var markup = "";
+            if (fullPath.endsWith(".phtml")) {
+                const parser = new PHTMLParser();
+                markup = parser.parse(await Fetcher.fetchText(fullPath), this);
+            }
+            else {
+                markup = await Fetcher.fetchText(fullPath);
+            }
             ///
-            return Fetcher.fetchText(fullPath);
+            return markup;
         };
         proto._postInit = async function (preHtml) {
             if (that.css) {
@@ -145,19 +154,19 @@ export var AccessType;
     AccessType[AccessType["BOTH"] = 3] = "BOTH";
 })(AccessType || (AccessType = {}));
 export class TripletBuilder {
-    html;
+    markup;
     css;
     js;
     uni;
     access = AccessType.BOTH;
     additionalFiles = new Map();
-    constructor(html, css, js) {
-        this.html = html;
+    constructor(markup, css, js) {
+        this.markup = markup;
         this.css = css;
         this.js = js;
     }
-    static create(html, css, js) {
-        let urlHtml = html ? new URL(html, window.location.origin) : null;
+    static create(markup, css, js) {
+        let urlHtml = markup ? new URL(markup, window.location.origin) : null;
         let urlCss = css ? new URL(css, window.location.origin) : null;
         let urlJs = js ? new URL(js, window.location.origin) : null;
         return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);

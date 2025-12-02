@@ -2,14 +2,12 @@ const swSelf = self;
 // Автоматически генерируем CACHE_NAME из base.json
 //import base from '../../../data/base.json';
 const CACHE_NAME = `pureper-v1`;
-const BASE_PATH = '/Pureper'; // GitHub Pages base path
-const IS_GITHUB_PAGES = swSelf.location.hostname.includes('github.io');
 const STATIC_ASSETS = [
     '/index.html'
 ];
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('../out/src/foundation/worker/ServiceWorker.js', { type: 'module' })
+        navigator.serviceWorker.register('./serviceWorker.js', { type: 'module' })
             .then((registration) => {
             console.log('ServiceWorker registration successful:', registration.scope);
         })

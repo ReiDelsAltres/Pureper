@@ -1,10 +1,3 @@
-declare global {
-    interface Window {
-        RouterConfig?: {
-            ASSET_PATH: string;
-        };
-    }
-}
 import UniHtml from "../component_api/UniHtml.js";
 export interface Route<T extends UniHtml = UniHtml> {
     route: string;
@@ -23,7 +16,7 @@ export declare abstract class Router {
     static getPersistedRoute(): URL | null;
     static clearPersistedRoute(): void;
     static legacyRouteTo(route: string): void;
-    static tryRouteTo(url: URL): void;
+    static tryRouteTo(url: URL, pushState?: boolean): void;
     static tryFindRoute(url: URL): Route;
     static registerRoute<T extends UniHtml>(path: string, route: string, pageFactory: (search?: URLSearchParams) => T, inheritedRoute?: Route): Promise<Route>;
     private static createPage;
