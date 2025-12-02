@@ -67,8 +67,12 @@ const semestrs: Semestr[] = [
       new Subject("English", "Ismayilova Aybəniz Arif qızı", ["759ITS", "759KM"], "Английский язык"),
     ]),
     new Semestr("&#8547;", []),
-  ]
+]
+
+
 const parser = new PHTMLParser();
 const html2 = parser.parse(tpl, { semestrs: semestrs });
 
 console.log(html2);
+const tt = JSON.stringify(new Subject("InfTech", "Həsənов Elчин Qafar oğlu", ["759ITS"], "Инфоомационные технологии"));
+console.log(encodeURIComponent(tt));
