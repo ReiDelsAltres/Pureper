@@ -20,5 +20,3 @@ export function RePage(html? : string, css?: string, js?: string, access?: Acces
         triplet.register("router", path)
     }
 }
-
-class myFirstPlugin {}
