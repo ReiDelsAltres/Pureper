@@ -100,7 +100,7 @@ export default class PHTMLParser {
     private stringifyValue(val: any): string {
         if (val == null) return '';
         if (typeof val === 'string') return val;
-        return JSON.stringify(val, null, 0);
+        return JSON.stringify(val,  Object.keys(val.constructor.prototype));
     }
 
     public parse(content: string, scope?: Record<string, any>): string {
