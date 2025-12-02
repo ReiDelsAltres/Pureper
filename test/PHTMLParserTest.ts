@@ -22,7 +22,7 @@ const tpl = `<paper-component simple="true" class="page">
             </div>
             <div class="chip-column">
               @for (group in subject.groups) {
-              <re-chip color="additional">@(group)</re-chip>
+              <re-chip color="additional">@(group)@(encodeURIComponent(JSON.stringify(subject)))</re-chip>
               }
             </div>
           </div>
