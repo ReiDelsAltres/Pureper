@@ -10,43 +10,67 @@ class PHTMLParserRule {
 }
 
 export default class PHTMLParser {
+    // Extracts a balanced block starting from position `start` in `content`.
+    // Returns { block, end } where `block` is the content inside braces and `end` is the position after closing brace.
+    private static extractBalancedBlock(content: string, start: number): { block: string; end: number } | null {
+        if (content[start] !== '{') return null;
+        let depth = 1;
+        let i = start + 1;
+        while (i < content.length && depth > 0) {
+            if (content[i] === '{') depth++;
+            else if (content[i] === '}') depth--;
+            i++;
+        }
+        if (depth !== 0) return null;
+        return { block: content.slice(start + 1, i - 1), end: i };
+    }
+
+    // Parses @for constructs with proper nesting support using brace counting.
+    private parseForLoops(content: string, scope?: Record<string, any>): string {
+        const forPattern = /@for\s*\(([A-Za-z0-9_$]+)\s+in\s+([A-Za-z0-9_$.]+)\s*\)\s*\{/g;
+        let result = '';
+        let lastIndex = 0;
+        let match: RegExpExecArray | null;
+
+        while ((match = forPattern.exec(content)) !== null) {
+            // Append text before this @for
+            result += content.slice(lastIndex, match.index);
+
+            const iterVar = match[1];
+            const iterableExpr = match[2];
+            const blockStart = match.index + match[0].length - 1; // position of '{'
+
+            const extracted = PHTMLParser.extractBalancedBlock(content, blockStart);
+            if (!extracted) {
+                // Unbalanced braces, just append the match as-is and continue
+                result += match[0];
+                lastIndex = match.index + match[0].length;
+                continue;
+            }
+
+            const inner = extracted.block;
+            lastIndex = extracted.end;
+            forPattern.lastIndex = lastIndex; // Update regex position
+
+            const resolved = this.resolveExpression(iterableExpr, scope);
+            const arr = Array.isArray(resolved) ? resolved : [];
+
+            const resultParts: string[] = [];
+            for (const item of arr) {
+                const fullScope = Object.assign({}, scope, { [iterVar]: item });
+                // Recursively parse inner block (handles nested @for and other rules)
+                const t = this.parse(inner, fullScope);
+                resultParts.push(t);
+            }
+            result += resultParts.join('\n');
+        }
+
+        // Append remaining content after last match
+        result += content.slice(lastIndex);
+        return result;
+    }
+
     private static rules: PHTMLParserRule[] = [
-        // Rule: for-loops like @for (item in items) { ... }
-        new PHTMLParserRule(/@for\s*\(([A-Za-z0-9_$]+)\s+in\s+([A-Za-z0-9_$.]+)\s*\)\s*\{([\s\S]*?)\}/g,
-            (parser, m, scope) => {
-                // m[1] = iteration variable name, m[2] = iterable expression, m[3] = inner block
-                const iterVar = m[1];
-                const iterableExpr = m[2];
-                const inner = m[3];
-
-                const resolved = parser.resolveExpression(iterableExpr, scope);
-                const arr = Array.isArray(resolved) ? resolved : [];
-
-                const resultParts: string[] = [];
-                let i = 0;
-                for (const item of arr) {
-                    const fullScope = Object.assign({}, scope, { [iterVar]: item });
-                    // parse inner block for this item
-                    let t = parser.parse(inner, fullScope);
-                    // normalize whitespace: remove leading/trailing whitespace lines and 
-                    if (i === 0) {
-                        t = t.trim();
-                        t = "    " + t;
-                    }
-                    t = t.split(/\n/)
-                        //.map(line => line.trim())
-                        .filter(line => line.length > 0)
-                        .toString();
-                        //.join('\n');
-                    resultParts.push(t);
-                    i++;
-                }
-                // join each item's rendered chunk with a single newline so output is compact
-                return resultParts.join('\n');
-
-                // Parse inner block for each element in the iterable using a local scope
-                //return arr.map((el) => parser.parse(inner, Object.assign({}, scope, { [iterVar]: el }))).join('');
-            }),
         new PHTMLParserRule(/@\(\(([\s\S]+?)\)\)/g, (parser, m, scope) => 
             parser.stringifyValue(parser.resolveExpression(m[1], scope))),
         new PHTMLParserRule(/@\(([\s\S]+?)\)/g, (parser, m, scope) => 
@@ -80,7 +104,10 @@ export default class PHTMLParser {
     }
 
     public parse(content: string, scope?: Record<string, any>): string {
-        let working = content;
+        // First, parse @for loops with proper nesting support
+        let working = this.parseForLoops(content, scope);
+        
+        // Then apply other rules
         for (const rule of PHTMLParser.rules) {
             working = working.replace(rule.pattern,
                 (...args) => rule.replacer(this, args as any, scope));
