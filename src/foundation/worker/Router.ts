@@ -1,9 +1,6 @@
 import { HOSTING, HOSTING_ORIGIN } from "../../index.js";
 import UniHtml from "../component_api/UniHtml.js";
 
-const HOSTING_BASE = HOSTING.endsWith("/") ? HOSTING.slice(0, -1) : HOSTING;
-const ABSOLUTE_URL_PATTERN = /^[a-zA-Z][a-zA-Z\d+\-.]*:/;
-
 export interface Route<T extends UniHtml = UniHtml> {
   route: string;
   path: string;
@@ -44,57 +41,48 @@ export abstract class Router {
     }
   }
 
+
   public static legacyRouteTo(route: string) {
-    const target = Router.resolveRouteHref(route);
-    if (window.location.href !== target.href) {
-      window.location.replace(target.href);
+    let url = new URL(route, HOSTING_ORIGIN);
+    if (window.location.pathname !== route) {
+      window.location.replace(url.href);
     }
   }
-
   public static tryRouteTo(url: URL, pushState: boolean = true) {
+    const urlH = new URL(url.href, HOSTING_ORIGIN);
     try {
-      const normalizedUrl = Router.normalizeIncomingUrl(url);
-      const found: Route = Router.tryFindRoute(normalizedUrl);
-      const page: UniHtml = Router.createPage(found, normalizedUrl.searchParams);
+      const found: Route = this.tryFindRoute(urlH);
+      const page: UniHtml = this.createPage(found, url.searchParams);
 
-      page.load(document.getElementById("page")!);
-
-      const hostedUrl = Router.buildHostedUrl(normalizedUrl);
+      page.load(document.getElementById('page')!);
       if (pushState && typeof window !== "undefined" && window.location) {
-        window.history.pushState(page, "", hostedUrl.href);
+        window.history.pushState(page, '', urlH.href);
       }
-
-      window.dispatchEvent(new CustomEvent("spa:navigated", { detail: { url: hostedUrl } }));
     } catch (error) {
-      console.error("[Router]: Unable to route to ", url.href, error);
+      console.error("[Router]: Unable to route to ", urlH.href, error);
     }
   }
-
   public static tryFindRoute(url: URL): Route {
-    const relativePath = Router.normalizeRoutePath(Router.extractRelativePath(url.pathname));
-    const found = ROUTES.find((r) => r.route === relativePath);
+    const tt = HOSTING.substring(0, HOSTING.length - 1) + url.pathname;
+    const found = ROUTES.find(r => r.route === tt);
     if (!found) {
       throw new Error(`[Router]: Route not found: ${url.pathname}`);
     }
     return found;
   }
 
-  public static async registerRoute<T extends UniHtml>(
-    path: string,
-    route: string,
-    pageFactory: (search?: URLSearchParams) => T,
-    inheritedRoute?: Route
-  ): Promise<Route> {
-    const normalizedRouteSegment = Router.normalizeRoutePath(route);
-    const compositeRoute = inheritedRoute
-      ? Router.normalizeRoutePath(`${inheritedRoute.route}${normalizedRouteSegment}`)
-      : normalizedRouteSegment;
+  public static async registerRoute<T extends UniHtml>(path: string, route: string, pageFactory: (search?: URLSearchParams) => T,
+    inheritedRoute?: Route): Promise<Route> {
 
-    const routeObj: Route = { route: compositeRoute, path, pageFactory };
+    let prepRoute = route
+    let fullRoute = inheritedRoute ? inheritedRoute.route + prepRoute : prepRoute;
+
+    const tt = HOSTING.substring(0, HOSTING.length - 1) + fullRoute;
+
+    let routeObj: Route = { route: tt, path, pageFactory };
 
     ROUTES.push(routeObj);
-    const hostedPreview = Router.buildHostedUrl(new URL(compositeRoute, window.location.origin));
-    console.log(`[Router]: Registered route: ${hostedPreview.pathname} -> ${path}`);
+    console.log(`[Router]: Registered route: ${tt} -> ${path}`);
 
     return Promise.resolve(routeObj);
   }
@@ -102,140 +90,39 @@ export abstract class Router {
   private static createPage(route: Route, search?: URLSearchParams): UniHtml {
     return route.pageFactory(search);
   }
-
-  private static normalizeIncomingUrl(url: URL): URL {
-    if (url.origin && url.origin !== window.location.origin) {
-      return url;
-    }
-
-    return new URL(url.href, window.location.origin);
-  }
-
-  private static normalizeRoutePath(route: string): string {
-    if (!route || route === "/") {
-      return "/";
-    }
-
-    const withSlash = route.startsWith("/") ? route : `/${route}`;
-      const collapsed = withSlash.replace(/\/{2,}/g, "/");
-    const withoutTrailing = collapsed.length > 1 && collapsed.endsWith("/") ? collapsed.slice(0, -1) : collapsed;
-    return withoutTrailing === "" ? "/" : withoutTrailing;
-  }
-
-  private static extractRelativePath(pathname: string): string {
-    if (!pathname) {
-      return "/";
-    }
-
-    const ensuredPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
-
-    if (HOSTING_BASE && ensuredPath.startsWith(HOSTING_BASE)) {
-      const trimmed = ensuredPath.slice(HOSTING_BASE.length);
-      if (!trimmed || trimmed === "") {
-        return "/";
-      }
-      return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
-    }
-
-    return ensuredPath;
-  }
-
-  private static resolveRouteHref(route: string): URL {
-    if (!route || route === "/") {
-      return new URL("./", HOSTING_ORIGIN);
-    }
-
-    if (ABSOLUTE_URL_PATTERN.test(route)) {
-      return new URL(route);
-    }
-
-    const normalized = route.startsWith("/") ? `.${route}` : route;
-    return new URL(normalized, HOSTING_ORIGIN);
-  }
-
-  private static buildHostedUrl(url: URL): URL {
-    if (url.origin && url.origin !== window.location.origin) {
-      return url;
-    }
-
-    const relativePath = Router.normalizeRoutePath(Router.extractRelativePath(url.pathname));
-    const routeSegment = relativePath === "/" ? "./" : `.${relativePath}`;
-    const hosted = new URL(routeSegment, HOSTING_ORIGIN);
-    hosted.search = url.search;
-    hosted.hash = url.hash;
-    return hosted;
-  }
 }
 
-const resolveLocalNavigationUrl = (rawHref: string | null): URL | null => {
-  if (!rawHref) {
-    return null;
-  }
-
-  const trimmed = rawHref.trim();
-  if (trimmed === "" || trimmed.toLowerCase().startsWith("javascript:")) {
-    return null;
-  }
-
-  try {
-    const candidate = ABSOLUTE_URL_PATTERN.test(trimmed)
-      ? new URL(trimmed)
-      : new URL(trimmed, window.location.href);
-
-    if (candidate.origin !== window.location.origin) {
-      return null;
-    }
-
-    return candidate;
-  } catch {
-    return null;
-  }
-};
-
-// For SPA navigation
-document.addEventListener("click", (e) => {
+//For SPA navigation
+document.addEventListener('click', e => {
   const target = e.target as Element | null;
-  if (!target) {
-    return;
+  if (target) {
+    const link = target.closest('a[data-link]') ?? target.closest('re-button[data-link]');
+    if (link) {
+      e.preventDefault();
+      const hr = HOSTING_ORIGIN.substring(0, HOSTING_ORIGIN.length - 1) + link.getAttribute('href');
+      const url : URL = new URL(hr, HOSTING_ORIGIN);
+      Router.tryRouteTo(url);
+    }
   }
-
-  const link = target.closest("a[data-link]") ?? target.closest("re-button[data-link]");
-  if (!link) {
-    return;
-  }
-
-  const resolved = resolveLocalNavigationUrl(link.getAttribute("href"));
-  if (!resolved) {
-    return;
-  }
-
-  e.preventDefault();
-  Router.tryRouteTo(resolved);
 });
 
-// For back/forward navigation
-window.addEventListener("popstate", () => {
+//For back/forward navigation
+window.addEventListener('popstate', e => {
   try {
-    const url = new URL(window.location.href);
+    const url = new URL(window.location.href, HOSTING_ORIGIN);
     Router.tryRouteTo(url, false);
   } catch (error) {
-    console.error("[Router] (popstate): failed to route to current location", error);
+    console.error('[Router] (popstate): failed to route to current location', error);
   }
 });
 
-window.addEventListener("DOMContentLoaded", () => {
-  const routes = ROUTES;
-  if (routes.length > 0) {
-    const hostedRoutes = routes.map((r) => describeHostedPath(r.route));
-    console.log("[Init] [Router]: available routes =", hostedRoutes.join(", "));
-  }
+window.addEventListener('DOMContentLoaded', () => {
+  const checkRoutes = () => {
+    const routes = ROUTES;
+    if (routes) {
+      console.log('[Init] [Router]: available routes =', routes.map(r => r.route).join(', '));
+    }
+  };
+
+  checkRoutes();
 });
-
-const describeHostedPath = (route: string): string => {
-  if (!route || route === "/") {
-    return new URL("./", HOSTING_ORIGIN).pathname;
-  }
-
-  const segment = route.startsWith("/") ? `.${route}` : route;
-  return new URL(segment, HOSTING_ORIGIN).pathname;
-};
