@@ -19,7 +19,7 @@ export default class UniHtml {
      * @param element Target container (usually shadowRoot.host)
      */
     public async load(element: HTMLElement | ShadowRoot): Promise<void> {;
-
+        await this.preInit();
         const preHtml: string = await this._init();
         const html: string = await this._postInit(preHtml);
 
@@ -47,6 +47,8 @@ export default class UniHtml {
     private async _init(): Promise<string> {
         throw new Error("Method not implemented.");
     }
+
+    protected async preInit(): Promise<void> {}
     /**
      * Hook before rendering (e.g., data preparation).
      * Для компонентов вызывается до появления содержимого в Shadow DOM, this.shadowRoot может быть недоступен.
