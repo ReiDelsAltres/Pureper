@@ -1,4 +1,4 @@
-import { HOSTING_ORIGIN } from "../../index.js";
+import { HOSTING, HOSTING_ORIGIN } from "../../index.js";
 import UniHtml from "../component_api/UniHtml.js";
 
 export interface Route<T extends UniHtml = UniHtml> {
@@ -76,10 +76,12 @@ export abstract class Router {
     let prepRoute = route
     let fullRoute = inheritedRoute ? inheritedRoute.route + prepRoute : prepRoute;
 
-    let routeObj: Route = { route: fullRoute, path, pageFactory };
+    const tt = HOSTING.substring(0, HOSTING.length - 1) + fullRoute;
+
+    let routeObj: Route = { route: tt, path, pageFactory };
 
     ROUTES.push(routeObj);
-    console.log(`[Router]: Registered route: ${fullRoute} -> ${path}`);
+    console.log(`[Router]: Registered route: ${tt} -> ${path}`);
 
     return Promise.resolve(routeObj);
   }
