@@ -1,5 +1,5 @@
 const str = "https://reidelsaltres.github.io/Hellper/src/components/PaperComponent.html.lt.css"
-const url = new URL(str, "https://reidelsaltres.github.io/Hellper/");
+const url = new URL("https://reidelsaltres.github.io/Hellper/chess", "https://reidelsaltres.github.io/Hellper/");
 
 console.log(url.pathname);
 

@@ -99,7 +99,8 @@ document.addEventListener('click', e => {
     const link = target.closest('a[data-link]') ?? target.closest('re-button[data-link]');
     if (link) {
       e.preventDefault();
-      const url : URL = new URL(link.getAttribute('href')!, HOSTING_ORIGIN);
+      const hr = HOSTING_ORIGIN.substring(0, HOSTING_ORIGIN.length - 1) + link.getAttribute('href');
+      const url : URL = new URL(hr, HOSTING_ORIGIN);
       Router.tryRouteTo(url);
     }
   }
