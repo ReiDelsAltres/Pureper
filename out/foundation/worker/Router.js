@@ -41,16 +41,17 @@ export class Router {
         }
     }
     static tryRouteTo(url, pushState = true) {
+        const urlH = new URL(url.href, HOSTING_ORIGIN);
         try {
             const found = this.tryFindRoute(url);
             const page = this.createPage(found, url.searchParams);
             page.load(document.getElementById('page'));
             if (pushState && typeof window !== "undefined" && window.location) {
-                window.history.pushState(page, '', url.href);
+                window.history.pushState(page, '', urlH.href);
             }
         }
         catch (error) {
-            console.error("[Router]: Unable to route to ", url.href, error);
+            console.error("[Router]: Unable to route to ", urlH.href, error);
         }
     }
     static tryFindRoute(url) {

@@ -1,3 +1,4 @@
+import { HOSTING_ORIGIN } from "../index";
 export default class Fetcher {
     static async fetchText(url) {
         const response = await this.internalFetch(url);
@@ -8,7 +9,8 @@ export default class Fetcher {
         return await response.json();
     }
     static async internalFetch(url) {
-        const response = await fetch(url, { cache: 'default' });
+        const URLObj = new URL(url, HOSTING_ORIGIN);
+        const response = await fetch(URLObj.href, { cache: 'default' });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
