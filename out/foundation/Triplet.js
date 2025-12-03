@@ -4,6 +4,7 @@ import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import PHTMLParser from "./PHTMLParser.js";
+import { HOSTING_ORIGIN } from "../index.js";
 export default class Triplet {
     uni;
     access;
@@ -166,9 +167,9 @@ export class TripletBuilder {
         this.js = js;
     }
     static create(markup, css, js) {
-        let urlHtml = markup ? new URL(markup, window.location.origin) : null;
-        let urlCss = css ? new URL(css, window.location.origin) : null;
-        let urlJs = js ? new URL(js, window.location.origin) : null;
+        let urlHtml = markup ? new URL(markup, HOSTING_ORIGIN) : null;
+        let urlCss = css ? new URL(css, HOSTING_ORIGIN) : null;
+        let urlJs = js ? new URL(js, HOSTING_ORIGIN) : null;
         return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
     }
     withUni(cls) {
@@ -180,7 +181,7 @@ export class TripletBuilder {
         return this;
     }
     withLightDOMCss(css) {
-        let urlCss = css ? new URL(css, window.location.origin) : null;
+        let urlCss = css ? new URL(css, HOSTING_ORIGIN) : null;
         this.additionalFiles.set('light-dom', urlCss?.href);
         return this;
     }

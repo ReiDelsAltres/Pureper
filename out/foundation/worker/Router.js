@@ -1,3 +1,4 @@
+import { HOSTING_ORIGIN } from "../../index.js";
 export var AccessType;
 (function (AccessType) {
     AccessType[AccessType["OFFLINE"] = 0] = "OFFLINE";
@@ -34,7 +35,7 @@ export class Router {
         }
     }
     static legacyRouteTo(route) {
-        let url = new URL(route, window.location.origin);
+        let url = new URL(route, HOSTING_ORIGIN);
         if (window.location.pathname !== route) {
             window.location.replace(url.href);
         }
@@ -78,7 +79,7 @@ document.addEventListener('click', e => {
         const link = target.closest('a[data-link]') ?? target.closest('re-button[data-link]');
         if (link) {
             e.preventDefault();
-            const url = new URL(link.getAttribute('href'), window.location.origin);
+            const url = new URL(link.getAttribute('href'), HOSTING_ORIGIN);
             Router.tryRouteTo(url);
         }
     }
@@ -86,7 +87,7 @@ document.addEventListener('click', e => {
 //For back/forward navigation
 window.addEventListener('popstate', e => {
     try {
-        const url = new URL(window.location.href);
+        const url = new URL(window.location.href, HOSTING_ORIGIN);
         Router.tryRouteTo(url, false);
     }
     catch (error) {

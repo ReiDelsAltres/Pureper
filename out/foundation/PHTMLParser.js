@@ -1,5 +1,7 @@
 class PHTMLParserRule {
     pattern;
+    // replacer can return either a string replacement OR an object with { text, end }
+    // where `end` is a position in the source string just after the consumed range.
     replacer;
     constructor(pattern, replacer) {
         this.pattern = pattern;
@@ -7,41 +9,134 @@ class PHTMLParserRule {
     }
 }
 export default class PHTMLParser {
+    // Extracts a balanced block starting from position `start` in `content`.
+    // Returns { block, end } where `block` is the content inside braces and `end` is the position after closing brace.
+    static extractBalancedBlock(content, start) {
+        if (content[start] !== '{')
+            return null;
+        let depth = 1;
+        let i = start + 1;
+        while (i < content.length && depth > 0) {
+            if (content[i] === '{')
+                depth++;
+            else if (content[i] === '}')
+                depth--;
+            i++;
+        }
+        if (depth !== 0)
+            return null;
+        return { block: content.slice(start + 1, i - 1), end: i };
+    }
+    // Extracts a balanced parenthesis block starting at `start` (which must be '(')
+    static extractBalancedParens(content, start) {
+        if (content[start] !== '(')
+            return null;
+        let depth = 1;
+        let i = start + 1;
+        while (i < content.length && depth > 0) {
+            if (content[i] === '(')
+                depth++;
+            else if (content[i] === ')')
+                depth--;
+            i++;
+        }
+        if (depth !== 0)
+            return null;
+        return { block: content.slice(start + 1, i - 1), end: i };
+    }
+    // Note: @for handling moved to a rule in `rules` so it can participate in the
+    // ordered rules pipeline. The actual exec loop for the for-rule is implemented
+    // inside parse() to allow balanced-brace extraction.
     static rules = [
-        // Rule: for-loops like @for (item in items) { ... }
-        new PHTMLParserRule(/@for\s*\(([A-Za-z0-9_$]+)\s+in\s+([A-Za-z0-9_$.]+)\s*\)\s*\{([\s\S]*?)\}/g, (parser, m, scope) => {
-            // m[1] = iteration variable name, m[2] = iterable expression, m[3] = inner block
-            const iterVar = m[1];
-            const iterableExpr = m[2];
-            const inner = m[3];
+        // Rule for nested @for blocks. This rule's replacer computes the
+        // replacement for one @for occurrence when given a RegExpExecArray
+        // (it expects match.index and match.input to be present so the parser
+        // can extract the full balanced block that follows the match).
+        new PHTMLParserRule(/@for\s*\(([A-Za-z0-9_$]+)\s+in\s+([A-Za-z0-9_$.]+)\s*\)\s*\{/g, (parser, m, scope) => {
+            // `m` will be a RegExpExecArray-like object when used by the
+            // exec-based loop inside `parse()` so we can treat it accordingly.
+            const match = m;
+            const iterVar = match[1];
+            const iterableExpr = match[2];
+            const offset = Number(match[match.length - 2]); // offset position
+            const input = String(match[match.length - 1]); // source string
+            const blockStart = offset + match[0].length - 1; // position of '{'
+            const extracted = PHTMLParser.extractBalancedBlock(input, blockStart);
+            if (!extracted)
+                return match[0];
+            const inner = extracted.block;
             const resolved = parser.resolveExpression(iterableExpr, scope);
             const arr = Array.isArray(resolved) ? resolved : [];
             const resultParts = [];
-            let i = 0;
             for (const item of arr) {
                 const fullScope = Object.assign({}, scope, { [iterVar]: item });
-                // parse inner block for this item
-                let t = parser.parse(inner, fullScope);
-                // normalize whitespace: remove leading/trailing whitespace lines and 
-                if (i === 0) {
-                    t = t.trim();
-                    t = "    " + t;
-                }
-                t = t.split(/\n/)
-                    //.map(line => line.trim())
-                    .filter(line => line.length > 0)
-                    .toString();
-                //.join('\n');
-                resultParts.push(t);
-                i++;
+                resultParts.push(parser.parse(inner, fullScope));
             }
-            // join each item's rendered chunk with a single newline so output is compact
-            return resultParts.join('\n');
-            // Parse inner block for each element in the iterable using a local scope
-            //return arr.map((el) => parser.parse(inner, Object.assign({}, scope, { [iterVar]: el }))).join('');
+            // return both the replacement text and the position after the full balanced block
+            return { text: resultParts.join('\n'), end: extracted.end };
         }),
-        new PHTMLParserRule(/@\(\(([\s\S]+?)\)\)/g, (parser, m, scope) => parser.stringifyValue(parser.resolveExpression(m[1], scope))),
-        new PHTMLParserRule(/@\(([\s\S]+?)\)/g, (parser, m, scope) => parser.stringifyValue(parser.resolveExpression(m[1], scope))),
+        // Double-paren expression: @(( code ))  — use exec+balanced-start extraction
+        new PHTMLParserRule(/@\(\(/g, (parser, m, scope) => {
+            const match = m;
+            const offset = Number(match[match.length - 2]);
+            const input = String(match[match.length - 1]);
+            const blockStart = offset + match[0].length - 1; // points at the inner '('
+            // extract balanced parentheses
+            const extracted = PHTMLParser.extractBalancedParens(input, blockStart);
+            if (!extracted)
+                return match[0];
+            const code = extracted.block;
+            // Evaluate code using parser.variables + local scope
+            const ctx = Object.assign({}, parser.variables, scope || {});
+            let result;
+            try {
+                // try to evaluate as expression first
+                const fn = new Function('with(this){ return (' + code + '); }');
+                result = fn.call(ctx);
+            }
+            catch (e) {
+                try {
+                    const fn2 = new Function('with(this){ ' + code + ' }');
+                    result = fn2.call(ctx);
+                }
+                catch (e2) {
+                    // On error return empty string
+                    return '';
+                }
+            }
+            // final end should include the outer ')' if present (for @(( ... )) constructs)
+            let finalEnd = extracted.end;
+            if (input[extracted.end] === ')')
+                finalEnd = extracted.end + 1;
+            return { text: parser.stringifyValue(result), end: finalEnd };
+        }),
+        // Single-paren expression: @( code ) — similar extraction, processed after double-paren rule
+        new PHTMLParserRule(/@\(/g, (parser, m, scope) => {
+            const match = m;
+            const offset = Number(match[match.length - 2]);
+            const input = String(match[match.length - 1]);
+            const blockStart = offset + match[0].length - 1; // points at '('
+            const extracted = PHTMLParser.extractBalancedParens(input, blockStart);
+            if (!extracted)
+                return match[0];
+            const code = extracted.block;
+            const ctx = Object.assign({}, parser.variables, scope || {});
+            let result;
+            try {
+                const fn = new Function('with(this){ return (' + code + '); }');
+                result = fn.call(ctx);
+            }
+            catch (e) {
+                try {
+                    const fn2 = new Function('with(this){ ' + code + ' }');
+                    result = fn2.call(ctx);
+                }
+                catch (e2) {
+                    return '';
+                }
+            }
+            return { text: parser.stringifyValue(result), end: extracted.end };
+        }),
     ];
     variables = {};
     addVariable(name, value) {
@@ -67,12 +162,40 @@ export default class PHTMLParser {
             return '';
         if (typeof val === 'string')
             return val;
-        return String(val);
+        const str = String(val);
+        return str;
     }
     parse(content, scope) {
         let working = content;
         for (const rule of PHTMLParser.rules) {
-            working = working.replace(rule.pattern, (...args) => rule.replacer(this, args, scope));
+            const pattern = rule.pattern;
+            let result = '';
+            let lastIndex = 0;
+            let match;
+            // reset scanning position
+            pattern.lastIndex = 0;
+            while ((match = pattern.exec(working)) !== null) {
+                // append text before this match
+                result += working.slice(lastIndex, match.index);
+                // build args array similar to replace(): [...match, offset, input]
+                const args = [...match, match.index, working];
+                const out = rule.replacer(this, args, scope);
+                if (typeof out === 'string') {
+                    // simple replacement: advance by matched token length
+                    result += out;
+                    lastIndex = match.index + match[0].length;
+                }
+                else {
+                    // object replacement provides final end index — consume until that position
+                    result += out.text;
+                    lastIndex = out.end;
+                }
+                // make sure regex scanning continues from the correct place
+                pattern.lastIndex = lastIndex;
+            }
+            // append tail and update working
+            result += working.slice(lastIndex);
+            working = result;
         }
         return working;
     }

@@ -18,6 +18,7 @@ export default class UniHtml {
     load(element: HTMLElement | ShadowRoot): Promise<void>;
     private _postInit;
     private _init;
+    protected preInit(): Promise<void>;
     /**
      * Hook before rendering (e.g., data preparation).
      * Для компонентов вызывается до появления содержимого в Shadow DOM, this.shadowRoot может быть недоступен.

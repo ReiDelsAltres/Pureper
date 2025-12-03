@@ -1,4 +1,6 @@
 export default class PHTMLParser {
+    private static extractBalancedBlock;
+    private static extractBalancedParens;
     private static rules;
     variables: Record<string, unknown>;
     addVariable(name: string, value: unknown): this;

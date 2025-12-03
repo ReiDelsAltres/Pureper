@@ -1,3 +1,4 @@
+import { HOSTING_ORIGIN } from "../../index.js";
 import UniHtml from "../component_api/UniHtml.js";
 
 export interface Route<T extends UniHtml = UniHtml> {
@@ -42,7 +43,7 @@ export abstract class Router {
 
 
   public static legacyRouteTo(route: string) {
-    let url = new URL(route, window.location.origin);
+    let url = new URL(route, HOSTING_ORIGIN);
     if (window.location.pathname !== route) {
       window.location.replace(url.href);
     }
@@ -95,7 +96,7 @@ document.addEventListener('click', e => {
     const link = target.closest('a[data-link]') ?? target.closest('re-button[data-link]');
     if (link) {
       e.preventDefault();
-      const url : URL = new URL(link.getAttribute('href')!, window.location.origin);
+      const url : URL = new URL(link.getAttribute('href')!, HOSTING_ORIGIN);
       Router.tryRouteTo(url);
     }
   }
@@ -104,7 +105,7 @@ document.addEventListener('click', e => {
 //For back/forward navigation
 window.addEventListener('popstate', e => {
   try {
-    const url = new URL(window.location.href);
+    const url = new URL(window.location.href, HOSTING_ORIGIN);
     Router.tryRouteTo(url, false);
   } catch (error) {
     console.error('[Router] (popstate): failed to route to current location', error);

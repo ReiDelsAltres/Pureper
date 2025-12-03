@@ -6,6 +6,7 @@ import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
 import PHTMLParser from "./PHTMLParser.js";
+import { HOSTING_ORIGIN } from "../index.js";
 
 export default class Triplet<T extends UniHtml> implements ITriplet {
     private uni?: AnyConstructor<UniHtml>;
@@ -188,9 +189,9 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
     ) { }
 
     public static create<T extends UniHtml>(markup?: string, css?: string, js?: string): TripletBuilder<T> {
-        let urlHtml: URL = markup ? new URL(markup, window.location.href) : null;
-        let urlCss: URL = css ? new URL(css, window.location.href) : null;
-        let urlJs: URL = js ? new URL(js, window.location.href) : null;
+        let urlHtml: URL = markup ? new URL(markup, HOSTING_ORIGIN) : null;
+        let urlCss: URL = css ? new URL(css, HOSTING_ORIGIN) : null;
+        let urlJs: URL = js ? new URL(js, HOSTING_ORIGIN) : null;
 
         return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
     }
@@ -204,7 +205,7 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
         return this;
     }
     public withLightDOMCss(css: string): TripletBuilder<T> {
-        let urlCss: URL = css ? new URL(css, window.location.origin) : null;
+        let urlCss: URL = css ? new URL(css, HOSTING_ORIGIN) : null;
         this.additionalFiles.set('light-dom', urlCss?.href);
         return this;
     }

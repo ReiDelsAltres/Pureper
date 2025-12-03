@@ -17,6 +17,11 @@ export { default as Fetcher } from './foundation/Fetcher.js';
 export { Router } from './foundation/worker/Router.js';
 export { default as ServiceWorker } from './foundation/worker/ServiceWorker.js';
 
-
-
 export * from './foundation/Theme.js';
+
+// derive the part of href after the origin (e.g. "/path?query#hash")
+export const HOSTING: string = window.location.href.startsWith(window.location.origin)
+	? window.location.href.substring(window.location.origin.length)
+	: window.location.href;
+
+export const HOSTING_ORIGIN: string = window.location.origin + HOSTING;
