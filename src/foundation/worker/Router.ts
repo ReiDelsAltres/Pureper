@@ -49,17 +49,17 @@ export abstract class Router {
     }
   }
   public static tryRouteTo(url: URL, pushState: boolean = true) {
+    const urlH = new URL(url.href, HOSTING_ORIGIN);
     try {
       const found: Route = this.tryFindRoute(url);
       const page: UniHtml = this.createPage(found, url.searchParams);
 
       page.load(document.getElementById('page')!);
-
       if (pushState && typeof window !== "undefined" && window.location) {
-        window.history.pushState(page, '', url.href);
+        window.history.pushState(page, '', urlH.href);
       }
     } catch (error) {
-      console.error("[Router]: Unable to route to ", url.href, error);
+      console.error("[Router]: Unable to route to ", urlH.href, error);
     }
   }
   public static tryFindRoute(url: URL): Route {
