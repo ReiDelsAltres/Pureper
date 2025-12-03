@@ -188,9 +188,9 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
     ) { }
 
     public static create<T extends UniHtml>(markup?: string, css?: string, js?: string): TripletBuilder<T> {
-        let urlHtml: URL = markup ? new URL(markup, window.location.origin) : null;
-        let urlCss: URL = css ? new URL(css, window.location.origin) : null;
-        let urlJs: URL = js ? new URL(js, window.location.origin) : null;
+        let urlHtml: URL = markup ? new URL(markup, window.location.href) : null;
+        let urlCss: URL = css ? new URL(css, window.location.href) : null;
+        let urlJs: URL = js ? new URL(js, window.location.href) : null;
 
         return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
     }
