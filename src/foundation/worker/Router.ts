@@ -51,7 +51,7 @@ export abstract class Router {
   public static tryRouteTo(url: URL, pushState: boolean = true) {
     const urlH = new URL(url.href, HOSTING_ORIGIN);
     try {
-      const found: Route = this.tryFindRoute(url);
+      const found: Route = this.tryFindRoute(urlH);
       const page: UniHtml = this.createPage(found, url.searchParams);
 
       page.load(document.getElementById('page')!);
@@ -63,7 +63,8 @@ export abstract class Router {
     }
   }
   public static tryFindRoute(url: URL): Route {
-    const found = ROUTES.find(r => r.route === url.pathname);
+    const tt = HOSTING.substring(0, HOSTING.length - 1) + url.pathname;
+    const found = ROUTES.find(r => r.route === tt);
     if (!found) {
       throw new Error(`[Router]: Route not found: ${url.pathname}`);
     }
