@@ -1,4 +1,4 @@
-import { HOSTING_ORIGIN } from "../index";
+import { HOSTING_ORIGIN } from "../index.js";
 
 export default class Fetcher {
     static async fetchText(url: string): Promise<string> {
