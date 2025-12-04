@@ -15,7 +15,7 @@ export default class Fetcher {
     private static async internalFetch(url: string): Promise<Response> {
         const urlObj = new URL(url, HOSTING_ORIGIN);
         var stri = "";
-        if (!stri.includes(HOSTING)) {
+        if (!urlObj.href.includes(HOSTING)) {
             stri = urlObj.origin + HOSTING.substring(0, HOSTING.length - 1) + urlObj.pathname;
         }
         const response = await fetch(stri, { cache: 'default' });
