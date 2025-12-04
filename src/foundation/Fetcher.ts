@@ -17,6 +17,8 @@ export default class Fetcher {
         var stri = "";
         if (!urlObj.href.includes(HOSTING)) {
             stri = urlObj.origin + HOSTING.substring(0, HOSTING.length - 1) + urlObj.pathname;
+        } else {
+            stri = urlObj.href;
         }
         const response = await fetch(stri, { cache: 'default' });
         if (!response.ok) {
