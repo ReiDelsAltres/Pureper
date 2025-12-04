@@ -14,7 +14,7 @@ export default class Fetcher {
 
     private static async internalFetch(url: string): Promise<Response> {
         const URLObj = new URL(url, HOSTING_ORIGIN);
-        const URL2 = new URL(HOSTING.substring(0, HOSTING.length - 1) + URLObj.pathname, HOSTING_ORIGIN);
+        const URL2 = new URL(HOSTING.substring(0, HOSTING.length - 1) + URLObj.pathname);
         const response = await fetch(URL2.href, { cache: 'default' });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
