@@ -1,4 +1,4 @@
-import { HOSTING_ORIGIN } from "../index.js";
+import { HOSTING, HOSTING_ORIGIN } from "../index.js";
 
 export default class Fetcher {
     static async fetchText(url: string): Promise<string> {
@@ -13,7 +13,7 @@ export default class Fetcher {
     }
 
     private static async internalFetch(url: string): Promise<Response> {
-        const URLObj = new URL(url, HOSTING_ORIGIN);
+        const URLObj = new URL(HOSTING.substring(0, HOSTING.length - 1) + url, HOSTING_ORIGIN);
         const response = await fetch(URLObj.href, { cache: 'default' });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
