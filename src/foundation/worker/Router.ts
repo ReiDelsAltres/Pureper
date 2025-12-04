@@ -63,8 +63,7 @@ export abstract class Router {
     }
   }
   public static tryFindRoute(url: URL): Route {
-    const tt = HOSTING.substring(0, HOSTING.length - 1) + url.pathname;
-    const found = ROUTES.find(r => r.route === tt);
+    const found = ROUTES.find(r => r.route === url.pathname);
     if (!found) {
       throw new Error(`[Router]: Route not found: ${url.pathname}`);
     }
