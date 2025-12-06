@@ -158,20 +158,20 @@ export default class HMLEParser {
         // Rule: @[on[eventName]](expression) — event binding
         // Example: @[on[click]](handleClick()) or @[on[input]](value = $event.target.value)
         // Expression is parsed from the attribute name itself: @[on[click]](code here)
-        new HMLEDOMRule(/^@\[on([A-Za-z]+)\]\((.+)\)$/g,
+        new HMLEDOMRule(/^@\[on([A-Za-z]+)\]/g,
             (parser, element, attrName, attrValue, match, scope) => {
                 const eventName = match[1].toLowerCase(); // click, input, etc.
-                const code = match[2]; // expression from (...)
+                const code = attrValue; // expression from (...)
                 const ctx = parser.buildContext(scope);
 
                 const handler = (event: Event) => {
                     // Add $event to context
-                    const eventCtx = Object.assign({}, ctx, { $event: event, $el: element });
+                    const eventCtx = Object.assign({}, ctx, { event: event, element: element });
                     try {
                         const fn = new Function('with(this){ ' + code + ' }');
                         fn.call(eventCtx);
                     } catch (e) {
-                        console.error(`HMLEParser: Error in @[on[${eventName}]] handler:`, e);
+                        console.error(`HMLEParser: Error in @[on${eventName}] handler:`, e);
                     }
                 };
 
