@@ -158,7 +158,7 @@ export default class HMLEParser {
         // Rule: @[on[eventName]](expression) — event binding
         // Example: @[on[click]](handleClick()) or @[on[input]](value = $event.target.value)
         // Expression is parsed from the attribute name itself: @[on[click]](code here)
-        new HMLEDOMRule(/^@\[on\[([A-Za-z]+)\]\]\((.+)\)$/,
+        new HMLEDOMRule(/^@\[on([A-Za-z]+)\]\((.+)\)$/g,
             (parser, element, attrName, attrValue, match, scope) => {
                 const eventName = match[1].toLowerCase(); // click, input, etc.
                 const code = match[2]; // expression from (...)
