@@ -16,7 +16,7 @@ export default class Fetcher {
         const urlObj = new URL(url, HOSTING_ORIGIN);
         var stri = "";
         if (!urlObj.href.includes(HOSTING)) {
-            stri = urlObj.origin + HOSTING.substring(0, HOSTING.length - 1) + urlObj.pathname;
+            stri = urlObj.origin + HOSTING + urlObj.pathname;
         } else {
             stri = urlObj.href;
         }
