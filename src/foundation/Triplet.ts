@@ -6,6 +6,7 @@ import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
 import PHTMLParser from "./PHTMLParser.js";
+import HMLEParser from "./HMLEParser.js";
 import { HOSTING_ORIGIN } from "../index.js";
 
 export default class Triplet<T extends UniHtml> implements ITriplet {
@@ -107,7 +108,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
 
                     return search?.get(name)
                 });
-                const unn : UniHtml = new ori(...args);
+                const unn: UniHtml = new ori(...args);
 
                 return unn;
             });
@@ -132,28 +133,25 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         };
         let proto = ori.prototype as any;
         proto._init = async function () {
-            ///
             const fullPath = that.markup!;
-            var markup = "";
-            if (fullPath.endsWith(".phtml")) {
-                const parser = new PHTMLParser();
-                markup = parser.parse(await Fetcher.fetchText(fullPath), this);
-            } else {
-                markup = await Fetcher.fetchText(fullPath);
-            }
-            ///
-            return markup;
+            const parser = new HMLEParser();
+            var domFragment: DocumentFragment = 
+                parser.parseToDOM(await Fetcher.fetchText(fullPath), this);
+            
+            return domFragment;
         }
-        proto._postInit = async function (preHtml: string): Promise<string> {
+        proto._postInit = async function (preHtml: DocumentFragment): Promise<DocumentFragment> {
             if (that.css) {
                 const link = that.createLink(that.css);
-                preHtml = link.outerHTML + "\n" + preHtml;
+                preHtml.prepend(link);
+                //preHtml.appendChild(link);
             }
             for (const [type, filePath] of that.additionalFiles) {
                 if (!filePath.endsWith(".css")) continue;
                 if (type !== 'light-dom') {
                     const link = that.createLink(filePath);
-                    preHtml = link.outerHTML + "\n" + preHtml;
+                    preHtml.prepend(link);
+                    //preHtml.appendChild(link)
                 }
             }
             return preHtml;
@@ -189,13 +187,13 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
     ) { }
 
     public static create<T extends UniHtml>(markup?: string, css?: string, js?: string): TripletBuilder<T> {
-        let urlHtml: URL = markup ? new URL(`${HOSTING_ORIGIN}/${markup}`,window.location.origin) : null;
+        let urlHtml: URL = markup ? new URL(`${HOSTING_ORIGIN}/${markup}`, window.location.origin) : null;
         let urlCss: URL = css ? new URL(`${HOSTING_ORIGIN}/${css}`, window.location.origin) : null;
         let urlJs: URL = js ? new URL(`${HOSTING_ORIGIN}/${js}`, window.location.origin) : null;
 
         return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
     }
-    
+
     public withUni(cls: AnyConstructor<UniHtml>): TripletBuilder<T> {
         this.uni = cls;
         return this;

@@ -20,11 +20,10 @@ export default class UniHtml {
      */
     public async load(element: HTMLElement | ShadowRoot): Promise<void> {;
         await this.preInit();
-        const preHtml: string = await this._init();
-        const html: string = await this._postInit(preHtml);
+        const preHtml: DocumentFragment = await this._init();
+        const html: DocumentFragment = await this._postInit(preHtml);
 
-        const localRoot = document.createElement('div');
-        localRoot.innerHTML = html;
+        const localRoot = html;
 
         const holder : IElementHolder = { element: localRoot };
 
@@ -41,10 +40,10 @@ export default class UniHtml {
         await this.postLoad(holder);
     }
 
-    private async _postInit(html: string): Promise<string> {
+    private async _postInit(html: DocumentFragment): Promise<DocumentFragment> {
         throw new Error("Method not implemented.");
     }
-    private async _init(): Promise<string> {
+    private async _init(): Promise<DocumentFragment> {
         throw new Error("Method not implemented.");
     }
 
@@ -69,17 +68,20 @@ export default class UniHtml {
      * @param element Target container
      * @param html HTML content
      */
-    protected async render(holder: IElementHolder, renderTarget: HTMLElement | ShadowRoot): Promise<void> {
+    protected async render(holder: IElementHolder, renderTarget: HTMLElement | DocumentFragment): Promise<void> {
+        // Clear renderTarget
         while (renderTarget.firstChild) {
             renderTarget.removeChild(renderTarget.firstChild);
         }
 
+        // Move all children from holder.element to renderTarget
         const children = Array.from(holder.element.childNodes);
         for (const child of children) {
             renderTarget.appendChild(child);
         }
         
-        (holder as any).element = this;
+        // Update holder to point to renderTarget (now contains the content)
+        (holder as { element: HTMLElement | DocumentFragment }).element = renderTarget;
         return Promise.resolve();
     }
 }
