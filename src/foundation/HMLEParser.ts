@@ -182,7 +182,7 @@ export default class HMLEParser {
 
         // Rule: @[bind:attribute](expression) — two-way binding
         // Example: @[bind:value](inputValue)
-        new HMLEDOMRule(/^@\[bind:([A-Za-z-]+)\]$/,
+        /*new HMLEDOMRule(/^@\[bind:([A-Za-z-]+)\]$/,
             (parser, element, attrName, attrValue, match, scope) => {
                 const boundAttr = match[1];
                 const ctx = parser.buildContext(scope);
@@ -210,11 +210,11 @@ export default class HMLEParser {
 
                 element.removeAttribute(attrName);
             }
-        ),
+        ),*/
 
         // Rule: @[ref](refName) — element reference
         // Example: @[ref](myButton)
-        new HMLEDOMRule(/^@\[ref\]$/,
+        /*new HMLEDOMRule(/^@\[ref\]$/,
             (parser, element, attrName, attrValue, match, scope) => {
                 if (scope && attrValue) {
                     scope[attrValue] = element;
@@ -223,11 +223,11 @@ export default class HMLEParser {
                 }
                 element.removeAttribute(attrName);
             }
-        ),
+        ),*/
 
         // Rule: @[class:className](condition) — conditional class
         // Example: @[class:active](isActive)
-        new HMLEDOMRule(/^@\[class:([A-Za-z_-][A-Za-z0-9_-]*)\]$/,
+        /*new HMLEDOMRule(/^@\[class:([A-Za-z_-][A-Za-z0-9_-]*)\]$/,
             (parser, element, attrName, attrValue, match, scope) => {
                 const className = match[1];
                 const ctx = parser.buildContext(scope);
@@ -241,11 +241,11 @@ export default class HMLEParser {
 
                 element.removeAttribute(attrName);
             }
-        ),
+        ),*/
 
         // Rule: @[style:property](expression) — dynamic style
         // Example: @[style:color](textColor)
-        new HMLEDOMRule(/^@\[style:([A-Za-z-]+)\]$/,
+        /*new HMLEDOMRule(/^@\[style:([A-Za-z-]+)\]$/,
             (parser, element, attrName, attrValue, match, scope) => {
                 const styleProp = match[1];
                 const ctx = parser.buildContext(scope);
@@ -257,11 +257,11 @@ export default class HMLEParser {
 
                 element.removeAttribute(attrName);
             }
-        ),
+        ),*/
 
         // Rule: @[if](condition) — conditional rendering
         // Example: @[if](showElement)
-        new HMLEDOMRule(/^@\[if\]$/,
+        /*new HMLEDOMRule(/^@\[if\]$/,
             (parser, element, attrName, attrValue, match, scope) => {
                 const ctx = parser.buildContext(scope);
                 const condition : boolean = parser.evaluateInContext(attrValue, ctx);
@@ -274,7 +274,7 @@ export default class HMLEParser {
                     element.removeAttribute(attrName);
                 }
             }
-        ),
+        ),*/
     ];
 
     public variables: Record<string, unknown> = {};
