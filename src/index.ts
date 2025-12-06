@@ -13,6 +13,8 @@ export { default as Triplet, TripletBuilder, AccessType } from './foundation/Tri
 export { ReComponent, RePage } from './foundation/TripletDecorator.js';
 
 export { default as Fetcher } from './foundation/Fetcher.js';
+export { default as PHTMLParser } from './foundation/PHTMLParser.js';
+export { default as HMLEParser } from './foundation/HMLEParser.js';
 
 export { Router } from './foundation/worker/Router.js';
 export { default as ServiceWorker } from './foundation/worker/ServiceWorker.js';

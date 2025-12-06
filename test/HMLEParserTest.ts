@@ -1,0 +1,85 @@
+import HMLEParser from "../src/foundation/HMLEParser.js";
+
+const html = `
+<div class="container">
+    <h1>@(title)</h1>
+    <p>Welcome, @(user.name)!</p>
+    
+    <ul>
+        @for (item in items) {
+            <li class="item-@(item.id)">@(item.name) - @(item.price)</li>
+        }
+    </ul>
+    
+    <re-button color="@(buttonColor)">@(buttonText)</re-button>
+    
+    <p>Method call: @(getFullTitle())</p>
+</div>
+`;
+
+// Stage 2 example with event bindings
+const htmlWithBindings = `
+<div class="app">
+    <h2>Counter: @(count)</h2>
+    <re-button color="primary" @[onClick](increment())>+1</re-button>
+    <re-button color="secondary" @[onClick](decrement())>-1</re-button>
+    <input type="text" @[bind:value](inputText) placeholder="Type here..." />
+    <p @[if](showMessage)>Message is visible!</p>
+    <span @[class:active](isActive) @[style:color](textColor)>Styled text</span>
+    <div @[ref](myDiv)>Referenced element</div>
+</div>
+`;
+
+class TestScope {
+    title = "HMLEParser Test";
+    user = { name: "John" };
+    items = [
+        { id: 1, name: "Apple", price: "$1.00" },
+        { id: 2, name: "Banana", price: "$0.50" },
+        { id: 3, name: "Orange", price: "$0.75" }
+    ];
+    buttonColor = "primary";
+    buttonText = "Click Me";
+    
+    // Stage 2 properties
+    count = 0;
+    inputText = "Hello";
+    showMessage = true;
+    isActive = true;
+    textColor = "blue";
+    myDiv: Element | null = null;
+
+    getFullTitle(): string {
+        return `${this.title} - Complete`;
+    }
+    
+    increment(): void {
+        this.count++;
+        console.log("Count:", this.count);
+    }
+    
+    decrement(): void {
+        this.count--;
+        console.log("Count:", this.count);
+    }
+}
+
+
+const parser = new HMLEParser();
+const scope = new TestScope();
+
+console.log("=== Stage 1: String Processing ===");
+console.log(parser.parse(html, scope));
+
+console.log("\n=== Stage 2: DOM Processing (attributes before processing) ===");
+console.log(parser.parse(htmlWithBindings, scope));
+
+console.log("\n=== Stage 2 DOM Rules ===");
+console.log("Available DOM rules:");
+console.log("  @[onClick](handler)     - Event binding");
+console.log("  @[bind:value](var)      - Two-way binding");
+console.log("  @[if](condition)        - Conditional rendering");
+console.log("  @[class:name](cond)     - Conditional class");
+console.log("  @[style:prop](value)    - Dynamic style");
+console.log("  @[ref](varName)         - Element reference");
+console.log("\nNote: DOM rules require browser environment (parseToDOM method)");
