@@ -176,7 +176,7 @@ export default class HMLEParser {
                 };
 
                 element.addEventListener(eventName, handler);
-                element.removeAttribute(attrName);
+                //element.removeAttribute(attrName);
             }
         ),
 
