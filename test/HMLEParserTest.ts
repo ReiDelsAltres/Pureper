@@ -71,15 +71,27 @@ const scope = new TestScope();
 console.log("=== Stage 1: String Processing ===");
 console.log(parser.parse(html, scope));
 
+// Numeric iteration example: indexes 0..4
+const htmlNumeric = `
+<ul>
+    @for (i in 5) {
+        <li>Index @(i)</li>
+    }
+</ul>
+`;
+console.log('\n=== Numeric @for (i in 5) ===');
+console.log(parser.parse(htmlNumeric, scope));
+
+// Two-variable iteration example: index and value
+const htmlIndexValue = `
+<ul>
+    @for (idx, it in items) {
+        <li>@(idx): @(it.name)</li>
+    }
+</ul>
+`;
+console.log('\n=== @for (idx, it in items) ===');
+console.log(parser.parse(htmlIndexValue, scope));
+
 console.log("\n=== Stage 2: DOM Processing (attributes before processing) ===");
 console.log(parser.parse(htmlWithBindings, scope));
-
-console.log("\n=== Stage 2 DOM Rules ===");
-console.log("Available DOM rules:");
-console.log("  @[onClick](handler)     - Event binding");
-console.log("  @[bind:value](var)      - Two-way binding");
-console.log("  @[if](condition)        - Conditional rendering");
-console.log("  @[class:name](cond)     - Conditional class");
-console.log("  @[style:prop](value)    - Dynamic style");
-console.log("  @[ref](varName)         - Element reference");
-console.log("\nNote: DOM rules require browser environment (parseToDOM method)");

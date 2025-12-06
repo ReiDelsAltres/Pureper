@@ -71,22 +71,54 @@ export default class HMLEParser {
     // Predefined rules processed in order
     private static rules: HMLEParserRule[] = [
         // Rule: @for (item in items) { ... }
-        new HMLEParserRule(/@for\s*\(\s*([A-Za-z_$][A-Za-z0-9_$]*)\s+in\s+([A-Za-z_$][A-Za-z0-9_$.]*)\s*\)\s*\{/g,
+        // Accept either single variable or index,value pair and either a variable/expr or a numeric literal
+        // Examples:
+        //   @for (item in items) { ... }
+        //   @for (idx, item in items) { ... }
+        //   @for (i in 10) { ... }
+        new HMLEParserRule(/@for\s*\(\s*([A-Za-z_$][A-Za-z0-9_$]*)(?:\s*,\s*([A-Za-z_$][A-Za-z0-9_$]*))?\s+in\s+([A-Za-z_$][A-Za-z0-9_$.]*|[0-9]+)\s*\)\s*\{/g,
             (parser, match, input, scope) => {
-                const iterVar = match[1];
-                const iterableExpr = match[2];
+                // match[1] = first identifier (either item OR index when pair syntax used)
+                // match[2] = optional second identifier (value when pair syntax used)
+                // match[3] = iterable expression (dotted path or numeric literal)
+                const maybeFirst = match[1];
+                const maybeSecond = match[2];
+                const iterableExpr = match[3];
                 const blockStart = match.index + match[0].length - 1; // position of '{'
 
                 const extracted = HMLEParser.extractBalancedBraces(input, blockStart);
                 if (!extracted) return match[0];
 
                 const inner = extracted.block;
-                const resolved = parser.resolveExpression(iterableExpr, scope);
-                const arr = Array.isArray(resolved) ? resolved : [];
+                // Support numeric literal or expression that resolves to a number
+                let arr: any[] = [];
+                // If the iterable part is a plain number literal, use it directly
+                if (/^\d+$/.test(iterableExpr)) {
+                    const n = parseInt(iterableExpr, 10);
+                    arr = Array.from({ length: Math.max(0, n) }, (_, i) => i);
+                } else {
+                    const resolved = parser.resolveExpression(iterableExpr, scope);
+                    if (typeof resolved === 'number' && isFinite(resolved)) {
+                        const n = Math.max(0, Math.floor(resolved));
+                        arr = Array.from({ length: n }, (_, i) => i);
+                    } else if (Array.isArray(resolved)) {
+                        arr = resolved;
+                    } else {
+                        arr = [];
+                    }
+                }
 
                 const parts: string[] = [];
-                for (const item of arr) {
-                    const fullScope = Object.assign({}, scope, { [iterVar]: item });
+                for (let i = 0; i < arr.length; i++) {
+                    const item = arr[i];
+                    let fullScope: Record<string, any>;
+                    // If two identifiers were provided, treat first as index and second as value
+                    if (maybeSecond) {
+                        fullScope = Object.assign({}, scope, { [maybeFirst]: i, [maybeSecond]: item });
+                    } else {
+                        // Single identifier: bind it to the item
+                        fullScope = Object.assign({}, scope, { [maybeFirst]: item });
+                    }
                     parts.push(parser.parse(inner, fullScope));
                 }
 
@@ -155,9 +187,9 @@ export default class HMLEParser {
 
     // Stage 2: DOM rules for attribute processing
     private static domRules: HMLEDOMRule[] = [
-        // Rule: @[on[eventName]](expression) — event binding
-        // Example: @[on[click]](handleClick()) or @[on[input]](value = $event.target.value)
-        // Expression is parsed from the attribute name itself: @[on[click]](code here)
+        // Rule: @[on{eventName}] = "{expression}" — event binding
+        // Example: @[onclick] = "handleClick()""
+        // Expression is parsed from the attribute name itself: @[on{click}]= "code here"
         new HMLEDOMRule(/^@\[on([A-Za-z]+)\]/g,
             (parser, element, attrName, attrValue, match, scope) => {
                 const eventName = match[1].toLowerCase(); // click, input, etc.
@@ -212,18 +244,33 @@ export default class HMLEParser {
             }
         ),*/
 
-        // Rule: @[ref](refName) — element reference
-        // Example: @[ref](myButton)
-        /*new HMLEDOMRule(/^@\[ref\]$/,
+        // Rule: @[ref] = "refName" — element reference
+        // Example: @[ref] = "myButton"
+        new HMLEDOMRule(/^@\[ref\]/g,
             (parser, element, attrName, attrValue, match, scope) => {
-                if (scope && attrValue) {
-                    scope[attrValue] = element;
-                } else if (attrValue) {
-                    parser.variables[attrValue] = element;
+                // attrValue may be a literal name or an expression that returns a string
+                // Evaluate the value in context first, falling back to the raw attrValue
+                const ctx = parser.buildContext(scope);
+                let refName: string | undefined;
+                if (attrValue && attrValue.trim() !== '') {
+                    const evaluated = parser.evaluateInContext(attrValue, ctx);
+                    if (typeof evaluated === 'string') refName = evaluated;
+                    else if (evaluated != null) refName = String(evaluated);
+                    else refName = attrValue; // fallback to literal attr value
                 }
-                element.removeAttribute(attrName);
+
+                if (refName) {
+                    if (scope) {
+                        (scope as any)[refName] = element;
+                    } else {
+                        parser.variables[refName] = element;
+                    }
+                }
+
+                // keep attribute intact for debugging; parser consumer may remove it later
+                // element.removeAttribute(attrName);
             }
-        ),*/
+        ),
 
         // Rule: @[class:className](condition) — conditional class
         // Example: @[class:active](isActive)
