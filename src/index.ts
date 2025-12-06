@@ -22,10 +22,10 @@ export * from './foundation/Theme.js';
 export const pathSegmentsToKeep : number = window.location.origin.includes(".github.io") ? 1 : 0;
 
 const l = window.location;
-export const HOSTING : string = l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep) + ""; 
+export const HOSTING : string = l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + ""; 
 
 export const HOSTING_ORIGIN : string = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-	l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep) + "";
+	l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + "";
     console.log("HOSTING:", HOSTING);
     console.log("HOSTING ORIGIN:", HOSTING_ORIGIN);
 
