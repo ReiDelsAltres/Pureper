@@ -76,7 +76,7 @@ export abstract class Router {
     let prepRoute = route
     let fullRoute = inheritedRoute ? inheritedRoute.route + prepRoute : prepRoute;
 
-    const tt = HOSTING.substring(0, HOSTING.length - 1) + fullRoute;
+    const tt = HOSTING + fullRoute;
 
     let routeObj: Route = { route: tt, path, pageFactory };
 
