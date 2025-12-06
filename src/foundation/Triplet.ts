@@ -189,9 +189,9 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
     ) { }
 
     public static create<T extends UniHtml>(markup?: string, css?: string, js?: string): TripletBuilder<T> {
-        let urlHtml: URL = markup ? new URL(`${HOSTING_ORIGIN}/${markup}`,HOSTING_ORIGIN) : null;
-        let urlCss: URL = css ? new URL(`${HOSTING_ORIGIN}/${css}`, HOSTING_ORIGIN) : null;
-        let urlJs: URL = js ? new URL(`${HOSTING_ORIGIN}/${js}`, HOSTING_ORIGIN) : null;
+        let urlHtml: URL = markup ? new URL(`${HOSTING_ORIGIN}/${markup}`,window.location.origin) : null;
+        let urlCss: URL = css ? new URL(`${HOSTING_ORIGIN}/${css}`, window.location.origin) : null;
+        let urlJs: URL = js ? new URL(`${HOSTING_ORIGIN}/${js}`, window.location.origin) : null;
 
         return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
     }
@@ -205,7 +205,7 @@ export class TripletBuilder<T extends UniHtml> implements ITriplet {
         return this;
     }
     public withLightDOMCss(css: string): TripletBuilder<T> {
-        let urlCss: URL = css ? new URL(`${HOSTING_ORIGIN}/${css}`, HOSTING_ORIGIN) : null;
+        let urlCss: URL = css ? new URL(`${HOSTING_ORIGIN}/${css}`, window.location.origin) : null;
         this.additionalFiles.set('light-dom', urlCss?.href);
         return this;
     }
