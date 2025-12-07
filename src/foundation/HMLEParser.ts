@@ -40,8 +40,6 @@ class HMLEDOMRule {
 }
 
 export default class HMLEParser {
-    private deferredBlocksStack: Array<Map<string, string>> = [];
-    private deferredBlockCounter = 0;
     // Extract balanced braces { ... }
     private static extractBalancedBraces(content: string, start: number): { block: string; end: number } | null {
         if (content[start] !== '{') return null;
@@ -70,274 +68,6 @@ export default class HMLEParser {
         return { block: content.slice(start + 1, i - 1), end: i };
     }
 
-    private static isIdentifierStart(ch: string): boolean {
-        return /[A-Za-z_$]/.test(ch);
-    }
-
-    private static isIdentifierPart(ch: string): boolean {
-        return /[A-Za-z0-9_$]/.test(ch);
-    }
-
-    private static transformDefStatements(code: string): string {
-        if (!code.includes('def')) return code;
-
-        let result = '';
-        let i = 0;
-        const len = code.length;
-        let inSingle = false;
-        let inDouble = false;
-        let inTemplate = false;
-        let inLineComment = false;
-        let inBlockComment = false;
-        let escape = false;
-
-        while (i < len) {
-            const ch = code[i];
-
-            if (inLineComment) {
-                result += ch;
-                if (ch === '\n') inLineComment = false;
-                i++;
-                continue;
-            }
-
-            if (inBlockComment) {
-                result += ch;
-                if (ch === '*' && code[i + 1] === '/') {
-                    result += '/';
-                    i += 2;
-                    inBlockComment = false;
-                } else {
-                    i++;
-                }
-                continue;
-            }
-
-            if (inSingle) {
-                result += ch;
-                if (!escape && ch === '\\') {
-                    escape = true;
-                } else {
-                    if (!escape && ch === "'") inSingle = false;
-                    escape = false;
-                }
-                i++;
-                continue;
-            }
-
-            if (inDouble) {
-                result += ch;
-                if (!escape && ch === '\\') {
-                    escape = true;
-                } else {
-                    if (!escape && ch === '"') inDouble = false;
-                    escape = false;
-                }
-                i++;
-                continue;
-            }
-
-            if (inTemplate) {
-                result += ch;
-                if (!escape && ch === '\\') {
-                    escape = true;
-                } else {
-                    if (!escape && ch === '`') inTemplate = false;
-                    escape = false;
-                }
-                i++;
-                continue;
-            }
-
-            if (ch === '/' && code[i + 1] === '/') {
-                inLineComment = true;
-                result += ch;
-                i++;
-                continue;
-            }
-
-            if (ch === '/' && code[i + 1] === '*') {
-                inBlockComment = true;
-                result += ch;
-                i++;
-                continue;
-            }
-
-            if (ch === "'") {
-                inSingle = true;
-                result += ch;
-                i++;
-                continue;
-            }
-
-            if (ch === '"') {
-                inDouble = true;
-                result += ch;
-                i++;
-                continue;
-            }
-
-            if (ch === '`') {
-                inTemplate = true;
-                result += ch;
-                i++;
-                continue;
-            }
-
-            if (code.startsWith('def', i) && (i === 0 || !HMLEParser.isIdentifierPart(code[i - 1])) && (i + 3 >= len || /\s/.test(code[i + 3]))) {
-                const defResult = HMLEParser.extractDefStatement(code, i);
-                if (defResult) {
-                    result += defResult.replacement;
-                    i = defResult.nextIndex;
-                    continue;
-                }
-            }
-
-            result += ch;
-            i++;
-        }
-
-        return result;
-    }
-
-    private static extractDefStatement(code: string, start: number): { replacement: string; nextIndex: number } | null {
-        const len = code.length;
-        let i = start + 3;
-
-        while (i < len && /\s/.test(code[i])) i++;
-        if (i >= len || !HMLEParser.isIdentifierStart(code[i])) return null;
-
-        const nameStart = i;
-        i++;
-        while (i < len && HMLEParser.isIdentifierPart(code[i])) i++;
-        const name = code.slice(nameStart, i);
-
-        while (i < len && /\s/.test(code[i])) i++;
-        if (i >= len || code[i] !== '=') return null;
-        i++; // skip '='
-        while (i < len && /\s/.test(code[i])) i++;
-
-        const exprInfo = HMLEParser.extractDefExpression(code, i);
-        if (!exprInfo) return null;
-
-        const replacement = `(void __hmle_def__("${name}", (${exprInfo.expression})))` + (exprInfo.terminatedWithSemicolon ? ';' : '');
-        return { replacement, nextIndex: exprInfo.nextIndex };
-    }
-
-    private static extractDefExpression(code: string, start: number): { expression: string; nextIndex: number; terminatedWithSemicolon: boolean } | null {
-        const len = code.length;
-        let i = start;
-        let depthParen = 0;
-        let depthBrace = 0;
-        let depthBracket = 0;
-        let inSingle = false;
-        let inDouble = false;
-        let inTemplate = false;
-        let inLineComment = false;
-        let inBlockComment = false;
-        let escape = false;
-
-        while (i < len) {
-            const ch = code[i];
-
-            if (inLineComment) {
-                if (ch === '\n') inLineComment = false;
-                i++;
-                continue;
-            }
-
-            if (inBlockComment) {
-                if (ch === '*' && code[i + 1] === '/') {
-                    i += 2;
-                    inBlockComment = false;
-                } else {
-                    i++;
-                }
-                continue;
-            }
-
-            if (inSingle) {
-                if (!escape && ch === '\\') {
-                    escape = true;
-                } else {
-                    if (!escape && ch === "'") inSingle = false;
-                    escape = false;
-                }
-                i++;
-                continue;
-            }
-
-            if (inDouble) {
-                if (!escape && ch === '\\') {
-                    escape = true;
-                } else {
-                    if (!escape && ch === '"') inDouble = false;
-                    escape = false;
-                }
-                i++;
-                continue;
-            }
-
-            if (inTemplate) {
-                if (!escape && ch === '\\') {
-                    escape = true;
-                } else {
-                    if (!escape && ch === '`') inTemplate = false;
-                    escape = false;
-                }
-                i++;
-                continue;
-            }
-
-            if (ch === '/' && code[i + 1] === '/') {
-                inLineComment = true;
-                i += 2;
-                continue;
-            }
-
-            if (ch === '/' && code[i + 1] === '*') {
-                inBlockComment = true;
-                i += 2;
-                continue;
-            }
-
-            if (ch === "'") {
-                inSingle = true;
-                i++;
-                continue;
-            }
-
-            if (ch === '"') {
-                inDouble = true;
-                i++;
-                continue;
-            }
-
-            if (ch === '`') {
-                inTemplate = true;
-                i++;
-                continue;
-            }
-
-            if (ch === '(') depthParen++;
-            else if (ch === ')') depthParen = Math.max(0, depthParen - 1);
-            else if (ch === '{') depthBrace++;
-            else if (ch === '}') depthBrace = Math.max(0, depthBrace - 1);
-            else if (ch === '[') depthBracket++;
-            else if (ch === ']') depthBracket = Math.max(0, depthBracket - 1);
-
-            if (ch === ';' && depthParen === 0 && depthBrace === 0 && depthBracket === 0) {
-                const expression = code.slice(start, i).trim();
-                return { expression, nextIndex: i + 1, terminatedWithSemicolon: true };
-            }
-
-            i++;
-        }
-
-        const expression = code.slice(start).trim();
-        return { expression, nextIndex: len, terminatedWithSemicolon: false };
-    }
-
     // Predefined rules processed in order
     private static rules: HMLEParserRule[] = [
         // Rule: @for (item in items) { ... }
@@ -360,35 +90,22 @@ export default class HMLEParser {
                 if (!extracted) return match[0];
 
                 const inner = extracted.block;
-                // Support numeric literal or expression that resolves to a number/iterable
+                // Support numeric literal or expression that resolves to a number
                 let arr: any[] = [];
-                let unresolvedIterable = false;
                 // If the iterable part is a plain number literal, use it directly
                 if (/^\d+$/.test(iterableExpr)) {
                     const n = parseInt(iterableExpr, 10);
                     arr = Array.from({ length: Math.max(0, n) }, (_, i) => i);
                 } else {
                     const resolved = parser.resolveExpression(iterableExpr, scope);
-                    if (resolved == null) {
-                        unresolvedIterable = true;
-                    } else if (typeof resolved === 'number' && isFinite(resolved)) {
+                    if (typeof resolved === 'number' && isFinite(resolved)) {
                         const n = Math.max(0, Math.floor(resolved));
                         arr = Array.from({ length: n }, (_, i) => i);
                     } else if (Array.isArray(resolved)) {
                         arr = resolved;
-                    } else if (typeof (resolved as any)[Symbol.iterator] === 'function') {
-                        arr = Array.from(resolved as Iterable<any>);
-                    } else if (typeof resolved === 'object' && typeof (resolved as any).length === 'number') {
-                        arr = Array.from(resolved as ArrayLike<any>);
                     } else {
                         arr = [];
                     }
-                }
-
-                if (unresolvedIterable) {
-                    const fullBlock = input.slice(match.index, extracted.end);
-                    const placeholder = parser.deferBlock(fullBlock);
-                    return { text: placeholder, end: extracted.end };
                 }
 
                 const parts: string[] = [];
@@ -417,66 +134,16 @@ export default class HMLEParser {
                 const extracted = HMLEParser.extractBalancedParens(input, blockStart);
                 if (!extracted) return match[0];
 
-                const originalCode = extracted.block;
-                const code = HMLEParser.transformDefStatements(originalCode);
+                const code = extracted.block;
                 const ctx = parser.buildContext(scope);
-                const assignToScope = (prop: string, value: any) => {
-                    (ctx as any)[prop] = value;
-                    if (scope) (scope as any)[prop] = value;
-                    else parser.variables[prop] = value;
-                    return value;
-                };
-                (ctx as any).__hmle_def__ = (prop: string, value: any) => assignToScope(prop, value);
-                const execCtx = new Proxy(ctx, {
-                    set(target, prop, value) {
-                        (target as any)[prop as any] = value;
-                        return true;
-                    },
-                    get(target, prop) {
-                        return (target as any)[prop as any];
-                    }
-                });
-                // Prepare code transformation rules:
-                // - If the code is a single assignment (no semicolons), execute it but suppress output
-                // - If code contains multiple statements separated by semicolons, transform so the
-                //   last non-empty statement becomes a returned value so it is printed
-                let processedCode = code;
-                let suppressOutput = false;
-                const trimmedCode = code.trim();
-
-                if (trimmedCode.indexOf(';') === -1) {
-                    // No semicolons: detect simple assignment like `a = 1` or `a += 1` and suppress output
-                    // Match assignment ops (=, +=, -=, *=, /=, %=)
-                    if (/^[A-Za-z_$][A-Za-z0-9_$]*\s*(?:[+\-*/%]?=)\s*[\s\S]+$/.test(trimmedCode)) {
-                        suppressOutput = true;
-                    }
-                } else {
-                    // Multi-statement: if the user used an explicit `return` anywhere,
-                    // wrap original code in an IIFE so that `return` works as expected.
-                    if (/\breturn\b/.test(code)) {
-                        processedCode = '(function(){' + code + '})()';
-                    } else {
-                        // Fallback: return the last non-empty statement's value
-                        const parts = code.split(';');
-                        let last = parts.length - 1;
-                        while (last >= 0 && parts[last].trim() === '') last--;
-                        if (last >= 0) {
-                            const head = parts.slice(0, last).join(';');
-                            const lastExpr = parts[last];
-                            // Build a small IIFE that runs the head and returns the last expression's value
-                            processedCode = '(function(){' + (head ? head + ';' : '') + ' return (' + lastExpr + '); })()';
-                        }
-                    }
-                }
-
                 let result: any;
                 try {
-                    const fn = new Function('with(this){ return (' + processedCode + '); }');
-                    result = fn.call(execCtx);
+                    const fn = new Function('with(this){ return (' + code + '); }');
+                    result = fn.call(ctx);
                 } catch (e) {
                     try {
-                        const fn2 = new Function('with(this){ ' + processedCode + ' }');
-                        result = fn2.call(execCtx);
+                        const fn2 = new Function('with(this){ ' + code + ' }');
+                        result = fn2.call(ctx);
                     } catch (e2) {
                         return { text: '', end: extracted.end };
                     }
@@ -486,12 +153,7 @@ export default class HMLEParser {
                 let finalEnd = extracted.end;
                 if (input[extracted.end] === ')') finalEnd = extracted.end + 1;
 
-                // If result is non-primitive (object/function) or null/undefined - do not print
-                let finalText = '';
-                if (!suppressOutput && result != null && typeof result !== 'object' && typeof result !== 'function') {
-                    finalText = parser.stringifyValue(result);
-                }
-                return { text: finalText, end: finalEnd };
+                return { text: parser.stringifyValue(result), end: finalEnd };
             }
         ),
 
@@ -503,68 +165,22 @@ export default class HMLEParser {
                 const extracted = HMLEParser.extractBalancedParens(input, blockStart);
                 if (!extracted) return match[0];
 
-                const originalCode = extracted.block;
-                const code = HMLEParser.transformDefStatements(originalCode);
+                const code = extracted.block;
                 const ctx = parser.buildContext(scope);
-                const assignToScope = (prop: string, value: any) => {
-                    (ctx as any)[prop] = value;
-                    if (scope) (scope as any)[prop] = value;
-                    else parser.variables[prop] = value;
-                    return value;
-                };
-                (ctx as any).__hmle_def__ = (prop: string, value: any) => assignToScope(prop, value);
-                const execCtx = new Proxy(ctx, {
-                    set(target, prop, value) {
-                        (target as any)[prop as any] = value;
-                        return true;
-                    },
-                    get(target, prop) {
-                        return (target as any)[prop as any];
-                    }
-                });
-                // Prepare processed code / suppression rules similar to double-paren handling
-                let processedCode = code;
-                let suppressOutput = false;
-                const trimmedCode = code.trim();
-
-                if (trimmedCode.indexOf(';') === -1) {
-                    if (/^[A-Za-z_$][A-Za-z0-9_$]*\s*(?:[+\-*/%]?=)\s*[\s\S]+$/.test(trimmedCode)) {
-                        suppressOutput = true;
-                    }
-                } else {
-                    // Multi-statement -> if explicit return used, wrap as-is in IIFE
-                    if (/\breturn\b/.test(code)) {
-                        processedCode = '(function(){' + code + '})()';
-                    } else {
-                        const parts = code.split(';');
-                        let last = parts.length - 1;
-                        while (last >= 0 && parts[last].trim() === '') last--;
-                        if (last >= 0) {
-                            const head = parts.slice(0, last).join(';');
-                            const lastExpr = parts[last];
-                            processedCode = '(function(){' + (head ? head + ';' : '') + ' return (' + lastExpr + '); })()';
-                        }
-                    }
-                }
-
                 let result: any;
                 try {
-                    const fn = new Function('with(this){ return (' + processedCode + '); }');
-                    result = fn.call(execCtx);
+                    const fn = new Function('with(this){ return (' + code + '); }');
+                    result = fn.call(ctx);
                 } catch (e) {
                     try {
-                        const fn2 = new Function('with(this){ ' + processedCode + ' }');
-                        result = fn2.call(execCtx);
+                        const fn2 = new Function('with(this){ ' + code + ' }');
+                        result = fn2.call(ctx);
                     } catch (e2) {
                         return { text: '', end: extracted.end };
                     }
                 }
 
-                let finalText = '';
-                if (!suppressOutput && result != null && typeof result !== 'object' && typeof result !== 'function') {
-                    finalText = parser.stringifyValue(result);
-                }
-                return { text: finalText, end: extracted.end };
+                return { text: parser.stringifyValue(result), end: extracted.end };
             }
         ),
     ];
@@ -788,76 +404,39 @@ export default class HMLEParser {
      */
     public parse(content: string, scope?: Record<string, any>): string {
         let working = content;
-        const maxPasses = 5;
-        let pass = 0;
-        const deferredBlocks = new Map<string, string>();
-        this.deferredBlocksStack.push(deferredBlocks);
 
-        try {
-            while (pass < maxPasses) {
-                let passChanged = false;
-                deferredBlocks.clear();
+        for (const rule of HMLEParser.rules) {
+            const pattern = rule.pattern;
+            let result = '';
+            let lastIndex = 0;
+            let match: RegExpExecArray | null;
 
-                for (const rule of HMLEParser.rules) {
-                    const pattern = rule.pattern;
-                    let result = '';
-                    let lastIndex = 0;
-                    let match: RegExpExecArray | null;
+            // Reset scanning position
+            pattern.lastIndex = 0;
+            while ((match = pattern.exec(working)) !== null) {
+                // Append text before this match
+                result += working.slice(lastIndex, match.index);
 
-                    pattern.lastIndex = 0;
-                    while ((match = pattern.exec(working)) !== null) {
-                        result += working.slice(lastIndex, match.index);
+                const out = rule.replacer(this, match, working, scope);
 
-                        const out = rule.replacer(this, match, working, scope);
-
-                        if (typeof out === 'string') {
-                            result += out;
-                            lastIndex = match.index + match[0].length;
-                        } else {
-                            result += out.text;
-                            lastIndex = out.end;
-                        }
-
-                        pattern.lastIndex = lastIndex;
-                    }
-
-                    result += working.slice(lastIndex);
-
-                    if (result !== working) {
-                        passChanged = true;
-                        working = result;
-                    }
+                if (typeof out === 'string') {
+                    result += out;
+                    lastIndex = match.index + match[0].length;
+                } else {
+                    result += out.text;
+                    lastIndex = out.end;
                 }
 
-                working = this.restoreDeferredBlocks(working);
-
-                if (!passChanged) break;
-                pass++;
+                // Continue scanning from the correct position
+                pattern.lastIndex = lastIndex;
             }
-        } finally {
-            this.deferredBlocksStack.pop();
+
+            // Append tail and update working
+            result += working.slice(lastIndex);
+            working = result;
         }
 
         return working;
-    }
-
-    private deferBlock(content: string): string {
-        const stack = this.deferredBlocksStack[this.deferredBlocksStack.length - 1];
-        if (!stack) return content;
-        const token = `__HMLE_PENDING_BLOCK_${this.deferredBlockCounter++}__`;
-        stack.set(token, content);
-        return token;
-    }
-
-    private restoreDeferredBlocks(text: string): string {
-        const stack = this.deferredBlocksStack[this.deferredBlocksStack.length - 1];
-        if (!stack || stack.size === 0) return text;
-        let restored = text;
-        for (const [token, content] of stack.entries()) {
-            restored = restored.replace(token, content);
-        }
-        stack.clear();
-        return restored;
     }
 
     /**
