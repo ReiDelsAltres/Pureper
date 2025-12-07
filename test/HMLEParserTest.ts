@@ -93,5 +93,32 @@ const htmlIndexValue = `
 console.log('\n=== @for (idx, it in items) ===');
 console.log(parser.parse(htmlIndexValue, scope));
 
+// Variable persistence example: assignments inside @() should be visible later
+const htmlVarPersist = `
+<div>
+        @(def val = "stri";
+            def num = 42;
+            def obj = { key: "value" };
+            def arr = [1, 2, 3];
+            const test = getFullTitle();
+            return test;
+        )
+        @(return JSON.stringify({ val, num, obj, arr }))
+        <p>String: @(val)</p>
+        <p>Number: @(num)</p>
+        <p>Object Key: @(obj.key)</p>
+        @for (i in arr) {
+            @(def item = i * 2;)
+            @for (j in i) {
+                <p>Inner Loop Index: @(j)</p>
+            }
+            <p>Array Item: @(i) @(item)</p>
+        }
+        <p>Method Call Result: @(test)</p>
+</div>
+`;
+console.log('\n=== Variable persistence from @() ===');
+console.log(parser.parse(htmlVarPersist, scope));
+
 console.log("\n=== Stage 2: DOM Processing (attributes before processing) ===");
 console.log(parser.parse(htmlWithBindings, scope));
