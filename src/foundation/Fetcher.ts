@@ -1,5 +1,7 @@
 import { HOSTING, HOSTING_ORIGIN } from "../index.js";
 
+
+const temporaryCache: Map<string, Response> = new Map();
 export default class Fetcher {
     static async fetchText(url: string): Promise<string> {
         const response = await this.internalFetch(url);
@@ -20,10 +22,14 @@ export default class Fetcher {
         } else {
             stri = urlObj.href;
         }
+        if (temporaryCache.has(stri)) 
+            return temporaryCache.get(stri);
+
         const response = await fetch(stri, { cache: 'default' });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        temporaryCache.set(stri, response);
         return response;
     }
 }
