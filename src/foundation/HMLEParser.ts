@@ -345,11 +345,38 @@ export default class HMLEParser {
             // Copy prototype methods (for class instances)
             let proto = Object.getPrototypeOf(scope);
             while (proto && proto !== Object.prototype) {
+                // Avoid copying host (DOM/native) prototype methods which may throw
+                const ctorName = proto && proto.constructor ? String((proto as any).constructor?.name ?? '') : '';
+                if (/HTMLElement|Element|Node|EventTarget|Window|GlobalThis/i.test(ctorName)) {
+                    // Skip host prototypes entirely
+                    proto = Object.getPrototypeOf(proto);
+                    continue;
+                }
+
                 for (const key of Object.getOwnPropertyNames(proto)) {
-                    if (key !== 'constructor' && typeof proto[key] === 'function' && !(key in ctx)) {
-                        ctx[key] = proto[key].bind(scope);
+                    if (key === 'constructor' || key in ctx) continue;
+
+                    // Use descriptor to avoid triggering getters/accessors
+                    let desc: PropertyDescriptor | undefined;
+                    try {
+                        desc = Object.getOwnPropertyDescriptor(proto, key) as PropertyDescriptor | undefined;
+                    } catch (e) {
+                        // Some host objects may throw on descriptor access — skip safely
+                        continue;
+                    }
+                    if (!desc) continue;
+
+                    // Only bind plain function values — don't copy getters/setters
+                    if (typeof desc.value === 'function') {
+                        try {
+                            ctx[key] = (desc.value as Function).bind(scope);
+                        } catch (e) {
+                            // binding some native functions may throw; skip them
+                            continue;
+                        }
                     }
                 }
+
                 proto = Object.getPrototypeOf(proto);
             }
         }
