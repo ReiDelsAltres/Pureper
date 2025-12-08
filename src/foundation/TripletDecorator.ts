@@ -22,9 +22,9 @@ export function RePage(html? : string, css?: string, js?: string, access?: Acces
         const builder = TripletBuilder.create(html, css, js)
         .withUni(ctor as any)
         .withAccess(access ?? AccessType.BOTH);
-        
+
         if (additionalCss)
-            builder.withLightDOMCss(additionalCss ?? "")
+            builder.withLightDOMCss(additionalCss)
 
         const triplet = builder.build();
 
