@@ -29,6 +29,76 @@ function findObservablesInExpr(expr: string, scope: Record<string, any>, dynamic
     return result;
 }
 
+// Helper: Find the index of the matching closing brace '}' ignoring braces inside quotes/comments
+function findMatchingClosingBrace(content: string, openIndex: number): number {
+    let i = openIndex + 1;
+    let depth = 1;
+    let inSingle = false;
+    let inDouble = false;
+    let inBacktick = false;
+    let inLineComment = false;
+    let inBlockComment = false;
+    let prevChar = '';
+
+    while (i < content.length && depth > 0) {
+        const ch = content[i];
+
+        // handle comment states
+        if (inLineComment) {
+            if (ch === '\n') inLineComment = false;
+            prevChar = ch;
+            i++;
+            continue;
+        }
+        if (inBlockComment) {
+            if (prevChar === '*' && ch === '/') inBlockComment = false;
+            prevChar = ch;
+            i++;
+            continue;
+        }
+
+        // handle string/template states, allow escaping
+        if (inSingle) {
+            if (ch === '\\' && prevChar !== '\\') { prevChar = ch; i++; continue; }
+            if (ch === "'" && prevChar !== '\\') inSingle = false;
+            prevChar = ch;
+            i++; continue;
+        }
+        if (inDouble) {
+            if (ch === '\\' && prevChar !== '\\') { prevChar = ch; i++; continue; }
+            if (ch === '"' && prevChar !== '\\') inDouble = false;
+            prevChar = ch;
+            i++; continue;
+        }
+        if (inBacktick) {
+            if (ch === '\\' && prevChar !== '\\') { prevChar = ch; i++; continue; }
+            if (ch === '`' && prevChar !== '\\') inBacktick = false;
+            prevChar = ch;
+            i++; continue;
+        }
+
+        // Not inside quotes or comments
+        // Start comments
+        if (prevChar === '/' && ch === '/') { inLineComment = true; prevChar = ''; i++; continue; }
+        if (prevChar === '/' && ch === '*') { inBlockComment = true; prevChar = ''; i++; continue; }
+
+        // Start quotes
+        if (ch === "'") { inSingle = true; prevChar = ch; i++; continue; }
+        if (ch === '"') { inDouble = true; prevChar = ch; i++; continue; }
+        if (ch === '`') { inBacktick = true; prevChar = ch; i++; continue; }
+
+        // handle braces
+        if (ch === '{') depth++;
+        else if (ch === '}') depth--;
+
+        prevChar = ch;
+        i++;
+    }
+
+    // i is index just after the closing brace (since we increment after reading '}' )
+    return i;
+}
+
 /**
  * Rule — represents a single parsing rule with its own check and execution logic.
  * Rules can apply to any of the 3 parsing stages or to specific ones.
@@ -529,16 +599,11 @@ const forRule: Rule = {
 
             const blockStart = m.index + m[0].length - 1; // position of '{'
 
-            // Extract balanced brace block
-            let depth = 1;
-            let i = blockStart + 1;
-            while (i < working.length && depth > 0) {
-                if (working[i] === '{') depth++;
-                else if (working[i] === '}') depth--;
-                i++;
-            }
+            // Extract balanced brace block using robust finder that ignores braces inside strings/comments
+            const i = findMatchingClosingBrace(working, blockStart);
 
-            if (depth !== 0) {
+            if (i > working.length || i <= blockStart) {
+                // Unable to find matching closing brace — fallback to leaving original match as-is
                 out += working.slice(m.index, forRe.lastIndex);
                 lastIndex = forRe.lastIndex;
                 continue;

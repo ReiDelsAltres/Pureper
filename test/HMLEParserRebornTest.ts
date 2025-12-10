@@ -415,3 +415,92 @@ console.log('After click count:', clickCount.getObject());
 assert(clickCount.getObject() === 1, 'click handler should update clickCount');
 assert(onContainer.textContent?.includes('Clicks: 1'), 'UI should update for Observable clickCount');
 console.log('✓ @[onclick] rule test passed');
+
+// 13) Edge case: braces inside attributes/strings should not break @for parsing
+console.log("13|---------------------------------------------------|");
+const arrForBraces = new Observable([
+    { name: 'Item1', data: '{ "k": "v" }' },
+    { name: 'Item2', data: '{ "x": 1 }' }
+]);
+const bracesTemplate = `
+    <ul>
+        @for (i, item in arr) {
+            <li data-json='@(item.data)'>@(item.name)</li>
+        }
+    </ul>
+`;
+const bracesScope: any = { arr: arrForBraces };
+const bracesParsed = parser.parse(bracesTemplate, bracesScope);
+console.log('Braces parsed:');
+console.log(bracesParsed);
+assert(!bracesParsed.includes('} </ul>') && !bracesParsed.includes('</li>}'), 'No stray } after parsing');
+// Parse to DOM and hydrate to ensure no runtime errors
+const bracesDom = parser.parseToDOM(bracesTemplate, bracesScope);
+parser.hydrate(bracesDom, bracesScope);
+const outBracesContainer = document.createElement('div');
+outBracesContainer.appendChild(bracesDom);
+console.log(outBracesContainer.innerHTML);
+// Ensure no stray closing brace immediately follows a tag such as '</ul>}', or '> }'
+assert(!/>\s*\}/.test(outBracesContainer.innerHTML), 'No stray } right after a tag in hydrated HTML');
+console.log('✓ Brace handling in forRule test passed');
+
+// 14) Regex inside attribute/expression: /a{2}/ quantifier should not break parsing
+console.log("14|---------------------------------------------------|");
+const regexArr = new Observable([{ name: 'I12' }, { name: 'A22' }]);
+const regexTemplate = `
+    <ul>
+        @for (i, item in arr) {
+            <li data-match='@(/\\d{2}/.test(item.name))'>@(item.name)</li>
+        }
+    </ul>
+`;
+const regexScope: any = { arr: regexArr };
+const regexParsed = parser.parse(regexTemplate, regexScope);
+console.log(regexParsed);
+assert(regexParsed.includes('data-match') && regexParsed.includes('{{EXP'), 'Regex attribute must be preserved as dynamic expression');
+const regexDom = parser.parseToDOM(regexTemplate, regexScope);
+parser.hydrate(regexDom, regexScope);
+const regexCont = document.createElement('div');
+regexCont.appendChild(regexDom);
+console.log(regexCont.innerHTML);
+assert(regexCont.textContent?.includes('I12') && regexCont.textContent?.includes('A22'), 'Items rendered correctly');
+console.log('✓ Regex in attribute/expression test passed');
+
+// 15) Template literals inside expression/attributes: `...${...}`
+console.log("15|---------------------------------------------------|");
+const tplArr = new Observable([{ name: 'Alpha' }, { name: 'Beta' }]);
+const tplTemplate = `
+    <ul>
+        @for (idx, item in arr) {
+            <li data-val="@(\`Name: \${item.name}\`)">@(\`Name: \${item.name}\`)</li>
+        }
+    </ul>
+`;
+const tplScope: any = { arr: tplArr };
+const tplParsed = parser.parse(tplTemplate, tplScope);
+console.log(tplParsed);
+assert(tplParsed.includes('template exp'), 'Template literal expression should create dynamic template');
+const tplDom = parser.parseToDOM(tplTemplate, tplScope);
+parser.hydrate(tplDom, tplScope);
+const tplCont = document.createElement('div');
+tplCont.appendChild(tplDom);
+console.log(tplCont.innerHTML);
+assert(tplCont.textContent?.includes('Name: Alpha') && tplCont.textContent?.includes('Name: Beta'), 'Template literals rendered correctly');
+console.log('✓ Template literal test passed');
+
+// 16) Inline JS object literal in event attribute — should be allowed and execute
+console.log("16|---------------------------------------------------|");
+const objVal = new Observable(null);
+const upd = (o: any) => { objVal.setObject(o); };
+const objTemplate = `<button @[onclick]="upd({x:1})">ClickObj</button><span>Val: @(objVal.x)</span>`;
+const objScope: any = { objVal, upd };
+const objDom = parser.parseToDOM(objTemplate, objScope);
+parser.hydrate(objDom, objScope);
+const objCont = document.createElement('div');
+objCont.appendChild(objDom);
+const objBtn = objCont.querySelector('button') as HTMLButtonElement;
+objBtn!.dispatchEvent(new (globalThis as any).window.Event('click'));
+console.log('After click objVal:', JSON.stringify(objVal.getObject()));
+assert(objVal.getObject() && objVal.getObject().x === 1, 'Inline JS object literal passed to handler');
+assert(objCont.textContent?.includes('Val: 1'), 'UI should update with object value');
+console.log('✓ Inline JS object literal in event attribute test passed');
