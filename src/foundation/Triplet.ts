@@ -133,9 +133,9 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
             }
         };
         let proto = ori.prototype as any;
+        const parser = new HMLEParserReborn();
         proto._init = async function () {
             const fullPath = that.markup!;
-            const parser = new HMLEParserReborn();
             var domFragment: DocumentFragment = 
                 parser.parseToDOM(await Fetcher.fetchText(fullPath), this);
             
@@ -155,6 +155,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
                     //preHtml.appendChild(link)
                 }
             }
+            parser.hydrate(preHtml, this);
             return preHtml;
         }
         return ori;
