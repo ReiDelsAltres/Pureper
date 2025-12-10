@@ -39,6 +39,6 @@ export default class UniHtml {
      * @param element Target container
      * @param html HTML content
      */
-    protected render(holder: IElementHolder, renderTarget: HTMLElement | ShadowRoot): Promise<void>;
+    protected render(holder: IElementHolder, renderTarget: HTMLElement | DocumentFragment): Promise<void>;
 }
 //# sourceMappingURL=UniHtml.d.ts.map

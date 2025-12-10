@@ -6,32 +6,21 @@ export { default as Component } from './foundation/component_api/Component.js';
 export { default as Triplet, TripletBuilder, AccessType } from './foundation/Triplet.js';
 export { ReComponent, RePage } from './foundation/TripletDecorator.js';
 export { default as Fetcher } from './foundation/Fetcher.js';
+export { default as PHTMLParser } from './foundation/PHTMLParser.js';
+export { default as HMLEParser } from './foundation/HMLEParser.js';
 export { Router } from './foundation/worker/Router.js';
 export { default as ServiceWorker } from './foundation/worker/ServiceWorker.js';
 export * from './foundation/Theme.js';
-const computeHostingPath = () => {
-    if (typeof window === "undefined" || typeof window.location === "undefined") {
-        return "/";
-    }
-    const pathname = window.location.pathname || "/";
-    if (pathname === "") {
-        return "/";
-    }
-    if (pathname.endsWith("/")) {
-        return pathname;
-    }
-    const lastSlash = pathname.lastIndexOf("/");
-    if (lastSlash <= 0) {
-        // either no slash at all or only the leading slash
-        return pathname.includes(".") ? "/" : `${pathname}/`;
-    }
-    const lastSegment = pathname.slice(lastSlash + 1);
-    if (lastSegment && !lastSegment.includes(".")) {
-        // we are on a nested route without trailing slash — treat it as a directory
-        return `${pathname}/`;
-    }
-    return pathname.slice(0, lastSlash + 1);
-};
-export const HOSTING = computeHostingPath();
-export const HOSTING_ORIGIN = `${window.location.origin}${HOSTING}`;
+export const pathSegmentsToKeep = window.location.origin.includes(".github.io") ? 1 : 0;
+const l = window.location;
+export const HOSTING = l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + "";
+export const HOSTING_ORIGIN = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+    l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + "";
+console.log("HOSTING:", HOSTING);
+console.log("HOSTING ORIGIN:", HOSTING_ORIGIN);
+// derive the part of href after the origin (e.g. "/path?query#hash")
+/*export const HOSTING: string = window.location.href.startsWith(window.location.origin)
+    ? window.location.href.substring(window.location.origin.length)
+    : "";*/
+//export const HOSTING_ORIGIN: string = window.location.origin + HOSTING;
 //# sourceMappingURL=index.js.map

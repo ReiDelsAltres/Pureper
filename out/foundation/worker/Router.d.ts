@@ -20,10 +20,5 @@ export declare abstract class Router {
     static tryFindRoute(url: URL): Route;
     static registerRoute<T extends UniHtml>(path: string, route: string, pageFactory: (search?: URLSearchParams) => T, inheritedRoute?: Route): Promise<Route>;
     private static createPage;
-    private static normalizeIncomingUrl;
-    private static normalizeRoutePath;
-    private static extractRelativePath;
-    private static resolveRouteHref;
-    private static buildHostedUrl;
 }
 //# sourceMappingURL=Router.d.ts.map

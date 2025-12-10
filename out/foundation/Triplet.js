@@ -3,7 +3,7 @@ import { Router } from "./worker/Router.js";
 import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
-import PHTMLParser from "./PHTMLParser.js";
+import HMLEParser from "./HMLEParser.js";
 import { HOSTING_ORIGIN } from "../index.js";
 export default class Triplet {
     uni;
@@ -116,30 +116,24 @@ export default class Triplet {
         };
         let proto = ori.prototype;
         proto._init = async function () {
-            ///
             const fullPath = that.markup;
-            var markup = "";
-            if (fullPath.endsWith(".phtml")) {
-                const parser = new PHTMLParser();
-                markup = parser.parse(await Fetcher.fetchText(fullPath), this);
-            }
-            else {
-                markup = await Fetcher.fetchText(fullPath);
-            }
-            ///
-            return markup;
+            const parser = new HMLEParser();
+            var domFragment = parser.parseToDOM(await Fetcher.fetchText(fullPath), this);
+            return domFragment;
         };
         proto._postInit = async function (preHtml) {
             if (that.css) {
                 const link = that.createLink(that.css);
-                preHtml = link.outerHTML + "\n" + preHtml;
+                preHtml.prepend(link);
+                //preHtml.appendChild(link);
             }
             for (const [type, filePath] of that.additionalFiles) {
                 if (!filePath.endsWith(".css"))
                     continue;
                 if (type !== 'light-dom') {
                     const link = that.createLink(filePath);
-                    preHtml = link.outerHTML + "\n" + preHtml;
+                    preHtml.prepend(link);
+                    //preHtml.appendChild(link)
                 }
             }
             return preHtml;
@@ -167,9 +161,9 @@ export class TripletBuilder {
         this.js = js;
     }
     static create(markup, css, js) {
-        let urlHtml = markup ? new URL(markup, HOSTING_ORIGIN) : null;
-        let urlCss = css ? new URL(css, HOSTING_ORIGIN) : null;
-        let urlJs = js ? new URL(js, HOSTING_ORIGIN) : null;
+        let urlHtml = markup ? new URL(`${HOSTING_ORIGIN}/${markup}`, window.location.origin) : null;
+        let urlCss = css ? new URL(`${HOSTING_ORIGIN}/${css}`, window.location.origin) : null;
+        let urlJs = js ? new URL(`${HOSTING_ORIGIN}/${js}`, window.location.origin) : null;
         return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
     }
     withUni(cls) {
@@ -181,7 +175,7 @@ export class TripletBuilder {
         return this;
     }
     withLightDOMCss(css) {
-        let urlCss = css ? new URL(css, HOSTING_ORIGIN) : null;
+        let urlCss = css ? new URL(`${HOSTING_ORIGIN}/${css}`, window.location.origin) : null;
         this.additionalFiles.set('light-dom', urlCss?.href);
         return this;
     }

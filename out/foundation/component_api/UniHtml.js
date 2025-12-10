@@ -13,8 +13,7 @@ export default class UniHtml {
         await this.preInit();
         const preHtml = await this._init();
         const html = await this._postInit(preHtml);
-        const localRoot = document.createElement('div');
-        localRoot.innerHTML = html;
+        const localRoot = html;
         const holder = { element: localRoot };
         // ВАЖНО: preLoad() вызывается ДО монтирования в DOM/Shadow DOM.
         // Для компонентов (UniHtmlComponent) на этом этапе ещё нельзя полагаться на this.shadowRoot —
@@ -56,14 +55,17 @@ export default class UniHtml {
      * @param html HTML content
      */
     async render(holder, renderTarget) {
+        // Clear renderTarget
         while (renderTarget.firstChild) {
             renderTarget.removeChild(renderTarget.firstChild);
         }
+        // Move all children from holder.element to renderTarget
         const children = Array.from(holder.element.childNodes);
         for (const child of children) {
             renderTarget.appendChild(child);
         }
-        holder.element = this;
+        // Update holder to point to renderTarget (now contains the content)
+        holder.element = renderTarget;
         return Promise.resolve();
     }
 }

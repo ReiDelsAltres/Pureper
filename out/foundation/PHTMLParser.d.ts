@@ -5,6 +5,7 @@ export default class PHTMLParser {
     variables: Record<string, unknown>;
     addVariable(name: string, value: unknown): this;
     resolveExpression(expr: string, scope?: Record<string, any>): any;
+    private buildContext;
     private stringifyValue;
     parse(content: string, scope?: Record<string, any>): string;
 }

@@ -87,7 +87,7 @@ export default class PHTMLParser {
                 return match[0];
             const code = extracted.block;
             // Evaluate code using parser.variables + local scope
-            const ctx = Object.assign({}, parser.variables, scope || {});
+            const ctx = parser.buildContext(scope);
             let result;
             try {
                 // try to evaluate as expression first
@@ -120,7 +120,7 @@ export default class PHTMLParser {
             if (!extracted)
                 return match[0];
             const code = extracted.block;
-            const ctx = Object.assign({}, parser.variables, scope || {});
+            const ctx = parser.buildContext(scope);
             let result;
             try {
                 const fn = new Function('with(this){ return (' + code + '); }');
@@ -147,7 +147,7 @@ export default class PHTMLParser {
     // Examples: "subjectChips" -> this.variables.subjectChips
     //           "chip.Color" -> scope.chip.Color (if chip exists in scope) or this.variables.chip.Color
     resolveExpression(expr, scope) {
-        const combined = Object.assign({}, this.variables, scope || {});
+        const combined = this.buildContext(scope);
         const parts = expr.split('.').map(p => p.trim()).filter(Boolean);
         let cur = combined;
         for (const part of parts) {
@@ -156,6 +156,25 @@ export default class PHTMLParser {
             cur = cur[part];
         }
         return cur;
+    }
+    // Build execution context that includes prototype methods from scope
+    buildContext(scope) {
+        const ctx = Object.assign({}, this.variables);
+        if (scope) {
+            // Copy own properties
+            Object.assign(ctx, scope);
+            // Copy prototype methods (for class instances)
+            let proto = Object.getPrototypeOf(scope);
+            while (proto && proto !== Object.prototype) {
+                for (const key of Object.getOwnPropertyNames(proto)) {
+                    if (key !== 'constructor' && typeof proto[key] === 'function' && !(key in ctx)) {
+                        ctx[key] = proto[key].bind(scope);
+                    }
+                }
+                proto = Object.getPrototypeOf(proto);
+            }
+        }
+        return ctx;
     }
     stringifyValue(val) {
         if (val == null)

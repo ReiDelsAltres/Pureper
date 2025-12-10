@@ -37,7 +37,5 @@
   "author": "ReiDelsAltres",
   "license": "MIT",
   "devDependencies": {
-    "@types/jsdom": "^27.0.0",
-    "jsdom": "^27.3.0"
   }
 }
