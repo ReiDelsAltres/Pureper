@@ -8,3 +8,7 @@
 # Explicitly ensure tests folder(s) are excluded from published package
 test/
 tests/
+node_modules/
+example/
+
+*.md
