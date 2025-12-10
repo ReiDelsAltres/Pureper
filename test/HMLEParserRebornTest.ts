@@ -95,6 +95,17 @@ parser.hydrate(domFrag81, scopeMethods);
 assert(domFrag81.textContent?.includes('BoundValue'), 'Method should be invoked with this bound to scope');
 console.log('✓ Methods bound to scope test passed');
 
+// 8.2) Methods from prototype should be available and bound
+console.log("8.2|---------------------------------------------------|");
+class Foo { constructor(public value: string) {} getValue() { return this.value; } }
+const f = new Foo('ProtoBound');
+const out82 = parser.parse('PB: @(getValue())', f as any);
+console.log(out82);
+const domFrag82 = parser.parseToDOM('PB: @(getValue())', f as any);
+parser.hydrate(domFrag82, f as any);
+assert(domFrag82.textContent?.includes('ProtoBound'), 'Prototype method should be bound and return correct value');
+console.log('✓ Prototype method binding test passed');
+
 // 9) Complex test: multiple static and dynamic rules together
 console.log("9|---------------------------------------------------|");
 console.log("Complex Observable test with nested structures");

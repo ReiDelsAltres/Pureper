@@ -115,6 +115,7 @@ export interface Rule {
 
 export default class HMLEParserReborn {
     private rules: Rule[] = [];
+    public variables: Record<string, any> = {};
 
     constructor() {
         // Register default rules — order matters!
@@ -145,8 +146,53 @@ export default class HMLEParserReborn {
         return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test((s || '').trim());
     }
 
+    private buildContext(scope?: Record<string, any>): Record<string, any> {
+        const ctx: Record<string, any> = Object.assign({}, this.variables);
+        if (scope) {
+            // Copy own properties
+            Object.assign(ctx, scope);
+
+            // Copy prototype methods (for class instances)
+            let proto: any = Object.getPrototypeOf(scope);
+            while (proto && proto !== Object.prototype) {
+                // Avoid copying host (DOM/native) prototype methods which may throw
+                const ctorName = proto && proto.constructor ? String((proto as any).constructor?.name ?? '') : '';
+                if (/HTMLElement|Element|Node|EventTarget|Window|GlobalThis/i.test(ctorName)) {
+                    proto = Object.getPrototypeOf(proto);
+                    continue;
+                }
+
+                for (const key of Object.getOwnPropertyNames(proto)) {
+                    if (key === 'constructor' || key in ctx) continue;
+
+                    let desc: PropertyDescriptor | undefined;
+                    try {
+                        desc = Object.getOwnPropertyDescriptor(proto, key) as PropertyDescriptor | undefined;
+                    } catch (e) {
+                        // Some host objects may throw on descriptor access — skip safely
+                        continue;
+                    }
+                    if (!desc) continue;
+
+                    // Only bind plain function values — don't copy getters/setters
+                    if (typeof desc.value === 'function') {
+                        try {
+                            ctx[key] = (desc.value as Function).bind(scope);
+                        } catch (e) {
+                            // binding some native functions may throw; skip them
+                            continue;
+                        }
+                    }
+                }
+
+                proto = Object.getPrototypeOf(proto);
+            }
+        }
+        return ctx;
+    }
+
     public evaluate(expr: string, scope?: Record<string, any>): any {
-        const ctx = Object.assign({}, scope ?? {});
+        const ctx = this.buildContext(scope);
         try {
             const fn = new Function('with(this){ return (' + expr + '); }');
             return fn.call(ctx);
