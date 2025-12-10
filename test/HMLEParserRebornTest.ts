@@ -81,6 +81,20 @@ expObs.setObject('Universe');
 console.log('After setObject:', domFrag2.textContent);
 assert(domFrag2.textContent?.includes('Did Universe'), 'text should update when Observable changes');
 
+// 8.1) Methods in scope using `this` should be callable and bound to scope
+console.log("8.1|---------------------------------------------------|");
+const scopeMethods: any = {
+    value: 'BoundValue',
+    getValue: function () { return (this as any).value; }
+};
+const out81 = parser.parse('Value: @(getValue())', scopeMethods);
+console.log(out81);
+assert(out81.includes('<template exp expr="getValue()"') || out81.includes('Value: BoundValue'), 'Method expression should be dynamic or resolved');
+const domFrag81 = parser.parseToDOM('Value: @(getValue())', scopeMethods);
+parser.hydrate(domFrag81, scopeMethods);
+assert(domFrag81.textContent?.includes('BoundValue'), 'Method should be invoked with this bound to scope');
+console.log('✓ Methods bound to scope test passed');
+
 // 9) Complex test: multiple static and dynamic rules together
 console.log("9|---------------------------------------------------|");
 console.log("Complex Observable test with nested structures");
