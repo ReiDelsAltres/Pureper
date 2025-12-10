@@ -3,7 +3,7 @@ import Observable from '../src/foundation/api/Observer.js';
 
 // Create a DOM environment for tests
 import { JSDOM } from 'jsdom';
-import { parse } from './../node_modules/tldts/dist/es6/index';
+import { parse } from '../../node_modules/tldts/dist/es6/index';
 const dom = new JSDOM('<!doctype html><html><body></body></html>');
 // @ts-ignore
 globalThis.window = dom.window as any;

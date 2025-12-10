@@ -8,6 +8,7 @@ import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
 import PHTMLParser from "./PHTMLParser.js";
 import HMLEParser from "./HMLEParser.js";
 import { HOSTING_ORIGIN } from "../index.js";
+import HMLEParserReborn from "./HMLEParserReborn.js";
 
 export default class Triplet<T extends UniHtml> implements ITriplet {
     private uni?: AnyConstructor<UniHtml>;
@@ -134,7 +135,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         let proto = ori.prototype as any;
         proto._init = async function () {
             const fullPath = that.markup!;
-            const parser = new HMLEParser();
+            const parser = new HMLEParserReborn();
             var domFragment: DocumentFragment = 
                 parser.parseToDOM(await Fetcher.fetchText(fullPath), this);
             
