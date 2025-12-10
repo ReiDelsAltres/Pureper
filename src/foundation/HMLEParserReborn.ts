@@ -1,4 +1,5 @@
 import Observable from './api/Observer.js';
+import Context from './hmle/Context.js';
 
 // Helper: encode expression for HTML attribute
 function encodeAttr(s: string): string {
@@ -147,48 +148,7 @@ export default class HMLEParserReborn {
     }
 
     private buildContext(scope?: Record<string, any>): Record<string, any> {
-        const ctx: Record<string, any> = Object.assign({}, this.variables);
-        if (scope) {
-            // Copy own properties
-            Object.assign(ctx, scope);
-
-            // Copy prototype methods (for class instances)
-            let proto: any = Object.getPrototypeOf(scope);
-            while (proto && proto !== Object.prototype) {
-                // Avoid copying host (DOM/native) prototype methods which may throw
-                const ctorName = proto && proto.constructor ? String((proto as any).constructor?.name ?? '') : '';
-                if (/HTMLElement|Element|Node|EventTarget|Window|GlobalThis/i.test(ctorName)) {
-                    proto = Object.getPrototypeOf(proto);
-                    continue;
-                }
-
-                for (const key of Object.getOwnPropertyNames(proto)) {
-                    if (key === 'constructor' || key in ctx) continue;
-
-                    let desc: PropertyDescriptor | undefined;
-                    try {
-                        desc = Object.getOwnPropertyDescriptor(proto, key) as PropertyDescriptor | undefined;
-                    } catch (e) {
-                        // Some host objects may throw on descriptor access — skip safely
-                        continue;
-                    }
-                    if (!desc) continue;
-
-                    // Only bind plain function values — don't copy getters/setters
-                    if (typeof desc.value === 'function') {
-                        try {
-                            ctx[key] = (desc.value as Function).bind(scope);
-                        } catch (e) {
-                            // binding some native functions may throw; skip them
-                            continue;
-                        }
-                    }
-                }
-
-                proto = Object.getPrototypeOf(proto);
-            }
-        }
-        return ctx;
+        return Context.build(this.variables, scope);
     }
 
     public evaluate(expr: string, scope?: Record<string, any>): any {
@@ -468,7 +428,7 @@ const expRule: Rule = {
                 const innerExpr = working.slice(first.idx + 2, j - 1).trim();
 
                 // Check if expression references any Observable in scope or dynamic vars
-                const observablesUsed = scope ? findObservablesInExpr(innerExpr, scope, dynamicVars) : 
+                const observablesUsed = scope ? findObservablesInExpr(innerExpr, scope, dynamicVars) :
                     (dynamicVars ? findObservablesInExpr(innerExpr, {}, dynamicVars) : []);
 
                 if (observablesUsed.length > 0) {
@@ -482,7 +442,7 @@ const expRule: Rule = {
                     } else {
                         // For dynamic vars from @for, include the var name
                         const dynamicVarsUsed = dynamicVars ? observablesUsed.filter(v => dynamicVars.has(v)) : [];
-                        
+
                         if (dynamicVarsUsed.length > 0) {
                             // Expression uses dynamic loop variables
                             out += `<template exp var="${dynamicVarsUsed.join(',')}" expr="${encodeAttr(innerExpr)}"></template>`;
@@ -541,17 +501,17 @@ const expRule: Rule = {
         // The var attribute contains comma-separated list of dynamic vars that should be Observable in scope
         if (varAttr && expr && scope) {
             const dynamicVarNames = varAttr.split(',').map(s => s.trim());
-            
+
             // Collect all Observable variables used in the expression
             const observablesUsed: { name: string, obs: Observable<any> }[] = [];
-            
+
             // Add dynamic vars from var attribute
             for (const name of dynamicVarNames) {
                 if ((scope as any)[name] instanceof Observable) {
                     observablesUsed.push({ name, obs: (scope as any)[name] });
                 }
             }
-            
+
             // Also find any other Observable variables used in expression
             const identifiers = expr.match(/[A-Za-z_$][A-Za-z0-9_$]*/g) || [];
             for (const id of identifiers) {
@@ -671,7 +631,7 @@ const forRule: Rule = {
             } else {
                 // Variable or dotted path
                 const rootName = iterable.split('.')[0];
-                
+
                 // Check if iterable references Observable or dynamic variable
                 const val = scope ? (scope as any)[rootName] : undefined;
                 const isDynamicIterable = dynamicVars?.has(rootName);
@@ -942,25 +902,24 @@ const onRule: Rule = {
             const expr = attr.value;
             // Add event listener
             el.addEventListener(eventName, (ev: Event) => {
-                // Build evaluation scope with unwrapped Observables
-                const evalScope = Object.assign({}, scope ?? {});
+                // Build evaluation scope with unwrapped Observables while preserving
+                // the prototype of the original scope so prototype methods remain bound.
+                let evalScope: Record<string, any> = Object.create(scope ?? null);
+
+                // Unwrap Observables referenced in expression into own-properties
                 if (scope) {
-                    // unwrap observables referenced in expr
                     const observed = findObservablesInExpr(expr, scope);
                     for (const name of observed) {
                         const o = (scope as any)[name];
-                        if (o instanceof Observable) evalScope[name] = o.getObject ? o.getObject() : undefined;
+                        if (o instanceof Observable) (evalScope as any)[name] = o.getObject ? o.getObject() : undefined;
                     }
                 }
-                // event and element are added to the scope
+
+                // event and element are added to the scope as own-properties
                 (evalScope as any)['event'] = ev;
                 (evalScope as any)['element'] = el;
 
-                try {
-                    parser.evaluate(expr, evalScope);
-                } catch (e) {
-                    // swallow evaluation errors
-                }
+                parser.evaluate(expr, evalScope);
             });
             el.removeAttribute(an);
         }
