@@ -419,7 +419,42 @@ refContainer.appendChild(refDom);
 console.log(refContainer.innerHTML);
 assert(refContainer.textContent?.includes('Element ID: theOne'), 'ref rule should expose element variable');
 assert(refScope.myEl && refScope.myEl.id === 'theOne', 'scope should have the element variable set');
+// Attribute should not be removed
+const el = refContainer.querySelector('#theOne') as Element | null;
+assert(el && el.hasAttribute('@[ref]'), 'ref attribute should be preserved after hydration');
 console.log('✓ @[ref] rule test passed');
+
+// 11.1) Element ref rule: @[ref] expression support (function returns name)
+console.log('11.1|---------------------------------------------------|');
+class NameHolder { getName() { return 'computedRef'; } }
+const sh = new NameHolder();
+const refExprTemplate = `<div @[ref]="getName()" id="theComputed">Ref Test</div><p>Element ID: @(computedRef.id)</p>`;
+const refExprDom = parser.parseToDOM(refExprTemplate, sh as any);
+parser.hydrate(refExprDom, sh as any);
+const refExprContainer = document.createElement('div');
+refExprContainer.appendChild(refExprDom);
+assert((sh as any).computedRef && (sh as any).computedRef.id === 'theComputed', 'scope should have computed ref variable set');
+console.log('✓ @[ref] expression support test passed');
+
+// 11.2) Element ref rule fallback to parser.variables when no scope
+console.log('11.2|---------------------------------------------------|');
+const refGlobalTemplate = `<div @[ref]="globalRef" id="theGlobal">Ref Test</div><p>Element ID: @(globalRef.id)</p>`;
+const refGlobalDom = parser.parseToDOM(refGlobalTemplate);
+parser.hydrate(refGlobalDom);
+const refGlobalContainer = document.createElement('div');
+refGlobalContainer.appendChild(refGlobalDom);
+assert((parser as any).variables.globalRef && (parser as any).variables.globalRef.id === 'theGlobal', 'parser.variables should have the element when no scope provided');
+console.log('✓ @[ref] parser.variables fallback test passed');
+// 11.3) Element ref with attribute expression converted to {{EXP:...}} by parser
+console.log('11.3|---------------------------------------------------|');
+const scopeWithFn = { computeName() { return 'refFromExpr'; } } as any;
+const refExpAttrTemplate = `<div @[ref]="@(computeName())" id="r10">Ref Test</div><p>Element ID: @(refFromExpr.id)</p>`;
+const refExpAttrDom = parser.parseToDOM(refExpAttrTemplate, scopeWithFn);
+parser.hydrate(refExpAttrDom, scopeWithFn);
+const refExpAttrContainer = document.createElement('div');
+refExpAttrContainer.appendChild(refExpAttrDom);
+assert(scopeWithFn.refFromExpr && scopeWithFn.refFromExpr.id === 'r10', 'scope should have the element variable set from attribute expression');
+console.log('✓ @[ref] attribute expression replaced and bound');
 
 // 12) Event binding: @[onclick]
 console.log("12|---------------------------------------------------|");

@@ -878,12 +878,64 @@ const refRule: Rule = {
     elementHydrate(parser, el, scope) {
         // attribute name is '@[ref]'
         if (!el.hasAttribute('@[ref]')) return;
-        const name = el.getAttribute('@[ref]')?.trim();
-        if (!name) return;
-        if (scope) {
-            (scope as any)[name] = el;
+        const raw = el.getAttribute('@[ref]')?.trim();
+        if (!raw) return;
+
+        // Build evaluation context so prototype methods are available
+        const ctx = Context.build(parser.variables, scope);
+
+        // If attribute contains attribute-expression placeholders like {{EXP:...}},
+        // replace them by evaluating inner expressions. Otherwise try to evaluate the whole
+        // attribute as an expression. Fallback to literal if evaluation fails.
+        let refName: string | undefined;
+        const expPattern = /\{\{EXP:([^}]+)\}\}/g;
+        if (expPattern.test(raw)) {
+            // Replace each placeholder with evaluated string
+            let tmp = raw;
+            expPattern.lastIndex = 0;
+            tmp = tmp.replace(expPattern, (_m, enc) => {
+                const expr = decodeAttr(enc);
+                // Build evaluation scope with unwrapped Observable values used in expr
+                const evalScope = Object.assign({}, ctx);
+                if (scope) {
+                    const obsNames = findObservablesInExpr(expr, scope);
+                    for (const name of obsNames) {
+                        const o = (scope as any)[name];
+                        if (o instanceof Observable) evalScope[name] = o.getObject ? o.getObject() : undefined;
+                    }
+                }
+                const val = parser.evaluate(expr, evalScope);
+                return val == null ? '' : String(val);
+            });
+            refName = tmp;
+        } else {
+            // Try evaluating full attribute as JS expression
+            try {
+                const evalScope = Object.assign({}, ctx);
+                if (scope) {
+                    const obsNames = findObservablesInExpr(raw, scope);
+                    for (const name of obsNames) {
+                        const o = (scope as any)[name];
+                        if (o instanceof Observable) evalScope[name] = o.getObject ? o.getObject() : undefined;
+                    }
+                }
+                const evaluated = parser.evaluate(raw, evalScope);
+                if (typeof evaluated === 'string') refName = evaluated;
+                else if (evaluated != null) refName = String(evaluated);
+            } catch (e) {
+                // ignore and fallback to raw
+            }
         }
-        el.removeAttribute('@[ref]');
+
+        if (!refName) refName = raw;
+
+        if (refName) {
+            if (scope) {
+                (scope as any)[refName] = el;
+            } else {
+                (parser as any).variables[refName] = el;
+            }
+        }
     }
 };
 
