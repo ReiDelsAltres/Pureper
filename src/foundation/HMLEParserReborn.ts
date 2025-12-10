@@ -1,4 +1,4 @@
-import Observable from './api/Observer';
+import Observable from './api/Observer.js';
 
 // Helper: encode expression for HTML attribute
 function encodeAttr(s: string): string {
