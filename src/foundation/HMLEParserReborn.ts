@@ -656,6 +656,7 @@ const forRule: Rule = {
 
                 out += `<template for index="${indexName}" var="${varName}" in="${iterable}">${parsedInner}</template>`;
                 lastIndex = i;
+                forRe.lastIndex = i;
                 continue;
             }
 
@@ -671,8 +672,8 @@ const forRule: Rule = {
                 }
                 out += parser.parse(inner, localScope);
             }
-
             lastIndex = i;
+            forRe.lastIndex = i;
         }
 
         out += working.slice(lastIndex);

@@ -1,0 +1,121 @@
+TestingPage parse log — start
+File read length: 1153
+Parsed full text length: 1490
+Parsed result sample:
+<paper-component simple="true" class="page">
+  <div class="header">
+    <h1>Testing Page</h1>
+    <p>Choose subject for testing</p>
+  </div>
+
+  <div class="semestr-list">
+    <template for index="index" var="semestr" in="semestrs">
+    <paper-component simple="true" class="semestr-item">
+      <p>Semestr <template exp var="semestr" expr="semestr.number"></template></p>
+      <div class="subject-list">
+        <template for index="index" var="subject" in="semestr.subjects">
+        <re-button class="btn" variant="outlined" color="additional" data-link
+          href="/testing/sub?subject={{EXP:encodeURIComponent(JSON.stringify(subject))}}">
+          <div class="content">
+            <div class="meta">
+              <div>
+                <h3><template exp var="subject" expr="subject.translatedName"></template></h3>
+                <!--<h4><template exp var="subject" expr="subject.name"></template></h4> -->
+              </div>
+              <p>Преподаватель: <template exp var="subject" expr="subject.teacher"></template></p>
+            </div>
+            <div class="chip-column">
+              <template for index="index" var="group" in="subject.groups">
+              <re-chip color="additional"><template exp var="group" expr="group"></template></re-chip>
+              </template>
+            </div>
+          </div>
+        </re-button>
+        </template>
+      </div>
+    </paper-component>
+    </template>
+  </div>
+</paper-component>
+Templates before hydrate: 1
+Templates after hydrate: 0
+Hydrated HTML full length: 2826
+Hydrated HTML sample:
+<paper-component simple="true" class="page">
+  <div class="header">
+    <h1>Testing Page</h1>
+    <p>Choose subject for testing</p>
+  </div>
+
+  <div class="semestr-list">
+    
+    <paper-component simple="true" class="semestr-item">
+      <p>Semestr I</p>
+      <div class="subject-list">
+        
+        <re-button class="btn" variant="outlined" color="additional" data-link="" href="/testing/sub?subject=%7B%22translatedName%22%3A%22Mathematics%22%2C%22name%22%3A%22math%22%2C%22teacher%22%3A%22Prof.%20Ivanov%22%2C%22groups%22%3A%5B%22A%22%2C%22B%22%5D%7D">
+          <div class="content">
+            <div class="meta">
+              <div>
+                <h3>Mathematics</h3>
+                <!--<h4><template exp var="subject" expr="subject.name"></template></h4> -->
+              </div>
+              <p>Преподаватель: Prof. Ivanov</p>
+            </div>
+            <div class="chip-column">
+              
+              <re-chip color="additional">A</re-chip>
+              
+              <re-chip color="additional">B</re-chip>
+              
+            </div>
+          </div>
+        </re-button>
+        
+        <re-button class="btn" variant="outlined" color="additional" data-link="" href="/testing/sub?subject=%7B%22translatedName%22%3A%22Physics%22%2C%22name%22%3A%22physics%22%2C%22teacher%22%3A%22Dr.%20Petrov%22%2C%22groups%22%3A%5B%22A%22%5D%7D">
+          <div class="content">
+            <div class="meta">
+              <div>
+                <h3>Physics</h3>
+                <!--<h4><template exp var="subject" expr="subject.name"></template></h4> -->
+              </div>
+              <p>Преподаватель: Dr. Petrov</p>
+            </div>
+            <div class="chip-column">
+              
+              <re-chip color="additional">A</re-chip>
+              
+            </div>
+          </div>
+        </re-button>
+        
+      </div>
+    </paper-component>
+    
+    <paper-component simple="true" class="semestr-item">
+      <p>Semestr II</p>
+      <div class="subject-list">
+        
+        <re-button class="btn" variant="outlined" color="additional" data-link="" href="/testing/sub?subject=%7B%22translatedName%22%3A%22Chemistry%22%2C%22name%22%3A%22chem%22%2C%22teacher%22%3A%22Dr.%20Sidorov%22%2C%22groups%22%3A%5B%22C%22%5D%7D">
+          <div class="content">
+            <div class="meta">
+              <div>
+                <h3>Chemistry</h3>
+                <!--<h4><template exp var="subject" expr="subject.name"></template></h4> -->
+              </div>
+              <p>Преподаватель: Dr. Sidorov</p>
+            </div>
+            <div class="chip-column">
+              
+              <re-chip color="additional">C</re-chip>
+              
+            </div>
+          </div>
+        </re-button>
+        
+      </div>
+    </paper-component>
+    
+  </div>
+</paper-component>
+Final textContent length: 990
