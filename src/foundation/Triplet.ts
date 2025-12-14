@@ -29,13 +29,13 @@ export type TripletStruct = {
     jsURL?: string;
 
     access?: AccessType;
-    class? : AnyConstructor<UniHtml>;
+    class?: AnyConstructor<UniHtml>;
 }
 export default class Triplet {
-    public readonly markup?: string;
-    public readonly css?: string;
-    public readonly lightCss?: string;
-    public readonly js?: string;
+    public readonly markup?: Promise<string>;
+    public readonly css?: Promise<string>;
+    public readonly lightCss?: Promise<string>;
+    public readonly js?: Promise<string>;
 
     private readonly markupURL?: string;
     private readonly cssURL?: string;
@@ -46,87 +46,33 @@ export default class Triplet {
 
     private uni?: AnyConstructor<UniHtml>;
 
-    private lightCssApplied: boolean = false;
-    private componentCssTextPromise?: Promise<string | undefined>;
-    private componentCssSheetPromise?: Promise<CSSStyleSheet | null>;
-
     public constructor(struct: TripletStruct) {
-        this.markup = struct.markup;
-        this.css = struct.css;
-        this.lightCss = struct.ltCss;
-        this.js = undefined;
-
         this.markupURL = struct.markupURL;
         this.cssURL = struct.cssURL;
         this.ltCssURL = struct.ltCssURL;
         this.jsURL = struct.jsURL;
 
+        let markup = Promise.resolve(struct.markup);
+        if (struct.markupURL)
+            markup = Fetcher.fetchText(struct.markupURL);
+        let css = Promise.resolve(struct.css);
+        if (struct.cssURL)
+            css = Fetcher.fetchText(struct.cssURL);
+        let ltCss = Promise.resolve(struct.ltCss);
+        if (struct.ltCssURL)
+            ltCss = Fetcher.fetchText(struct.ltCssURL);
+        let js = Promise.resolve(undefined);
+        if (struct.jsURL)
+            js = Fetcher.fetchText(struct.jsURL);
+
+        this.markup = markup;
+        this.css = css;
+        this.lightCss = ltCss;
+        this.js = js;
+
         this.access = struct.access ?? AccessType.BOTH;
 
         this.uni = struct.class;
-    }
-
-    private async getMarkupText(): Promise<string | undefined> {
-        if (this.markup) return this.markup;
-        if (this.markupURL) return Fetcher.fetchText(this.markupURL);
-        return undefined;
-    }
-
-    private async getLightCssText(): Promise<string | undefined> {
-        if (this.lightCss) return this.lightCss;
-        if (this.ltCssURL) return Fetcher.fetchText(this.ltCssURL);
-        return undefined;
-    }
-
-    private async getComponentCssText(): Promise<string | undefined> {
-        if (this.css) return this.css;
-        if (!this.cssURL) return undefined;
-
-        this.componentCssTextPromise = this.componentCssTextPromise ?? Fetcher.fetchText(this.cssURL);
-        return this.componentCssTextPromise;
-    }
-
-    private async getComponentCssSheet(): Promise<CSSStyleSheet | null> {
-        if (this.componentCssSheetPromise) return this.componentCssSheetPromise;
-
-        this.componentCssSheetPromise = (async () => {
-            const cssText = await this.getComponentCssText();
-            if (!cssText) return null;
-
-            const sheet = new CSSStyleSheet();
-            await sheet.replace(cssText);
-            return sheet;
-        })();
-
-        return this.componentCssSheetPromise;
-    }
-
-    private static canUseConstructableStylesheets(target: Document | ShadowRoot): boolean {
-        try {
-            return (
-                typeof CSSStyleSheet !== "undefined" &&
-                typeof (CSSStyleSheet as any).prototype?.replace === "function" &&
-                typeof (target as any).adoptedStyleSheets !== "undefined" &&
-                Array.isArray((target as any).adoptedStyleSheets)
-            );
-        } catch {
-            return false;
-        }
-    }
-
-    private static ensureInlineStyle(target: Document | ShadowRoot, key: string, cssText: string): void {
-        const container: ParentNode = (target instanceof Document)
-            ? (target.head ?? target.documentElement)
-            : target;
-
-        const selector = `style[data-triplet-css="${CSS.escape(key)}"]`;
-        const existing = (container as ParentNode).querySelector?.(selector);
-        if (existing) return;
-
-        const styleEl = document.createElement("style");
-        styleEl.setAttribute("data-triplet-css", key);
-        styleEl.textContent = cssText;
-        (container as any).appendChild(styleEl);
     }
 
     public async init(): Promise<boolean> {
@@ -158,28 +104,18 @@ export default class Triplet {
                     break;
             }
         }
-        if (!this.lightCssApplied) {
-            const lightCssText = await this.getLightCssText();
-            if (lightCssText) {
-                const key = this.ltCssURL ?? "light-inline";
-                if (Triplet.canUseConstructableStylesheets(document)) {
-                    const style = new CSSStyleSheet();
-                    await style.replace(lightCssText);
-                    document.adoptedStyleSheets = [
-                        ...document.adoptedStyleSheets,
-                        style
-                    ];
-                } else {
-                    Triplet.ensureInlineStyle(document, key, lightCssText);
-                }
-            }
-            this.lightCssApplied = true;
+        if (this.lightCss) {
+            var style = await new CSSStyleSheet().replace(await this.lightCss);
+            document.adoptedStyleSheets = [
+                ...document.adoptedStyleSheets,
+                style
+            ];
         }
 
         let ori = this.createInjectedClass(this.uni, type);
 
         if (type === "router") {
-            const routePath = this.markupURL ?? this.markup ?? "";
+            const routePath = this.markupURL ?? "";
             var reg = Router.registerRoute(routePath, name, (search) => {
                 const paramNames = (() => {
                     const ctor = this.uni.prototype.constructor;
@@ -223,30 +159,20 @@ export default class Triplet {
         const parser = new HMLEParserReborn();
 
         proto._init = async function (): Promise<DocumentFragment> {
-            const markupText = await that.getMarkupText();
+            const markupText = await that.markup;
             if (!markupText) return new DocumentFragment();
             return parser.parseToDOM(markupText, this);
         }
 
         proto._postInit = async function (preHtml: DocumentFragment): Promise<DocumentFragment> {
             const dmc: Document | ShadowRoot = this.shadowRoot ?? document;
+            const css = await that.css;
 
-            const cssText = await that.getComponentCssText();
-            if (cssText) {
-                const key = that.cssURL ?? "component-inline";
-
-                if (Triplet.canUseConstructableStylesheets(dmc)) {
-                    const cssSheet = await that.getComponentCssSheet();
-                    if (cssSheet) {
-                        const sheets = (dmc as any).adoptedStyleSheets as CSSStyleSheet[];
-                        if (!sheets.includes(cssSheet)) {
-                            (dmc as any).adoptedStyleSheets = [...sheets, cssSheet];
-                        }
-                    }
-                } else {
-                    Triplet.ensureInlineStyle(dmc, key, cssText);
-                }
-            }
+            var style = await new CSSStyleSheet().replace(css);
+            dmc.adoptedStyleSheets = [
+                ...dmc.adoptedStyleSheets,
+                style
+            ];
 
             parser.hydrate(preHtml, this);
             return preHtml;

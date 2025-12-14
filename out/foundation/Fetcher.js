@@ -64,7 +64,7 @@ export default class Fetcher {
     static async internalFetch(resolvedUrl) {
         const response = await fetch(resolvedUrl, { cache: 'default' });
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! ${resolvedUrl} status: ${response.status}`);
         }
         return response;
     }
