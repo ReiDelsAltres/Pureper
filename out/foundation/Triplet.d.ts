@@ -29,14 +29,17 @@ export default class Triplet {
     private readonly access;
     private uni?;
     private lightCssApplied;
+    private componentCssTextPromise?;
     private componentCssSheetPromise?;
     constructor(struct: TripletStruct);
     private getMarkupText;
     private getLightCssText;
+    private getComponentCssText;
     private getComponentCssSheet;
+    private static canUseConstructableStylesheets;
+    private static ensureInlineStyle;
     init(): Promise<boolean>;
     cache(): Promise<void>;
-    private createLink;
     register(type: "router" | "markup", name: string): Promise<boolean>;
     private createInjectedClass;
 }

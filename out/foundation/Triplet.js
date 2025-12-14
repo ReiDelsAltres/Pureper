@@ -23,6 +23,7 @@ export default class Triplet {
     access;
     uni;
     lightCssApplied = false;
+    componentCssTextPromise;
     componentCssSheetPromise;
     constructor(struct) {
         this.markup = struct.markup;
@@ -50,11 +51,19 @@ export default class Triplet {
             return Fetcher.fetchText(this.ltCssURL);
         return undefined;
     }
+    async getComponentCssText() {
+        if (this.css)
+            return this.css;
+        if (!this.cssURL)
+            return undefined;
+        this.componentCssTextPromise = this.componentCssTextPromise ?? Fetcher.fetchText(this.cssURL);
+        return this.componentCssTextPromise;
+    }
     async getComponentCssSheet() {
         if (this.componentCssSheetPromise)
             return this.componentCssSheetPromise;
         this.componentCssSheetPromise = (async () => {
-            const cssText = this.css ?? (this.cssURL ? await Fetcher.fetchText(this.cssURL) : undefined);
+            const cssText = await this.getComponentCssText();
             if (!cssText)
                 return null;
             const sheet = new CSSStyleSheet();
@@ -62,6 +71,30 @@ export default class Triplet {
             return sheet;
         })();
         return this.componentCssSheetPromise;
+    }
+    static canUseConstructableStylesheets(target) {
+        try {
+            return (typeof CSSStyleSheet !== "undefined" &&
+                typeof CSSStyleSheet.prototype?.replace === "function" &&
+                typeof target.adoptedStyleSheets !== "undefined" &&
+                Array.isArray(target.adoptedStyleSheets));
+        }
+        catch {
+            return false;
+        }
+    }
+    static ensureInlineStyle(target, key, cssText) {
+        const container = (target instanceof Document)
+            ? (target.head ?? target.documentElement)
+            : target;
+        const selector = `style[data-triplet-css="${CSS.escape(key)}"]`;
+        const existing = container.querySelector?.(selector);
+        if (existing)
+            return;
+        const styleEl = document.createElement("style");
+        styleEl.setAttribute("data-triplet-css", key);
+        styleEl.textContent = cssText;
+        container.appendChild(styleEl);
     }
     async init() {
         const isOnline = await ServiceWorker.isOnline();
@@ -81,14 +114,6 @@ export default class Triplet {
     async cache() {
         //
     }
-    createLink(cssPath) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        ///
-        link.href = cssPath;
-        ///
-        return link;
-    }
     async register(type, name) {
         if (!this.uni) {
             switch (type) {
@@ -103,12 +128,18 @@ export default class Triplet {
         if (!this.lightCssApplied) {
             const lightCssText = await this.getLightCssText();
             if (lightCssText) {
-                const style = new CSSStyleSheet();
-                await style.replace(lightCssText);
-                document.adoptedStyleSheets = [
-                    ...document.adoptedStyleSheets,
-                    style
-                ];
+                const key = this.ltCssURL ?? "light-inline";
+                if (Triplet.canUseConstructableStylesheets(document)) {
+                    const style = new CSSStyleSheet();
+                    await style.replace(lightCssText);
+                    document.adoptedStyleSheets = [
+                        ...document.adoptedStyleSheets,
+                        style
+                    ];
+                }
+                else {
+                    Triplet.ensureInlineStyle(document, key, lightCssText);
+                }
             }
             this.lightCssApplied = true;
         }
@@ -159,10 +190,22 @@ export default class Triplet {
             return parser.parseToDOM(markupText, this);
         };
         proto._postInit = async function (preHtml) {
-            var dmc = this.shadowRoot ?? document;
-            const cssSheet = await that.getComponentCssSheet();
-            if (cssSheet) {
-                dmc.adoptedStyleSheets = [...dmc.adoptedStyleSheets, cssSheet];
+            const dmc = this.shadowRoot ?? document;
+            const cssText = await that.getComponentCssText();
+            if (cssText) {
+                const key = that.cssURL ?? "component-inline";
+                if (Triplet.canUseConstructableStylesheets(dmc)) {
+                    const cssSheet = await that.getComponentCssSheet();
+                    if (cssSheet) {
+                        const sheets = dmc.adoptedStyleSheets;
+                        if (!sheets.includes(cssSheet)) {
+                            dmc.adoptedStyleSheets = [...sheets, cssSheet];
+                        }
+                    }
+                }
+                else {
+                    Triplet.ensureInlineStyle(dmc, key, cssText);
+                }
             }
             parser.hydrate(preHtml, this);
             return preHtml;
