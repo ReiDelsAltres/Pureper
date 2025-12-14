@@ -5,43 +5,48 @@ const CACHE_NAME = `pureper-v1`;
 const STATIC_ASSETS = [
     '/index.html'
 ];
-if ('serviceWorker' in navigator) {
+/*if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./serviceWorker.js', { type: 'module' })
             .then((registration) => {
-            console.log('ServiceWorker registration successful:', registration.scope);
-        })
+                console.log('ServiceWorker registration successful:', registration.scope);
+            })
             .catch((error) => {
-            console.error('ServiceWorker registration failed:', error);
-        });
+                console.error('ServiceWorker registration failed:', error);
+            });
     });
-    window.addEventListener('fetch', (event) => {
-        event.respondWith(caches.match(event.request).then((cachedResponse) => {
-            console.log(`[ServiceWorker]: Fetching ${event.request.url}`);
-            return cachedResponse || fetch(event.request);
-        }));
+    window.addEventListener('fetch', (event: FetchEvent) => {
+        event.respondWith(
+            caches.match(event.request).then((cachedResponse) => {
+                console.log(`[ServiceWorker]: Fetching ${event.request.url}`);
+                return cachedResponse || fetch(event.request);
+            })
+        );
     });
 }
+
 /**
  * Install event - cache static assets
  */
-window.addEventListener('install', (event) => {
+/*window.addEventListener('install', (event: ExtendableEvent) => {
     console.log('ServiceWorker: Installing...');
     const assetsToCache = [
         ...STATIC_ASSETS
     ];
     // Remove duplicates
     const uniqueAssets = Array.from(new Set(assetsToCache));
-    event.waitUntil(caches.open(CACHE_NAME)
-        .then((cache) => {
-        console.log('ServiceWorker: Caching static assets and SPA routes');
-        return cache.addAll(uniqueAssets);
-    })
-        .then(() => {
-        console.log('ServiceWorker: Installation complete');
-        return swSelf.skipWaiting();
-    }));
-});
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then((cache: Cache) => {
+                console.log('ServiceWorker: Caching static assets and SPA routes');
+                return cache.addAll(uniqueAssets);
+            })
+            .then(() => {
+                console.log('ServiceWorker: Installation complete');
+                return swSelf.skipWaiting();
+            })
+    );
+});*/
 export default class ServiceWorker {
     /**
      * Sends a message to the service worker to cache a specific URL.

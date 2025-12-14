@@ -10,6 +10,7 @@ declare const Component_base: {
     prototype: HTMLElement;
 };
 export default class Component extends Component_base implements IUniHtmlComponent {
+    private _attributes;
     private _attributeChangedCallbacks?;
     constructor();
     onConnected(): void;

@@ -1,4 +1,5 @@
-import Observable from './api/Observer';
+import Observable from './api/Observer.js';
+import Context from './hmle/Context.js';
 // Helper: encode expression for HTML attribute
 function encodeAttr(s) {
     return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -25,8 +26,117 @@ function findObservablesInExpr(expr, scope, dynamicVars) {
     }
     return result;
 }
+// Helper: Find the index of the matching closing brace '}' ignoring braces inside quotes/comments
+function findMatchingClosingBrace(content, openIndex) {
+    let i = openIndex + 1;
+    let depth = 1;
+    let inSingle = false;
+    let inDouble = false;
+    let inBacktick = false;
+    let inLineComment = false;
+    let inBlockComment = false;
+    let prevChar = '';
+    while (i < content.length && depth > 0) {
+        const ch = content[i];
+        // handle comment states
+        if (inLineComment) {
+            if (ch === '\n')
+                inLineComment = false;
+            prevChar = ch;
+            i++;
+            continue;
+        }
+        if (inBlockComment) {
+            if (prevChar === '*' && ch === '/')
+                inBlockComment = false;
+            prevChar = ch;
+            i++;
+            continue;
+        }
+        // handle string/template states, allow escaping
+        if (inSingle) {
+            if (ch === '\\' && prevChar !== '\\') {
+                prevChar = ch;
+                i++;
+                continue;
+            }
+            if (ch === "'" && prevChar !== '\\')
+                inSingle = false;
+            prevChar = ch;
+            i++;
+            continue;
+        }
+        if (inDouble) {
+            if (ch === '\\' && prevChar !== '\\') {
+                prevChar = ch;
+                i++;
+                continue;
+            }
+            if (ch === '"' && prevChar !== '\\')
+                inDouble = false;
+            prevChar = ch;
+            i++;
+            continue;
+        }
+        if (inBacktick) {
+            if (ch === '\\' && prevChar !== '\\') {
+                prevChar = ch;
+                i++;
+                continue;
+            }
+            if (ch === '`' && prevChar !== '\\')
+                inBacktick = false;
+            prevChar = ch;
+            i++;
+            continue;
+        }
+        // Not inside quotes or comments
+        // Start comments
+        if (prevChar === '/' && ch === '/') {
+            inLineComment = true;
+            prevChar = '';
+            i++;
+            continue;
+        }
+        if (prevChar === '/' && ch === '*') {
+            inBlockComment = true;
+            prevChar = '';
+            i++;
+            continue;
+        }
+        // Start quotes
+        if (ch === "'") {
+            inSingle = true;
+            prevChar = ch;
+            i++;
+            continue;
+        }
+        if (ch === '"') {
+            inDouble = true;
+            prevChar = ch;
+            i++;
+            continue;
+        }
+        if (ch === '`') {
+            inBacktick = true;
+            prevChar = ch;
+            i++;
+            continue;
+        }
+        // handle braces
+        if (ch === '{')
+            depth++;
+        else if (ch === '}')
+            depth--;
+        prevChar = ch;
+        i++;
+    }
+    // i is index just after the closing brace (since we increment after reading '}' )
+    return i;
+}
 export default class HMLEParserReborn {
     rules = [];
+    variables = {};
     constructor() {
         // Register default rules — order matters!
         // forRule must come before expRule so that @for creates local scope first
@@ -52,8 +162,11 @@ export default class HMLEParserReborn {
     static isIdentifier(s) {
         return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test((s || '').trim());
     }
+    buildContext(scope) {
+        return Context.build(this.variables, scope);
+    }
     evaluate(expr, scope) {
-        const ctx = Object.assign({}, scope ?? {});
+        const ctx = this.buildContext(scope);
         try {
             const fn = new Function('with(this){ return (' + expr + '); }');
             return fn.call(ctx);
@@ -456,17 +569,10 @@ const forRule = {
             const b = m[2];
             const iterable = m[3];
             const blockStart = m.index + m[0].length - 1; // position of '{'
-            // Extract balanced brace block
-            let depth = 1;
-            let i = blockStart + 1;
-            while (i < working.length && depth > 0) {
-                if (working[i] === '{')
-                    depth++;
-                else if (working[i] === '}')
-                    depth--;
-                i++;
-            }
-            if (depth !== 0) {
+            // Extract balanced brace block using robust finder that ignores braces inside strings/comments
+            const i = findMatchingClosingBrace(working, blockStart);
+            if (i > working.length || i <= blockStart) {
+                // Unable to find matching closing brace — fallback to leaving original match as-is
                 out += working.slice(m.index, forRe.lastIndex);
                 lastIndex = forRe.lastIndex;
                 continue;
@@ -514,6 +620,7 @@ const forRule = {
                 const parsedInner = parseWithDynamicVars(parser, inner, scope, innerDynamicVars);
                 out += `<template for index="${indexName}" var="${varName}" in="${iterable}">${parsedInner}</template>`;
                 lastIndex = i;
+                forRe.lastIndex = i;
                 continue;
             }
             // STATIC expansion for non-Observable values
@@ -530,6 +637,7 @@ const forRule = {
                 out += parser.parse(inner, localScope);
             }
             lastIndex = i;
+            forRe.lastIndex = i;
         }
         out += working.slice(lastIndex);
         return out;
@@ -710,13 +818,69 @@ const refRule = {
         // attribute name is '@[ref]'
         if (!el.hasAttribute('@[ref]'))
             return;
-        const name = el.getAttribute('@[ref]')?.trim();
-        if (!name)
+        const raw = el.getAttribute('@[ref]')?.trim();
+        if (!raw)
             return;
-        if (scope) {
-            scope[name] = el;
+        // Build evaluation context so prototype methods are available
+        const ctx = Context.build(parser.variables, scope);
+        // If attribute contains attribute-expression placeholders like {{EXP:...}},
+        // replace them by evaluating inner expressions. Otherwise try to evaluate the whole
+        // attribute as an expression. Fallback to literal if evaluation fails.
+        let refName;
+        const expPattern = /\{\{EXP:([^}]+)\}\}/g;
+        if (expPattern.test(raw)) {
+            // Replace each placeholder with evaluated string
+            let tmp = raw;
+            expPattern.lastIndex = 0;
+            tmp = tmp.replace(expPattern, (_m, enc) => {
+                const expr = decodeAttr(enc);
+                // Build evaluation scope with unwrapped Observable values used in expr
+                const evalScope = Object.assign({}, ctx);
+                if (scope) {
+                    const obsNames = findObservablesInExpr(expr, scope);
+                    for (const name of obsNames) {
+                        const o = scope[name];
+                        if (o instanceof Observable)
+                            evalScope[name] = o.getObject ? o.getObject() : undefined;
+                    }
+                }
+                const val = parser.evaluate(expr, evalScope);
+                return val == null ? '' : String(val);
+            });
+            refName = tmp;
         }
-        el.removeAttribute('@[ref]');
+        else {
+            // Try evaluating full attribute as JS expression
+            try {
+                const evalScope = Object.assign({}, ctx);
+                if (scope) {
+                    const obsNames = findObservablesInExpr(raw, scope);
+                    for (const name of obsNames) {
+                        const o = scope[name];
+                        if (o instanceof Observable)
+                            evalScope[name] = o.getObject ? o.getObject() : undefined;
+                    }
+                }
+                const evaluated = parser.evaluate(raw, evalScope);
+                if (typeof evaluated === 'string')
+                    refName = evaluated;
+                else if (evaluated != null)
+                    refName = String(evaluated);
+            }
+            catch (e) {
+                // ignore and fallback to raw
+            }
+        }
+        if (!refName)
+            refName = raw;
+        if (refName) {
+            if (scope) {
+                scope[refName] = el;
+            }
+            else {
+                parser.variables[refName] = el;
+            }
+        }
     }
 };
 // ==========================================
@@ -736,10 +900,11 @@ const onRule = {
             const expr = attr.value;
             // Add event listener
             el.addEventListener(eventName, (ev) => {
-                // Build evaluation scope with unwrapped Observables
-                const evalScope = Object.assign({}, scope ?? {});
+                // Build evaluation scope with unwrapped Observables while preserving
+                // the prototype of the original scope so prototype methods remain bound.
+                let evalScope = Object.create(scope ?? null);
+                // Unwrap Observables referenced in expression into own-properties
                 if (scope) {
-                    // unwrap observables referenced in expr
                     const observed = findObservablesInExpr(expr, scope);
                     for (const name of observed) {
                         const o = scope[name];
@@ -747,15 +912,10 @@ const onRule = {
                             evalScope[name] = o.getObject ? o.getObject() : undefined;
                     }
                 }
-                // event and element are added to the scope
+                // event and element are added to the scope as own-properties
                 evalScope['event'] = ev;
                 evalScope['element'] = el;
-                try {
-                    parser.evaluate(expr, evalScope);
-                }
-                catch (e) {
-                    // swallow evaluation errors
-                }
+                parser.evaluate(expr, evalScope);
             });
             el.removeAttribute(an);
         }

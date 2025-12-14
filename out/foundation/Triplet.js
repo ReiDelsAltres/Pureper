@@ -3,23 +3,65 @@ import { Router } from "./worker/Router.js";
 import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
-import HMLEParser from "./HMLEParser.js";
-import { HOSTING_ORIGIN } from "../index.js";
+import HMLEParserReborn from "./HMLEParserReborn.js";
+export var AccessType;
+(function (AccessType) {
+    AccessType[AccessType["NONE"] = 0] = "NONE";
+    AccessType[AccessType["OFFLINE"] = 1] = "OFFLINE";
+    AccessType[AccessType["ONLINE"] = 2] = "ONLINE";
+    AccessType[AccessType["BOTH"] = 3] = "BOTH";
+})(AccessType || (AccessType = {}));
 export default class Triplet {
-    uni;
-    access;
     markup;
     css;
+    lightCss;
     js;
-    additionalFiles = new Map();
-    constructor(builder) {
-        this.markup = builder.markup;
-        this.css = builder.css;
-        this.js = builder.js;
-        this.additionalFiles = builder.additionalFiles;
-        this.uni = builder.uni;
-        ;
-        this.access = builder.access;
+    markupURL;
+    cssURL;
+    ltCssURL;
+    jsURL;
+    access;
+    uni;
+    lightCssApplied = false;
+    componentCssSheetPromise;
+    constructor(struct) {
+        this.markup = struct.markup;
+        this.css = struct.css;
+        this.lightCss = struct.ltCss;
+        this.js = undefined;
+        this.markupURL = struct.markupURL;
+        this.cssURL = struct.cssURL;
+        this.ltCssURL = struct.ltCssURL;
+        this.jsURL = struct.jsURL;
+        this.access = struct.access ?? AccessType.BOTH;
+        this.uni = struct.class;
+    }
+    async getMarkupText() {
+        if (this.markup)
+            return this.markup;
+        if (this.markupURL)
+            return Fetcher.fetchText(this.markupURL);
+        return undefined;
+    }
+    async getLightCssText() {
+        if (this.lightCss)
+            return this.lightCss;
+        if (this.ltCssURL)
+            return Fetcher.fetchText(this.ltCssURL);
+        return undefined;
+    }
+    async getComponentCssSheet() {
+        if (this.componentCssSheetPromise)
+            return this.componentCssSheetPromise;
+        this.componentCssSheetPromise = (async () => {
+            const cssText = this.css ?? (this.cssURL ? await Fetcher.fetchText(this.cssURL) : undefined);
+            if (!cssText)
+                return null;
+            const sheet = new CSSStyleSheet();
+            await sheet.replace(cssText);
+            return sheet;
+        })();
+        return this.componentCssSheetPromise;
     }
     async init() {
         const isOnline = await ServiceWorker.isOnline();
@@ -37,17 +79,7 @@ export default class Triplet {
         return true;
     }
     async cache() {
-        if (this.markup)
-            await ServiceWorker.addToCache(this.markup);
-        if (this.css)
-            await ServiceWorker.addToCache(this.css);
-        if (this.js)
-            await ServiceWorker.addToCache(this.js);
-        if (this.additionalFiles.size > 0) {
-            for (const [type, filePath] of this.additionalFiles) {
-                await ServiceWorker.addToCache(filePath);
-            }
-        }
+        //
     }
     createLink(cssPath) {
         const link = document.createElement('link');
@@ -68,18 +100,22 @@ export default class Triplet {
                     break;
             }
         }
-        for (const [type, filePath] of this.additionalFiles) {
-            if (type !== 'light-dom')
-                continue;
-            if (!filePath.endsWith(".css"))
-                continue;
-            const link = this.createLink(filePath);
-            document.head.appendChild(link);
-            console.info(`[Triplet]: Additional light-dom CSS file '${filePath}' added to document head.`);
+        if (!this.lightCssApplied) {
+            const lightCssText = await this.getLightCssText();
+            if (lightCssText) {
+                const style = new CSSStyleSheet();
+                await style.replace(lightCssText);
+                document.adoptedStyleSheets = [
+                    ...document.adoptedStyleSheets,
+                    style
+                ];
+            }
+            this.lightCssApplied = true;
         }
-        let ori = this.createInjectedClass(this.uni);
+        let ori = this.createInjectedClass(this.uni, type);
         if (type === "router") {
-            var reg = Router.registerRoute(this.markup, name, (search) => {
+            const routePath = this.markupURL ?? this.markup ?? "";
+            var reg = Router.registerRoute(routePath, name, (search) => {
                 const paramNames = (() => {
                     const ctor = this.uni.prototype.constructor;
                     const fnStr = ctor.toString();
@@ -95,7 +131,7 @@ export default class Triplet {
                 const unn = new ori(...args);
                 return unn;
             });
-            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.markup}' by class ${ori}.`);
+            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${routePath}' by class ${ori}.`);
             return reg.then(() => true).catch(() => false);
         }
         else if (type === "markup") {
@@ -107,7 +143,7 @@ export default class Triplet {
         }
         return Promise.resolve(false);
     }
-    createInjectedClass(c) {
+    createInjectedClass(c, type) {
         let that = this;
         let ori = class extends c {
             constructor(...args) {
@@ -115,72 +151,23 @@ export default class Triplet {
             }
         };
         let proto = ori.prototype;
+        const parser = new HMLEParserReborn();
         proto._init = async function () {
-            const fullPath = that.markup;
-            const parser = new HMLEParser();
-            var domFragment = parser.parseToDOM(await Fetcher.fetchText(fullPath), this);
-            return domFragment;
+            const markupText = await that.getMarkupText();
+            if (!markupText)
+                return new DocumentFragment();
+            return parser.parseToDOM(markupText, this);
         };
         proto._postInit = async function (preHtml) {
-            if (that.css) {
-                const link = that.createLink(that.css);
-                preHtml.prepend(link);
-                //preHtml.appendChild(link);
+            var dmc = this.shadowRoot ?? document;
+            const cssSheet = await that.getComponentCssSheet();
+            if (cssSheet) {
+                dmc.adoptedStyleSheets = [...dmc.adoptedStyleSheets, cssSheet];
             }
-            for (const [type, filePath] of that.additionalFiles) {
-                if (!filePath.endsWith(".css"))
-                    continue;
-                if (type !== 'light-dom') {
-                    const link = that.createLink(filePath);
-                    preHtml.prepend(link);
-                    //preHtml.appendChild(link)
-                }
-            }
+            parser.hydrate(preHtml, this);
             return preHtml;
         };
         return ori;
-    }
-}
-export var AccessType;
-(function (AccessType) {
-    AccessType[AccessType["NONE"] = 0] = "NONE";
-    AccessType[AccessType["OFFLINE"] = 1] = "OFFLINE";
-    AccessType[AccessType["ONLINE"] = 2] = "ONLINE";
-    AccessType[AccessType["BOTH"] = 3] = "BOTH";
-})(AccessType || (AccessType = {}));
-export class TripletBuilder {
-    markup;
-    css;
-    js;
-    uni;
-    access = AccessType.BOTH;
-    additionalFiles = new Map();
-    constructor(markup, css, js) {
-        this.markup = markup;
-        this.css = css;
-        this.js = js;
-    }
-    static create(markup, css, js) {
-        let urlHtml = markup ? new URL(`${HOSTING_ORIGIN}/${markup}`, window.location.origin) : null;
-        let urlCss = css ? new URL(`${HOSTING_ORIGIN}/${css}`, window.location.origin) : null;
-        let urlJs = js ? new URL(`${HOSTING_ORIGIN}/${js}`, window.location.origin) : null;
-        return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
-    }
-    withUni(cls) {
-        this.uni = cls;
-        return this;
-    }
-    withAccess(access) {
-        this.access = access;
-        return this;
-    }
-    withLightDOMCss(css) {
-        let urlCss = css ? new URL(`${HOSTING_ORIGIN}/${css}`, window.location.origin) : null;
-        this.additionalFiles.set('light-dom', urlCss?.href);
-        return this;
-    }
-    build() {
-        return new Triplet(this);
     }
 }
 //# sourceMappingURL=Triplet.js.map

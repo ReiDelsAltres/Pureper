@@ -1,33 +1,21 @@
-import { AccessType, TripletBuilder } from "./Triplet.js"
-
-export function ReComponent(html? : string, css?: string, js?: string, access?: AccessType, name?: string, 
-    additionalCss?: string) {
+import Triplet, { AccessType, TripletStruct } from "./Triplet.js"
+export function ReComponent(settings: TripletStruct, tag: string) {
     return (ctor: Function) => {
-        const builder = TripletBuilder.create(html, css, js)
-        .withUni(ctor as any)
-        .withAccess(access ?? AccessType.BOTH);
+        if (tag == null || tag.length === 0 || !tag.includes("-"))
+            throw new Error("Invalid custom element tag name.");
 
-        if (additionalCss)
-            builder.withLightDOMCss(additionalCss);
+        const triplet: Triplet = new Triplet(settings);
 
-        const triplet = builder.build();
-
-        triplet.register("markup", name)
+        triplet.register("markup", tag)
     }
 }
-export function RePage(html? : string, css?: string, js?: string, access?: AccessType, path?: string,
-    additionalCss?: string
-) {
+export function RePage(settings: TripletStruct, route: string) {
     return (ctor: Function) => {
-        const builder = TripletBuilder.create(html, css, js)
-        .withUni(ctor as any)
-        .withAccess(access ?? AccessType.BOTH);
+        if (route == null || route.length === 0 || !route.startsWith("/"))
+            throw new Error("Invalid route path.");
+        
+        const triplet: Triplet = new Triplet(settings);
 
-        if (additionalCss)
-            builder.withLightDOMCss(additionalCss)
-
-        const triplet = builder.build();
-
-        triplet.register("router", path)
+        triplet.register("router", route)
     }
 }

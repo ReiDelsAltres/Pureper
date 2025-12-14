@@ -13,6 +13,7 @@ export interface Rule {
 }
 export default class HMLEParserReborn {
     private rules;
+    variables: Record<string, any>;
     constructor();
     /**
      * Add a custom rule to the parser
@@ -23,6 +24,7 @@ export default class HMLEParserReborn {
      */
     getRules(): Rule[];
     static isIdentifier(s: string): boolean;
+    private buildContext;
     evaluate(expr: string, scope?: Record<string, any>): any;
     stringify(v: any): string;
     /**

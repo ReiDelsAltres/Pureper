@@ -19,7 +19,7 @@ const STATIC_ASSETS: string[] = [
     '/index.html'
 ];
 
-if ('serviceWorker' in navigator) {
+/*if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./serviceWorker.js', { type: 'module' })
             .then((registration) => {
@@ -42,7 +42,7 @@ if ('serviceWorker' in navigator) {
 /**
  * Install event - cache static assets
  */
-window.addEventListener('install', (event: ExtendableEvent) => {
+/*window.addEventListener('install', (event: ExtendableEvent) => {
     console.log('ServiceWorker: Installing...');
     const assetsToCache = [
         ...STATIC_ASSETS
@@ -60,7 +60,7 @@ window.addEventListener('install', (event: ExtendableEvent) => {
                 return swSelf.skipWaiting();
             })
     );
-});
+});*/
 
 export default class ServiceWorker {
     /**

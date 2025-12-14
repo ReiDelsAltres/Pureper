@@ -1,4 +1,5 @@
-import { HOSTING, HOSTING_ORIGIN } from "../../index.js";
+import { HOSTING } from "../Hosting.js";
+import Fetcher from "../Fetcher.js";
 import UniHtml from "../component_api/UniHtml.js";
 
 export interface Route<T extends UniHtml = UniHtml> {
@@ -43,16 +44,16 @@ export abstract class Router {
 
 
   public static legacyRouteTo(route: string) {
-    let url = new URL(route, HOSTING_ORIGIN);
-    if (window.location.pathname !== route) {
+    const url = new URL(Fetcher.resolveUrl(route));
+    if (window.location.pathname !== url.pathname) {
       window.location.replace(url.href);
     }
   }
   public static tryRouteTo(url: URL, pushState: boolean = true) {
-    const urlH = new URL(url.href, HOSTING_ORIGIN);
+    const urlH = new URL(Fetcher.resolveUrl(url.href));
     try {
       const found: Route = this.tryFindRoute(urlH);
-      const page: UniHtml = this.createPage(found, url.searchParams);
+      const page: UniHtml = this.createPage(found, urlH.searchParams);
 
       page.load(document.getElementById('page')!);
       if (pushState && typeof window !== "undefined" && window.location) {
@@ -98,8 +99,9 @@ document.addEventListener('click', e => {
     const link = target.closest('a[data-link]') ?? target.closest('re-button[data-link]');
     if (link) {
       e.preventDefault();
-      const hr = HOSTING_ORIGIN + link.getAttribute('href');
-      const url : URL = new URL(hr, HOSTING_ORIGIN);
+      const href = link.getAttribute('href');
+      if (!href) return;
+      const url: URL = new URL(Fetcher.resolveUrl(href));
       Router.tryRouteTo(url);
     }
   }
@@ -108,7 +110,7 @@ document.addEventListener('click', e => {
 //For back/forward navigation
 window.addEventListener('popstate', e => {
   try {
-    const url = new URL(window.location.href, HOSTING_ORIGIN);
+    const url = new URL(Fetcher.resolveUrl(window.location.href));
     Router.tryRouteTo(url, false);
   } catch (error) {
     console.error('[Router] (popstate): failed to route to current location', error);

@@ -1,4 +1,4 @@
-import { HOSTING, HOSTING_ORIGIN } from "../index.js";
+import { HOSTING_ORIGIN } from "./Hosting.js";
 // cache stores response bodies (text) by resolved URL so we can reuse them safely
 const temporaryCache = new Map();
 // keep in-flight promises to deduplicate concurrent identical requests
@@ -47,11 +47,19 @@ export default class Fetcher {
         return p;
     }
     static resolveUrl(url) {
-        const urlObj = new URL(url, HOSTING_ORIGIN);
-        if (!urlObj.href.includes(HOSTING)) {
-            return urlObj.origin + HOSTING + urlObj.pathname;
-        }
-        return urlObj.href;
+        const trimmed = url.trim();
+        // Absolute (scheme) URLs: http:, https:, data:, blob:, file:, etc.
+        if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed))
+            return trimmed;
+        // Protocol-relative URL
+        if (trimmed.startsWith("//"))
+            return `${window.location.protocol}${trimmed}`;
+        // App-root absolute path ("/foo"). We treat it as *hosting-root relative*, not origin-root.
+        if (trimmed.startsWith("/"))
+            return `${HOSTING_ORIGIN}${trimmed}`;
+        // Relative path: resolve against hosting root.
+        // (If the project needs a subfolder root, set <base href="/subfolder/"> so HOSTING/HOSTING_ORIGIN reflect it.)
+        return new URL(trimmed, `${HOSTING_ORIGIN}/`).href;
     }
     static async internalFetch(resolvedUrl) {
         const response = await fetch(resolvedUrl, { cache: 'default' });

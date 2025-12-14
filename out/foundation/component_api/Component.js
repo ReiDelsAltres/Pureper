@@ -1,6 +1,7 @@
 import UniHtml from "../component_api/UniHtml.js";
 import { Class } from "./mixin/Proto.js";
 export default class Component extends Class(HTMLElement).extend(UniHtml).build() {
+    _attributes = [];
     _attributeChangedCallbacks;
     constructor() {
         super();
@@ -24,6 +25,19 @@ export default class Component extends Class(HTMLElement).extend(UniHtml).build(
      */
     connectedCallback() {
         this.attachShadow({ mode: 'open' });
+        for (const attr of this._attributes) {
+            const vv = this.getAttribute(attr.name);
+            if (vv === null || vv === "") {
+                if (this.hasAttribute(attr.name)) {
+                    attr.initialize(true);
+                }
+                else {
+                    attr.initialize(null);
+                }
+                continue;
+            }
+            attr.initialize(vv);
+        }
         this.onConnected();
         this.load(this.shadowRoot);
     }

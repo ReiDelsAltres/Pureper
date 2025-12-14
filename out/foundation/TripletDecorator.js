@@ -1,24 +1,18 @@
-import { AccessType, TripletBuilder } from "./Triplet.js";
-export function ReComponent(html, css, js, access, name, additionalCss) {
+import Triplet from "./Triplet.js";
+export function ReComponent(settings, tag) {
     return (ctor) => {
-        const builder = TripletBuilder.create(html, css, js)
-            .withUni(ctor)
-            .withAccess(access ?? AccessType.BOTH);
-        if (additionalCss)
-            builder.withLightDOMCss(additionalCss);
-        const triplet = builder.build();
-        triplet.register("markup", name);
+        if (tag == null || tag.length === 0 || !tag.includes("-"))
+            throw new Error("Invalid custom element tag name.");
+        const triplet = new Triplet(settings);
+        triplet.register("markup", tag);
     };
 }
-export function RePage(html, css, js, access, path, additionalCss) {
+export function RePage(settings, route) {
     return (ctor) => {
-        const builder = TripletBuilder.create(html, css, js)
-            .withUni(ctor)
-            .withAccess(access ?? AccessType.BOTH);
-        if (additionalCss)
-            builder.withLightDOMCss(additionalCss);
-        const triplet = builder.build();
-        triplet.register("router", path);
+        if (route == null || route.length === 0 || !route.startsWith("/"))
+            throw new Error("Invalid route path.");
+        const triplet = new Triplet(settings);
+        triplet.register("router", route);
     };
 }
 //# sourceMappingURL=TripletDecorator.js.map

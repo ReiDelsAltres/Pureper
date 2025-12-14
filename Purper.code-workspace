@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../Hellper"
+		},
+		{
+			"path": "../HMLE"
+		},
+		{
+			"path": "../Example"
+		}
+	],
+	"settings": {
+		"liveServer.settings.NoBrowser": true,
+		"liveServer.settings.multiRootWorkspaceName": "Example",
+		"github-actions.workflows.pinned.workflows": [
+			"Purper/.github/workflows/publish.yml"
+		]
+	}
+}

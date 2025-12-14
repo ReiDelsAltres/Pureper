@@ -1,9 +1,12 @@
 import IElementHolder from "../api/ElementHolder.js";
 import UniHtml from "../component_api/UniHtml.js";
+import Attribute from "./Attribute.js";
 import { Class, Mixined } from "./mixin/Proto.js";
 
-export default interface Component extends Mixined,HTMLElement, UniHtml {}
+export default interface Component extends Mixined, HTMLElement, UniHtml { }
 export default class Component extends Class(HTMLElement).extend(UniHtml).build() implements IUniHtmlComponent {
+    private _attributes: Attribute[] = [];
+
     private _attributeChangedCallbacks?: ((name: string, oldValue: any, newValue: any) => void)[];
     constructor() {
         super();
@@ -36,8 +39,21 @@ export default class Component extends Class(HTMLElement).extend(UniHtml).build(
     private connectedCallback(): void {
         this.attachShadow({ mode: 'open' });
 
+        for (const attr of this._attributes) {
+            const vv = this.getAttribute(attr.name);
+            if (vv === null || vv === "") {
+                if (this.hasAttribute(attr.name)) {
+                    (attr as any).initialize(true);
+                } else {
+                    (attr as any).initialize(null);
+                }
+                continue;
+            }
+            (attr as any).initialize(vv as any);
+        }
+
         this.onConnected();
-        
+
         this.load(this.shadowRoot);
     }
     protected render(element: IElementHolder, renderTarget: HTMLElement | ShadowRoot): Promise<void> {

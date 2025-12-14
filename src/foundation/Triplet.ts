@@ -7,28 +7,89 @@ import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
 import PHTMLParser from "./PHTMLParser.js";
 import HMLEParser from "./HMLEParser.js";
-import { HOSTING_ORIGIN } from "../index.js";
 import HMLEParserReborn from "./HMLEParserReborn.js";
 
-export default class Triplet<T extends UniHtml> implements ITriplet {
-    private uni?: AnyConstructor<UniHtml>;
-    private readonly access: AccessType;
 
+export enum AccessType {
+    NONE = 0,
+    OFFLINE = 1 << 0,
+    ONLINE = 1 << 1,
+    BOTH = OFFLINE | ONLINE
+}
+export type TripletStruct = {
+    markupURL?: string;
+    markup?: string;
+
+    cssURL?: string;
+    css?: string;
+
+    ltCssURL?: string;
+    ltCss?: string;
+
+    jsURL?: string;
+
+    access?: AccessType;
+    class? : AnyConstructor<UniHtml>;
+}
+export default class Triplet {
     public readonly markup?: string;
     public readonly css?: string;
+    public readonly lightCss?: string;
     public readonly js?: string;
 
-    public readonly additionalFiles: Map<string, string> = new Map();
+    private readonly markupURL?: string;
+    private readonly cssURL?: string;
+    private readonly ltCssURL?: string;
+    private readonly jsURL?: string;
 
-    public constructor(builder: TripletBuilder<T>) {
-        this.markup = builder.markup;
-        this.css = builder.css;
-        this.js = builder.js;
+    private readonly access: AccessType;
 
-        this.additionalFiles = builder.additionalFiles;
+    private uni?: AnyConstructor<UniHtml>;
 
-        this.uni = builder.uni;;
-        this.access = builder.access;
+    private lightCssApplied: boolean = false;
+    private componentCssSheetPromise?: Promise<CSSStyleSheet | null>;
+
+    public constructor(struct: TripletStruct) {
+        this.markup = struct.markup;
+        this.css = struct.css;
+        this.lightCss = struct.ltCss;
+        this.js = undefined;
+
+        this.markupURL = struct.markupURL;
+        this.cssURL = struct.cssURL;
+        this.ltCssURL = struct.ltCssURL;
+        this.jsURL = struct.jsURL;
+
+        this.access = struct.access ?? AccessType.BOTH;
+
+        this.uni = struct.class;
+    }
+
+    private async getMarkupText(): Promise<string | undefined> {
+        if (this.markup) return this.markup;
+        if (this.markupURL) return Fetcher.fetchText(this.markupURL);
+        return undefined;
+    }
+
+    private async getLightCssText(): Promise<string | undefined> {
+        if (this.lightCss) return this.lightCss;
+        if (this.ltCssURL) return Fetcher.fetchText(this.ltCssURL);
+        return undefined;
+    }
+
+    private async getComponentCssSheet(): Promise<CSSStyleSheet | null> {
+        if (this.componentCssSheetPromise) return this.componentCssSheetPromise;
+
+        this.componentCssSheetPromise = (async () => {
+            const cssText = this.css ?? (this.cssURL ? await Fetcher.fetchText(this.cssURL) : undefined);
+            if (!cssText) return null;
+
+            const sheet = new CSSStyleSheet();
+            await sheet.replace(cssText);
+            return sheet;
+        })();
+
+        return this.componentCssSheetPromise;
     }
 
     public async init(): Promise<boolean> {
@@ -46,17 +107,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
     }
 
     public async cache(): Promise<void> {
-        if (this.markup)
-            await ServiceWorker.addToCache(this.markup);
-        if (this.css)
-            await ServiceWorker.addToCache(this.css);
-        if (this.js)
-            await ServiceWorker.addToCache(this.js);
-        if (this.additionalFiles.size > 0) {
-            for (const [type, filePath] of this.additionalFiles) {
-                await ServiceWorker.addToCache(filePath);
-            }
-        }
+        //
     }
 
     private createLink(cssPath: string): HTMLLinkElement {
@@ -80,21 +131,24 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
                     break;
             }
         }
-
-        for (const [type, filePath] of this.additionalFiles) {
-            if (type !== 'light-dom') continue;
-            if (!filePath.endsWith(".css")) continue;
-
-            const link = this.createLink(filePath);
-            document.head.appendChild(link);
-
-            console.info(`[Triplet]: Additional light-dom CSS file '${filePath}' added to document head.`);
+        if (!this.lightCssApplied) {
+            const lightCssText = await this.getLightCssText();
+            if (lightCssText) {
+                const style = new CSSStyleSheet();
+                await style.replace(lightCssText);
+                document.adoptedStyleSheets = [
+                    ...document.adoptedStyleSheets,
+                    style
+                ];
+            }
+            this.lightCssApplied = true;
         }
 
-        let ori = this.createInjectedClass(this.uni);
+        let ori = this.createInjectedClass(this.uni, type);
 
         if (type === "router") {
-            var reg = Router.registerRoute(this.markup!, name, (search) => {
+            const routePath = this.markupURL ?? this.markup ?? "";
+            var reg = Router.registerRoute(routePath, name, (search) => {
                 const paramNames = (() => {
                     const ctor = this.uni.prototype.constructor;
                     const fnStr = ctor.toString();
@@ -114,7 +168,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
                 return unn;
             });
 
-            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${this.markup}' by class ${ori}.`);
+            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${routePath}' by class ${ori}.`);
             return reg.then(() => true).catch(() => false);
         } else if (type === "markup") {
             if (customElements.get(name)) throw new Error(`Custom element '${name}' is already defined.`);
@@ -125,7 +179,7 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         }
         return Promise.resolve(false);
     }
-    private createInjectedClass(c: AnyConstructor<UniHtml>): any {
+    private createInjectedClass(c: AnyConstructor<UniHtml>, type: "router" | "markup"): any {
         let that = this;
         let ori = class extends c {
             constructor(...args: any[]) {
@@ -134,26 +188,16 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         };
         let proto = ori.prototype as any;
         const parser = new HMLEParserReborn();
-        proto._init = async function () {
-            const fullPath = that.markup!;
-            var domFragment: DocumentFragment = 
-                parser.parseToDOM(await Fetcher.fetchText(fullPath), this);
-            
-            return domFragment;
+        proto._init = async function (): Promise<DocumentFragment> {
+            const markupText = await that.getMarkupText();
+            if (!markupText) return new DocumentFragment();
+            return parser.parseToDOM(markupText, this);
         }
         proto._postInit = async function (preHtml: DocumentFragment): Promise<DocumentFragment> {
-            if (that.css) {
-                const link = that.createLink(that.css);
-                preHtml.prepend(link);
-                //preHtml.appendChild(link);
-            }
-            for (const [type, filePath] of that.additionalFiles) {
-                if (!filePath.endsWith(".css")) continue;
-                if (type !== 'light-dom') {
-                    const link = that.createLink(filePath);
-                    preHtml.prepend(link);
-                    //preHtml.appendChild(link)
-                }
+            var dmc = this.shadowRoot ?? document;
+            const cssSheet = await that.getComponentCssSheet();
+            if (cssSheet) {
+                dmc.adoptedStyleSheets = [...dmc.adoptedStyleSheets, cssSheet];
             }
             parser.hydrate(preHtml, this);
             return preHtml;
@@ -161,56 +205,4 @@ export default class Triplet<T extends UniHtml> implements ITriplet {
         return ori;
     }
 
-}
-
-interface ITriplet {
-    readonly markup?: string;
-    readonly css?: string;
-    readonly js?: string;
-}
-
-export enum AccessType {
-    NONE = 0,
-    OFFLINE = 1 << 0,
-    ONLINE = 1 << 1,
-    BOTH = OFFLINE | ONLINE
-}
-
-export class TripletBuilder<T extends UniHtml> implements ITriplet {
-    public uni?: AnyConstructor<UniHtml>;
-    public access: AccessType = AccessType.BOTH;
-
-    public readonly additionalFiles: Map<string, string> = new Map();
-
-    private constructor(
-        public readonly markup?: string,
-        public readonly css?: string,
-        public readonly js?: string
-    ) { }
-
-    public static create<T extends UniHtml>(markup?: string, css?: string, js?: string): TripletBuilder<T> {
-        let urlHtml: URL = markup ? new URL(`${HOSTING_ORIGIN}/${markup}`, window.location.origin) : null;
-        let urlCss: URL = css ? new URL(`${HOSTING_ORIGIN}/${css}`, window.location.origin) : null;
-        let urlJs: URL = js ? new URL(`${HOSTING_ORIGIN}/${js}`, window.location.origin) : null;
-
-        return new TripletBuilder(urlHtml?.href, urlCss?.href, urlJs?.href);
-    }
-
-    public withUni(cls: AnyConstructor<UniHtml>): TripletBuilder<T> {
-        this.uni = cls;
-        return this;
-    }
-    public withAccess(access: AccessType): TripletBuilder<T> {
-        this.access = access;
-        return this;
-    }
-    public withLightDOMCss(css: string): TripletBuilder<T> {
-        let urlCss: URL = css ? new URL(`${HOSTING_ORIGIN}/${css}`, window.location.origin) : null;
-        this.additionalFiles.set('light-dom', urlCss?.href);
-        return this;
-    }
-
-    public build(): Triplet<T> {
-        return new Triplet<T>(this);
-    }
 }
