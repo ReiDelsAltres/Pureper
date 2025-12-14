@@ -7,7 +7,6 @@ export function ReComponent(settings: TripletStruct, tag: string) {
         const triplet: Triplet = new Triplet(settings);
 
         await triplet.register("markup", tag)
-        return ctor;
     }
 }
 export function RePage(settings: TripletStruct, route: string) {
@@ -18,6 +17,5 @@ export function RePage(settings: TripletStruct, route: string) {
         const triplet: Triplet = new Triplet(settings);
 
         await triplet.register("router", route)
-        return ctor;
     }
 }

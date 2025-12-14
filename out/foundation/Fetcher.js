@@ -15,10 +15,7 @@ export default class Fetcher {
         const p = (async () => {
             const response = await this.internalFetch(resolved);
             const text = await response.text();
-            try {
-                temporaryCache.set(resolved, text);
-            }
-            catch { }
+            temporaryCache.set(resolved, text);
             return text;
         })();
         inFlightText.set(resolved, p);
@@ -36,10 +33,7 @@ export default class Fetcher {
         const p = (async () => {
             const response = await this.internalFetch(resolved);
             const json = await response.json();
-            try {
-                temporaryCache.set(resolved, JSON.stringify(json));
-            }
-            catch { }
+            temporaryCache.set(resolved, JSON.stringify(json));
             return json;
         })();
         inFlightJSON.set(resolved, p);

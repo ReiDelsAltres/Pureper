@@ -889,6 +889,10 @@ const refRule = {
 const onRule = {
     name: 'on',
     elementHydrate(parser, el, scope) {
+        // Ensure we don't attach duplicate handlers when hydration runs multiple times
+        const anyEl = el;
+        anyEl.__hmle_on_handlers = anyEl.__hmle_on_handlers || {};
+        const HMLE_ON_HANDLERS = anyEl.__hmle_on_handlers;
         for (const attr of Array.from(el.attributes)) {
             const an = attr.name;
             if (!an.startsWith('@[on') || !an.endsWith(']'))
@@ -898,8 +902,13 @@ const onRule = {
             if (eventName.startsWith('on'))
                 eventName = eventName.slice(2);
             const expr = attr.value;
+            // Skip if we already attached a handler for this event on this element
+            if (HMLE_ON_HANDLERS[eventName]) {
+                el.removeAttribute(an);
+                continue;
+            }
             // Add event listener
-            el.addEventListener(eventName, (ev) => {
+            const handler = (ev) => {
                 // Build evaluation scope with unwrapped Observables while preserving
                 // the prototype of the original scope so prototype methods remain bound.
                 let evalScope = Object.create(scope ?? null);
@@ -916,7 +925,9 @@ const onRule = {
                 evalScope['event'] = ev;
                 evalScope['element'] = el;
                 parser.evaluate(expr, evalScope);
-            });
+            };
+            el.addEventListener(eventName, handler);
+            HMLE_ON_HANDLERS[eventName] = handler;
             el.removeAttribute(an);
         }
     }
