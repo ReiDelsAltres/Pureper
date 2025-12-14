@@ -11,7 +11,8 @@ export type ThemeColor = 'primary' | 'secondary' | 'tertiary' | 'additional' |
 export let ACTIVE_THEME_KEY = "Empty";
 
 export async function loadTheme(name: string) : Promise<string> {
-    return Fetcher.fetchText(`../../../resources/${name}.theme.css`);
+    // Use hosting-root absolute path so GitHub Pages subfolder deployments (e.g. /Hellper/) keep the subfolder.
+    return Fetcher.fetchText(`/resources/${name}.theme.css`);
 }
 export async function loadThemeAsInstant(name: string) : Promise<CSSStyleSheet> {
     let theme: string = await loadTheme(name);
