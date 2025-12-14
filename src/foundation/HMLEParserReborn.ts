@@ -157,12 +157,7 @@ export default class HMLEParserReborn {
             const fn = new Function('with(this){ return (' + expr + '); }');
             return fn.call(ctx);
         } catch (e) {
-            try {
-                const fn2 = new Function('with(this){ ' + expr + ' }');
-                return fn2.call(ctx);
-            } catch (e2) {
-                return undefined;
-            }
+            return null;
         }
     }
 
