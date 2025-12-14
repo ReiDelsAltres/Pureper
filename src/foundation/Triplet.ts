@@ -156,7 +156,7 @@ export default class Triplet {
             }
         };
         let proto = ori.prototype as any;
-        const parser = new HMLEParserReborn();
+        const parser = new HMLEParser();
 
         proto._init = async function (): Promise<DocumentFragment> {
             const markupText = await that.markup;
@@ -174,7 +174,7 @@ export default class Triplet {
                 style
             ];
 
-            parser.hydrate(preHtml, this);
+            //parser.hydrate(preHtml, this);
             return preHtml;
         }
 
