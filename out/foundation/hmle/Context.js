@@ -38,7 +38,8 @@ export default class Context {
     bindPrototypeMethods(instance) {
         if (!instance)
             return this;
-        let proto = Object.getPrototypeOf(instance);
+        const bindTarget = instance.__hmle_this ?? instance;
+        let proto = Object.getPrototypeOf(bindTarget);
         while (proto && proto !== Object.prototype) {
             // avoid copying host DOM/window prototype methods
             const ctorName = proto && proto.constructor ? String(proto.constructor?.name ?? '') : '';
@@ -63,7 +64,7 @@ export default class Context {
                     continue;
                 if (typeof desc.value === 'function') {
                     try {
-                        this.values[key] = desc.value.bind(instance);
+                        this.values[key] = desc.value.bind(bindTarget);
                     }
                     catch (_e) {
                         // binding may fail for native host methods — skip

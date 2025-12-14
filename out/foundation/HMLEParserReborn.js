@@ -172,13 +172,7 @@ export default class HMLEParserReborn {
             return fn.call(ctx);
         }
         catch (e) {
-            try {
-                const fn2 = new Function('with(this){ ' + expr + ' }');
-                return fn2.call(ctx);
-            }
-            catch (e2) {
-                return undefined;
-            }
+            return null;
         }
     }
     stringify(v) {
@@ -912,6 +906,9 @@ const onRule = {
                 // Build evaluation scope with unwrapped Observables while preserving
                 // the prototype of the original scope so prototype methods remain bound.
                 let evalScope = Object.create(scope ?? null);
+                // Ensure Context.bindPrototypeMethods binds to the real scope instance,
+                // not to this wrapper object (otherwise `this` inside methods is not HTMLElement).
+                evalScope.__hmle_this = scope ?? null;
                 // Unwrap Observables referenced in expression into own-properties
                 if (scope) {
                     const observed = findObservablesInExpr(expr, scope);

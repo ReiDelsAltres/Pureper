@@ -963,6 +963,10 @@ const onRule: Rule = {
                 // the prototype of the original scope so prototype methods remain bound.
                 let evalScope: Record<string, any> = Object.create(scope ?? null);
 
+                // Ensure Context.bindPrototypeMethods binds to the real scope instance,
+                // not to this wrapper object (otherwise `this` inside methods is not HTMLElement).
+                (evalScope as any).__hmle_this = scope ?? null;
+
                 // Unwrap Observables referenced in expression into own-properties
                 if (scope) {
                     const observed = findObservablesInExpr(expr, scope);
