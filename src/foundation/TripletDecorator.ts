@@ -1,21 +1,29 @@
 import Triplet, { AccessType, TripletStruct } from "./Triplet.js"
 export function ReComponent(settings: TripletStruct, tag: string) {
-    return async (ctor: Function) => {
+    return (ctor: Function) => {
         if (tag == null || tag.length === 0 || !tag.includes("-"))
             throw new Error("Invalid custom element tag name.");
 
         const triplet: Triplet = new Triplet(settings);
 
-        await triplet.register("markup", tag)
+        triplet.register("markup", tag)
+            .then(ok => {
+                if (!ok) console.error(`[ReComponent:${tag}] registration returned false`);
+            })
+            .catch(err => console.error(`[ReComponent:${tag}] register failed`, err));
     }
 }
 export function RePage(settings: TripletStruct, route: string) {
-    return async (ctor: Function) => {
+    return (ctor: Function) => {
         if (route == null || route.length === 0 || !route.startsWith("/"))
             throw new Error("Invalid route path.");
         
         const triplet: Triplet = new Triplet(settings);
 
-        await triplet.register("router", route)
+        triplet.register("router", route)
+            .then(ok => {
+                if (!ok) console.error(`[RePage:${route}] registration returned false`);
+            })
+            .catch(err => console.error(`[RePage:${route}] register failed`, err));
     }
 }

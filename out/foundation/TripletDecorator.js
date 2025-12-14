@@ -1,20 +1,28 @@
 import Triplet from "./Triplet.js";
 export function ReComponent(settings, tag) {
-    return async (ctor) => {
+    return (ctor) => {
         if (tag == null || tag.length === 0 || !tag.includes("-"))
             throw new Error("Invalid custom element tag name.");
         const triplet = new Triplet(settings);
-        await triplet.register("markup", tag);
-        return ctor;
+        triplet.register("markup", tag)
+            .then(ok => {
+            if (!ok)
+                console.error(`[ReComponent:${tag}] registration returned false`);
+        })
+            .catch(err => console.error(`[ReComponent:${tag}] register failed`, err));
     };
 }
 export function RePage(settings, route) {
-    return async (ctor) => {
+    return (ctor) => {
         if (route == null || route.length === 0 || !route.startsWith("/"))
             throw new Error("Invalid route path.");
         const triplet = new Triplet(settings);
-        await triplet.register("router", route);
-        return ctor;
+        triplet.register("router", route)
+            .then(ok => {
+            if (!ok)
+                console.error(`[RePage:${route}] registration returned false`);
+        })
+            .catch(err => console.error(`[RePage:${route}] register failed`, err));
     };
 }
 //# sourceMappingURL=TripletDecorator.js.map
