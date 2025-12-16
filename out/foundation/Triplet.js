@@ -3,7 +3,7 @@ import { Router } from "./worker/Router.js";
 import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
-import HMLEParserReborn from "./HMLEParserReborn.js";
+import HMLEParser from "./HMLEParser.js";
 export var AccessType;
 (function (AccessType) {
     AccessType[AccessType["NONE"] = 0] = "NONE";
@@ -36,13 +36,13 @@ export default class Triplet {
         let ltCss = Promise.resolve(struct.ltCss);
         if (struct.ltCssURL)
             ltCss = Fetcher.fetchText(struct.ltCssURL);
-        let js = Promise.resolve(undefined);
+        /*let js = Promise.resolve(undefined);
         if (struct.jsURL)
-            js = Fetcher.fetchText(struct.jsURL);
+            js = Fetcher.fetchText(struct.jsURL);*/
         this.markup = markup;
         this.css = css;
         this.lightCss = ltCss;
-        this.js = js;
+        //this.js = js;
         this.access = struct.access ?? AccessType.BOTH;
         this.uni = struct.class;
     }
@@ -121,7 +121,7 @@ export default class Triplet {
             }
         };
         let proto = ori.prototype;
-        const parser = new HMLEParserReborn();
+        const parser = new HMLEParser();
         proto._init = async function () {
             const markupText = await that.markup;
             if (!markupText)
@@ -136,7 +136,7 @@ export default class Triplet {
                 ...dmc.adoptedStyleSheets,
                 style
             ];
-            parser.hydrate(preHtml, this);
+            //parser.hydrate(preHtml, this);
             return preHtml;
         };
         return ori;

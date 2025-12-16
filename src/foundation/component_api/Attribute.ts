@@ -63,6 +63,13 @@ export default class Attribute<T = any> {
         else this.component.setAttribute(this._name, val.toString());
     }
 
+    public isDefault(): boolean {
+        return this.value === this._defaultValue;
+    }
+    public isExist(): boolean {
+        return this.value !== undefined && this.value !== null && this.value !== "";
+    }
+
     public subscribe(listener: (key: string, oldValue: string | T, newValue: string | T) => void): void {
         this.listeners.push((o,n) => listener(this._name, o, n));
     }

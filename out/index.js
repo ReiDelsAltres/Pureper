@@ -6,13 +6,11 @@ export { default as Component } from './foundation/component_api/Component.js';
 export { default as Triplet, AccessType } from './foundation/Triplet.js';
 export { ReComponent, RePage } from './foundation/TripletDecorator.js';
 export { default as Fetcher } from './foundation/Fetcher.js';
-export { default as PHTMLParser } from './foundation/PHTMLParser.js';
 export { default as HMLEParser } from './foundation/HMLEParser.js';
 export { Router } from './foundation/worker/Router.js';
 export { default as ServiceWorker } from './foundation/worker/ServiceWorker.js';
 export * from './foundation/Hosting.js';
 export * from './foundation/Theme.js';
-export { default as DynamicBlock } from './components/DynamicBlock.js';
 // derive the part of href after the origin (e.g. "/path?query#hash")
 /*export const HOSTING: string = window.location.href.startsWith(window.location.origin)
     ? window.location.href.substring(window.location.origin.length)

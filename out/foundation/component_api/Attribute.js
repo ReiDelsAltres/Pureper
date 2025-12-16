@@ -51,6 +51,12 @@ export default class Attribute {
         else
             this.component.setAttribute(this._name, val.toString());
     }
+    isDefault() {
+        return this.value === this._defaultValue;
+    }
+    isExist() {
+        return this.value !== undefined && this.value !== null && this.value !== "";
+    }
     subscribe(listener) {
         this.listeners.push((o, n) => listener(this._name, o, n));
     }

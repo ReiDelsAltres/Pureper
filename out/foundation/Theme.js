@@ -1,7 +1,8 @@
 import Fetcher from "./Fetcher.js";
 export let ACTIVE_THEME_KEY = "Empty";
 export async function loadTheme(name) {
-    return Fetcher.fetchText(`../../../resources/${name}.theme.css`);
+    // Use hosting-root absolute path so GitHub Pages subfolder deployments (e.g. /Hellper/) keep the subfolder.
+    return Fetcher.fetchText(`/resources/${name}.theme.css`);
 }
 export async function loadThemeAsInstant(name) {
     let theme = await loadTheme(name);

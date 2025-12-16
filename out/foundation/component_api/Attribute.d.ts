@@ -11,6 +11,8 @@ export default class Attribute<T = any> {
     get name(): string;
     get value(): T | string;
     set value(val: T | string);
+    isDefault(): boolean;
+    isExist(): boolean;
     subscribe(listener: (key: string, oldValue: string | T, newValue: string | T) => void): void;
     unsubscribe(listener: (key: string, oldValue: string | T, newValue: string | T) => void): void;
 }
