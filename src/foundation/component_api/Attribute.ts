@@ -48,6 +48,7 @@ export default class Attribute<T = any> {
     public set value(val: T | string) {
         if (val === this._value) return;
         this.notify(this.value, val);
+        this._value = val;
 
         if (typeof val === "boolean") {
             if (val) this.component.setAttribute(this._name, "");
