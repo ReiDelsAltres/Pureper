@@ -173,6 +173,9 @@ export default class Triplet {
                 style
             ];
 
+            preHtml.bindRefs();
+            preHtml.bindEvents();
+
             return preHtml;
         }
 

@@ -335,7 +335,7 @@ export default class TemplateInstance {
      * Привязать к контейнеру.
      * Вставляет DOM, вызывает bindRefs, processInjections и bindEvents.
      */
-    public bind(container: Element): void {
+    public bind(container: Element, flag: boolean = true): void {
         if (this.containerBindings.has(container)) {
             console.warn('[TemplateInstance] Container already bound');
             return;
@@ -353,9 +353,9 @@ export default class TemplateInstance {
         this.insertFragmentsIntoContainer(container, binding);
         
         // Привязываем refs, обрабатываем injections, привязываем events
-        this.bindRefsForContainer(container);
+        if (flag) this.bindRefsForContainer(container);
         this.processInjectionsForContainer(container);
-        this.bindEventsForContainer(container, binding);
+        if (flag) this.bindEventsForContainer(container, binding);
     }
 
     /**
