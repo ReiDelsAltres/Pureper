@@ -10,6 +10,7 @@ import IElementHolder from "../api/ElementHolder.js";
  * Use static factory methods for instantiation.
  */
 export default class UniHtml {
+    private readonly templateInstance;
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.

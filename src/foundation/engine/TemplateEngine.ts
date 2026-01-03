@@ -1,7 +1,7 @@
 import Scope from './Scope.js';
 import Expression from './Expression.js';
 import EscapeHandler from './EscapeHandler.js';
-import TemplateInstance, { TemplateSection } from './TemplateInstance.js';
+import TemplateInstance, { TemplateSection, FragmentBinding } from './TemplateInstance.js';
 import Rule, { RuleMatch, RuleResult, SyntaxRule, AttributeRule } from './Rule.js';
 import Observable from '../api/Observer.js';
 
@@ -30,6 +30,8 @@ export interface ProcessResult {
     output: string;
     observables: Observable<any>[];
     sections: TemplateSection[];
+    /** ID созданного фрагмента (если был создан) */
+    fragmentId?: string;
 }
 
 /**
@@ -97,10 +99,15 @@ export default class TemplateEngine {
      * Обработать шаблон и вернуть TemplateInstance
      */
     public parse(template: string): TemplateInstance {
-        const result = this.processTemplate(template, this.scope);
-        const templateInstance = new TemplateInstance(result.output, this.scope);
+        const templateInstance = new TemplateInstance(this.scope);
+        const result = this.processTemplateWithFragments(template, this.scope, templateInstance, null);
 
-        // Add sections
+        // Устанавливаем корневой фрагмент
+        if (result.fragmentId) {
+            templateInstance.setRootFragment(result.fragmentId);
+        }
+
+        // Add sections and track observables
         for (const section of result.sections) {
             templateInstance.addSection(section);
 
@@ -113,6 +120,31 @@ export default class TemplateEngine {
         }
 
         return templateInstance;
+    }
+
+    /**
+     * Обработать шаблон с созданием фрагментов
+     */
+    private processTemplateWithFragments(
+        template: string,
+        scope: Scope,
+        instance: TemplateInstance,
+        parentFragmentId: string | null
+    ): ProcessResult {
+        const result = this.processTemplate(template, scope);
+        
+        // Создаём фрагмент для этого результата
+        const fragmentId = instance.createFragment(
+            result.output,
+            template,
+            result.sections,
+            parentFragmentId
+        );
+        
+        return {
+            ...result,
+            fragmentId
+        };
     }
 
     /**
@@ -217,6 +249,49 @@ export default class TemplateEngine {
             .replace(/@\[ref\]\s*=\s*["'][^"']*["']/gi, '')
             .replace(/@on\[[a-zA-Z]+\]\s*=\s*["'][^"']*["']/gi, '')
             .replace(/@injection\[(head|tail)\]\s*=\s*["'][^"']*["']/gi, '');
+    }
+
+    /**
+     * Добавить новый шаблон в существующий TemplateInstance.
+     * Обрабатывает шаблон и добавляет результат как новый фрагмент.
+     * Если instance привязан к контейнерам, DOM обновится автоматически.
+     * 
+     * @param instance - существующий TemplateInstance
+     * @param template - новый шаблон для добавления
+     * @param customScope - опциональный scope для нового шаблона
+     * @returns ID созданного фрагмента
+     */
+    public appendTemplate(instance: TemplateInstance, template: string, customScope?: Scope | object): string {
+        const scope = customScope 
+            ? (customScope instanceof Scope ? customScope : Scope.from(customScope))
+            : instance.getScope();
+        
+        // Обрабатываем шаблон
+        const result = this.processTemplate(template, scope);
+        
+        // Создаём фрагмент
+        const fragmentId = instance.createFragment(
+            result.output,
+            template,
+            result.sections,
+            null // без родителя - это отдельный фрагмент
+        );
+        
+        // Добавляем секции и отслеживаем Observable
+        for (const section of result.sections) {
+            instance.addSection(section);
+            
+            for (const observable of section.result.observables || []) {
+                instance.trackObservable(observable, section, (s) => {
+                    return this.processTemplate(s.sourceTemplate, scope);
+                });
+            }
+        }
+        
+        // Вставляем в привязанные контейнеры
+        instance.insertAppendedFragment(fragmentId);
+        
+        return fragmentId;
     }
 
     /**

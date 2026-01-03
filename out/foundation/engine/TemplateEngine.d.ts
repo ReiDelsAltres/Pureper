@@ -25,6 +25,8 @@ export interface ProcessResult {
     output: string;
     observables: Observable<any>[];
     sections: TemplateSection[];
+    /** ID созданного фрагмента (если был создан) */
+    fragmentId?: string;
 }
 /**
  * TemplateEngine - главный класс шаблонизатора.
@@ -53,6 +55,10 @@ export default class TemplateEngine {
      */
     parse(template: string): TemplateInstance;
     /**
+     * Обработать шаблон с созданием фрагментов
+     */
+    private processTemplateWithFragments;
+    /**
      * Обработать шаблон (внутренний метод, используется Rule для рекурсии)
      */
     processTemplate(template: string, scope: Scope): ProcessResult;
@@ -64,6 +70,17 @@ export default class TemplateEngine {
      * Удалить синтаксис атрибутивных Rule из финального HTML
      */
     private removeAttributeSyntax;
+    /**
+     * Добавить новый шаблон в существующий TemplateInstance.
+     * Обрабатывает шаблон и добавляет результат как новый фрагмент.
+     * Если instance привязан к контейнерам, DOM обновится автоматически.
+     *
+     * @param instance - существующий TemplateInstance
+     * @param template - новый шаблон для добавления
+     * @param customScope - опциональный scope для нового шаблона
+     * @returns ID созданного фрагмента
+     */
+    appendTemplate(instance: TemplateInstance, template: string, customScope?: Scope | object): string;
     /**
      * Статический метод для быстрой обработки
      */

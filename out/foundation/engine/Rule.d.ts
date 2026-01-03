@@ -22,6 +22,8 @@ export interface RuleResult {
     observables?: any[];
     /** Дочерние Rule (для вложенных структур) */
     children?: Rule[];
+    /** Дополнительные данные (например, refName для RefRule) */
+    data?: Record<string, any>;
 }
 /**
  * RuleType - тип Rule

@@ -68,9 +68,13 @@ export default class TemplateEngine {
      * Обработать шаблон и вернуть TemplateInstance
      */
     parse(template) {
-        const result = this.processTemplate(template, this.scope);
-        const templateInstance = new TemplateInstance(result.output, this.scope);
-        // Add sections
+        const templateInstance = new TemplateInstance(this.scope);
+        const result = this.processTemplateWithFragments(template, this.scope, templateInstance, null);
+        // Устанавливаем корневой фрагмент
+        if (result.fragmentId) {
+            templateInstance.setRootFragment(result.fragmentId);
+        }
+        // Add sections and track observables
         for (const section of result.sections) {
             templateInstance.addSection(section);
             // Track observables
@@ -81,6 +85,18 @@ export default class TemplateEngine {
             }
         }
         return templateInstance;
+    }
+    /**
+     * Обработать шаблон с созданием фрагментов
+     */
+    processTemplateWithFragments(template, scope, instance, parentFragmentId) {
+        const result = this.processTemplate(template, scope);
+        // Создаём фрагмент для этого результата
+        const fragmentId = instance.createFragment(result.output, template, result.sections, parentFragmentId);
+        return {
+            ...result,
+            fragmentId
+        };
     }
     /**
      * Обработать шаблон (внутренний метод, используется Rule для рекурсии)
@@ -163,6 +179,38 @@ export default class TemplateEngine {
             .replace(/@\[ref\]\s*=\s*["'][^"']*["']/gi, '')
             .replace(/@on\[[a-zA-Z]+\]\s*=\s*["'][^"']*["']/gi, '')
             .replace(/@injection\[(head|tail)\]\s*=\s*["'][^"']*["']/gi, '');
+    }
+    /**
+     * Добавить новый шаблон в существующий TemplateInstance.
+     * Обрабатывает шаблон и добавляет результат как новый фрагмент.
+     * Если instance привязан к контейнерам, DOM обновится автоматически.
+     *
+     * @param instance - существующий TemplateInstance
+     * @param template - новый шаблон для добавления
+     * @param customScope - опциональный scope для нового шаблона
+     * @returns ID созданного фрагмента
+     */
+    appendTemplate(instance, template, customScope) {
+        const scope = customScope
+            ? (customScope instanceof Scope ? customScope : Scope.from(customScope))
+            : instance.getScope();
+        // Обрабатываем шаблон
+        const result = this.processTemplate(template, scope);
+        // Создаём фрагмент
+        const fragmentId = instance.createFragment(result.output, template, result.sections, null // без родителя - это отдельный фрагмент
+        );
+        // Добавляем секции и отслеживаем Observable
+        for (const section of result.sections) {
+            instance.addSection(section);
+            for (const observable of section.result.observables || []) {
+                instance.trackObservable(observable, section, (s) => {
+                    return this.processTemplate(s.sourceTemplate, scope);
+                });
+            }
+        }
+        // Вставляем в привязанные контейнеры
+        instance.insertAppendedFragment(fragmentId);
+        return fragmentId;
     }
     /**
      * Статический метод для быстрой обработки

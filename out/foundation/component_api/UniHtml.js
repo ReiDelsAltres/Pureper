@@ -3,6 +3,7 @@
  * Use static factory methods for instantiation.
  */
 export default class UniHtml {
+    templateInstance;
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
@@ -13,7 +14,8 @@ export default class UniHtml {
         await this.preInit();
         const preHtml = await this._init();
         const html = await this._postInit(preHtml);
-        const localRoot = html;
+        // Создаём DOM фрагмент из TemplateInstance
+        const localRoot = html.createDOMFragment();
         const holder = { element: localRoot };
         // ВАЖНО: preLoad() вызывается ДО монтирования в DOM/Shadow DOM.
         // Для компонентов (UniHtmlComponent) на этом этапе ещё нельзя полагаться на this.shadowRoot —

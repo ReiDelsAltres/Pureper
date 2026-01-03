@@ -6,6 +6,7 @@ import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
 import HMLEParser from "./HMLEParser.js";
+import TemplateEngine, { TemplateInstance } from './engine/TemplateEngine.js';
 
 
 export enum AccessType {
@@ -154,15 +155,15 @@ export default class Triplet {
             }
         };
         let proto = ori.prototype as any;
-        const parser = new HMLEParser();
+        const engine = new TemplateEngine(proto);
 
-        proto._init = async function (): Promise<DocumentFragment> {
+        proto._init = async function (): Promise<TemplateInstance> {
             const markupText = await that.markup;
-            if (!markupText) return new DocumentFragment();
-            return parser.parseToDOM(markupText, this);
+            if (!markupText) return engine.parse("");
+            return engine.parse(markupText);
         }
 
-        proto._postInit = async function (preHtml: DocumentFragment): Promise<DocumentFragment> {
+        proto._postInit = async function (preHtml: TemplateInstance): Promise<TemplateInstance> {
             const dmc: Document | ShadowRoot = this.shadowRoot ?? document;
             const css = await that.css;
 
@@ -172,7 +173,6 @@ export default class Triplet {
                 style
             ];
 
-            //parser.hydrate(preHtml, this);
             return preHtml;
         }
 

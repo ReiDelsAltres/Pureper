@@ -5,6 +5,8 @@
 export default class Scope {
     private variables;
     private readonly debugWarnings;
+    /** Оригинальный объект для синхронизации refs */
+    private originalSource;
     constructor(options?: {
         debugWarnings?: boolean;
     });
@@ -14,8 +16,9 @@ export default class Scope {
     getVariables(): Record<string, any>;
     /**
      * Установить переменную в Scope
+     * @param syncToOriginal - синхронизировать с оригинальным объектом (по умолчанию true)
      */
-    set(key: string, value: any): void;
+    set(key: string, value: any, syncToOriginal?: boolean): void;
     /**
      * Получить переменную из Scope
      */
@@ -45,6 +48,7 @@ export default class Scope {
     extractFromObject(obj: object): Record<string, any>;
     /**
      * Статический метод для создания Scope из объекта
+     * Сохраняет ссылку на оригинальный объект для синхронизации refs
      */
     static from(source: object | Record<string, any>, options?: {
         debugWarnings?: boolean;

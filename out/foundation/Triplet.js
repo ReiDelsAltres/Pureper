@@ -3,7 +3,7 @@ import { Router } from "./worker/Router.js";
 import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
-import HMLEParser from "./HMLEParser.js";
+import TemplateEngine from './engine/TemplateEngine.js';
 export var AccessType;
 (function (AccessType) {
     AccessType[AccessType["NONE"] = 0] = "NONE";
@@ -121,12 +121,12 @@ export default class Triplet {
             }
         };
         let proto = ori.prototype;
-        const parser = new HMLEParser();
+        const engine = new TemplateEngine(proto);
         proto._init = async function () {
             const markupText = await that.markup;
             if (!markupText)
-                return new DocumentFragment();
-            return parser.parseToDOM(markupText, this);
+                return engine.parse("");
+            return engine.parse(markupText);
         };
         proto._postInit = async function (preHtml) {
             const dmc = this.shadowRoot ?? document;
@@ -136,7 +136,6 @@ export default class Triplet {
                 ...dmc.adoptedStyleSheets,
                 style
             ];
-            //parser.hydrate(preHtml, this);
             return preHtml;
         };
         return ori;

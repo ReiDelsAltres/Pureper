@@ -5,6 +5,8 @@
 export default class Scope {
     private variables: Record<string, any> = {};
     private readonly debugWarnings: boolean;
+    /** Оригинальный объект для синхронизации refs */
+    private originalSource: object | null = null;
 
     constructor(options?: { debugWarnings?: boolean }) {
         this.debugWarnings = options?.debugWarnings ?? true;
@@ -19,12 +21,18 @@ export default class Scope {
 
     /**
      * Установить переменную в Scope
+     * @param syncToOriginal - синхронизировать с оригинальным объектом (по умолчанию true)
      */
-    public set(key: string, value: any): void {
-        if (this.debugWarnings && key in this.variables) {
-            console.warn(`[Scope] Warning: Variable "${key}" is being overwritten`);
+    public set(key: string, value: any, syncToOriginal: boolean = true): void {
+        if (this.debugWarnings && key in this.variables && this.variables[key] !== undefined) {
+            // Не предупреждаем при установке ref (значение было undefined)
         }
         this.variables[key] = value;
+        
+        // Синхронизируем с оригинальным объектом если он есть
+        if (syncToOriginal && this.originalSource) {
+            (this.originalSource as any)[key] = value;
+        }
     }
 
     /**
@@ -146,9 +154,11 @@ export default class Scope {
 
     /**
      * Статический метод для создания Scope из объекта
+     * Сохраняет ссылку на оригинальный объект для синхронизации refs
      */
     public static from(source: object | Record<string, any>, options?: { debugWarnings?: boolean }): Scope {
         const scope = new Scope(options);
+        scope.originalSource = source;
         scope.merge(source);
         return scope;
     }

@@ -2,13 +2,13 @@ import Scope from './Scope.js';
 import Observable from '../api/Observer.js';
 import Rule, { RuleMatch, RuleResult } from './Rule.js';
 /**
- * TemplateChangeEvent - событие изменения шаблона
+ * FragmentChangeEvent - событие изменения конкретного фрагмента
  */
-export interface TemplateChangeEvent {
-    oldValue: any;
-    newValue: any;
-    oldTemplate: string;
-    newTemplate: string;
+export interface FragmentChangeEvent {
+    fragmentId: string;
+    oldNodes: Node[];
+    newNodes: Node[];
+    affectedObservables: Observable<any>[];
 }
 /**
  * TemplateSection - секция шаблона, связанная с Rule
@@ -29,59 +29,204 @@ export interface TemplateSection {
         observable: Observable<any>;
         unsubscribe: () => void;
     }>;
+    /** ID фрагмента, к которому принадлежит секция */
+    fragmentId?: string;
 }
 /**
- * PageTemplate - динамический шаблон страницы.
- * Хранит обработанные Rule и поддерживает реактивное обновление.
+ * FragmentBinding - привязка фрагмента
+ */
+export interface FragmentBinding {
+    /** Уникальный ID фрагмента */
+    id: string;
+    /** Текущий HTML контент фрагмента (с placeholder-ами для дочерних) */
+    html: string;
+    /** Исходный шаблон (до обработки) */
+    sourceTemplate: string;
+    /** Секции, входящие в этот фрагмент */
+    sections: TemplateSection[];
+    /** Observable, от которых зависит фрагмент */
+    observables: Set<Observable<any>>;
+    /** ID родительского фрагмента (null для корневого) */
+    parentId: string | null;
+    /** ID дочерних фрагментов (placeholder-ы) */
+    childIds: string[];
+}
+/**
+ * ContainerBinding - привязка к DOM-контейнеру
+ */
+export interface ContainerBinding {
+    /** DOM-контейнер */
+    container: Element;
+    /** Маркеры фрагментов в этом контейнере: fragmentId -> { start, end, nodes } */
+    markers: Map<string, {
+        startMarker: Comment;
+        endMarker: Comment;
+        nodes: Node[];
+    }>;
+    /** Функции отписки событий для этого контейнера */
+    eventUnbinders: Array<() => void>;
+}
+/**
+ * TemplateInstance - динамический шаблон страницы.
  *
- * При изменении Observable все зависимые секции обновляются
- * одновременно в одном событии onTemplateChange.
+ * Поддерживает:
+ * - Множество мелких фрагментов, каждый обновляется независимо
+ * - Множество container bindings
+ * - Автоматическое обновление DOM при изменении Observable
+ * - bind/unbind для refs и events
  */
 export default class TemplateInstance {
-    private template;
     private scope;
     private sections;
-    private fragment;
-    /** Observers for template changes */
-    private changeObserver;
+    /** Все фрагменты шаблона */
+    private fragments;
+    /** ID корневого фрагмента */
+    private rootFragmentId;
+    /** Счётчик для генерации ID фрагментов */
+    private fragmentIdCounter;
+    /** Observers for fragment changes */
+    private fragmentChangeObserver;
     /** Группировка секций по Observable */
     private observableTrackings;
-    constructor(template: string, scope: Scope);
-    /**
-     * Получить текущий шаблон
-     */
-    getTemplate(): string;
-    /**
-     * Установить новый шаблон (вызывает событие изменения)
-     */
-    setTemplate(newTemplate: string): void;
+    /** Привязки к контейнерам */
+    private containerBindings;
+    constructor(scope: Scope);
     /**
      * Получить Scope
      */
     getScope(): Scope;
     /**
-     * Подписаться на изменения шаблона
+     * Получить все секции
      */
-    onTemplateChange(listener: (oldValue: any, newValue: any, oldTemplate: string, newTemplate: string) => void): () => void;
+    getSections(): TemplateSection[];
+    /**
+     * Получить все фрагменты
+     */
+    getAllFragments(): Map<string, FragmentBinding>;
+    /**
+     * Получить фрагмент по ID
+     */
+    getFragmentBinding(id: string): FragmentBinding | undefined;
+    /**
+     * Получить финальный HTML (собранный из всех фрагментов)
+     */
+    getTemplate(): string;
+    /**
+     * Создать новый фрагмент и вернуть его ID
+     */
+    createFragment(html: string, sourceTemplate: string, sections?: TemplateSection[], parentId?: string | null): string;
+    /**
+     * Установить корневой фрагмент
+     */
+    setRootFragment(id: string): void;
     /**
      * Добавить секцию шаблона
      */
     addSection(section: TemplateSection): void;
     /**
-     * Получить все секции
+     * Вставить добавленный фрагмент во все привязанные контейнеры.
+     * Вызывается после appendTemplate.
      */
-    getSections(): TemplateSection[];
+    insertAppendedFragment(fragmentId: string): void;
     /**
-     * Подписаться на Observable и автоматически пересоздавать секцию.
-     * Все секции, зависящие от одного Observable, обновляются разом.
+     * Привязать события только для нового фрагмента
+     */
+    private bindEventsForNewFragment;
+    /**
+     * Подписаться на изменения фрагментов
+     */
+    onFragmentChange(listener: (event: FragmentChangeEvent) => void): () => void;
+    /**
+     * Подписаться на Observable и автоматически пересоздавать секцию
      */
     trackObservable(observable: Observable<any>, section: TemplateSection, rebuild: (section: TemplateSection) => RuleResult): () => void;
     /**
-     * Перестроить все секции, зависящие от Observable, за один раз
+     * Привязать к контейнеру.
+     * Вставляет DOM, вызывает bindRefs, processInjections и bindEvents.
      */
-    private rebuildAllSectionsForObservable;
+    bind(container: Element): void;
     /**
-     * Отписаться от вложенных Observable в секции (но не от главного)
+     * Отвязать от контейнера.
+     * Отвязывает refs и events, но оставляет DOM.
+     */
+    unbind(container: Element): void;
+    /**
+     * Привязать refs к элементам.
+     * Если есть контейнеры - привязывает для них.
+     * Если нет - создаёт временный DocumentFragment и привязывает refs из него.
+     */
+    bindRefs(): void;
+    /**
+     * Привязать refs из DocumentFragment (без контейнера)
+     */
+    private bindRefsForFragment;
+    /**
+     * Отвязать refs (для всех контейнеров)
+     */
+    unbindRefs(): void;
+    /**
+     * Привязать события (для всех контейнеров)
+     */
+    bindEvents(): void;
+    /**
+     * Отвязать события (для всех контейнеров)
+     */
+    unbindEvents(): void;
+    /**
+     * Очистить все подписки и bindings
+     */
+    dispose(): void;
+    /**
+     * Вставить все фрагменты в контейнер с маркерами
+     */
+    private insertFragmentsIntoContainer;
+    /**
+     * Рекурсивно вставить фрагмент и его дочерние
+     */
+    private insertFragmentRecursive;
+    /**
+     * Создать ноды из HTML строки
+     */
+    private createNodesFromHtml;
+    /**
+     * Собрать HTML из фрагмента (рекурсивно заменяя placeholder-ы)
+     */
+    private buildHtmlFromFragment;
+    /**
+     * Привязать refs для конкретного контейнера
+     */
+    private bindRefsForContainer;
+    /**
+     * Обработать инжекции для конкретного контейнера.
+     * Находит элементы с data-injection-* атрибутами и перемещает их в целевые элементы.
+     */
+    private processInjectionsForContainer;
+    /**
+     * Отвязать refs для конкретного контейнера
+     */
+    private unbindRefsForContainer;
+    /**
+     * Привязать события для конкретного контейнера
+     */
+    private bindEventsForContainer;
+    /**
+     * Привязать события к одному элементу
+     */
+    private bindEventsToElement;
+    /**
+     * Перестроить фрагменты при изменении Observable
+     */
+    private rebuildFragmentsForObservable;
+    /**
+     * Обновить фрагмент во всех контейнерах
+     */
+    private updateFragmentInAllContainers;
+    /**
+     * Отвязать события от нод
+     */
+    private unbindEventsFromNodes;
+    /**
+     * Отписаться от вложенных Observable в секции
      */
     private unsubscribeSectionNested;
     /**
@@ -89,33 +234,8 @@ export default class TemplateInstance {
      */
     private unsubscribeSection;
     /**
-     * Создать DocumentFragment из текущего шаблона
+     * @deprecated Используйте bind(container)
      */
-    createFragment(): DocumentFragment;
-    /**
-     * Получить кэшированный DocumentFragment
-     */
-    getFragment(): DocumentFragment | null;
-    /**
-     * Пересоздать fragment
-     */
-    rebuildFragment(): DocumentFragment;
-    /**
-     * Очистить все подписки
-     */
-    dispose(): void;
-    /**
-     * Привязать refs после вставки в DOM
-     */
-    bindRefs(root: Element | DocumentFragment): void;
-    /**
-     * Обработать инжекции (@injection[head/tail])
-     * Должен вызываться после bindRefs
-     */
-    processInjections(root: Element | DocumentFragment): void;
-    /**
-     * Отвязать refs (установить null)
-     */
-    unbindRefs(): void;
+    createDOMFragment(): DocumentFragment;
 }
 //# sourceMappingURL=TemplateInstance.d.ts.map

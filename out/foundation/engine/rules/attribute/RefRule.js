@@ -70,11 +70,17 @@ export default class RefRule extends AttributeRule {
             console.error(`[RefRule] Expression must return a string (variable name), got: ${typeof refName}`);
             return { output: '' };
         }
+        // Сразу регистрируем ref в scope с null значением
+        // Будет заполнен реальным элементом при bindRefs()
+        if (!scope.has(refName)) {
+            scope.set(refName, null);
+        }
         // Store placeholder - actual element will be set during DOM processing
         // For now, return the attribute without the @[ref] syntax
         return {
             output: `data-ref="${refName}"`,
-            observables: []
+            observables: [],
+            data: { refName } // Сохраняем имя ref для быстрого доступа
         };
     }
     supportsObservable() {
