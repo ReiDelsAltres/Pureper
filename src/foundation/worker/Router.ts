@@ -42,13 +42,13 @@ export abstract class Router {
     }
   }
 
-
   public static legacyRouteTo(route: string) {
     const url = new URL(Fetcher.resolveUrl(route));
     if (window.location.pathname !== url.pathname) {
       window.location.replace(url.href);
     }
   }
+  
   public static tryRouteTo(url: URL, pushState: boolean = true) {
     const urlH = new URL(Fetcher.resolveUrl(url.href));
     try {
