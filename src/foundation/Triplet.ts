@@ -155,7 +155,7 @@ export default class Triplet {
             }
         };
         let proto = ori.prototype as any;
-        const engine = new TemplateEngine(proto);
+        const engine = new TemplateEngine(ori);
 
         proto._init = async function (): Promise<TemplateInstance> {
             const markupText = await that.markup;

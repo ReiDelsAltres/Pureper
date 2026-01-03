@@ -1,6 +1,6 @@
 import IElementHolder from "../api/ElementHolder.js";
 import UniHtml from "../component_api/UniHtml.js";
-import TemplateInstance from "../engine/TemplateInstance.js";
+import { TemplateInstance } from "../engine/TemplateEngine.js";
 import Attribute from "./Attribute.js";
 import { Class, Mixined } from "./mixin/Proto.js";
 

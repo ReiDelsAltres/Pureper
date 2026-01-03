@@ -18,11 +18,6 @@ export { default as HMLEParser } from './foundation/HMLEParser.js';
 
 export * from './foundation/engine/TemplateEngine.js';
 
-export { 
-    InvalidDynamicRuleUsage, 
-    InvalidTemplateEngineSyntaxException 
-} from './foundation/engine/exceptions/TemplateExceptions.js';
-
 export { Router } from './foundation/worker/Router.js';
 export { default as ServiceWorker } from './foundation/worker/ServiceWorker.js';
 
