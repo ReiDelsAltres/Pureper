@@ -16,14 +16,20 @@ export { ReComponent, RePage } from './foundation/TripletDecorator.js';
 export { default as Fetcher } from './foundation/Fetcher.js';
 export { default as HMLEParser } from './foundation/HMLEParser.js';
 
-export * from './foundation/engine/TemplateEngine.js';
 export * from './foundation/engine/TemplateInstance.js';
+export * from './foundation/engine/TemplateEngine.js';
+
+export { 
+    InvalidDynamicRuleUsage, 
+    InvalidTemplateEngineSyntaxException 
+} from './foundation/engine/exceptions/TemplateExceptions.js';
 
 export { Router } from './foundation/worker/Router.js';
 export { default as ServiceWorker } from './foundation/worker/ServiceWorker.js';
 
 export * from './foundation/Hosting.js';
 export * from './foundation/Theme.js';
+
 
 // derive the part of href after the origin (e.g. "/path?query#hash")
 /*export const HOSTING: string = window.location.href.startsWith(window.location.origin)

@@ -33,6 +33,7 @@ export default class Attribute {
         if (val === this._value)
             return;
         this.notify(this.value, val);
+        this._value = val;
         if (typeof val === "boolean") {
             if (val)
                 this.component.setAttribute(this._name, "");
