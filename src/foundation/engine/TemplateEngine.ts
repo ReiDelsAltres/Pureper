@@ -1,7 +1,7 @@
 import Scope from './Scope.js';
 import Expression from './Expression.js';
 import EscapeHandler from './EscapeHandler.js';
-import PageTemplate, { TemplateSection } from './PageTemplate.js';
+import TemplateInstance, { TemplateSection } from './TemplateInstance.js';
 import Rule, { RuleMatch, RuleResult, SyntaxRule, AttributeRule } from './Rule.js';
 import Observable from '../api/Observer.js';
 
@@ -34,7 +34,7 @@ export interface ProcessResult {
 
 /**
  * TemplateEngine - главный класс шаблонизатора.
- * Обрабатывает HTML-шаблон с Rule и создаёт PageTemplate.
+ * Обрабатывает HTML-шаблон с Rule и создаёт TemplateInstance.
  */
 export default class TemplateEngine {
     private readonly scope: Scope;
@@ -94,25 +94,25 @@ export default class TemplateEngine {
     }
 
     /**
-     * Обработать шаблон и вернуть PageTemplate
+     * Обработать шаблон и вернуть TemplateInstance
      */
-    public parse(template: string): PageTemplate {
+    public parse(template: string): TemplateInstance {
         const result = this.processTemplate(template, this.scope);
-        const pageTemplate = new PageTemplate(result.output, this.scope);
+        const TemplateInstance = new TemplateInstance(result.output, this.scope);
 
         // Add sections
         for (const section of result.sections) {
-            pageTemplate.addSection(section);
+            TemplateInstance.addSection(section);
 
             // Track observables
             for (const observable of section.result.observables || []) {
-                pageTemplate.trackObservable(observable, section, (s) => {
+                TemplateInstance.trackObservable(observable, section, (s) => {
                     return this.processTemplate(s.sourceTemplate, this.scope);
                 });
             }
         }
 
-        return pageTemplate;
+        return TemplateInstance;
     }
 
     /**
@@ -224,20 +224,20 @@ export default class TemplateEngine {
      */
     public static process(template: string, scope: object, options?: TemplateEngineOptions): string {
         const engine = new TemplateEngine(scope, options);
-        const pageTemplate = engine.parse(template);
-        return pageTemplate.getTemplate();
+        const TemplateInstance = engine.parse(template);
+        return TemplateInstance.getTemplate();
     }
 
     /**
-     * Создать PageTemplate из шаблона
+     * Создать TemplateInstance из шаблона
      */
-    public static create(template: string, scope: object, options?: TemplateEngineOptions): PageTemplate {
+    public static create(template: string, scope: object, options?: TemplateEngineOptions): TemplateInstance {
         const engine = new TemplateEngine(scope, options);
         return engine.parse(template);
     }
 }
 
 // Re-export useful types
-export { Scope, Expression, PageTemplate, Rule, SyntaxRule, AttributeRule };
+export { Scope, Expression, TemplateInstance, Rule, SyntaxRule, AttributeRule };
 export { ExpressionRule, IfRule, ForRule, RefRule, EventRule, InjectionRule };
 export * from './exceptions/TemplateExceptions.js';
