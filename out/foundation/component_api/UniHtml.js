@@ -3,7 +3,6 @@
  * Use static factory methods for instantiation.
  */
 export default class UniHtml {
-    templateInstance;
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
@@ -14,20 +13,17 @@ export default class UniHtml {
         await this.preInit();
         const preHtml = await this._init();
         const html = await this._postInit(preHtml);
-        // Создаём DOM фрагмент из TemplateInstance
-        const localRoot = html.createDOMFragment();
-        const holder = { element: localRoot };
         // ВАЖНО: preLoad() вызывается ДО монтирования в DOM/Shadow DOM.
         // Для компонентов (UniHtmlComponent) на этом этапе ещё нельзя полагаться на this.shadowRoot —
         // используйте переданный localRoot для подготовки DOM, данных и навешивания обработчиков.
         // Это предпочтительный этап инициализации для компонентов.
-        await this.preLoad(holder);
+        await this.preLoad(html);
         // render() отвечает за помещение содержимого из localRoot в конечную цель (renderTarget).
         // В UniHtmlComponent.render() после вызова базового render() происходит добавление wrapper в shadowRoot.
-        await this.render(holder, element);
+        await this.render(html, element);
         // postLoad() вызывается ПОСЛЕ render(). Для компонентов к этому моменту содержимое уже добавлено
         // внутрь shadowRoot, и можно безопасно работать с this.shadowRoot, измерениями layout и т.п.
-        await this.postLoad(holder);
+        await this.postLoad(html);
     }
     async _postInit(html) {
         throw new Error("Method not implemented.");
@@ -42,32 +38,26 @@ export default class UniHtml {
      * РЕКОМЕНДАЦИЯ: предпочитайте выполнять основную подготовку, поиск элементов, навешивание обработчиков
      * на узлы из localRoot именно здесь; затем render() вставит их в целевой контейнер/теневой DOM.
      */
-    async preLoad(holder) { }
+    async preLoad(template) { }
     /**
      * Hook after rendering (e.g., event binding).
      * Для компонентов вызывается после того, как содержимое вставлено в shadowRoot (см. UniHtmlComponent.render()).
      * Используйте этот этап только когда необходим доступ к реально смонтированному DOM (layout/measurements,
      * интеграции, требующие присутствия в документе). В остальных случаях предпочитайте preLoad().
      */
-    async postLoad(holder) { }
+    async postLoad(template) { }
     /**
      * Main rendering step. By default, simply inserts HTML into the container.
      * Override in subclasses for custom rendering logic.
      * @param element Target container
      * @param html HTML content
      */
-    async render(holder, renderTarget) {
+    async render(template, renderTarget) {
         // Clear renderTarget
         while (renderTarget.firstChild) {
             renderTarget.removeChild(renderTarget.firstChild);
         }
-        // Move all children from holder.element to renderTarget
-        const children = Array.from(holder.element.childNodes);
-        for (const child of children) {
-            renderTarget.appendChild(child);
-        }
-        // Update holder to point to renderTarget (now contains the content)
-        holder.element = renderTarget;
+        template.bind(renderTarget);
         return Promise.resolve();
     }
 }

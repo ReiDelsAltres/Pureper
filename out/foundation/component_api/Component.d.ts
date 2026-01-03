@@ -1,5 +1,5 @@
-import IElementHolder from "../api/ElementHolder.js";
 import UniHtml from "../component_api/UniHtml.js";
+import TemplateInstance from "../engine/TemplateInstance.js";
 import { Mixined } from "./mixin/Proto.js";
 export default interface Component extends Mixined, HTMLElement, UniHtml {
 }
@@ -23,7 +23,7 @@ export default class Component extends Component_base implements IUniHtmlCompone
      * @deprecated Use onConnected instead.
      */
     private connectedCallback;
-    protected render(element: IElementHolder, renderTarget: HTMLElement | ShadowRoot): Promise<void>;
+    protected render(element: TemplateInstance, renderTarget: HTMLElement | ShadowRoot): Promise<void>;
     /**
      * @deprecated Use onDisconnected instead.
      */
