@@ -1,0 +1,46 @@
+<div>
+    <inside></inside>
+</div>
+<span></span>
+<p></p>
+
+
+@(someValue)
+@for(idx, e in collection) {
+    <section>Element @(idx): @(e)</section>
+}
+@if(condition) {
+    <div>Condition is true</div>
+} elseif(otherCondition) {
+    <div>Other condition is true</div>
+} else {
+    <div>Condition is false</div>
+}
+<p @[ref]="'onePi'" @on[click]=""></p>
+
+<exp of="'someValue'" />
+<for index="'idx'" value="'e'" of="'collection'">
+    <section>Element <exp of="'idx'"/>: <exp of="'e'"/></section>
+</for>
+<if condition="'condition'">
+    <div>Condition is true</div>
+</if>
+<elseif condition="'otherCondition'">
+    <div>Other condition is true</div>
+</elseif>
+<else>
+    <div>Condition is false</div>
+</else>
+<p ref="'onePi'" on[click]=""></p>
+
+<injection target="'onePi'" at="head" >
+
+</injection>
+
+
+<div> #1
+    @for(i in collection) { #1-1
+    <div>Item @(i)</div> #1-2
+    } #1-3
+</div>
+<p></p>#2    <a>Link #3-1</a> #3

@@ -57,7 +57,7 @@ export abstract class Router {
 
       page.load(document.getElementById('page')!);
       if (pushState && typeof window !== "undefined" && window.location) {
-        window.history.pushState(page, '', urlH.href);
+        window.history.pushState({}, '', urlH.href);
       }
     } catch (error) {
       console.error("[Router]: Unable to route to ", urlH.href, error);
