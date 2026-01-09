@@ -48,7 +48,7 @@ export class Router {
             const page = this.createPage(found, urlH.searchParams);
             page.load(document.getElementById('page'));
             if (pushState && typeof window !== "undefined" && window.location) {
-                window.history.pushState(page, '', urlH.href);
+                window.history.pushState({}, '', urlH.href);
             }
         }
         catch (error) {

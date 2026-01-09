@@ -1,6 +1,5 @@
 import IElementHolder from "../api/ElementHolder.js";
 import UniHtml from "../component_api/UniHtml.js";
-import { TemplateInstance } from "../engine/TemplateEngine.js";
 import Attribute from "./Attribute.js";
 import { Class, Mixined } from "./mixin/Proto.js";
 
@@ -57,7 +56,7 @@ export default class Component extends Class(HTMLElement).extend(UniHtml).build(
 
         this.load(this.shadowRoot);
     }
-    protected render(element: TemplateInstance, renderTarget: HTMLElement | ShadowRoot): Promise<void> {
+    protected render(element: IElementHolder, renderTarget: HTMLElement | ShadowRoot): Promise<void> {
         (this.getMixin(UniHtml)?.instance.get() as any).render(element, renderTarget);
         //super.render(element, renderTarget);
         //this.shadowRoot!.appendChild(renderTarget);
