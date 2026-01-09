@@ -85,4 +85,6 @@ export default class UniHtml {
         (holder as { element: HTMLElement | DocumentFragment }).element = renderTarget;
         return Promise.resolve();
     }
+
+    public async dispose(): Promise<void> {}
 }

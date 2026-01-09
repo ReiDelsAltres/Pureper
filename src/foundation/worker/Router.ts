@@ -18,6 +18,8 @@ export const ROUTES: Route[] = [];
 export const TO_CACHE: string[] = [];
 
 export abstract class Router {
+  private static currentPage: UniHtml | null = null;
+
   public static savePersistedRoute(url: URL) {
     try {
       sessionStorage.setItem("spa:persisted-route", url.toJSON());
@@ -53,7 +55,9 @@ export abstract class Router {
     const urlH = new URL(Fetcher.resolveUrl(url.href));
     try {
       const found: Route = this.tryFindRoute(urlH);
+      if (this.currentPage != null) this.currentPage.dispose();
       const page: UniHtml = this.createPage(found, urlH.searchParams);
+      this.currentPage = page;
 
       page.load(document.getElementById('page')!);
       if (pushState && typeof window !== "undefined" && window.location) {
