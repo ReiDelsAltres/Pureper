@@ -70,11 +70,6 @@ export default class UniHtml {
      * @param html HTML content
      */
     protected async render(holder: IElementHolder, renderTarget: HTMLElement | DocumentFragment): Promise<void> {
-        // Clear renderTarget
-        while (renderTarget.firstChild) {
-            renderTarget.removeChild(renderTarget.firstChild);
-        }
-
         // Move all children from holder.element to renderTarget
         const children = Array.from(holder.element.childNodes);
         for (const child of children) {
