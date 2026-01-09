@@ -66,7 +66,7 @@ export abstract class Router {
       // Это разрывает ссылки от старых event handlers
       const pageContainer = document.getElementById('page');
       if (pageContainer) {
-        pageContainer.innerHTML = '';
+        pageContainer.replaceWith(pageContainer.cloneNode(false));
       }
       
       const page: UniHtml = this.createPage(found, urlH.searchParams);
