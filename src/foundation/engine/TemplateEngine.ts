@@ -43,6 +43,7 @@ export default class TemplateEngine {
 
             }
         }
+        return scope;
     }
     public static processAttributes(root: Node, scope: Scope): Scope {
         const walker = document.createTreeWalker(
@@ -62,4 +63,5 @@ export default class TemplateEngine {
                 }
             }
         }
+        return scope;
     }
