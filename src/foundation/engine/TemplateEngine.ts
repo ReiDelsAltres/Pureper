@@ -1,5 +1,5 @@
-import Expression from "./Expression";
-import Scope from "./Scope";
+import Expression from "./Expression.js";
+import Scope from "./Scope.js";
 
 export default class TemplateEngine {
     public static process(root: Node, onlyRoot: boolean = false): Node[] {
@@ -60,7 +60,7 @@ export default class TemplateEngine {
                     const eventName = attr.name.substring(2);
                     const expr = new Expression(attr.value);
                     element.addEventListener(eventName, (e) => {});
-                });
+                });5
             }
         }
         return scope;

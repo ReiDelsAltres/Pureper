@@ -1,4 +1,4 @@
-import Expression from "./Expression";
+import Expression from "./Expression.js";
 export default class TemplateEngine {
     static process(root, onlyRoot = false) {
         let elements = [];
@@ -50,6 +50,7 @@ export default class TemplateEngine {
                     const expr = new Expression(attr.value);
                     element.addEventListener(eventName, (e) => { });
                 });
+                5;
             }
         }
         return scope;
