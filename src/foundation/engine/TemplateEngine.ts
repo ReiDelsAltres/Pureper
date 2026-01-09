@@ -60,8 +60,9 @@ export default class TemplateEngine {
                     const eventName = attr.name.substring(2);
                     const expr = new Expression(attr.value);
                     element.addEventListener(eventName, (e) => {});
-                }
+                });
             }
         }
         return scope;
     }
+}
