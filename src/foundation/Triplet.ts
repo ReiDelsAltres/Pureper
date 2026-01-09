@@ -123,15 +123,11 @@ export default class Triplet {
                     return argsMatch[1].split(',').map(s => s.trim()).filter(Boolean);
                 })();
 
-
                 const args = paramNames.map(name => {
-                    const string = search?.get(name);
-
                     return search?.get(name)
                 });
-                const unn: UniHtml = new ori(...args);
 
-                return unn;
+                return new ori(...args);
             });
 
             console.info(`[Triplet]` + `: Router route '${name}' registered for path '${routePath}' by class ${ori}.`);

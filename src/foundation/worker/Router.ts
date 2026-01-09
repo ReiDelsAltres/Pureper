@@ -55,11 +55,24 @@ export abstract class Router {
     const urlH = new URL(Fetcher.resolveUrl(url.href));
     try {
       const found: Route = this.tryFindRoute(urlH);
-      if (this.currentPage != null) this.currentPage.dispose();
+      
+      // Очистка предыдущей страницы
+      if (this.currentPage != null) {
+        this.currentPage.dispose();
+        this.currentPage = null;
+      }
+      
+      // Очищаем DOM контейнер перед загрузкой новой страницы
+      // Это разрывает ссылки от старых event handlers
+      const pageContainer = document.getElementById('page');
+      if (pageContainer) {
+        pageContainer.innerHTML = '';
+      }
+      
       const page: UniHtml = this.createPage(found, urlH.searchParams);
       this.currentPage = page;
 
-      page.load(document.getElementById('page')!);
+      page.load(pageContainer!);
       if (pushState && typeof window !== "undefined" && window.location) {
         window.history.pushState({}, '', urlH.href);
       }
