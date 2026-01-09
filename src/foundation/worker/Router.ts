@@ -62,13 +62,15 @@ export abstract class Router {
       }
       
       let pageContainer = document.getElementById('page');
-      pageContainer = pageContainer.cloneNode(false) as HTMLElement;
-
+      let cloneContainer = pageContainer.cloneNode(false) as HTMLElement;
       
       const page: UniHtml = this.createPage(found, urlH.searchParams);
       this.currentPage = page;
 
-      page.load(pageContainer!);
+      page.load(cloneContainer!);
+      pageContainer.replaceWith(cloneContainer);
+      pageContainer = cloneContainer;
+
       if (pushState && typeof window !== "undefined" && window.location) {
         window.history.pushState({}, '', urlH.href);
       }
