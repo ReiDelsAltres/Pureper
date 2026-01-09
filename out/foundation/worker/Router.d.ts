@@ -12,6 +12,7 @@ export declare enum AccessType {
 export declare const ROUTES: Route[];
 export declare const TO_CACHE: string[];
 export declare abstract class Router {
+    private static currentPage;
     static savePersistedRoute(url: URL): void;
     static getPersistedRoute(): URL | null;
     static clearPersistedRoute(): void;

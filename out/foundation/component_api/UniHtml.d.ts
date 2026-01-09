@@ -40,5 +40,6 @@ export default class UniHtml {
      * @param html HTML content
      */
     protected render(holder: IElementHolder, renderTarget: HTMLElement | DocumentFragment): Promise<void>;
+    dispose(): Promise<void>;
 }
 //# sourceMappingURL=UniHtml.d.ts.map

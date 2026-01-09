@@ -68,5 +68,6 @@ export default class UniHtml {
         holder.element = renderTarget;
         return Promise.resolve();
     }
+    async dispose() { }
 }
 //# sourceMappingURL=UniHtml.js.map

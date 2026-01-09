@@ -9,6 +9,7 @@ export var AccessType;
 export const ROUTES = [];
 export const TO_CACHE = [];
 export class Router {
+    static currentPage = null;
     static savePersistedRoute(url) {
         try {
             sessionStorage.setItem("spa:persisted-route", url.toJSON());
@@ -45,7 +46,10 @@ export class Router {
         const urlH = new URL(Fetcher.resolveUrl(url.href));
         try {
             const found = this.tryFindRoute(urlH);
+            if (this.currentPage != null)
+                this.currentPage.dispose();
             const page = this.createPage(found, urlH.searchParams);
+            this.currentPage = page;
             page.load(document.getElementById('page'));
             if (pushState && typeof window !== "undefined" && window.location) {
                 window.history.pushState({}, '', urlH.href);
