@@ -55,19 +55,15 @@ export abstract class Router {
     const urlH = new URL(Fetcher.resolveUrl(url.href));
     try {
       const found: Route = this.tryFindRoute(urlH);
-      
-      // Очистка предыдущей страницы
+
       if (this.currentPage != null) {
         this.currentPage.dispose();
         this.currentPage = null;
       }
       
-      // Очищаем DOM контейнер перед загрузкой новой страницы
-      // Это разрывает ссылки от старых event handlers
-      const pageContainer = document.getElementById('page');
-      if (pageContainer) {
-        pageContainer.replaceWith(pageContainer.cloneNode(false));
-      }
+      let pageContainer = document.getElementById('page');
+      pageContainer = pageContainer.cloneNode(false) as HTMLElement;
+
       
       const page: UniHtml = this.createPage(found, urlH.searchParams);
       this.currentPage = page;
