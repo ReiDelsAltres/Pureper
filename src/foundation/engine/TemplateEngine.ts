@@ -307,7 +307,7 @@ export default class TemplateEngine {
         (this.ref_component as any).globalScope = scope;
 
         const walker = new Walker<Scope>(root, {
-            nodeFilter: NodeFilter.SHOW_ELEMENT,
+            nodeFilter: NodeFilter.SHOW_DOCUMENT_FRAGMENT | NodeFilter.SHOW_ELEMENT,
             walkerFunction: (walker: Walker<Scope>, node: Node, data?: Scope) => {
                 for (const component of this.components)
                     if (component.walkthrough?.call(component, walker, node, data)) return;
@@ -331,7 +331,7 @@ export default class TemplateEngine {
     }
     public fullCleanup(root: Node): void {
         const walker = new Walker<Scope>(root, {
-            nodeFilter: NodeFilter.SHOW_ELEMENT
+            nodeFilter: NodeFilter.SHOW_DOCUMENT_FRAGMENT | NodeFilter.SHOW_ELEMENT
         });
         let i = 0;
         walker.onEnterNode((node: Node, data?: Scope) => {

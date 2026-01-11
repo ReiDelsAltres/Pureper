@@ -302,6 +302,8 @@ console.log('└─────────────────────�
     const engine = new TemplateEngine();
     engine.fullProcess(getApp(), scope)
 
+    console.log(dd);
+
     /*console.log(getApp().innerHTML);
 
     dd.bool.setObject(false);
