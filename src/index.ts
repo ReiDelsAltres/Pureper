@@ -14,7 +14,6 @@ export { default as Triplet, TripletStruct, AccessType } from './foundation/Trip
 export { ReComponent, RePage } from './foundation/TripletDecorator.js';
 
 export { default as Fetcher } from './foundation/Fetcher.js';
-export { default as HMLEParser } from './foundation/HMLEParser.js';
 
 export * from './foundation/engine/TemplateEngine.js';
 
