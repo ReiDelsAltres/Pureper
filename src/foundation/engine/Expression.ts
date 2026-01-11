@@ -182,9 +182,27 @@ export default class Expression {
      * Выполнить в контексте (синхронно)
      */
     private executeInContext(context: Record<string, any>, codeOverride?: string): any {
-        const keys = Object.keys(context);
+        // Handle reserved keywords used as variable names (e.g., "super")
+        const reservedKeywords = ['super', 'this', 'arguments'];
+        const keyMapping: Record<string, string> = {};
+        
+        const keys = Object.keys(context).map(key => {
+            if (reservedKeywords.includes(key)) {
+                const safeKey = `__${key}__`;
+                keyMapping[key] = safeKey;
+                return safeKey;
+            }
+            return key;
+        });
         const values = Object.values(context);
-        const codeToExecute = codeOverride ?? this.code;
+        
+        let codeToExecute = codeOverride ?? this.code;
+        
+        // Replace reserved keywords in code with safe alternatives
+        for (const [original, safe] of Object.entries(keyMapping)) {
+            const regex = new RegExp(`\\b${original}\\b`, 'g');
+            codeToExecute = codeToExecute.replace(regex, safe);
+        }
 
         let functionBody: string;
 
@@ -218,9 +236,27 @@ export default class Expression {
      * Выполнить в контексте (асинхронно)
      */
     private async executeInContextAsync(context: Record<string, any>, codeOverride?: string): Promise<any> {
-        const keys = Object.keys(context);
+        // Handle reserved keywords used as variable names (e.g., "super")
+        const reservedKeywords = ['super', 'this', 'arguments'];
+        const keyMapping: Record<string, string> = {};
+        
+        const keys = Object.keys(context).map(key => {
+            if (reservedKeywords.includes(key)) {
+                const safeKey = `__${key}__`;
+                keyMapping[key] = safeKey;
+                return safeKey;
+            }
+            return key;
+        });
         const values = Object.values(context);
-        const codeToExecute = codeOverride ?? this.code;
+        
+        let codeToExecute = codeOverride ?? this.code;
+        
+        // Replace reserved keywords in code with safe alternatives
+        for (const [original, safe] of Object.entries(keyMapping)) {
+            const regex = new RegExp(`\\b${original}\\b`, 'g');
+            codeToExecute = codeToExecute.replace(regex, safe);
+        }
 
         let functionBody: string;
 

@@ -289,6 +289,7 @@ console.log('└─────────────────────�
         public bool: Observable<boolean> = new Observable<boolean>(true)
         public observableCollection: Observable<number[]> = new Observable<number[]>([10, 20, 30]);
         public nestedObservableCollection: Observable<number[][]> = new Observable<number[][]>([[1, 2], [3, 4, 5]]);
+        public counterRoot: HTMLDivElement;
         public increment() {
             this.count.setObject(this.count.getObject() + 1);
         };
