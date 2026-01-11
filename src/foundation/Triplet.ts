@@ -6,6 +6,7 @@ import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
 import TemplateEngine, { TemplateHolder } from "./engine/TemplateEngine.js";
+import Scope from "./engine/Scope.js";
 
 
 export enum AccessType {
@@ -154,7 +155,7 @@ export default class Triplet {
 
         proto._init = async function (): Promise<TemplateHolder> {
             const markupText = await that.markup;
-            return TemplateEngine.createHolder(markupText, this);
+            return TemplateEngine.createHolder(markupText, Scope.from(this));
         }
 
         proto._postInit = async function (preHtml: TemplateHolder): Promise<TemplateHolder> {
