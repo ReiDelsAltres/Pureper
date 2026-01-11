@@ -309,6 +309,12 @@ export default class TemplateEngine {
         const walker = new Walker<Scope>(root, {
             nodeFilter: NodeFilter.SHOW_DOCUMENT_FRAGMENT | NodeFilter.SHOW_ELEMENT,
             walkerFunction: (walker: Walker<Scope>, node: Node, data?: Scope) => {
+                if (node.nodeType !== Node.ELEMENT_NODE) {
+                    node.childNodes.forEach(child => {
+                        walker.walk(child, data);
+                    });
+                };
+
                 for (const component of this.components)
                     if (component.walkthrough?.call(component, walker, node, data)) return;
 
