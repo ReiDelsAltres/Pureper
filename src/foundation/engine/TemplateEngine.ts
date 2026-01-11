@@ -313,7 +313,8 @@ export default class TemplateEngine {
                     node.childNodes.forEach(child => {
                         walker.walk(child, data);
                     });
-                };
+                    return;
+                }
 
                 for (const component of this.components)
                     if (component.walkthrough?.call(component, walker, node, data)) return;
