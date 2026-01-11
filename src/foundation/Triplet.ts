@@ -5,7 +5,7 @@ import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import { AnyConstructor, Constructor } from "./component_api/mixin/Proto.js";
-import HMLEParser from "./HMLEParser.js";
+import TemplateEngine, { TemplateHolder } from "./engine/TemplateEngine.js";
 
 
 export enum AccessType {
@@ -150,15 +150,14 @@ export default class Triplet {
             }
         };
         let proto = ori.prototype as any;
-        const parser = new HMLEParser();
+        const parser = new TemplateEngine();
 
-        proto._init = async function (): Promise<DocumentFragment> {
+        proto._init = async function (): Promise<TemplateHolder> {
             const markupText = await that.markup;
-            if (!markupText) return new DocumentFragment();
-            return parser.parseToDOM(markupText, this);
+            return TemplateEngine.createHolder(markupText, this);
         }
 
-        proto._postInit = async function (preHtml: DocumentFragment): Promise<DocumentFragment> {
+        proto._postInit = async function (preHtml: TemplateHolder): Promise<TemplateHolder> {
             const dmc: Document | ShadowRoot = this.shadowRoot ?? document;
             const css = await that.css;
 

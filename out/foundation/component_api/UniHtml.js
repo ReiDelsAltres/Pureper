@@ -14,18 +14,17 @@ export default class UniHtml {
         const preHtml = await this._init();
         const html = await this._postInit(preHtml);
         const localRoot = html;
-        const holder = { element: localRoot };
         // ВАЖНО: preLoad() вызывается ДО монтирования в DOM/Shadow DOM.
         // Для компонентов (UniHtmlComponent) на этом этапе ещё нельзя полагаться на this.shadowRoot —
         // используйте переданный localRoot для подготовки DOM, данных и навешивания обработчиков.
         // Это предпочтительный этап инициализации для компонентов.
-        await this.preLoad(holder);
+        await this.preLoad(html);
         // render() отвечает за помещение содержимого из localRoot в конечную цель (renderTarget).
         // В UniHtmlComponent.render() после вызова базового render() происходит добавление wrapper в shadowRoot.
-        await this.render(holder, element);
+        await this.render(html, element);
         // postLoad() вызывается ПОСЛЕ render(). Для компонентов к этому моменту содержимое уже добавлено
         // внутрь shadowRoot, и можно безопасно работать с this.shadowRoot, измерениями layout и т.п.
-        await this.postLoad(holder);
+        await this.postLoad(html);
     }
     async _postInit(html) {
         throw new Error("Method not implemented.");
@@ -55,17 +54,7 @@ export default class UniHtml {
      * @param html HTML content
      */
     async render(holder, renderTarget) {
-        // Clear renderTarget
-        while (renderTarget.firstChild) {
-            renderTarget.removeChild(renderTarget.firstChild);
-        }
-        // Move all children from holder.element to renderTarget
-        const children = Array.from(holder.element.childNodes);
-        for (const child of children) {
-            renderTarget.appendChild(child);
-        }
-        // Update holder to point to renderTarget (now contains the content)
-        holder.element = renderTarget;
+        holder.pushTo(renderTarget);
         return Promise.resolve();
     }
     async dispose() { }

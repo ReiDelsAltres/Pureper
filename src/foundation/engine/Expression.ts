@@ -143,7 +143,7 @@ export default class Expression {
      */
     public execute(scope: Scope, extraVars?: Record<string, any>): any {
         const context = scope.getVariables();
-        
+
         if (extraVars) {
             Object.assign(context, extraVars);
         }
@@ -164,7 +164,6 @@ export default class Expression {
      */
     public async executeAsync(scope: Scope, extraVars?: Record<string, any>): Promise<any> {
         const context = scope.getVariables();
-        
         if (extraVars) {
             Object.assign(context, extraVars);
         }
