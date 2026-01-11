@@ -30,6 +30,28 @@ export default class TemplateEngine {
             });
         }
     }(this);
+    private readonly set_component: TemplateComponent = new class implements TemplateComponent {
+        public constructor(private engine: TemplateEngine) { }
+        public acceptNode(node: Element): boolean {
+            return Array.from(node.attributes).some(attr => /^set\[[^\]]+\]$/i.test(attr.name));
+        }
+        public walkthrough(walker: Walker<Scope>, node: Node, data?: Scope): boolean {
+            const element = node as Element;
+            const bool = this.acceptNode(element);
+            if (bool) {
+                const setAttribute = Array.from(element.attributes)
+                    .find(attr => /^set\[[^\]]+\]$/i.test(attr.name));
+                const attributeName = setAttribute!.name.substring(4, setAttribute!.name.length - 1);
+                const valueExpression = new Expression(setAttribute!.value);
+                
+                element.setAttribute(attributeName, valueExpression.eval(data!));
+                this.engine.bindings.set(element, () => {
+                    element.removeAttribute(attributeName);
+                });
+            }
+            return false;
+        }
+    }(this);
     private readonly on_component: TemplateComponent = new class implements TemplateComponent {
         public constructor(private engine: TemplateEngine) { }
         public acceptNode(node: Element): boolean {
@@ -53,9 +75,6 @@ export default class TemplateEngine {
                 });
             }
             return false;
-        }
-        public doWork(context?: { element: Element, refName: string, data?: Scope }): void {
-
         }
     }(this);
     private readonly injection_component: TemplateComponent = new class implements TemplateComponent {
@@ -277,8 +296,9 @@ export default class TemplateEngine {
         }
     }(this);
     private readonly components: TemplateComponent[] = [
-        this.ref_component, this.on_component, this.injection_component,
-        this.exp_component, this.for_component, this.if_component
+        this.ref_component, this.on_component, this.set_component, 
+        this.injection_component, this.exp_component, this.for_component, 
+        this.if_component
     ];
     public readonly bindings: Map<Element, () => void> = new Map();
     private readonly onChangeCallbacks: (() => void)[] = [];
