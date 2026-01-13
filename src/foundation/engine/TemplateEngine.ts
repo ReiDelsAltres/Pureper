@@ -39,11 +39,10 @@ export default class TemplateEngine {
         public walkthrough(walker: Walker<Scope>, node: Node, data?: Scope): boolean {
             const element = node as Element;
             const bool = this.acceptNode(element);
-            if (bool) {
-                const setAttribute = Array.from(element.attributes)
-                    .find(attr => /^set\[[^\]]+\]$/i.test(attr.name));
-                const attributeName = setAttribute!.name.substring(4, setAttribute!.name.length - 1);
-                const valueExpression = new Expression(setAttribute!.value);
+            if (!bool) return false;
+            for (const attr of Array.from(element.attributes).filter(attr => /^set\[[^\]]+\]$/i.test(attr.name))) {
+                const attributeName = attr!.name.substring(4, attr!.name.length - 1);
+                const valueExpression = new Expression(attr.value);
                 const value = valueExpression.eval(data!);
                 if (value instanceof Observable) {
                     value.subscribe((newValue: any) => {
@@ -77,11 +76,10 @@ export default class TemplateEngine {
         public walkthrough(walker: Walker<Scope>, node: Node, data?: Scope): boolean {
             const element = node as Element;
             const bool = this.acceptNode(element);
-            if (bool) {
-                const onAttribute = Array.from(element.attributes)
-                    .find(attr => /^on\[[^\]]+\]$/i.test(attr.name));
-                const eventName = onAttribute!.name.substring(3, onAttribute!.name.length - 1);
-                const handler = new Expression(onAttribute.value);
+            if (!bool) return false;
+            for (const attr of Array.from(element.attributes).filter(attr => /^on\[[^\]]+\]$/i.test(attr.name))) {
+                const eventName = attr!.name.substring(3, attr!.name.length - 1);
+                const handler = new Expression(attr.value);
                 const listener = (event: Event) => {
                     handler.eval(data!, { event });
                 };
