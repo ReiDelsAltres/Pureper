@@ -43,13 +43,23 @@ export default class TemplateEngine {
                     .find(attr => /^set\[[^\]]+\]$/i.test(attr.name));
                 const attributeName = setAttribute!.name.substring(4, setAttribute!.name.length - 1);
                 const valueExpression = new Expression(setAttribute!.value);
-                
-                element.setAttribute(attributeName, valueExpression.eval(data!));
+                const value = valueExpression.eval(data!);
+                if (value instanceof Observable) {
+                    value.subscribe((newValue: any) => {
+                        this.engine.change();
+                        this.doWork({ element, name: attributeName, value: newValue });
+                    });
+                }
+                this.doWork({ element, name: attributeName, value });
                 this.engine.bindings.set(element, () => {
                     element.removeAttribute(attributeName);
                 });
             }
             return false;
+        }
+        doWork(context?: { element: Element, name: string, value: string }): void {
+            const { element, name, value } = context!;
+            element.setAttribute(name, value);
         }
     }(this);
     private readonly on_component: TemplateComponent = new class implements TemplateComponent {
@@ -296,8 +306,8 @@ export default class TemplateEngine {
         }
     }(this);
     private readonly components: TemplateComponent[] = [
-        this.ref_component, this.on_component, this.set_component, 
-        this.injection_component, this.exp_component, this.for_component, 
+        this.ref_component, this.on_component, this.set_component,
+        this.injection_component, this.exp_component, this.for_component,
         this.if_component
     ];
     public readonly bindings: Map<Element, () => void> = new Map();
