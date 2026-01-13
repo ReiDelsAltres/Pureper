@@ -4,7 +4,9 @@ export { default as EmptyConstructor } from './foundation/api/EmptyConstructor.j
 export { default as Lazy } from './foundation/api/Lazy.js';
 
 export * from './foundation/component_api/mixin/Proto.js';
-export * from './foundation/api/Observer.js'
+export { default as Observable, 
+	IObserver, IMutationObserver, IKeyMutationObserver, Observer, MutationObserver, 
+	isObservable } from './foundation/api/Observer.js'
 
 export { default as UniHtml } from './foundation/component_api/UniHtml.js';
 export { default as Page } from './foundation/component_api/Page.js';
