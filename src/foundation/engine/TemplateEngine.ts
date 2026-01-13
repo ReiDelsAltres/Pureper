@@ -1,4 +1,5 @@
 import Observable from "../api/Observer.js";
+import Attribute from "../component_api/Attribute.js";
 import Expression from "./Expression.js";
 import Scope from "./Scope.js";
 
@@ -46,6 +47,12 @@ export default class TemplateEngine {
                 const value = valueExpression.eval(data!);
                 if (value instanceof Observable) {
                     value.subscribe((newValue: any) => {
+                        this.engine.change();
+                        this.doWork({ element, name: attributeName, value: newValue });
+                    });
+                }
+                if (value instanceof Attribute) {
+                    value.subscribe((key, oldValue, newValue) => {
                         this.engine.change();
                         this.doWork({ element, name: attributeName, value: newValue });
                     });
@@ -145,6 +152,13 @@ export default class TemplateEngine {
                         this.doWork({ element, value: newValue });
                     });
                 }
+                if (value instanceof Attribute) {
+                    value.subscribe((key, oldValue, newValue) => {
+                        element.textContent = "";
+                        this.engine.change();
+                        this.doWork({ element, value: newValue });
+                    });
+                }
                 this.doWork({ element, value });
 
                 /*const textNode = document.createTextNode(of);
@@ -175,6 +189,12 @@ export default class TemplateEngine {
                 const iterable = of instanceof Observable ? of.getObject() : of;
                 if (of instanceof Observable) {
                     of.subscribe((newValue: any[]) => {
+                        this.engine.change();
+                        this.doWork({ element, iterable: newValue, index, value, walker, shadow, data });
+                    });
+                }
+                if (of instanceof Attribute) {
+                    of.subscribe((key, oldValue, newValue) => {
                         this.engine.change();
                         this.doWork({ element, iterable: newValue, index, value, walker, shadow, data });
                     });
@@ -254,6 +274,12 @@ export default class TemplateEngine {
 
                     if (condition instanceof Observable) {
                         condition.subscribe((newValue: boolean) => {
+                            this.engine.change();
+                            this.doWork({ walker, data, allParts: allParts });
+                        });
+                    }
+                    if (condition instanceof Attribute) {
+                        condition.subscribe((key, oldValue, newValue) => {
                             this.engine.change();
                             this.doWork({ walker, data, allParts: allParts });
                         });
