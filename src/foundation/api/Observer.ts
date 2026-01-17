@@ -114,4 +114,10 @@ export default class Observable<T> {
         this.observer.notify(this.object);
         this.mutationObserver.notify(oldObject, this.object);
     }
+    public updateObject(updater: (obj: T) => T): void {
+        const oldObject = this.object;
+        this.object = updater(this.object);
+        this.observer.notify(this.object);
+        this.mutationObserver.notify(oldObject, this.object);
+    }
 }
