@@ -1,32 +1,31 @@
-import { IKeyMutationObserver } from "../api/Observer.js";
+import Observable, { IKeyMutationObserver } from "../api/Observer.js";
 import Component from "./Component.js";
 
-export default class Attribute<T = any> {
+export default class Attribute<T = any> extends Observable<T | string> implements IKeyMutationObserver<string, T | string> {
     private component!: Component;
     private listeners: Array<(oldValue: string | T, newValue: string | T) => void> = [];
 
     private _name: string;
 
     private _defaultValue!: T | string;
-    private _value?: T | string;
 
     constructor(component: Component, name: string, value?: T) {
+        super(value);
         this.component = component;
         this.component["_attributes"].push(this);
 
         this._name = name;
 
         this._defaultValue = value;
-        this._value = value;
     }
 
         
-    private notify(oldValue: string | T, newValue: string | T): void {
+    public notify(oldValue: string | T, newValue: string | T): void {
         this.listeners.forEach(listener => listener(oldValue, newValue));
     }
 
     private initialize(initValue: T | string) {
-        this._value = initValue ?? this._defaultValue;
+        this.object = initValue ?? this._defaultValue;
         if ((this.component as any).observedAttributes === undefined)
             (this.component as any).observedAttributes = [];
         (this.component as any).observedAttributes.push(this._name);
@@ -42,13 +41,13 @@ export default class Attribute<T = any> {
     }
 
     public get value(): T | string {
-        return this._value ?? this._defaultValue;
+        return this.object ?? this._defaultValue;
     }
 
     public set value(val: T | string) {
-        if (val === this._value) return;
+        if (val === this.object) return;
         this.notify(this.value, val);
-        this._value = val;
+        this.object = val;
 
         if (typeof val === "boolean") {
             if (val) this.component.setAttribute(this._name, "");
@@ -62,6 +61,10 @@ export default class Attribute<T = any> {
 
         if (this._defaultValue === this.value) this.component.removeAttribute(this._name);
         else this.component.setAttribute(this._name, val.toString());
+    }
+
+    public setObject(object: string | T): void {
+        this.value = object;
     }
 
     public isDefault(): boolean {

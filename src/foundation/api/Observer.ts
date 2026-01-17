@@ -66,9 +66,9 @@ export function isObservable<T = any>(value: any): value is Observable<T> {
  *   @(user.name) - автоматически распознаётся как user.getObject().name
  */
 export default class Observable<T> {
-    private object: T;
-    private observer: Observer<T> = new Observer<T>();
-    private mutationObserver: MutationObserver<T> = new MutationObserver<T>();
+    protected object: T;
+    protected observer: Observer<T> = new Observer<T>();
+    protected mutationObserver: MutationObserver<T> = new MutationObserver<T>();
 
     // Mark as Observable
     public readonly [OBSERVABLE_SYMBOL] = true;

@@ -3,7 +3,8 @@ import Attribute from "../component_api/Attribute.js";
 import Expression from "./Expression.js";
 import Scope from "./Scope.js";
 
-export default class TemplateEngine {
+export default class TemplateEngine { 
+
     private readonly ref_component: TemplateComponent = new class implements TemplateComponent {
         public globalScope?: Scope;
         public constructor(private engine: TemplateEngine) { }
@@ -46,12 +47,6 @@ export default class TemplateEngine {
                 const value = valueExpression.eval(data!);
                 if (value instanceof Observable) {
                     value.subscribe((newValue: any) => {
-                        this.engine.change();
-                        this.doWork({ element, name: attributeName, value: newValue });
-                    });
-                }
-                if (value instanceof Attribute) {
-                    value.subscribe((key, oldValue, newValue) => {
                         this.engine.change();
                         this.doWork({ element, name: attributeName, value: newValue });
                     });
@@ -140,6 +135,8 @@ export default class TemplateEngine {
             const bool = this.acceptNode(element);
             if (bool) {
                 const vvv = element.getAttribute("of")!;
+                const allowHtmlInjection = element.hasAttribute("html-injection") || 
+                    element.getAttribute("html-injection") === "true";
                 const of: string | any = new Expression(vvv).eval(data!);
 
                 const value = of instanceof Observable ? of.getObject() : of;
@@ -147,24 +144,21 @@ export default class TemplateEngine {
                     of.subscribe((newValue: any[]) => {
                         element.textContent = "";
                         this.engine.change();
-                        this.doWork({ element, value: newValue });
+                        this.doWork({ element, value: newValue, allowHtmlInjection: allowHtmlInjection });
                     });
                 }
-                if (value instanceof Attribute) {
-                    value.subscribe((key, oldValue, newValue) => {
-                        element.textContent = "";
-                        this.engine.change();
-                        this.doWork({ element, value: newValue });
-                    });
-                }
-                this.doWork({ element, value });
+                this.doWork({ element, value, allowHtmlInjection: allowHtmlInjection });
 
                 /*const textNode = document.createTextNode(of);
                 element.parentNode!.replaceChild(textNode, element);*/
             }
             return bool;
         }
-        public doWork(context?: { element: Element, value: any }): void {
+        public doWork(context?: { element: Element, value: any, allowHtmlInjection?: boolean }): void {
+            if (context!.allowHtmlInjection) {
+                context!.element.innerHTML = context.value;
+                return;
+            }
             context.element.textContent = context.value;
         }
     }(this);
@@ -187,12 +181,6 @@ export default class TemplateEngine {
                 const iterable = of instanceof Observable ? of.getObject() : of;
                 if (of instanceof Observable) {
                     of.subscribe((newValue: any[]) => {
-                        this.engine.change();
-                        this.doWork({ element, iterable: newValue, index, value, walker, shadow, data });
-                    });
-                }
-                if (of instanceof Attribute) {
-                    of.subscribe((key, oldValue, newValue) => {
                         this.engine.change();
                         this.doWork({ element, iterable: newValue, index, value, walker, shadow, data });
                     });
@@ -276,12 +264,6 @@ export default class TemplateEngine {
                             this.doWork({ walker, data, allParts: allParts });
                         });
                     }
-                    if (condition instanceof Attribute) {
-                        condition.subscribe((key, oldValue, newValue) => {
-                            this.engine.change();
-                            this.doWork({ walker, data, allParts: allParts });
-                        });
-                    }
                 }
 
                 this.doWork({ walker, data, allParts: allParts });
@@ -334,6 +316,7 @@ export default class TemplateEngine {
         this.injection_component, this.exp_component, this.for_component,
         this.if_component
     ];
+
     public readonly bindings: Map<Element, () => void> = new Map();
     private readonly onChangeCallbacks: (() => void)[] = [];
     public processLogs: string[] = [];
