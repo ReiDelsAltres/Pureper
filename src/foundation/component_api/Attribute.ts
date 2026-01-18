@@ -66,6 +66,9 @@ export default class Attribute<T = any> extends Observable<T | string> implement
     public setObject(object: string | T): void {
         this.value = object;
     }
+    public updateObject(updater: (obj: string | T) => string | T): void {
+        this.value = updater(this.value);
+    }
 
     public isDefault(): boolean {
         return this.value === this._defaultValue;
