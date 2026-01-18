@@ -108,16 +108,55 @@ export default class Observable<T> {
         this.mutationObserver.unsubscribe(listener);
     }
 
-    public setObject(object: T): void {
+    public setObject(object: T, silent: boolean = false): void {
         const oldObject = this.object;
         this.object = object;
-        this.observer.notify(this.object);
-        this.mutationObserver.notify(oldObject, this.object);
+        if (!silent) {
+            this.observer.notify(this.object);
+            this.mutationObserver.notify(oldObject, this.object);
+        }
     }
-    public updateObject(updater: (obj: T) => T): void {
+    public updateObject(updater: (obj: T) => T, silent: boolean = false): void {
         const oldObject = this.object;
         this.object = updater(this.object);
-        this.observer.notify(this.object);
-        this.mutationObserver.notify(oldObject, this.object);
+        if (!silent) {
+            this.observer.notify(this.object);
+            this.mutationObserver.notify(oldObject, this.object);
+        }
+    }
+
+    public transaction(): Transaction<T> {
+        return new Transaction<T>(this);
+    }
+}
+export class Transaction<T> {
+    private observable: Observable<T>;
+    private originalValue: T;
+    private transactionValue: T;
+    private operations: Array<(obj: T) => T> = [];
+    constructor(observable: Observable<T>) {
+        this.observable = observable;
+        this.originalValue = observable.getObject();
+        this.transactionValue = this.originalValue;
+    }
+    public setObject(object: T, delayed: boolean = false): void {
+        this.transactionValue = object;
+
+        if (!delayed) this.operations.push(() => object);
+    }
+    public updateObject(updater: (obj: T) => T, delayed: boolean = false): void {
+        this.transactionValue = updater(this.transactionValue);
+        if (!delayed) this.operations.push(updater);
+    }
+    public commit(): void {
+        let newValue = this.transactionValue
+        this.operations.forEach(op => {
+            newValue = op(newValue);
+        });
+        this.observable.setObject(newValue);
+
+        this.transactionValue = newValue;
+        this.operations = [];
+        
     }
 }

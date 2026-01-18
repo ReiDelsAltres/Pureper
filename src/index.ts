@@ -5,7 +5,7 @@ export { default as Lazy } from './foundation/api/Lazy.js';
 
 export * from './foundation/component_api/mixin/Proto.js';
 export { default as Observable, 
-	IObserver, IMutationObserver, IKeyMutationObserver, Observer, MutationObserver, 
+	IObserver, IMutationObserver, IKeyMutationObserver, Observer, MutationObserver, Transaction,
 	isObservable } from './foundation/api/Observer.js'
 
 export { default as UniHtml } from './foundation/component_api/UniHtml.js';

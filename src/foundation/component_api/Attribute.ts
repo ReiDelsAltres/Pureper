@@ -19,7 +19,7 @@ export default class Attribute<T = any> extends Observable<T | string> implement
         this._defaultValue = value;
     }
 
-        
+
     public notify(oldValue: string | T, newValue: string | T): void {
         this.listeners.forEach(listener => listener(oldValue, newValue));
     }
@@ -41,12 +41,20 @@ export default class Attribute<T = any> extends Observable<T | string> implement
     }
 
     public get value(): T | string {
-        return this.object ?? this._defaultValue;
+        return this.getObject();
     }
 
     public set value(val: T | string) {
+        this.setObject(val);
+    }
+
+    public getObject(): string | T {
+        return this.object ?? this._defaultValue;
+    }
+
+    public setObject(val: string | T, silent: boolean = false): void {
         if (val === this.object) return;
-        this.notify(this.value, val);
+        if (!silent) this.notify(this.value, val);
         this.object = val;
 
         if (typeof val === "boolean") {
@@ -62,12 +70,8 @@ export default class Attribute<T = any> extends Observable<T | string> implement
         if (this._defaultValue === this.value) this.component.removeAttribute(this._name);
         else this.component.setAttribute(this._name, val.toString());
     }
-
-    public setObject(object: string | T): void {
-        this.value = object;
-    }
-    public updateObject(updater: (obj: string | T) => string | T): void {
-        this.value = updater(this.value);
+    public updateObject(updater: (obj: string | T) => string | T, silent: boolean = false): void {
+        this.setObject(updater(this.value), silent);
     }
 
     public isDefault(): boolean {
@@ -78,7 +82,7 @@ export default class Attribute<T = any> extends Observable<T | string> implement
     }
 
     public subscribe(listener: (key: string, oldValue: string | T, newValue: string | T) => void): void {
-        this.listeners.push((o,n) => listener(this._name, o, n));
+        this.listeners.push((o, n) => listener(this._name, o, n));
     }
     public unsubscribe(listener: (key: string, oldValue: string | T, newValue: string | T) => void): void {
         this.listeners = this.listeners.filter(l => l !== listener);
