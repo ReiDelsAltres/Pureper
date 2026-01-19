@@ -46,10 +46,10 @@ const template = `
             }
         }
     }
+}
+@for color in colors {
 }`;
 
-const styleSheet = new CSSStyleSheet();
-styleSheet.replaceSync(template);
 
 const scope = Scope.from({});
 scope.set('colors', [
@@ -68,6 +68,6 @@ scope.set('variants', [
     { signature: 'text' },
 ]);
 
-const processedCss = StylePreprocessor.process(template, scope);
+const processedCss = StylePreprocessor.preprocess(template, scope);
 
 console.log(processedCss);

@@ -1,286 +1,169 @@
-import Scope from './Scope.js';
+import Scope from "./Scope.js";
 
-// AST Node Types
-type ASTNode = TextNode | ForNode | IfNode | InterpolationNode | ContinueNode;
-
-interface TextNode { type: 'text'; value: string; }
-interface ForNode { type: 'for'; variable: string; collection: string; body: ASTNode[]; }
-interface IfNode { type: 'if'; branches: { condition: Expression | null; body: ASTNode[] }[]; }
-interface InterpolationNode { type: 'interpolation'; expression: string; }
-interface ContinueNode { type: 'continue'; }
-
-// Signal for @continue - carries partial result
-class ContinueSignal extends Error { 
-    constructor(public partial: string = '') { super('continue'); } 
+interface Node {
+    type: string;
+    loc?: {
+        start: number;
+        end: number;
+    };
+}
+interface NestingNode extends Node {
+    exp: string;
+    children: Node[];
 }
 
-// Expression Types
-type Expression = BinaryExpr | UnaryExpr | LiteralExpr | IdentifierExpr | MemberExpr;
+type Token =
+    | { type: "ident"; value: string }
+    | { type: "brace-open"; depth: number }
+    | { type: "brace-close"; depth: number }
+    | { type: "parenthesis-open"; depth: number }
+    | { type: "parenthesis-close"; depth: number }
+    | { type: "colon" }
+    | { type: "semicolon" }
+    | { type: "colon-rule", value: string }
+    | { type: "at"; value: string }
+    | { type: "string"; value: string };
 
-interface BinaryExpr { type: 'binary'; operator: '==' | '!=' | '&&' | '||' | '>' | '<' | '>=' | '<='; left: Expression; right: Expression; }
-interface UnaryExpr { type: 'unary'; operator: '!'; operand: Expression; }
-interface LiteralExpr { type: 'literal'; value: string | number | boolean; }
-interface IdentifierExpr { type: 'identifier'; name: string; }
-interface MemberExpr { type: 'member'; object: Expression; property: string; }
+interface ASTRule<T extends Node = Node> {
+    walk(walker: StylePreprocessor, tokens: Token[], data?: Scope): { node: T; tokens: Token[] } | null;
+}
 
-// StylePreprocessor
+const FOR_RULE: ASTRule<NestingNode> = {
+    walk(walker: StylePreprocessor, tokens: Token[], data?: Scope): { node: NestingNode; tokens: Token[] } | null {
+        if (tokens[0].type !== "at") return null;
+        if (tokens[1].type !== "ident") return null;
+        if (tokens[2].type !== "brace-open") return null;
+
+        if (tokens[0].value !== "for") return null;
+
+        const at = tokens[0];
+        const ident = tokens[1];
+        const braceOpen = tokens[2];
+        const braceCloseIndex = tokens.findIndex((t, i) => t.type === "brace-close" && t.depth === braceOpen.depth);
+
+        const bodyTokens: Token[] = tokens.slice(3, braceCloseIndex);
+        const walkedChildrens = walker.walk(walker, bodyTokens, data);
+
+        const nestingNode: NestingNode = {
+            type: `for`,
+            exp: ident.value,
+            children: walkedChildrens,
+        }
+
+        return { node: nestingNode, tokens: tokens.slice(braceCloseIndex + 1) };
+    }
+}
+const IF_RULE: ASTRule<NestingNode> = {
+    walk(walker: StylePreprocessor, tokens: Token[], data?: Scope): { node: NestingNode; tokens: Token[] } | null {
+        if (tokens[0].type !== "at") return null;
+        if (tokens[1].type !== "ident") return null;
+        if (tokens[2].type !== "brace-open") return null;
+
+        if (tokens[0].value !== "if") return null;
+
+        const at = tokens[0];
+        const ident = tokens[1];
+        const braceOpen = tokens[2];
+        const braceCloseIndex = tokens.findIndex((t, i) => t.type === "brace-close" && t.depth === braceOpen.depth);
+
+        const bodyTokens: Token[] = tokens.slice(3, braceCloseIndex);
+        const walkedChildrens = walker.walk(walker, bodyTokens, data);
+
+        const nestingNode: NestingNode = {
+            type: `if`,
+            exp: ident.value,
+            children: walkedChildrens,
+        }
+
+        return { node: nestingNode, tokens: tokens.slice(braceCloseIndex + 1) };
+    }
+}
+
+
 export default class StylePreprocessor {
-    private pos = 0;
-    constructor(private input: string) { }
+    constructor(private tokens: Token[], private pos = 0) { }
 
-    public static process(input: string, scope: Scope): string {
-        const ast = new StylePreprocessor(input).parse();
-        return new Evaluator(scope).eval(ast).replace(/\n{3,}/g, '\n\n').trim();
+    private match(type: Token["type"]) {
+        return this.tokens[this.pos]?.type === type;
+    }
+    private consume<T extends Token["type"]>(type: T): Extract<Token, { type: T }> {
+        const token = this.tokens[this.pos];
+        if (!token || token.type !== type) {
+            throw new SyntaxError(`Expected ${type}`);
+        }
+        this.pos++;
+        return token as Extract<Token, { type: T }>;
     }
 
-    parse(): ASTNode[] {
-        return this.parseNodes(0);
-    }
+    public static tokenize(css: string): Token[] {
+        const tokens: Token[] = [];
+        let i = 0;
 
-    private parseNodes(braceDepth: number): ASTNode[] {
-        const nodes: ASTNode[] = [];
-        let text = '';
+        let braceDepth = 0;
+        let parenthesisDepth = 0;
+        while (i < css.length) {
+            const c = css[i];
 
-        const flush = () => { if (text) { nodes.push({ type: 'text', value: text }); text = ''; } };
-
-        while (this.pos < this.input.length) {
-            // Stop at } when we're at directive level (braceDepth == 1)
-            if (braceDepth === 1 && this.check('}')) {
-                break;
+            if (/\s/.test(c)) {
+                i++;
+                continue;
             }
-
-            // Check for @elseIf or @else (should stop current block parsing)
-            if (braceDepth > 0 && (this.checkAhead('@elseIf') || this.checkAhead('@else'))) {
-                break;
-            }
-
-            // Directives - check these BEFORE handling braces
-            if (this.checkAhead('@for ')) {
-                flush();
-                nodes.push(this.parseFor());
-            } else if (this.checkAhead('@if ')) {
-                flush();
-                nodes.push(this.parseIf());
-            } else if (this.checkAhead('@continue')) {
-                flush();
-                this.consume('@continue');
-                nodes.push({ type: 'continue' });
-            } else if (this.check('@') && this.isIdentAt(1) && !this.checkAhead('@else') && !this.checkAhead('@elseIf')) {
-                flush();
-                nodes.push(this.parseInterpolation());
-            } else if (this.check('{')) {
-                // CSS brace - include it and recurse for content
-                text += this.input[this.pos++];
-                flush();
-                const inner = this.parseNodes(braceDepth + 1);
-                nodes.push(...inner);
-                // Add closing brace
-                if (this.check('}')) {
-                    nodes.push({ type: 'text', value: this.input[this.pos++] });
+            if (c === "{") tokens.push({ type: "brace-open", depth: braceDepth++ });
+            else if (c === "}") tokens.push({ type: "brace-close", depth: braceDepth-- });
+            else if (c === "(") tokens.push({ type: "parenthesis-open", depth: parenthesisDepth++ });
+            else if (c === ")") tokens.push({ type: "parenthesis-close", depth: parenthesisDepth-- });
+            else if (c === ":") {
+                let name = "";
+                while (/[:a-zA-Z]/.test(css[i])) name += css[i++];
+                tokens.push({ type: "colon-rule", value: name });
+                if (name.length === 0) {
+                    tokens.push({ type: "colon" });
                 }
-            } else if (this.check('}') && braceDepth > 1) {
-                // Closing a CSS brace (not directive) - don't consume, let parent handle
-                break;
+                i--;
+            }
+            else if (c === ";") tokens.push({ type: "semicolon" });
+            else if (c === "@") {
+                i++;
+                let name = "";
+                while (/[a-zA-Z-]/.test(css[i])) name += css[i++];
+                tokens.push({ type: "at", value: name });
+                continue;
             } else {
-                text += this.input[this.pos++];
+                let value = "";
+                while (!/[(){}:;]/.test(css[i])) value += css[i++];
+                tokens.push({ type: "ident", value: value.trim() });
+                continue;
             }
+
+            i++;
         }
-        flush();
-        return nodes;
+
+        return tokens;
     }
+    public static preprocess(css: string, data?: Scope): string {
+        const tokens = StylePreprocessor.tokenize(css);
+        const parser = new StylePreprocessor(tokens);
 
-    private parseFor(): ForNode {
-        this.consume('@for'); this.ws();
-        const variable = this.ident(); this.ws();
-        this.consume('in'); this.ws();
-        const collection = this.ident(); this.ws();
-        this.consume('{');
-        const body = this.parseNodes(1);
-        this.consume('}');
-        return { type: 'for', variable, collection, body };
+
+        return JSON.stringify(parser.walk(parser, tokens, data) as any);
     }
+    public walk(walker: StylePreprocessor, node: Token[], data?: Scope): Node[] {
+        const ast: Node[] = [];
+        const rules = [FOR_RULE, IF_RULE /*, ... other rules */];
 
-    private parseIf(): IfNode {
-        const branches: { condition: Expression | null; body: ASTNode[] }[] = [];
+        let tokens = node;
+        for (const rule of rules) {
+            let result = rule.walk(walker, tokens, data);
+            if (result) tokens = result.tokens;
 
-        this.consume('@if'); this.ws();
-        branches.push({ condition: this.parseExpr(), body: (this.ws(), this.consume('{'), this.parseNodes(1)) });
-        this.consume('}');
+            while (result) {
+                ast.push(result.node);
 
-        while (true) {
-            this.ws();
-            if (this.checkAhead('@elseIf')) {
-                this.consume('@elseIf'); this.ws();
-                branches.push({ condition: this.parseExpr(), body: (this.ws(), this.consume('{'), this.parseNodes(1)) });
-                this.consume('}');
-            } else if (this.checkAhead('@else')) {
-                this.consume('@else'); this.ws();
-                this.consume('{');
-                branches.push({ condition: null, body: this.parseNodes(1) });
-                this.consume('}');
-                break;
-            } else {
-                break;
+                result = rule.walk(walker, tokens, data);
+                tokens = result.tokens;
             }
         }
 
-        return { type: 'if', branches };
-    }
-
-    private parseInterpolation(): InterpolationNode {
-        this.consume('@');
-        let expr = this.ident();
-        while (this.check('.')) { this.pos++; expr += '.' + this.ident(); }
-        return { type: 'interpolation', expression: expr };
-    }
-
-    private parseExpr(): Expression { return this.parseOr(); }
-
-    private parseOr(): Expression {
-        let left = this.parseAnd();
-        while (this.ws(), this.checkAhead('||')) { this.consume('||'); this.ws(); left = { type: 'binary', operator: '||', left, right: this.parseAnd() }; }
-        return left;
-    }
-
-    private parseAnd(): Expression {
-        let left = this.parseEq();
-        while (this.ws(), this.checkAhead('&&')) { this.consume('&&'); this.ws(); left = { type: 'binary', operator: '&&', left, right: this.parseEq() }; }
-        return left;
-    }
-
-    private parseEq(): Expression {
-        let left = this.parseCmp();
-        while (this.ws(), this.checkAhead('==') || this.checkAhead('!=')) {
-            const op = this.checkAhead('==') ? (this.consume('=='), '==') : (this.consume('!='), '!=');
-            this.ws(); left = { type: 'binary', operator: op as '==' | '!=', left, right: this.parseCmp() };
-        }
-        return left;
-    }
-
-    private parseCmp(): Expression {
-        let left = this.parseUnary();
-        while (this.ws(), this.checkAhead('>=') || this.checkAhead('<=') || this.checkAhead('>') || this.checkAhead('<')) {
-            let op: '>=' | '<=' | '>' | '<';
-            if (this.checkAhead('>=')) { this.consume('>='); op = '>='; }
-            else if (this.checkAhead('<=')) { this.consume('<='); op = '<='; }
-            else if (this.checkAhead('>')) { this.consume('>'); op = '>'; }
-            else { this.consume('<'); op = '<'; }
-            this.ws(); left = { type: 'binary', operator: op, left, right: this.parseUnary() };
-        }
-        return left;
-    }
-
-    private parseUnary(): Expression {
-        this.ws();
-        if (this.check('!') && !this.checkAhead('!=')) { this.pos++; this.ws(); return { type: 'unary', operator: '!', operand: this.parseUnary() }; }
-        return this.parsePrimary();
-    }
-
-    private parsePrimary(): Expression {
-        this.ws();
-        if (this.check('(')) { this.pos++; const e = this.parseExpr(); this.ws(); this.consume(')'); return e; }
-        if (this.check('"') || this.check("'")) return { type: 'literal', value: this.str() };
-        if (this.isDigit()) return { type: 'literal', value: parseInt(this.num()) };
-        if (this.checkAhead('true')) { this.consume('true'); return { type: 'literal', value: true }; }
-        if (this.checkAhead('false')) { this.consume('false'); return { type: 'literal', value: false }; }
-
-        let expr: Expression = { type: 'identifier', name: this.ident() };
-        while (this.check('.')) { this.pos++; expr = { type: 'member', object: expr, property: this.ident() }; }
-        return expr;
-    }
-
-    // Helpers
-    private check(s: string) { return this.input[this.pos] === s; }
-    private checkAhead(s: string) { return this.input.slice(this.pos, this.pos + s.length) === s; }
-    private consume(s: string) { if (!this.checkAhead(s)) throw new Error(`Expected '${s}' at ${this.pos}`); this.pos += s.length; }
-    private ws() { while (this.pos < this.input.length && /\s/.test(this.input[this.pos])) this.pos++; }
-    private isIdentAt(off: number) { return /[a-zA-Z_]/.test(this.input[this.pos + off] || ''); }
-    private isDigit() { return /\d/.test(this.input[this.pos] || ''); }
-    private ident() { let r = ''; while (/[a-zA-Z0-9_-]/.test(this.input[this.pos] || '')) r += this.input[this.pos++]; return r; }
-    private num() { let r = ''; while (/\d/.test(this.input[this.pos] || '')) r += this.input[this.pos++]; return r; }
-    private str() { const q = this.input[this.pos++]; let r = ''; while (this.input[this.pos] !== q) r += this.input[this.pos++]; this.pos++; return r; }
-}
-
-// Evaluator
-class Evaluator {
-    constructor(private scope: Scope) { }
-
-    eval(nodes: ASTNode[]): string {
-        let result = '';
-        for (const n of nodes) {
-            try {
-                result += this.node(n);
-            } catch (e) {
-                if (e instanceof ContinueSignal) {
-                    throw new ContinueSignal(result + e.partial);
-                }
-                throw e;
-            }
-        }
-        return result;
-    }
-
-    private node(n: ASTNode): string {
-        switch (n.type) {
-            case 'text': return n.value;
-            case 'for': return this.forNode(n);
-            case 'if': return this.ifNode(n);
-            case 'interpolation': return this.interp(n);
-            case 'continue': throw new ContinueSignal('');
-        }
-    }
-
-    private forNode(n: ForNode): string {
-        const arr = this.scope.get(n.collection);
-        if (!Array.isArray(arr)) throw new Error(`${n.collection} is not an array`);
-        const results: string[] = [];
-        for (const item of arr) {
-            try {
-                results.push(new Evaluator(this.scope.createChild({ [n.variable]: item })).eval(n.body));
-            } catch (e) {
-                if (e instanceof ContinueSignal) {
-                    results.push(e.partial);
-                    continue;
-                }
-                throw e;
-            }
-        }
-        return results.join('');
-    }
-
-    private ifNode(n: IfNode): string {
-        for (const b of n.branches) {
-            if (b.condition === null || this.expr(b.condition)) return this.eval(b.body);
-        }
-        return '';
-    }
-
-    private interp(n: InterpolationNode): string {
-        const parts = n.expression.split('.');
-        let value: any = this.scope.get(parts[0]);
-        for (let i = 1; i < parts.length; i++) value = value?.[parts[i]];
-        return String(value ?? '');
-    }
-
-    private expr(e: Expression): any {
-        switch (e.type) {
-            case 'literal': return e.value;
-            case 'identifier': return this.scope.get(e.name);
-            case 'member': return this.expr(e.object)?.[e.property];
-            case 'unary': return !this.expr(e.operand);
-            case 'binary': {
-                const l = this.expr(e.left), r = this.expr(e.right);
-                switch (e.operator) {
-                    case '==': return l === r;
-                    case '!=': return l !== r;
-                    case '&&': return l && r;
-                    case '||': return l || r;
-                    case '>': return l > r;
-                    case '<': return l < r;
-                    case '>=': return l >= r;
-                    case '<=': return l <= r;
-                }
-            }
-        }
+        return ast;
     }
 }

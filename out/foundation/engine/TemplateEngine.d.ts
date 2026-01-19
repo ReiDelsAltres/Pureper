@@ -1,6 +1,7 @@
 import Scope from "./Scope.js";
 export default class TemplateEngine {
     private readonly ref_component;
+    private readonly set_component;
     private readonly on_component;
     private readonly injection_component;
     private readonly exp_component;

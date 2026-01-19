@@ -1,4 +1,5 @@
 import { isObservable } from '../api/Observer.js';
+import Attribute from '../component_api/Attribute.js';
 /**
  * Expression - класс для выполнения JS-кода в контексте Scope.
  * Поддерживает:
@@ -96,21 +97,27 @@ export default class Expression {
         let transformedCode = this.code;
         // Находим Observable переменные
         const observableVars = new Set();
+        // Находим Attribute переменные
+        const attributeVars = new Set();
         for (const [key, value] of Object.entries(context)) {
             if (isObservable(value)) {
                 observableVars.add(key);
             }
+            if (value instanceof Attribute) {
+                attributeVars.add(key);
+            }
         }
-        if (observableVars.size === 0) {
-            return transformedCode;
-        }
-        // Трансформируем: user.name -> user.getObject().name
-        // и user (само по себе) -> user.getObject()
+        // Трансформируем Observable: user.name -> user.getObject().name
         for (const varName of observableVars) {
-            // user.property -> user.getObject().property
             const propRegex = new RegExp(`\\b${varName}\\.(?!getObject|setObject|subscribe|unsubscribe|getObserver|getMutationObserver|subscribeMutation|unsubscribeMutation)`, 'g');
             transformedCode = transformedCode.replace(propRegex, `${varName}.getObject().`);
-            // Если просто user без вызова метода, не трансформируем (может быть намеренно)
+        }
+        // Трансформируем Attribute: attr.foo -> attr.value.foo, attr -> attr.value
+        for (const varName of attributeVars) {
+            const propRegex = new RegExp(`\\b${varName}\\.(?!value\\b|name\\b|isDefault\\b|isExist\\b|subscribe\\b|unsubscribe\\b)`, 'g');
+            transformedCode = transformedCode.replace(propRegex, `${varName}.value.`);
+            const bareRegex = new RegExp(`\\b${varName}\\b(?!\\s*\.)`, 'g');
+            transformedCode = transformedCode.replace(bareRegex, `${varName}.value`);
         }
         return transformedCode;
     }
@@ -158,9 +165,24 @@ export default class Expression {
      * Выполнить в контексте (синхронно)
      */
     executeInContext(context, codeOverride) {
-        const keys = Object.keys(context);
+        // Handle reserved keywords used as variable names (e.g., "super")
+        const reservedKeywords = ['super', 'this', 'arguments'];
+        const keyMapping = {};
+        const keys = Object.keys(context).map(key => {
+            if (reservedKeywords.includes(key)) {
+                const safeKey = `__${key}__`;
+                keyMapping[key] = safeKey;
+                return safeKey;
+            }
+            return key;
+        });
         const values = Object.values(context);
-        const codeToExecute = codeOverride ?? this.code;
+        let codeToExecute = codeOverride ?? this.code;
+        // Replace reserved keywords in code with safe alternatives
+        for (const [original, safe] of Object.entries(keyMapping)) {
+            const regex = new RegExp(`\\b${original}\\b`, 'g');
+            codeToExecute = codeToExecute.replace(regex, safe);
+        }
         let functionBody;
         if (this.hasReturn) {
             // Code contains return, wrap in function directly
@@ -193,9 +215,24 @@ export default class Expression {
      * Выполнить в контексте (асинхронно)
      */
     async executeInContextAsync(context, codeOverride) {
-        const keys = Object.keys(context);
+        // Handle reserved keywords used as variable names (e.g., "super")
+        const reservedKeywords = ['super', 'this', 'arguments'];
+        const keyMapping = {};
+        const keys = Object.keys(context).map(key => {
+            if (reservedKeywords.includes(key)) {
+                const safeKey = `__${key}__`;
+                keyMapping[key] = safeKey;
+                return safeKey;
+            }
+            return key;
+        });
         const values = Object.values(context);
-        const codeToExecute = codeOverride ?? this.code;
+        let codeToExecute = codeOverride ?? this.code;
+        // Replace reserved keywords in code with safe alternatives
+        for (const [original, safe] of Object.entries(keyMapping)) {
+            const regex = new RegExp(`\\b${original}\\b`, 'g');
+            codeToExecute = codeToExecute.replace(regex, safe);
+        }
         let functionBody;
         if (this.hasReturn) {
             functionBody = codeToExecute;

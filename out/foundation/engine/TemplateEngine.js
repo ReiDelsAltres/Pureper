@@ -29,6 +29,41 @@ export default class TemplateEngine {
             });
         }
     }(this);
+    set_component = new class {
+        engine;
+        constructor(engine) {
+            this.engine = engine;
+        }
+        acceptNode(node) {
+            return Array.from(node.attributes).some(attr => /^set\[[^\]]+\]$/i.test(attr.name));
+        }
+        walkthrough(walker, node, data) {
+            const element = node;
+            const bool = this.acceptNode(element);
+            if (!bool)
+                return false;
+            for (const attr of Array.from(element.attributes).filter(attr => /^set\[[^\]]+\]$/i.test(attr.name))) {
+                const attributeName = attr.name.substring(4, attr.name.length - 1);
+                const valueExpression = new Expression(attr.value);
+                const value = valueExpression.eval(data);
+                if (value instanceof Observable) {
+                    value.subscribe((newValue) => {
+                        this.engine.change();
+                        this.doWork({ element, name: attributeName, value: newValue });
+                    });
+                }
+                this.doWork({ element, name: attributeName, value });
+                this.engine.bindings.set(element, () => {
+                    element.removeAttribute(attributeName);
+                });
+            }
+            return false;
+        }
+        doWork(context) {
+            const { element, name, value } = context;
+            element.setAttribute(name, value);
+        }
+    }(this);
     on_component = new class {
         engine;
         constructor(engine) {
@@ -40,11 +75,11 @@ export default class TemplateEngine {
         walkthrough(walker, node, data) {
             const element = node;
             const bool = this.acceptNode(element);
-            if (bool) {
-                const onAttribute = Array.from(element.attributes)
-                    .find(attr => /^on\[[^\]]+\]$/i.test(attr.name));
-                const eventName = onAttribute.name.substring(3, onAttribute.name.length - 1);
-                const handler = new Expression(onAttribute.value);
+            if (!bool)
+                return false;
+            for (const attr of Array.from(element.attributes).filter(attr => /^on\[[^\]]+\]$/i.test(attr.name))) {
+                const eventName = attr.name.substring(3, attr.name.length - 1);
+                const handler = new Expression(attr.value);
                 const listener = (event) => {
                     handler.eval(data, { event });
                 };
@@ -54,8 +89,6 @@ export default class TemplateEngine {
                 });
             }
             return false;
-        }
-        doWork(context) {
         }
     }(this);
     injection_component = new class {
@@ -111,22 +144,28 @@ export default class TemplateEngine {
             const bool = this.acceptNode(element);
             if (bool) {
                 const vvv = element.getAttribute("of");
+                const allowHtmlInjection = element.hasAttribute("html-injection") ||
+                    element.getAttribute("html-injection") === "true";
                 const of = new Expression(vvv).eval(data);
                 const value = of instanceof Observable ? of.getObject() : of;
                 if (of instanceof Observable) {
                     of.subscribe((newValue) => {
                         element.textContent = "";
                         this.engine.change();
-                        this.doWork({ element, value: newValue });
+                        this.doWork({ element, value: newValue, allowHtmlInjection: allowHtmlInjection });
                     });
                 }
-                this.doWork({ element, value });
+                this.doWork({ element, value, allowHtmlInjection: allowHtmlInjection });
                 /*const textNode = document.createTextNode(of);
                 element.parentNode!.replaceChild(textNode, element);*/
             }
             return bool;
         }
         doWork(context) {
+            if (context.allowHtmlInjection) {
+                context.element.innerHTML = context.value;
+                return;
+            }
             context.element.textContent = context.value;
         }
     }(this);
@@ -259,8 +298,9 @@ export default class TemplateEngine {
         }
     }(this);
     components = [
-        this.ref_component, this.on_component, this.injection_component,
-        this.exp_component, this.for_component, this.if_component
+        this.ref_component, this.on_component, this.set_component,
+        this.injection_component, this.exp_component, this.for_component,
+        this.if_component
     ];
     bindings = new Map();
     onChangeCallbacks = [];
@@ -287,8 +327,14 @@ export default class TemplateEngine {
         this.processLogs = [];
         this.ref_component.globalScope = scope;
         const walker = new Walker(root, {
-            nodeFilter: NodeFilter.SHOW_ELEMENT,
+            nodeFilter: NodeFilter.SHOW_DOCUMENT_FRAGMENT | NodeFilter.SHOW_ELEMENT,
             walkerFunction: (walker, node, data) => {
+                if (node.nodeType !== Node.ELEMENT_NODE) {
+                    node.childNodes.forEach(child => {
+                        walker.walk(child, data);
+                    });
+                    return;
+                }
                 for (const component of this.components)
                     if (component.walkthrough?.call(component, walker, node, data))
                         return;
@@ -310,7 +356,7 @@ export default class TemplateEngine {
     }
     fullCleanup(root) {
         const walker = new Walker(root, {
-            nodeFilter: NodeFilter.SHOW_ELEMENT
+            nodeFilter: NodeFilter.SHOW_DOCUMENT_FRAGMENT | NodeFilter.SHOW_ELEMENT
         });
         let i = 0;
         walker.onEnterNode((node, data) => {

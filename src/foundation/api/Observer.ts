@@ -76,15 +76,35 @@ export default class Observable<T> {
     constructor(object: T) {
         this.object = object;
     }
+    public createDependent<U>(mapper: () => U): Observable<U>;
+    public createDependent<U>(mapper: (obj: T) => U): Observable<U>;
+    public createDependent<U>(mapper: (obj?: T) => U): Observable<U> {
+        const dependent = new Observable<U>(mapper(this.object));
+        this.subscribe((newValue) => {
+            dependent.setObject(mapper(newValue));
+        });
+        return dependent;
+    }
+
+    public static createDependent<U>(mapper: () => U, source: Observable<any>): Observable<U>;
+    public static createDependent<T, U>(mapper: (obj: T) => U, source: Observable<T>): Observable<U>;
+    public static createDependent<T, U>(mapper: (obj?: T) => U, source: Observable<T>): Observable<U> {
+        const dependent = new Observable<U>(mapper(source.getObject()));
+        source.subscribe((newValue) => {
+            dependent.setObject(mapper(newValue));
+        });
+        return dependent;
+    }
+
 
     public getObject(): T {
         return this.object;
     }
-    
+
     public getObserver(): Observer<T> {
         return this.observer;
     }
-    
+
     public getMutationObserver(): MutationObserver<T> {
         return this.mutationObserver;
     }
@@ -92,7 +112,7 @@ export default class Observable<T> {
     public subscribe(listener: (data: T) => void): void {
         this.observer.subscribe(listener);
     }
-    
+
     public unsubscribe(listener: (data: T) => void): void {
         this.observer.unsubscribe(listener);
     }
@@ -103,7 +123,7 @@ export default class Observable<T> {
     public subscribeMutation(listener: (oldValue: T, newValue: T) => void): void {
         this.mutationObserver.subscribe(listener);
     }
-    
+
     public unsubscribeMutation(listener: (oldValue: T, newValue: T) => void): void {
         this.mutationObserver.unsubscribe(listener);
     }
@@ -157,6 +177,6 @@ export class Transaction<T> {
 
         this.transactionValue = newValue;
         this.operations = [];
-        
+
     }
 }

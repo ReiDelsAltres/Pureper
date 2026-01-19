@@ -50,6 +50,20 @@ export default class Observable {
     constructor(object) {
         this.object = object;
     }
+    createDependent(mapper) {
+        const dependent = new Observable(mapper(this.object));
+        this.subscribe((newValue) => {
+            dependent.setObject(mapper(newValue));
+        });
+        return dependent;
+    }
+    static createDependent(mapper, source) {
+        const dependent = new Observable(mapper(source.getObject()));
+        source.subscribe((newValue) => {
+            dependent.setObject(mapper(newValue));
+        });
+        return dependent;
+    }
     getObject() {
         return this.object;
     }
@@ -74,11 +88,54 @@ export default class Observable {
     unsubscribeMutation(listener) {
         this.mutationObserver.unsubscribe(listener);
     }
-    setObject(object) {
+    setObject(object, silent = false) {
         const oldObject = this.object;
         this.object = object;
-        this.observer.notify(this.object);
-        this.mutationObserver.notify(oldObject, this.object);
+        if (!silent) {
+            this.observer.notify(this.object);
+            this.mutationObserver.notify(oldObject, this.object);
+        }
+    }
+    updateObject(updater, silent = false) {
+        const oldObject = this.object;
+        this.object = updater(this.object);
+        if (!silent) {
+            this.observer.notify(this.object);
+            this.mutationObserver.notify(oldObject, this.object);
+        }
+    }
+    transaction() {
+        return new Transaction(this);
+    }
+}
+export class Transaction {
+    observable;
+    originalValue;
+    transactionValue;
+    operations = [];
+    constructor(observable) {
+        this.observable = observable;
+        this.originalValue = observable.getObject();
+        this.transactionValue = this.originalValue;
+    }
+    setObject(object, delayed = false) {
+        this.transactionValue = object;
+        if (!delayed)
+            this.operations.push(() => object);
+    }
+    updateObject(updater, delayed = false) {
+        this.transactionValue = updater(this.transactionValue);
+        if (!delayed)
+            this.operations.push(updater);
+    }
+    commit() {
+        let newValue = this.transactionValue;
+        this.operations.forEach(op => {
+            newValue = op(newValue);
+        });
+        this.observable.setObject(newValue);
+        this.transactionValue = newValue;
+        this.operations = [];
     }
 }
 //# sourceMappingURL=Observer.js.map

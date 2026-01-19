@@ -1,21 +1,21 @@
-export default class Attribute {
+import Observable from "../api/Observer.js";
+export default class Attribute extends Observable {
     component;
     listeners = [];
     _name;
     _defaultValue;
-    _value;
     constructor(component, name, value) {
+        super(value);
         this.component = component;
         this.component["_attributes"].push(this);
         this._name = name;
         this._defaultValue = value;
-        this._value = value;
     }
     notify(oldValue, newValue) {
         this.listeners.forEach(listener => listener(oldValue, newValue));
     }
     initialize(initValue) {
-        this._value = initValue ?? this._defaultValue;
+        this.object = initValue ?? this._defaultValue;
         if (this.component.observedAttributes === undefined)
             this.component.observedAttributes = [];
         this.component.observedAttributes.push(this._name);
@@ -27,13 +27,20 @@ export default class Attribute {
         return this._name;
     }
     get value() {
-        return this._value ?? this._defaultValue;
+        return this.getObject();
     }
     set value(val) {
-        if (val === this._value)
+        this.setObject(val);
+    }
+    getObject() {
+        return this.object ?? this._defaultValue;
+    }
+    setObject(val, silent = false) {
+        if (val === this.object)
             return;
-        this.notify(this.value, val);
-        this._value = val;
+        if (!silent)
+            this.notify(this.value, val);
+        this.object = val;
         if (typeof val === "boolean") {
             if (val)
                 this.component.setAttribute(this._name, "");
@@ -51,6 +58,9 @@ export default class Attribute {
             this.component.removeAttribute(this._name);
         else
             this.component.setAttribute(this._name, val.toString());
+    }
+    updateObject(updater, silent = false) {
+        this.setObject(updater(this.value), silent);
     }
     isDefault() {
         return this.value === this._defaultValue;

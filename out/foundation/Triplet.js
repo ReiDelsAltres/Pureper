@@ -4,6 +4,7 @@ import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import TemplateEngine from "./engine/TemplateEngine.js";
+import Scope from "./engine/Scope.js";
 export var AccessType;
 (function (AccessType) {
     AccessType[AccessType["NONE"] = 0] = "NONE";
@@ -122,7 +123,7 @@ export default class Triplet {
         const parser = new TemplateEngine();
         proto._init = async function () {
             const markupText = await that.markup;
-            return TemplateEngine.createHolder(markupText, this);
+            return TemplateEngine.createHolder(markupText, Scope.from(this));
         };
         proto._postInit = async function (preHtml) {
             const dmc = this.shadowRoot ?? document;
