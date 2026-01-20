@@ -12,7 +12,6 @@ export default class UniHtml {
     public constructor() {
         this._status.subscribe((data) =>
             (this as unknown as EventTarget).dispatchEvent(new CustomEvent('status-change', { detail: { status: data } })));
-        this._status.setObject("constructed");
     }
 
     /**

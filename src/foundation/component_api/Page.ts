@@ -9,5 +9,6 @@ export default interface Page extends Mixined, UniHtml, EventTarget { }
 export default class Page extends Class(EventTarget).extend(UniHtml).build() {
     constructor() {
         super();
+        this._status.setObject("constructed");
     }
 }

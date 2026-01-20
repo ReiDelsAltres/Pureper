@@ -7,7 +7,6 @@ export default class UniHtml {
     _status = new Observable("constructed");
     constructor() {
         this._status.subscribe((data) => this.dispatchEvent(new CustomEvent('status-change', { detail: { status: data } })));
-        this._status.setObject("constructed");
     }
     /**
      * Unified component lifecycle entrypoint.

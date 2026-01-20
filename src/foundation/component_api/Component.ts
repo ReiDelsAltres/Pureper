@@ -11,6 +11,7 @@ export default class Component extends Class(HTMLElement).extend(UniHtml).build(
     private _attributeChangedCallbacks?: ((name: string, oldValue: any, newValue: any) => void)[];
     constructor() {
         super();
+        this._status.setObject("constructed");
     }
 
     onConnected(): void {
