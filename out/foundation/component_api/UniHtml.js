@@ -5,9 +5,6 @@ import Observable from "../api/Observer.js";
  */
 export default class UniHtml {
     _status = new Observable("constructed");
-    constructor() {
-        this._status.subscribe((data) => this.dispatchEvent(new CustomEvent('status-change', { detail: { status: data } })));
-    }
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.

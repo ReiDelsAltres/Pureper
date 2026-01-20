@@ -5,6 +5,7 @@ export default class Component extends Class(HTMLElement).extend(UniHtml).build(
     _attributeChangedCallbacks;
     constructor() {
         super();
+        this._status.subscribe((data) => this.dispatchEvent(new CustomEvent('status-change', { detail: { status: data } })));
         this._status.setObject("constructed");
     }
     onConnected() {

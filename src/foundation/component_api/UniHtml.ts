@@ -9,11 +9,6 @@ import { TemplateHolder } from "../engine/TemplateEngine.js";
 export default class UniHtml {
     public _status: Observable<"constructed" | "loading" | "ready"> = new Observable("constructed");
 
-    public constructor() {
-        this._status.subscribe((data) =>
-            (this as unknown as EventTarget).dispatchEvent(new CustomEvent('status-change', { detail: { status: data } })));
-    }
-
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
