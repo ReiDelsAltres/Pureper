@@ -1,9 +1,12 @@
+import Observable from "../api/Observer.js";
 import { TemplateHolder } from "../engine/TemplateEngine.js";
 /**
  * Universal SPA component base for pages and elements.
  * Use static factory methods for instantiation.
  */
 export default class UniHtml {
+    _status: Observable<"constructed" | "loading" | "ready">;
+    constructor();
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.

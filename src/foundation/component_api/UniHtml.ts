@@ -1,3 +1,4 @@
+import Observable from "../api/Observer.js";
 import { TemplateHolder } from "../engine/TemplateEngine.js";
 
 
@@ -6,6 +7,13 @@ import { TemplateHolder } from "../engine/TemplateEngine.js";
  * Use static factory methods for instantiation.
  */
 export default class UniHtml {
+    public _status: Observable<"constructed" | "loading" | "ready"> = new Observable("constructed");
+
+    public constructor() {
+        this._status.subscribe((data) =>
+            (this as unknown as EventTarget).dispatchEvent(new CustomEvent('status-change', { detail: { status: data } })));
+        this._status.setObject("constructed");
+    }
 
     /**
      * Unified component lifecycle entrypoint.
@@ -13,7 +21,7 @@ export default class UniHtml {
      * @param element Target container (usually shadowRoot.host)
      */
     public async load(element: HTMLElement | ShadowRoot): Promise<void> {
-        ;
+        this._status.setObject("loading");
         await this.preInit();
 
         const preHtml: TemplateHolder = await this._init();
@@ -30,6 +38,7 @@ export default class UniHtml {
         // postLoad() вызывается ПОСЛЕ render(). Для компонентов к этому моменту содержимое уже добавлено
         // внутрь shadowRoot, и можно безопасно работать с this.shadowRoot, измерениями layout и т.п.
         await this.postLoad(html);
+        this._status.setObject("ready");
     }
 
     private async _postInit(html: TemplateHolder): Promise<TemplateHolder> {
@@ -65,9 +74,27 @@ export default class UniHtml {
             renderTarget.removeChild(renderTarget.firstChild);
         }
 
+        const promises: Promise<void>[] = [];
+        const childrens = holder.documentFragment.childNodes;
+        for (const child of childrens) {
+            const promise = new Promise<void>((resolve) => {
+                if ((child instanceof UniHtml) && child._status.getObject() === "ready")
+                    return resolve();
+
+                const handler = (e) => {
+                    if (e.detail.status === "ready") {
+                        child.removeEventListener("status-change", handler);
+                        resolve();
+                    }
+                };
+                child.addEventListener("status-change", (e) => handler(e));
+            });
+            promises.push(promise);
+        }
+
         holder.pushTo(renderTarget);
 
-        return Promise.resolve();
+        return Promise.all(promises).then(() => { return; });
     }
 
     public async dispose(): Promise<void> { }

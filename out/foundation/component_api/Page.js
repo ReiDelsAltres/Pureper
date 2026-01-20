@@ -1,8 +1,8 @@
+import { Class } from "./mixin/Proto.js";
 import UniHtml from "./UniHtml.js";
-/**
- * Base class for SPA pages in Pureper application
- * Provides lifecycle hooks and template rendering functionality
- */
-export default class Page extends UniHtml {
+export default class Page extends Class(EventTarget).extend(UniHtml).build() {
+    constructor() {
+        super();
+    }
 }
 //# sourceMappingURL=Page.js.map
