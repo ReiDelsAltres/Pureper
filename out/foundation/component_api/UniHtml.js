@@ -13,7 +13,6 @@ export default class UniHtml {
         await this.preInit();
         const preHtml = await this._init();
         const html = await this._postInit(preHtml);
-        const localRoot = html;
         // ВАЖНО: preLoad() вызывается ДО монтирования в DOM/Shadow DOM.
         // Для компонентов (UniHtmlComponent) на этом этапе ещё нельзя полагаться на this.shadowRoot —
         // используйте переданный localRoot для подготовки DOM, данных и навешивания обработчиков.
@@ -54,6 +53,9 @@ export default class UniHtml {
      * @param html HTML content
      */
     async render(holder, renderTarget) {
+        while (renderTarget.firstChild) {
+            renderTarget.removeChild(renderTarget.firstChild);
+        }
         holder.pushTo(renderTarget);
         return Promise.resolve();
     }

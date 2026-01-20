@@ -1,10 +1,3 @@
-
-/**
- * Abstract base class for HTML components in Pureper SPA.
- * Provides a unified lifecycle: init → preLoadJS → render → postLoadJS.
- * Use static factory methods to create instances from an HTML file or string.
- * Designed to replace legacy Page and Component base classes.
- */
 import { TemplateHolder } from "../engine/TemplateEngine.js";
 
 
@@ -13,19 +6,18 @@ import { TemplateHolder } from "../engine/TemplateEngine.js";
  * Use static factory methods for instantiation.
  */
 export default class UniHtml {
-    
+
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
      * @param element Target container (usually shadowRoot.host)
      */
-    public async load(element: HTMLElement | ShadowRoot): Promise<void> {;
+    public async load(element: HTMLElement | ShadowRoot): Promise<void> {
+        ;
         await this.preInit();
 
         const preHtml: TemplateHolder = await this._init();
         const html: TemplateHolder = await this._postInit(preHtml);
-
-        const localRoot = html;
 
         // ВАЖНО: preLoad() вызывается ДО монтирования в DOM/Shadow DOM.
         // Для компонентов (UniHtmlComponent) на этом этапе ещё нельзя полагаться на this.shadowRoot —
@@ -47,14 +39,14 @@ export default class UniHtml {
         throw new Error("Method not implemented.");
     }
 
-    protected async preInit(): Promise<void> {}
+    protected async preInit(): Promise<void> { }
     /**
      * Hook before rendering (e.g., data preparation).
      * Для компонентов вызывается до появления содержимого в Shadow DOM, this.shadowRoot может быть недоступен.
      * РЕКОМЕНДАЦИЯ: предпочитайте выполнять основную подготовку, поиск элементов, навешивание обработчиков
      * на узлы из localRoot именно здесь; затем render() вставит их в целевой контейнер/теневой DOM.
      */
-    protected async preLoad(holder : TemplateHolder) { }
+    protected async preLoad(holder: TemplateHolder) { }
     /**
      * Hook after rendering (e.g., event binding).
      * Для компонентов вызывается после того, как содержимое вставлено в shadowRoot (см. UniHtmlComponent.render()).
@@ -69,10 +61,14 @@ export default class UniHtml {
      * @param html HTML content
      */
     protected async render(holder: TemplateHolder, renderTarget: HTMLElement | DocumentFragment): Promise<void> {
+        while (renderTarget.firstChild) {
+            renderTarget.removeChild(renderTarget.firstChild);
+        }
+
         holder.pushTo(renderTarget);
 
         return Promise.resolve();
     }
 
-    public async dispose(): Promise<void> {}
+    public async dispose(): Promise<void> { }
 }

@@ -46,17 +46,10 @@ export class Router {
         const urlH = new URL(Fetcher.resolveUrl(url.href));
         try {
             const found = this.tryFindRoute(urlH);
-            if (this.currentPage != null) {
-                this.currentPage.dispose();
-                this.currentPage = null;
-            }
             let pageContainer = document.getElementById('page');
-            let cloneContainer = pageContainer.cloneNode(false);
             const page = this.createPage(found, urlH.searchParams);
             this.currentPage = page;
-            page.load(cloneContainer);
-            pageContainer.replaceWith(cloneContainer);
-            pageContainer = cloneContainer;
+            page.load(pageContainer);
             if (pushState && typeof window !== "undefined" && window.location) {
                 window.history.pushState({}, '', urlH.href);
             }

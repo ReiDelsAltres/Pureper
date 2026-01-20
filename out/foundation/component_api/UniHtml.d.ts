@@ -1,9 +1,3 @@
-/**
- * Abstract base class for HTML components in Pureper SPA.
- * Provides a unified lifecycle: init → preLoadJS → render → postLoadJS.
- * Use static factory methods to create instances from an HTML file or string.
- * Designed to replace legacy Page and Component base classes.
- */
 import { TemplateHolder } from "../engine/TemplateEngine.js";
 /**
  * Universal SPA component base for pages and elements.
