@@ -1,6 +1,6 @@
 {
   "name": "@reidelsaltres/pureper",
-  "version": "0.1.197",
+  "version": "0.1.198",
   "description": "Minimal library extracted from the Pureper SPA foundation — utilities and base classes for components/pages.",
   "type": "module",
   "main": "out/src/index.js",
