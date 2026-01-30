@@ -25,7 +25,7 @@ export default class Attribute<T = any> extends Observable<T | string> implement
     }
 
     private initialize(initValue: T | string) {
-        this.object = initValue ?? this._defaultValue;
+        this.value = initValue ?? this._defaultValue;
         if ((this.component as any).observedAttributes === undefined)
             (this.component as any).observedAttributes = [];
         (this.component as any).observedAttributes.push(this._name);
