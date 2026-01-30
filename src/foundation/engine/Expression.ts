@@ -113,14 +113,9 @@ export default class Expression {
         
         // Находим Observable переменные
         const observableVars = new Set<string>();
-        // Находим Attribute переменные
-        const attributeVars = new Set<string>();
         for (const [key, value] of Object.entries(context)) {
             if (isObservable(value)) {
                 observableVars.add(key);
-            }
-            if (value instanceof Attribute) {
-                attributeVars.add(key);
             }
         }
 
@@ -128,15 +123,6 @@ export default class Expression {
         for (const varName of observableVars) {
             const propRegex = new RegExp(`\\b${varName}\\.(?!getObject|setObject|subscribe|unsubscribe|getObserver|getMutationObserver|subscribeMutation|unsubscribeMutation)`, 'g');
             transformedCode = transformedCode.replace(propRegex, `${varName}.getObject().`);
-        }
-
-        // Трансформируем Attribute: attr.foo -> attr.value.foo, attr -> attr.value
-        for (const varName of attributeVars) {
-            const propRegex = new RegExp(`\\b${varName}\\.(?!value\\b|name\\b|isDefault\\b|isExist\\b|subscribe\\b|unsubscribe\\b)`, 'g');
-            transformedCode = transformedCode.replace(propRegex, `${varName}.value.`);
-
-            const bareRegex = new RegExp(`\\b${varName}\\b(?!\\s*\.)`, 'g');
-            transformedCode = transformedCode.replace(bareRegex, `${varName}.value`);
         }
 
         return transformedCode;
