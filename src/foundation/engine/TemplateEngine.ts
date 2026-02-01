@@ -1,8 +1,6 @@
 import Observable from "../api/Observer.js";
-import Attribute from "../component_api/Attribute.js";
 import Expression from "./Expression.js";
 import Scope from "./Scope.js";
-import ComponentCore from './../../../../Hellper/out/src/components/core/ComponentCore';
 
 export default class TemplateEngine { 
 
