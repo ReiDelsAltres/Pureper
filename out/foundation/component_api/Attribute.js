@@ -15,7 +15,7 @@ export default class Attribute extends Observable {
         this.listeners.forEach(listener => listener(oldValue, newValue));
     }
     initialize(initValue) {
-        this.object = initValue ?? this._defaultValue;
+        this.value = initValue ?? this._defaultValue;
         if (this.component.observedAttributes === undefined)
             this.component.observedAttributes = [];
         this.component.observedAttributes.push(this._name);

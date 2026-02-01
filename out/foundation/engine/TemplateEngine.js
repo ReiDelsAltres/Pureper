@@ -45,9 +45,12 @@ export default class TemplateEngine {
             for (const attr of Array.from(element.attributes).filter(attr => /^set\[[^\]]+\]$/i.test(attr.name))) {
                 const attributeName = attr.name.substring(4, attr.name.length - 1);
                 const valueExpression = new Expression(attr.value);
-                const value = valueExpression.eval(data);
-                if (value instanceof Observable) {
-                    value.subscribe((newValue) => {
+                const of = valueExpression.eval(data);
+                const value = of instanceof Observable ? of.getObject() : of;
+                if (value === null || value === undefined)
+                    continue;
+                if (of instanceof Observable) {
+                    of.subscribe((newValue) => {
                         this.engine.change();
                         this.doWork({ element, name: attributeName, value: newValue });
                     });
