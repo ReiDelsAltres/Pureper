@@ -1,8 +1,9 @@
 name: Publish Package
 
 permissions:
+  id-token: write  # Required for OIDC
   contents: read
-  packages: write
+  #packages: write
 
 on:
   push:
@@ -13,14 +14,15 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      #- run: npm test
-
+      - run: npm run build --if-present
+      - run: npm test
+      - run: npm publish
       - name: Publish to GitHub Packages
         run: |
           npm config set //npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}
@@ -28,9 +30,9 @@ jobs:
         env:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
 
-      - name: Publish to npmjs.org
-        run: |
-          npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}
-          npm publish --scope=@npm --registry=https://registry.npmjs.org
-        env:
-          NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+      #- name: Publish to npmjs.org
+      #  run: |
+      #    npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}
+      #    npm publish --scope=@npm --registry=https://registry.npmjs.org
+      #  env:
+      #    NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
