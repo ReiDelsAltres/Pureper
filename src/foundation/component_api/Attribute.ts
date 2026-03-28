@@ -1,9 +1,8 @@
-import Observable from "../api/Observer.js";
+import Observable, { IKeyMutationObserver } from "../api/Observer.js";
 import Component from "./Component.js";
 
-export default class Attribute<T = any> extends Observable<T | string> {
+export default class Attribute<T = any> extends Observable<T | string> implements IKeyMutationObserver<string, T | string> {
     private component!: Component;
-    private listeners: Array<(oldValue: string | T, newValue: string | T) => void> = [];
 
     private _name: string;
 
@@ -21,7 +20,7 @@ export default class Attribute<T = any> extends Observable<T | string> {
 
 
     public notify(oldValue: string | T, newValue: string | T): void {
-        this.listeners.forEach(listener => listener(oldValue, newValue));
+        this.notifyAll(oldValue, newValue);
     }
 
     private initialize(initValue: T | string) {
@@ -54,21 +53,24 @@ export default class Attribute<T = any> extends Observable<T | string> {
 
     public setObject(val: string | T, silent: boolean = false): void {
         if (val === this.object) return;
-        if (!silent) this.notify(this.value, val);
+        const oldObject = this.object;
         this.object = val;
 
         if (typeof val === "boolean") {
             if (val) this.component.setAttribute(this._name, "");
             else this.component.removeAttribute(this._name);
-            return;
-        }
-        if (typeof val === "string") {
-            if (this._defaultValue === this.value) this.component.removeAttribute(this._name);
+        } else if (typeof val === "string") {
+            if (this._defaultValue === this.object) this.component.removeAttribute(this._name);
             else this.component.setAttribute(this._name, val);
+        } else {
+            if (this._defaultValue === this.object) this.component.removeAttribute(this._name);
+            else if (this.object != null) this.component.setAttribute(this._name, (this.object as any).toString());
+            else this.component.removeAttribute(this._name);
         }
 
-        if (this._defaultValue === this.value) this.component.removeAttribute(this._name);
-        else this.component.setAttribute(this._name, val.toString());
+        if (!silent) {
+            this.notifyAll(oldObject, this.object);
+        }
     }
     public updateObject(updater: (obj: string | T) => string | T, silent: boolean = false): void {
         this.setObject(updater(this.value), silent);
@@ -81,10 +83,26 @@ export default class Attribute<T = any> extends Observable<T | string> {
         return this.value !== undefined && this.value !== null && this.value !== "";
     }
 
-    public subscribe(listener: (newValue: string | T) => void): void {
-        this.listeners.push((_o, n) => listener(n));
+    public subscribe(listener: (key: string, oldValue: string | T, newValue: string | T) => void): void;
+    public subscribe(listener: (newValue: string | T) => void): void;
+    public subscribe(listener: Function): void {
+        if (listener.length <= 1) {
+            const w = (_o: string | T, n: string | T) => (listener as any)(n);
+            this._wraps.set(listener, w as any);
+            this._mutationObserver.subscribe(w as any);
+        } else {
+            const w = (o: string | T, n: string | T) => (listener as any)(this._name, o, n);
+            this._wraps.set(listener, w as any);
+            this._mutationObserver.subscribe(w as any);
+        }
     }
-    public unsubscribe(listener: (newValue: string | T) => void): void {
-        this.listeners = this.listeners.filter(l => l !== listener);
+    public unsubscribe(listener: (key: string, oldValue: string | T, newValue: string | T) => void): void;
+    public unsubscribe(listener: (newValue: string | T) => void): void;
+    public unsubscribe(listener: Function): void {
+        const w = this._wraps.get(listener);
+        if (w) {
+            this._mutationObserver.unsubscribe(w as any);
+            this._wraps.delete(listener);
+        }
     }
 }

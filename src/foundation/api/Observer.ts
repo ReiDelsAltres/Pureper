@@ -67,8 +67,8 @@ export function isObservable<T = any>(value: any): value is Observable<T> {
  */
 export default class Observable<T> {
     protected object?: T;
-    protected observer: Observer<T> = new Observer<T>();
-    protected mutationObserver: MutationObserver<T> = new MutationObserver<T>();
+    protected _mutationObserver: MutationObserver<T> = new MutationObserver<T>();
+    protected _wraps = new Map<Function, (oldValue: T, newValue: T) => void>();
 
     // Mark as Observable
     public readonly [OBSERVABLE_SYMBOL] = true;
@@ -101,44 +101,44 @@ export default class Observable<T> {
         return this.object ?? null;
     }
 
-    public getObserver(): Observer<T> {
-        return this.observer;
-    }
-
-    public getMutationObserver(): MutationObserver<T> {
-        return this.mutationObserver;
-    }
-
     public subscribe(listener: (data: T) => void): void {
-        this.observer.subscribe(listener);
+        const w = (_o: T, n: T) => listener(n);
+        this._wraps.set(listener, w);
+        this._mutationObserver.subscribe(w);
     }
 
     public unsubscribe(listener: (data: T) => void): void {
-        this.observer.unsubscribe(listener);
+        const w = this._wraps.get(listener);
+        if (w) {
+            this._mutationObserver.unsubscribe(w);
+            this._wraps.delete(listener);
+        }
     }
 
     public subscribeMutation(listener: (oldValue: T, newValue: T) => void): void {
-        this.mutationObserver.subscribe(listener);
+        this._mutationObserver.subscribe(listener);
     }
 
     public unsubscribeMutation(listener: (oldValue: T, newValue: T) => void): void {
-        this.mutationObserver.unsubscribe(listener);
+        this._mutationObserver.unsubscribe(listener);
+    }
+
+    protected notifyAll(oldValue: T, newValue: T): void {
+        this._mutationObserver.notify(oldValue, newValue);
     }
 
     public setObject(object: T, silent: boolean = false): void {
         const oldObject = this.object;
         this.object = object;
         if (!silent) {
-            this.observer.notify(this.object);
-            this.mutationObserver.notify(oldObject, this.object);
+            this.notifyAll(oldObject, this.object);
         }
     }
     public updateObject(updater: (obj: T) => T, silent: boolean = false): void {
         const oldObject = this.object;
         this.object = updater(this.object);
         if (!silent) {
-            this.observer.notify(this.object);
-            this.mutationObserver.notify(oldObject, this.object);
+            this.notifyAll(oldObject, this.object);
         }
     }
 
