@@ -45,10 +45,6 @@ export default class TemplateEngine {
                 const valueExpression = new Expression(attr.value);
                 const of = valueExpression.eval(data!);
                 const value = of instanceof Observable ? of.getObject() : of;
-                if (value === null || value === undefined) {
-                    if (element.hasAttribute(attributeName)) element.removeAttribute(attributeName);
-                    continue;
-                }
                 if (of instanceof Observable) {
                     of.subscribe((newValue: any) => {
                         this.engine.change();
@@ -56,15 +52,17 @@ export default class TemplateEngine {
                     });
                 }
                 this.doWork({ element, name: attributeName, value });
-                this.engine.bindings.set(element, () => {
-                    element.removeAttribute(attributeName);
-                });
             }
             return false;
         }
         doWork(context?: { element: Element, name: string, value: string }): void {
             const { element, name, value } = context!;
-            element.setAttribute(name, value);
+            if (value === null || value === undefined) {
+                if (element.hasAttribute(name))
+                    element.removeAttribute(name);
+            } else {
+                element.setAttribute(name, value);
+            }
         }
     }(this);
     private readonly on_component: TemplateComponent = new class implements TemplateComponent {
@@ -84,9 +82,6 @@ export default class TemplateEngine {
                 };
 
                 element.addEventListener(eventName, listener);
-                this.engine.bindings.set(element, () => {
-                    element.removeEventListener(eventName, listener);
-                });
             }
             return false;
         }
