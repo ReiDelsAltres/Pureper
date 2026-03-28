@@ -65,7 +65,7 @@ export default class Observable {
         return dependent;
     }
     getObject() {
-        return this.object;
+        return this.object ?? null;
     }
     getObserver() {
         return this.observer;
@@ -79,9 +79,6 @@ export default class Observable {
     unsubscribe(listener) {
         this.observer.unsubscribe(listener);
     }
-    /**
-     * Subscribe to mutation events (oldValue, newValue)
-     */
     subscribeMutation(listener) {
         this.mutationObserver.subscribe(listener);
     }

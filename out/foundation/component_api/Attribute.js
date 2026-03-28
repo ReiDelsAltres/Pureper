@@ -69,7 +69,7 @@ export default class Attribute extends Observable {
         return this.value !== undefined && this.value !== null && this.value !== "";
     }
     subscribe(listener) {
-        this.listeners.push((o, n) => listener(this._name, o, n));
+        this.listeners.push((_o, n) => listener(n));
     }
     unsubscribe(listener) {
         this.listeners = this.listeners.filter(l => l !== listener);

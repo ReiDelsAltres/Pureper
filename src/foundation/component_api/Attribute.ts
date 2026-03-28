@@ -1,7 +1,7 @@
-import Observable, { IKeyMutationObserver } from "../api/Observer.js";
+import Observable from "../api/Observer.js";
 import Component from "./Component.js";
 
-export default class Attribute<T = any> extends Observable<T | string> implements IKeyMutationObserver<string, T | string> {
+export default class Attribute<T = any> extends Observable<T | string> {
     private component!: Component;
     private listeners: Array<(oldValue: string | T, newValue: string | T) => void> = [];
 
@@ -81,10 +81,10 @@ export default class Attribute<T = any> extends Observable<T | string> implement
         return this.value !== undefined && this.value !== null && this.value !== "";
     }
 
-    public subscribe(listener: (key: string, oldValue: string | T, newValue: string | T) => void): void {
-        this.listeners.push((o, n) => listener(this._name, o, n));
+    public subscribe(listener: (newValue: string | T) => void): void {
+        this.listeners.push((_o, n) => listener(n));
     }
-    public unsubscribe(listener: (key: string, oldValue: string | T, newValue: string | T) => void): void {
+    public unsubscribe(listener: (newValue: string | T) => void): void {
         this.listeners = this.listeners.filter(l => l !== listener);
     }
 }

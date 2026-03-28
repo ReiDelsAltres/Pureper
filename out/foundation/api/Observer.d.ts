@@ -42,23 +42,20 @@ export declare function isObservable<T = any>(value: any): value is Observable<T
  *   @(user.name) - автоматически распознаётся как user.getObject().name
  */
 export default class Observable<T> {
-    protected object: T;
+    protected object?: T;
     protected observer: Observer<T>;
     protected mutationObserver: MutationObserver<T>;
     readonly [OBSERVABLE_SYMBOL] = true;
-    constructor(object: T);
+    constructor(object?: T);
     createDependent<U>(mapper: () => U): Observable<U>;
     createDependent<U>(mapper: (obj: T) => U): Observable<U>;
     static createDependent<U>(mapper: () => U, source: Observable<any>): Observable<U>;
     static createDependent<T, U>(mapper: (obj: T) => U, source: Observable<T>): Observable<U>;
-    getObject(): T;
+    getObject(): T | null;
     getObserver(): Observer<T>;
     getMutationObserver(): MutationObserver<T>;
     subscribe(listener: (data: T) => void): void;
     unsubscribe(listener: (data: T) => void): void;
-    /**
-     * Subscribe to mutation events (oldValue, newValue)
-     */
     subscribeMutation(listener: (oldValue: T, newValue: T) => void): void;
     unsubscribeMutation(listener: (oldValue: T, newValue: T) => void): void;
     setObject(object: T, silent?: boolean): void;

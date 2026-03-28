@@ -43,8 +43,8 @@ export declare class Walker<D> {
     onLeaveNode(callback: (node: Node, data?: D) => void): void;
 }
 export interface TemplateComponent {
-    acceptNode(element: Element): boolean;
-    walkthrough?(walker: Walker<Scope>, node: Node, data?: Scope): boolean;
+    acceptNode?(element: Element): boolean;
+    walkthrough(walker: Walker<Scope>, node: Node, data?: Scope): boolean;
     doWork?(context?: any): void;
 }
 //# sourceMappingURL=TemplateEngine.d.ts.map
