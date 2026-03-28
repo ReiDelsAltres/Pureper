@@ -2,7 +2,7 @@ import Observable from "../api/Observer.js";
 import Expression from "./Expression.js";
 import Scope from "./Scope.js";
 
-export default class TemplateEngine { 
+export default class TemplateEngine {
 
     private readonly ref_component: TemplateComponent = new class implements TemplateComponent {
         public globalScope?: Scope;
@@ -45,7 +45,10 @@ export default class TemplateEngine {
                 const valueExpression = new Expression(attr.value);
                 const of = valueExpression.eval(data!);
                 const value = of instanceof Observable ? of.getObject() : of;
-                if (value === null || value === undefined) continue;
+                if (value === null || value === undefined) {
+                    if (element.hasAttribute(attributeName)) element.removeAttribute(attributeName);
+                    continue;
+                }
                 if (of instanceof Observable) {
                     of.subscribe((newValue: any) => {
                         this.engine.change();
@@ -136,7 +139,7 @@ export default class TemplateEngine {
             const bool = this.acceptNode(element);
             if (bool) {
                 const vvv = element.getAttribute("of")!;
-                const allowHtmlInjection = element.hasAttribute("html-injection") || 
+                const allowHtmlInjection = element.hasAttribute("html-injection") ||
                     element.getAttribute("html-injection") === "true";
                 const of: string | any = new Expression(vvv).eval(data!);
 
@@ -468,7 +471,7 @@ export class Walker<D> {
     }
 }
 export interface TemplateComponent {
-    acceptNode(element: Element): boolean;
-    walkthrough?(walker: Walker<Scope>, node: Node, data?: Scope): boolean;
+    acceptNode?(element: Element): boolean;
+    walkthrough(walker: Walker<Scope>, node: Node, data?: Scope): boolean;
     doWork?(context?: any): void;
 }

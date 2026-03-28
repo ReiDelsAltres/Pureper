@@ -66,14 +66,14 @@ export function isObservable<T = any>(value: any): value is Observable<T> {
  *   @(user.name) - автоматически распознаётся как user.getObject().name
  */
 export default class Observable<T> {
-    protected object: T;
+    protected object?: T;
     protected observer: Observer<T> = new Observer<T>();
     protected mutationObserver: MutationObserver<T> = new MutationObserver<T>();
 
     // Mark as Observable
     public readonly [OBSERVABLE_SYMBOL] = true;
 
-    constructor(object: T) {
+    constructor(object?: T) {
         this.object = object;
     }
     public createDependent<U>(mapper: () => U): Observable<U>;
@@ -97,8 +97,8 @@ export default class Observable<T> {
     }
 
 
-    public getObject(): T {
-        return this.object;
+    public getObject(): T | null {
+        return this.object ?? null;
     }
 
     public getObserver(): Observer<T> {
@@ -117,9 +117,6 @@ export default class Observable<T> {
         this.observer.unsubscribe(listener);
     }
 
-    /**
-     * Subscribe to mutation events (oldValue, newValue)
-     */
     public subscribeMutation(listener: (oldValue: T, newValue: T) => void): void {
         this.mutationObserver.subscribe(listener);
     }
