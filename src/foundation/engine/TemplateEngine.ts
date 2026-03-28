@@ -78,7 +78,7 @@ export default class TemplateEngine {
                 const eventName = attr!.name.substring(3, attr!.name.length - 1);
                 const handler = new Expression(attr.value);
                 const listener = (event: Event) => {
-                    handler.eval(data!, { event });
+                    handler.eval(data!, { event, element });
                 };
 
                 element.addEventListener(eventName, listener);
