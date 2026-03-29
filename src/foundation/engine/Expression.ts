@@ -19,6 +19,9 @@ export default class Expression {
     private readonly isAsync: boolean;
     private readonly hasReturn: boolean;
 
+    private static fnCache = new Map<string, Function>();
+    private static readonly FN_CACHE_MAX = 500;
+
     constructor(code: string) {
         this.code = code.trim();
         this.isAsync = this.detectAsync(this.code);
@@ -79,7 +82,7 @@ export default class Expression {
         const identifiers: string[] = [];
         // Regex для идентификаторов (не после точки)
         const regex = /(?<![.\w])([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
-        
+
         // Список встроенных глобальных объектов, которые нужно игнорировать
         const builtins = new Set([
             'true', 'false', 'null', 'undefined', 'NaN', 'Infinity',
@@ -110,7 +113,7 @@ export default class Expression {
     public transformCode(scope: Scope): string {
         const context = scope.getVariables();
         let transformedCode = this.code;
-        
+
         // Находим Observable переменные
         const observableVars = new Set<string>();
         for (const [key, value] of Object.entries(context)) {
@@ -178,7 +181,7 @@ export default class Expression {
         // Handle reserved keywords used as variable names (e.g., "super")
         const reservedKeywords = ['super', 'this', 'arguments'];
         const keyMapping: Record<string, string> = {};
-        
+
         const keys = Object.keys(context).map(key => {
             if (reservedKeywords.includes(key)) {
                 const safeKey = `__${key}__`;
@@ -188,9 +191,9 @@ export default class Expression {
             return key;
         });
         const values = Object.values(context);
-        
+
         let codeToExecute = codeOverride ?? this.code;
-        
+
         // Replace reserved keywords in code with safe alternatives
         for (const [original, safe] of Object.entries(keyMapping)) {
             const regex = new RegExp(`\\b${original}\\b`, 'g');
@@ -208,19 +211,30 @@ export default class Expression {
         }
 
         try {
-            // Create function with context variables as parameters
-            const fn = new Function(...keys, functionBody);
+            const cacheKey = keys.join('\0') + '\0' + functionBody;
+            let fn = Expression.fnCache.get(cacheKey);
+            if (!fn) {
+                try {
+                    fn = new Function(...keys, functionBody);
+                } catch (syntaxError) {
+                    if (!this.hasReturn) {
+                        try {
+                            fn = new Function(...keys, codeToExecute);
+                        } catch {
+                            throw syntaxError;
+                        }
+                    } else {
+                        throw syntaxError;
+                    }
+                }
+                if (Expression.fnCache.size >= Expression.FN_CACHE_MAX) {
+                    const firstKey = Expression.fnCache.keys().next().value;
+                    Expression.fnCache.delete(firstKey);
+                }
+                Expression.fnCache.set(cacheKey, fn);
+            }
             return fn.apply(null, values);
         } catch (syntaxError) {
-            // If implicit return fails, try without it (for statements)
-            if (!this.hasReturn) {
-                try {
-                    const fn = new Function(...keys, codeToExecute);
-                    return fn.apply(null, values);
-                } catch {
-                    throw syntaxError;
-                }
-            }
             throw syntaxError;
         }
     }
@@ -232,7 +246,7 @@ export default class Expression {
         // Handle reserved keywords used as variable names (e.g., "super")
         const reservedKeywords = ['super', 'this', 'arguments'];
         const keyMapping: Record<string, string> = {};
-        
+
         const keys = Object.keys(context).map(key => {
             if (reservedKeywords.includes(key)) {
                 const safeKey = `__${key}__`;
@@ -242,9 +256,9 @@ export default class Expression {
             return key;
         });
         const values = Object.values(context);
-        
+
         let codeToExecute = codeOverride ?? this.code;
-        
+
         // Replace reserved keywords in code with safe alternatives
         for (const [original, safe] of Object.entries(keyMapping)) {
             const regex = new RegExp(`\\b${original}\\b`, 'g');
@@ -261,13 +275,13 @@ export default class Expression {
 
         try {
             // Create async function
-            const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+            const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
             const fn = new AsyncFunction(...keys, functionBody);
             return await fn.apply(null, values);
         } catch (syntaxError) {
             if (!this.hasReturn) {
                 try {
-                    const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+                    const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
                     const fn = new AsyncFunction(...keys, codeToExecute);
                     return await fn.apply(null, values);
                 } catch {

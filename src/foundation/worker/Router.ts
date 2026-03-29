@@ -50,14 +50,21 @@ export abstract class Router {
       window.location.replace(url.href);
     }
   }
-  
+
   public static tryRouteTo(url: URL, pushState: boolean = true) {
     const urlH = new URL(Fetcher.resolveUrl(url.href));
     try {
       const found: Route = this.tryFindRoute(urlH);
-      
+
       let pageContainer = document.getElementById('page');
-      
+
+      if (this.currentPage) {
+        this.currentPage.dispose();
+      }
+      while (pageContainer.firstChild) {
+        pageContainer.removeChild(pageContainer.firstChild);
+      }
+
       const page: UniHtml = this.createPage(found, urlH.searchParams);
       this.currentPage = page;
 

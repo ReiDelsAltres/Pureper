@@ -25,7 +25,7 @@ export default class TemplateEngine {
             context!.data!.set(context!.refName, context!.element);
             this.globalScope!.set(context!.refName, context!.element);
 
-            this.engine.bindings.set(context!.element, () => {
+            this.engine.addBinding(context!.element, () => {
                 context!.data!.delete(context!.refName);
                 this.globalScope!.delete(context!.refName);
             });
@@ -46,10 +46,12 @@ export default class TemplateEngine {
                 const of = valueExpression.eval(data!);
                 const value = of instanceof Observable ? of.getObject() : of;
                 if (of instanceof Observable) {
-                    of.subscribe((newValue: any) => {
+                    const handler = (newValue: any) => {
                         this.engine.change();
                         this.doWork({ element, name: attributeName, value: newValue });
-                    });
+                    };
+                    of.subscribe(handler);
+                    this.engine.addBinding(element, () => of.unsubscribe(handler));
                 }
                 this.doWork({ element, name: attributeName, value });
             }
@@ -82,6 +84,7 @@ export default class TemplateEngine {
                 };
 
                 element.addEventListener(eventName, listener);
+                this.engine.addBinding(element, () => element.removeEventListener(eventName, listener));
             }
             return false;
         }
@@ -140,11 +143,13 @@ export default class TemplateEngine {
 
                 const value = of instanceof Observable ? of.getObject() : of;
                 if (of instanceof Observable) {
-                    of.subscribe((newValue: any[]) => {
+                    const handler = (newValue: any[]) => {
                         element.textContent = "";
                         this.engine.change();
                         this.doWork({ element, value: newValue, allowHtmlInjection: allowHtmlInjection });
-                    });
+                    };
+                    of.subscribe(handler);
+                    this.engine.addBinding(element, () => of.unsubscribe(handler));
                 }
                 this.doWork({ element, value, allowHtmlInjection: allowHtmlInjection });
 
@@ -179,10 +184,12 @@ export default class TemplateEngine {
 
                 const iterable = of instanceof Observable ? of.getObject() : of;
                 if (of instanceof Observable) {
-                    of.subscribe((newValue: any[]) => {
+                    const handler = (newValue: any[]) => {
                         this.engine.change();
                         this.doWork({ element, iterable: newValue, index, value, walker, shadow, data });
-                    });
+                    };
+                    of.subscribe(handler);
+                    this.engine.addBinding(element, () => of.unsubscribe(handler));
                 }
                 this.doWork({ element, iterable: iterable, index, value, walker, shadow, data });
             }
@@ -204,6 +211,7 @@ export default class TemplateEngine {
             const data = context!.data;
 
             element.childNodes.forEach(n => this.engine.fullCleanup(n));
+            while (element.firstChild) element.removeChild(element.firstChild);
 
             const lenght = typeof iterable === "number" ? iterable : iterable.length;
 
@@ -258,10 +266,12 @@ export default class TemplateEngine {
                     const condition = new Expression(conditionAtt).eval(data!);
 
                     if (condition instanceof Observable) {
-                        condition.subscribe((newValue: boolean) => {
+                        const handler = (newValue: boolean) => {
                             this.engine.change();
                             this.doWork({ walker, data, allParts: allParts });
-                        });
+                        };
+                        condition.subscribe(handler);
+                        this.engine.addBinding(part.element, () => condition.unsubscribe(handler));
                     }
                 }
 
@@ -278,9 +288,8 @@ export default class TemplateEngine {
             const { walker, data, allParts } = context!;
 
             allParts.forEach(part => {
-                this.engine.fullCleanup(part.element);
-                /*part.element.childNodes.forEach(n =>
-                    this.engine.fullCleanup(n));*/
+                part.element.childNodes.forEach(n => this.engine.fullCleanup(n));
+                while (part.element.firstChild) part.element.removeChild(part.element.firstChild);
             });
 
             for (const part of allParts) {
@@ -316,9 +325,24 @@ export default class TemplateEngine {
         this.if_component
     ];
 
-    public readonly bindings: Map<Element, () => void> = new Map();
+    public readonly bindings: Map<Node, (() => void)[]> = new Map();
     private readonly onChangeCallbacks: (() => void)[] = [];
     public processLogs: string[] = [];
+    public addBinding(node: Node, cleanup: () => void): void {
+        const existing = this.bindings.get(node);
+        if (existing) {
+            existing.push(cleanup);
+        } else {
+            this.bindings.set(node, [cleanup]);
+        }
+    }
+    public dispose(): void {
+        for (const [, cleanups] of this.bindings) {
+            cleanups.forEach(cleanup => cleanup());
+        }
+        this.bindings.clear();
+        this.onChangeCallbacks.length = 0;
+    }
     public static fullProcess(root: Node, scope: Scope): string[] {
         const engine = new TemplateEngine();
         engine.fullProcess(root, scope);
@@ -379,8 +403,11 @@ export default class TemplateEngine {
         let i = 0;
         walker.onEnterNode((node: Node, data?: Scope) => {
             const element = node as Element;
-            const binding = this.bindings.get(element);
-            if (binding) binding();
+            const bindings = this.bindings.get(element);
+            if (bindings) {
+                bindings.forEach(b => b());
+                this.bindings.delete(element);
+            }
 
             this.processLogs.push((" ").repeat(i) + "layer " + i + " Cleaning up Starting: " + node.nodeName);
             i++;

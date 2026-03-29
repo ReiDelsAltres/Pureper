@@ -8,6 +8,7 @@ import { TemplateHolder } from "../engine/TemplateEngine.js";
  */
 export default class UniHtml {
     public _status: Observable<"constructed" | "loading" | "ready"> = new Observable("constructed");
+    protected _templateHolder?: TemplateHolder;
 
     /**
      * Unified component lifecycle entrypoint.
@@ -25,6 +26,7 @@ export default class UniHtml {
         // Для компонентов (UniHtmlComponent) на этом этапе ещё нельзя полагаться на this.shadowRoot —
         // используйте переданный localRoot для подготовки DOM, данных и навешивания обработчиков.
         // Это предпочтительный этап инициализации для компонентов.
+        this._templateHolder = html;
         await this.preLoad(html);
         // render() отвечает за помещение содержимого из localRoot в конечную цель (renderTarget).
         // В UniHtmlComponent.render() после вызова базового render() происходит добавление wrapper в shadowRoot.
@@ -81,7 +83,7 @@ export default class UniHtml {
                         resolve();
                     }
                 };
-                child.addEventListener("status-change", (e) => handler(e));
+                child.addEventListener("status-change", handler);
             });
             promises.push(promise);
         }
@@ -91,5 +93,10 @@ export default class UniHtml {
         return Promise.all(promises).then(() => { return; });
     }
 
-    public async dispose(): Promise<void> { }
+    public async dispose(): Promise<void> {
+        if (this._templateHolder) {
+            this._templateHolder.engine.dispose();
+            this._templateHolder = undefined;
+        }
+    }
 }
