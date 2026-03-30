@@ -17,10 +17,10 @@ export default class UniHtml {
      */
     public async load(element: HTMLElement | ShadowRoot): Promise<void> {
         this._status.setObject("loading");
+        (this as any)._lastRenderTarget = element;
         await this.preInit();
 
-        const preHtml: TemplateHolder = await this._init();
-        const html: TemplateHolder = await this._postInit(preHtml);
+        const html: TemplateHolder = await this._init();
 
         // ВАЖНО: preLoad() вызывается ДО монтирования в DOM/Shadow DOM.
         // Для компонентов (UniHtmlComponent) на этом этапе ещё нельзя полагаться на this.shadowRoot —
@@ -37,9 +37,6 @@ export default class UniHtml {
         this._status.setObject("ready");
     }
 
-    private async _postInit(html: TemplateHolder): Promise<TemplateHolder> {
-        throw new Error("Method not implemented.");
-    }
     private async _init(): Promise<TemplateHolder> {
         throw new Error("Method not implemented.");
     }
@@ -98,5 +95,29 @@ export default class UniHtml {
             this._templateHolder.engine.dispose();
             this._templateHolder = undefined;
         }
+    }
+
+    /**
+     * Reload this instance: dispose current state, then re-run the full lifecycle.
+     * Called automatically when the active Implementation is switched via Placeholder.
+     */
+    public async reload(): Promise<void> {
+        const renderTarget = (this as any).shadowRoot ?? (this as any)._lastRenderTarget;
+        await this.dispose();
+        this._status.setObject("constructed");
+
+        if (renderTarget) {
+            // Clear existing content
+            while (renderTarget.firstChild) {
+                renderTarget.removeChild(renderTarget.firstChild);
+            }
+            // Clear adopted stylesheets so the new implementation applies its own
+            if ('adoptedStyleSheets' in renderTarget) {
+                renderTarget.adoptedStyleSheets = [];
+            }
+            await this.load(renderTarget);
+        }
+
+        console.info(`[UniHtml]: Instance reloaded`);
     }
 }
