@@ -1,37 +1,42 @@
-import UniHtml from "./component_api/UniHtml.js";
-import { AnyConstructor } from "./component_api/mixin/Proto.js";
+import { ImplementationStruct } from "./Injection.js";
+export declare const REGISTRY: (() => void)[];
 export declare enum AccessType {
     NONE = 0,
     OFFLINE = 1,
     ONLINE = 2,
     BOTH = 3
 }
-export type TripletStruct = {
-    markupURL?: string;
-    markup?: string;
-    cssURL?: string;
-    css?: string;
-    ltCssURL?: string;
-    ltCss?: string;
-    jsURL?: string;
+export type TripletStruct = ImplementationStruct & {
     access?: AccessType;
-    class?: AnyConstructor<UniHtml>;
 };
+/**
+ * Triplet — registers a placeholder with a default implementation.
+ *
+ * The placeholder is what gets registered in `customElements.define()` or `Router`.
+ * At runtime, the placeholder resolves the currently active {@link Implementation}
+ * and uses its markup, style, and class for the lifecycle.
+ *
+ * ```ts
+ * // Default implementation registered via @ReComponent
+ * @ReComponent({ markupURL: './Button.hmle', cssURL: './Button.css' }, "re-button")
+ * class ReButton extends Component { ... }
+ *
+ * // Alternative implementation registered via @ReImplementation
+ * @ReImplementation({ markupURL: './FancyButton.hmle', cssURL: './Fancy.css' }, "re-button")
+ * class FancyButton extends Component { ... }
+ *
+ * // Switch globally — all re-button instances reload
+ * Placeholder.switchTo("re-button", "FancyButton");
+ *
+ * // Switch one instance only
+ * Placeholder.switchInstance("re-button", myBtnInstance, "FancyButton");
+ * ```
+ */
 export default class Triplet {
-    readonly markup?: Promise<string>;
-    readonly css?: Promise<string>;
-    readonly lightCss?: Promise<string>;
-    readonly js?: Promise<string>;
-    private readonly markupURL?;
-    private readonly cssURL?;
-    private readonly ltCssURL?;
-    private readonly jsURL?;
     private readonly access;
-    private uni?;
-    constructor(struct: TripletStruct);
-    init(): Promise<boolean>;
-    cache(): Promise<void>;
-    register(type: "router" | "markup", name: string): Promise<boolean>;
-    private createInjectedClass;
+    private readonly placeholderName?;
+    private readonly implementation;
+    constructor(struct: TripletStruct, implName?: string);
+    register(type: "router" | "markup", name: string): Promise<void>;
 }
 //# sourceMappingURL=Triplet.d.ts.map

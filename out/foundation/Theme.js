@@ -1,5 +1,6 @@
 import Fetcher from "./Fetcher.js";
 export let ACTIVE_THEME_KEY = "Empty";
+let activeThemeSheet = null;
 export async function loadTheme(name) {
     // Use hosting-root absolute path so GitHub Pages subfolder deployments (e.g. /Hellper/) keep the subfolder.
     return Fetcher.fetchText(`/resources/${name}.theme.css`);
@@ -24,6 +25,20 @@ export async function setTheme(name) {
     theme = theme.replace(/\.[\w-]+-theme/g, ":root");
     const sheet = new CSSStyleSheet();
     sheet.replaceSync(theme);
-    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+    if (activeThemeSheet) {
+        const index = document.adoptedStyleSheets.indexOf(activeThemeSheet);
+        if (index !== -1) {
+            const sheets = [...document.adoptedStyleSheets];
+            sheets[index] = sheet;
+            document.adoptedStyleSheets = sheets;
+        }
+        else {
+            document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+        }
+    }
+    else {
+        document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+    }
+    activeThemeSheet = sheet;
 }
 //# sourceMappingURL=Theme.js.map

@@ -1,40 +1,29 @@
 import { HOSTING_ORIGIN } from "./Hosting.js";
-// cache stores response bodies (text) by resolved URL so we can reuse them safely
-const temporaryCache = new Map();
 // keep in-flight promises to deduplicate concurrent identical requests
 const inFlightText = new Map();
 const inFlightJSON = new Map();
 export default class Fetcher {
     static async fetchText(url) {
         const resolved = this.resolveUrl(url);
-        if (temporaryCache.has(resolved))
-            return temporaryCache.get(resolved);
         // If a request for the same URL is already in-flight, reuse its promise
         if (inFlightText.has(resolved))
             return inFlightText.get(resolved);
         const p = (async () => {
             const response = await this.internalFetch(resolved);
-            const text = await response.text();
-            temporaryCache.set(resolved, text);
-            return text;
+            return response.text();
         })();
         inFlightText.set(resolved, p);
-        // cleanup entry when finished
         p.finally(() => inFlightText.delete(resolved));
         return p;
     }
     static async fetchJSON(url) {
         const resolved = this.resolveUrl(url);
-        if (temporaryCache.has(resolved))
-            return JSON.parse(temporaryCache.get(resolved));
         // If a request for the same URL is already in-flight, reuse its promise
         if (inFlightJSON.has(resolved))
             return inFlightJSON.get(resolved);
         const p = (async () => {
             const response = await this.internalFetch(resolved);
-            const json = await response.json();
-            temporaryCache.set(resolved, JSON.stringify(json));
-            return json;
+            return response.json();
         })();
         inFlightJSON.set(resolved, p);
         p.finally(() => inFlightJSON.delete(resolved));
@@ -56,6 +45,12 @@ export default class Fetcher {
         return new URL(trimmed, `${HOSTING_ORIGIN}/`).href;
     }
     static async internalFetch(resolvedUrl) {
+        // L2: check ServiceWorker CacheStorage before hitting the network
+        if ('caches' in window) {
+            const cached = await caches.match(resolvedUrl);
+            if (cached)
+                return cached;
+        }
         const response = await fetch(resolvedUrl, { cache: 'default' });
         if (!response.ok) {
             throw new Error(`HTTP error! ${resolvedUrl} status: ${response.status}`);

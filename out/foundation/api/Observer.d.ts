@@ -43,8 +43,8 @@ export declare function isObservable<T = any>(value: any): value is Observable<T
  */
 export default class Observable<T> {
     protected object?: T;
-    protected observer: Observer<T>;
-    protected mutationObserver: MutationObserver<T>;
+    protected _mutationObserver: MutationObserver<T>;
+    protected _wraps: Map<Function, (oldValue: T, newValue: T) => void>;
     readonly [OBSERVABLE_SYMBOL] = true;
     constructor(object?: T);
     createDependent<U>(mapper: () => U): Observable<U>;
@@ -52,12 +52,11 @@ export default class Observable<T> {
     static createDependent<U>(mapper: () => U, source: Observable<any>): Observable<U>;
     static createDependent<T, U>(mapper: (obj: T) => U, source: Observable<T>): Observable<U>;
     getObject(): T | null;
-    getObserver(): Observer<T>;
-    getMutationObserver(): MutationObserver<T>;
     subscribe(listener: (data: T) => void): void;
     unsubscribe(listener: (data: T) => void): void;
     subscribeMutation(listener: (oldValue: T, newValue: T) => void): void;
     unsubscribeMutation(listener: (oldValue: T, newValue: T) => void): void;
+    protected notifyAll(oldValue: T, newValue: T): void;
     setObject(object: T, silent?: boolean): void;
     updateObject(updater: (obj: T) => T, silent?: boolean): void;
     transaction(): Transaction<T>;

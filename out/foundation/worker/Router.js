@@ -47,6 +47,12 @@ export class Router {
         try {
             const found = this.tryFindRoute(urlH);
             let pageContainer = document.getElementById('page');
+            if (this.currentPage) {
+                this.currentPage.dispose();
+            }
+            while (pageContainer.firstChild) {
+                pageContainer.removeChild(pageContainer.firstChild);
+            }
             const page = this.createPage(found, urlH.searchParams);
             this.currentPage = page;
             page.load(pageContainer);

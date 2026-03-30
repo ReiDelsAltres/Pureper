@@ -54,6 +54,7 @@ export default class Component extends Class(HTMLElement).extend(UniHtml).build(
      */
     disconnectedCallback() {
         this.onDisconnected();
+        this.dispose();
     }
     /**
      * @deprecated Use onMoved instead.

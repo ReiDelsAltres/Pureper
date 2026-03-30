@@ -1,10 +1,10 @@
-import Fetcher from "./Fetcher.js";
 import { Router } from "./worker/Router.js";
-import ServiceWorker from "./worker/ServiceWorker.js";
 import Page from "./component_api/Page.js";
 import Component from "./component_api/Component.js";
 import TemplateEngine from "./engine/TemplateEngine.js";
 import Scope from "./engine/Scope.js";
+import { Implementation, Placeholder } from "./Injection.js";
+export const REGISTRY = [];
 export var AccessType;
 (function (AccessType) {
     AccessType[AccessType["NONE"] = 0] = "NONE";
@@ -12,131 +12,112 @@ export var AccessType;
     AccessType[AccessType["ONLINE"] = 2] = "ONLINE";
     AccessType[AccessType["BOTH"] = 3] = "BOTH";
 })(AccessType || (AccessType = {}));
+/**
+ * Triplet — registers a placeholder with a default implementation.
+ *
+ * The placeholder is what gets registered in `customElements.define()` or `Router`.
+ * At runtime, the placeholder resolves the currently active {@link Implementation}
+ * and uses its markup, style, and class for the lifecycle.
+ *
+ * ```ts
+ * // Default implementation registered via @ReComponent
+ * @ReComponent({ markupURL: './Button.hmle', cssURL: './Button.css' }, "re-button")
+ * class ReButton extends Component { ... }
+ *
+ * // Alternative implementation registered via @ReImplementation
+ * @ReImplementation({ markupURL: './FancyButton.hmle', cssURL: './Fancy.css' }, "re-button")
+ * class FancyButton extends Component { ... }
+ *
+ * // Switch globally — all re-button instances reload
+ * Placeholder.switchTo("re-button", "FancyButton");
+ *
+ * // Switch one instance only
+ * Placeholder.switchInstance("re-button", myBtnInstance, "FancyButton");
+ * ```
+ */
 export default class Triplet {
-    markup;
-    css;
-    lightCss;
-    js;
-    markupURL;
-    cssURL;
-    ltCssURL;
-    jsURL;
     access;
-    uni;
-    constructor(struct) {
-        this.markupURL = struct.markupURL;
-        this.cssURL = struct.cssURL;
-        this.ltCssURL = struct.ltCssURL;
-        this.jsURL = struct.jsURL;
-        let markup = Promise.resolve(struct.markup);
-        if (struct.markupURL)
-            markup = Fetcher.fetchText(struct.markupURL);
-        let css = Promise.resolve(struct.css);
-        if (struct.cssURL)
-            css = Fetcher.fetchText(struct.cssURL);
-        let ltCss = Promise.resolve(struct.ltCss);
-        if (struct.ltCssURL)
-            ltCss = Fetcher.fetchText(struct.ltCssURL);
-        /*let js = Promise.resolve(undefined);
-        if (struct.jsURL)
-            js = Fetcher.fetchText(struct.jsURL);*/
-        this.markup = markup;
-        this.css = css;
-        this.lightCss = ltCss;
-        //this.js = js;
+    placeholderName;
+    implementation;
+    constructor(struct, implName) {
         this.access = struct.access ?? AccessType.BOTH;
-        this.uni = struct.class;
-    }
-    async init() {
-        const isOnline = await ServiceWorker.isOnline();
-        if (this.access === AccessType.NONE)
-            return false;
-        if (this.access === AccessType.BOTH) {
-            await this.cache();
-            return true;
-        }
-        ;
-        if (this.access === AccessType.OFFLINE && isOnline)
-            return false;
-        if (this.access === AccessType.ONLINE && !isOnline)
-            return false;
-        return true;
-    }
-    async cache() {
-        //
+        const name = implName ?? struct.class?.name ?? "default";
+        this.implementation = new Implementation(name, struct);
     }
     async register(type, name) {
-        if (!this.uni) {
-            switch (type) {
-                case "router":
-                    this.uni = Page;
-                    break;
-                case "markup":
-                    this.uni = Component;
-                    break;
-            }
+        const placeholder = Placeholder.get(name);
+        placeholder.addImplementation(this.implementation);
+        // If the placeholder already has a registered element/route, skip re-registration
+        if (placeholder.implementations.size > 1) {
+            console.info(`[Triplet]: Implementation "${this.implementation.name}" added to existing placeholder "${name}"`);
+            return;
         }
-        if (this.lightCss) {
-            var style = await new CSSStyleSheet().replace(await this.lightCss);
-            document.adoptedStyleSheets = [
-                ...document.adoptedStyleSheets,
-                style
-            ];
-        }
-        let ori = this.createInjectedClass(this.uni, type);
+        // First implementation — register the placeholder shell
         if (type === "router") {
-            const routePath = this.markupURL ?? "";
-            var reg = Router.registerRoute(routePath, name, (search) => {
-                const paramNames = (() => {
-                    const ctor = this.uni.prototype.constructor;
-                    const fnStr = ctor.toString();
-                    const argsMatch = fnStr.match(/constructor\s*\(([^)]*)\)/);
-                    if (!argsMatch)
-                        return [];
-                    return argsMatch[1].split(',').map(s => s.trim()).filter(Boolean);
-                })();
-                const args = paramNames.map(name => {
-                    return search?.get(name);
+            REGISTRY.push(() => {
+                const routePath = name;
+                Router.registerRoute("", routePath, (search) => {
+                    const impl = placeholder.getActive();
+                    const cls = impl.uniClass ?? Page;
+                    const paramNames = (() => {
+                        const ctor = cls.prototype.constructor;
+                        const fnStr = ctor.toString();
+                        const argsMatch = fnStr.match(/constructor\s*\(([^)]*)\)/);
+                        if (!argsMatch)
+                            return [];
+                        return argsMatch[1].split(',').map(s => s.trim()).filter(Boolean);
+                    })();
+                    const args = paramNames.map(n => search?.get(n));
+                    const instance = new cls(...args);
+                    // Attach placeholder context to instance for _init resolution
+                    instance._placeholderName = name;
+                    instance._activeImplementation = impl;
+                    placeholder.trackInstance(instance);
+                    return instance;
                 });
-                return new ori(...args);
+                console.info(`[Triplet]: Router route "${name}" registered as placeholder`);
             });
-            console.info(`[Triplet]` + `: Router route '${name}' registered for path '${routePath}' by class ${ori}.`);
-            return reg.then(() => true).catch(() => false);
         }
         else if (type === "markup") {
-            if (customElements.get(name))
-                throw new Error(`Custom element '${name}' is already defined.`);
-            customElements.define(name, ori.prototype.constructor);
-            console.info(`[Triplet]: Custom element '${name}' defined.`);
-            return Promise.resolve(true);
+            REGISTRY.push(() => {
+                if (customElements.get(name))
+                    throw new Error(`Custom element '${name}' is already defined.`);
+                const cls = this.implementation.uniClass ?? Component;
+                const placeholderRef = placeholder;
+                const placeholderName = name;
+                // Create the placeholder class that delegates to the active implementation
+                let proto = cls.prototype;
+                proto._init = async function () {
+                    // Resolve which implementation to use (per-instance override or global)
+                    const impl = this._activeImplementation
+                        ?? placeholderRef.getActive();
+                    if (!impl)
+                        throw new Error(`[Placeholder:${placeholderName}]: No active implementation.`);
+                    // Store for reload
+                    this._placeholderName = placeholderName;
+                    if (!this._activeImplementation)
+                        this._activeImplementation = impl;
+                    placeholderRef.trackInstance(this);
+                    // Load markup
+                    const markupText = await impl.markup;
+                    const holder = TemplateEngine.createHolder(markupText, Scope.from(this));
+                    // Apply scoped CSS
+                    const dmc = this.shadowRoot ?? document;
+                    const cssText = await impl.style;
+                    if (cssText) {
+                        dmc.adoptedStyleSheets.push(await new CSSStyleSheet().replace(cssText));
+                    }
+                    // Apply global CSS  
+                    const globalCss = await impl.globalStyle;
+                    if (globalCss) {
+                        document.adoptedStyleSheets.push(await new CSSStyleSheet().replace(globalCss));
+                    }
+                    return holder;
+                };
+                customElements.define(name, cls.prototype.constructor);
+                console.info(`[Triplet]: Custom element "${name}" registered as placeholder`);
+            });
         }
-        return Promise.resolve(false);
-    }
-    createInjectedClass(c, type) {
-        let that = this;
-        let ori = class extends c {
-            constructor(...args) {
-                super(...args);
-            }
-        };
-        let proto = ori.prototype;
-        const parser = new TemplateEngine();
-        proto._init = async function () {
-            const markupText = await that.markup;
-            return TemplateEngine.createHolder(markupText, Scope.from(this));
-        };
-        proto._postInit = async function (preHtml) {
-            const dmc = this.shadowRoot ?? document;
-            const css = await that.css;
-            var style = await new CSSStyleSheet().replace(css);
-            dmc.adoptedStyleSheets = [
-                ...dmc.adoptedStyleSheets,
-                style
-            ];
-            //parser.hydrate(preHtml, this);
-            return preHtml;
-        };
-        return ori;
     }
 }
 //# sourceMappingURL=Triplet.js.map

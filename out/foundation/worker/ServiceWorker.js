@@ -1,144 +1,211 @@
-const swSelf = self;
-// Автоматически генерируем CACHE_NAME из base.json
-//import base from '../../../data/base.json';
-const CACHE_NAME = `pureper-v1`;
-const STATIC_ASSETS = [
-    '/index.html'
-];
-/*if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./serviceWorker.js', { type: 'module' })
-            .then((registration) => {
-                console.log('ServiceWorker registration successful:', registration.scope);
-            })
-            .catch((error) => {
-                console.error('ServiceWorker registration failed:', error);
-            });
-    });
-    window.addEventListener('fetch', (event: FetchEvent) => {
-        event.respondWith(
-            caches.match(event.request).then((cachedResponse) => {
-                console.log(`[ServiceWorker]: Fetching ${event.request.url}`);
-                return cachedResponse || fetch(event.request);
-            })
-        );
-    });
-}
-
+import Observable from "../api/Observer.js";
 /**
- * Install event - cache static assets
+ * Client-side Service Worker manager for Purper SPA.
+ *
+ * Provides:
+ * - Registration with one call (`ServiceWorker.register()`)
+ * - Cache management: add / remove / list / clear
+ * - Connectivity detection with reactive `online` observable
+ *
+ * Usage:
+ * ```ts
+ * await ServiceWorker.register();              // defaults to './serviceworker.js'
+ * await ServiceWorker.addToCache('/data.json');
+ * await ServiceWorker.removeFromCache('/old.css');
+ * ServiceWorker.online.subscribe(v => console.log('online:', v));
+ * ```
  */
-/*window.addEventListener('install', (event: ExtendableEvent) => {
-    console.log('ServiceWorker: Installing...');
-    const assetsToCache = [
-        ...STATIC_ASSETS
-    ];
-    // Remove duplicates
-    const uniqueAssets = Array.from(new Set(assetsToCache));
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache: Cache) => {
-                console.log('ServiceWorker: Caching static assets and SPA routes');
-                return cache.addAll(uniqueAssets);
-            })
-            .then(() => {
-                console.log('ServiceWorker: Installation complete');
-                return swSelf.skipWaiting();
-            })
-    );
-});*/
 export default class ServiceWorker {
-    /**
-     * Sends a message to the service worker to cache a specific URL.
-     * @param url The URL of the resource to cache.
-     */
-    static async addToCache(url) {
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage({
-                type: 'CACHE_URL',
-                url: url
-            });
-        }
-        else {
-            // Fallback: try to cache directly using the Cache API
-            try {
-                const cache = await caches.open('pureper-v1');
-                const response = await fetch(url);
-                if (response.ok) {
-                    await cache.put(url, response);
-                    console.log('[ServiceWorker]: Resource cached directly:', url);
-                }
-            }
-            catch (e) {
-                console.warn('[ServiceWorker]: Failed to cache resource:', url, e);
-            }
-        }
-    }
-    /**
-     * Asks the service worker to skip waiting and activate the new version.
-     */
-    static skipWaiting() {
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
-        }
-    }
-    /**
-     * Gets the version of the currently active service worker.
-     * @returns A promise that resolves with the version string.
-     */
-    static getVersion() {
-        return new Promise((resolve, reject) => {
-            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                const messageChannel = new MessageChannel();
-                messageChannel.port1.onmessage = (event) => {
-                    if (event.data.error) {
-                        reject(event.data.error);
-                    }
-                    else {
-                        resolve(event.data.version);
-                    }
-                };
-                navigator.serviceWorker.controller.postMessage({ type: 'GET_VERSION' }, [messageChannel.port2]);
-            }
-            else {
-                reject('Service worker not available.');
-            }
+    static _registration;
+    /** Observable connectivity state — subscribe for real-time changes. */
+    static online = new Observable(navigator.onLine);
+    // ── Connectivity listeners (bound once) ─────────────────────────
+    static _connectivityBound = false;
+    static _bindConnectivity() {
+        if (this._connectivityBound)
+            return;
+        this._connectivityBound = true;
+        window.addEventListener('online', () => {
+            console.log('[ServiceWorker]: Browser went online');
+            this.online.setObject(true);
+        });
+        window.addEventListener('offline', () => {
+            console.log('[ServiceWorker]: Browser went offline');
+            this.online.setObject(false);
         });
     }
-    /**
-     * Checks if the given URL is present in the Service Worker's cache.
-     */
-    static isCached(url) {
-        return new Promise((resolve) => {
-            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                const mc = new MessageChannel();
-                mc.port1.onmessage = (ev) => {
-                    if (ev.data && typeof ev.data.cached === 'boolean') {
-                        resolve(ev.data.cached);
-                    }
-                    else {
-                        resolve(false);
-                    }
-                };
-                navigator.serviceWorker.controller.postMessage({ type: 'HAS_URL', url }, [mc.port2]);
-            }
-            else {
-                // Fallback: try CacheStorage directly (same-origin only)
-                caches.match(url).then(match => resolve(!!match)).catch(() => resolve(false));
-            }
-        });
-    }
-    /**
-     * Checks if the browser is online.
-     */
-    static async isOnline() {
+    // ── Registration ────────────────────────────────────────────────
+    static async register(config) {
+        if (!('serviceWorker' in navigator)) {
+            console.warn('[ServiceWorker]: Service Workers are not supported in this browser');
+            return undefined;
+        }
+        this._bindConnectivity();
+        const scriptURL = config?.scriptURL ?? './serviceworker.js';
+        const scope = config?.scope ?? '/';
         try {
-            const response = await fetch('./index.html', { cache: 'no-store' });
-            return response && response.ok;
+            const reg = await navigator.serviceWorker.register(scriptURL, { scope });
+            this._registration = reg;
+            console.log(`[ServiceWorker]: Registered "${scriptURL}" with scope "${reg.scope}"`);
+            reg.addEventListener('updatefound', () => {
+                const newWorker = reg.installing;
+                if (!newWorker)
+                    return;
+                console.log('[ServiceWorker]: New version installing...');
+                newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'activated') {
+                        console.log('[ServiceWorker]: New version activated');
+                    }
+                });
+            });
+            // Wait for the controller to be available
+            if (!navigator.serviceWorker.controller) {
+                await new Promise((resolve) => {
+                    navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true });
+                });
+            }
+            return reg;
+        }
+        catch (err) {
+            console.error('[ServiceWorker]: Registration failed', err);
+            return undefined;
+        }
+    }
+    // ── Helpers ─────────────────────────────────────────────────────
+    static _postMessage(msg) {
+        navigator.serviceWorker?.controller?.postMessage(msg);
+    }
+    static _request(msg) {
+        return new Promise((resolve, reject) => {
+            if (!navigator.serviceWorker?.controller) {
+                reject('[ServiceWorker]: No active controller');
+                return;
+            }
+            const mc = new MessageChannel();
+            mc.port1.onmessage = (ev) => resolve(ev.data);
+            navigator.serviceWorker.controller.postMessage(msg, [mc.port2]);
+        });
+    }
+    // ── Cache Management ────────────────────────────────────────────
+    /** Add a single URL to the SW cache. */
+    static async addToCache(url) {
+        if (navigator.serviceWorker?.controller) {
+            this._postMessage({ type: 'CACHE_URL', url });
+            return;
+        }
+        // Fallback: use Cache API directly
+        try {
+            const cache = await caches.open('purper-v1');
+            const response = await fetch(url);
+            if (response.ok) {
+                await cache.put(url, response);
+                console.log('[ServiceWorker]: Resource cached directly:', url);
+            }
+        }
+        catch (e) {
+            console.warn('[ServiceWorker]: Failed to cache resource:', url, e);
+        }
+    }
+    /** Add multiple URLs to the SW cache in one batch. */
+    static addAllToCache(urls) {
+        this._postMessage({ type: 'CACHE_URLS', urls });
+    }
+    /** Remove a URL from the SW cache. Returns true if it was found and deleted. */
+    static async removeFromCache(url) {
+        try {
+            const data = await this._request({ type: 'REMOVE_URL', url });
+            return data.deleted;
+        }
+        catch {
+            // Fallback
+            try {
+                const cache = await caches.open('purper-v1');
+                return await cache.delete(url);
+            }
+            catch {
+                return false;
+            }
+        }
+    }
+    /** Return all URLs currently in the SW cache. */
+    static async getCacheKeys() {
+        try {
+            const data = await this._request({ type: 'GET_CACHE_KEYS' });
+            return data.keys;
+        }
+        catch {
+            return [];
+        }
+    }
+    /** Wipe the entire SW cache. */
+    static async clearCache() {
+        try {
+            const data = await this._request({ type: 'CLEAR_CACHE' });
+            return data.cleared;
         }
         catch {
             return false;
         }
+    }
+    /** Check whether a URL exists in the SW cache. */
+    static async isCached(url) {
+        try {
+            const data = await this._request({ type: 'HAS_URL', url });
+            return data.cached;
+        }
+        catch {
+            // Fallback: CacheStorage directly
+            try {
+                return !!(await caches.match(url));
+            }
+            catch {
+                return false;
+            }
+        }
+    }
+    // ── Version & lifecycle ─────────────────────────────────────────
+    /** Ask the waiting SW to activate immediately. */
+    static skipWaiting() {
+        this._postMessage({ type: 'SKIP_WAITING' });
+    }
+    /** Get the version string from the running SW. */
+    static async getVersion() {
+        const data = await this._request({ type: 'GET_VERSION' });
+        return data.version;
+    }
+    // ── Connectivity ────────────────────────────────────────────────
+    /**
+     * Active connectivity probe — makes a real network request.
+     * Unlike `online` observable (which relies on browser events), this
+     * detects captive portals and lie-fi.
+     */
+    static async isOnline(probeURL) {
+        try {
+            // Try SW-side probe first
+            const data = await this._request({
+                type: 'IS_ONLINE',
+                url: probeURL ?? '/index.html'
+            });
+            this.online.setObject(data.online);
+            return data.online;
+        }
+        catch {
+            // Fallback: client-side probe
+            try {
+                const response = await fetch(probeURL ?? './index.html', { cache: 'no-store', method: 'HEAD' });
+                const result = response.ok;
+                this.online.setObject(result);
+                return result;
+            }
+            catch {
+                this.online.setObject(false);
+                return false;
+            }
+        }
+    }
+    /** Current registration, if any. */
+    static get registration() {
+        return this._registration;
     }
 }
 //# sourceMappingURL=ServiceWorker.js.map

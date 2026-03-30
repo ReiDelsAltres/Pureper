@@ -16,6 +16,8 @@ export default class Expression {
     private readonly code;
     private readonly isAsync;
     private readonly hasReturn;
+    private static fnCache;
+    private static readonly FN_CACHE_MAX;
     constructor(code: string);
     /**
      * Определить, содержит ли код await

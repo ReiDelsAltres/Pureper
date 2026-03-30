@@ -25,6 +25,7 @@
     "./src",
   ],
   "exclude": [
-    "./test"
+    "./test",
+    "./src/foundation/worker/serviceworker.js"
   ]
 }

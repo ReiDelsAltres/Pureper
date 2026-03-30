@@ -8,9 +8,11 @@ export default class TemplateEngine {
     private readonly for_component;
     private readonly if_component;
     private readonly components;
-    readonly bindings: Map<Element, () => void>;
+    readonly bindings: Map<Node, (() => void)[]>;
     private readonly onChangeCallbacks;
     processLogs: string[];
+    addBinding(node: Node, cleanup: () => void): void;
+    dispose(): void;
     static fullProcess(root: Node, scope: Scope): string[];
     static createHolder(markup: string, scope: Scope): TemplateHolder;
     private change;

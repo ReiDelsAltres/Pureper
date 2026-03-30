@@ -15,6 +15,8 @@ export default class Expression {
     code;
     isAsync;
     hasReturn;
+    static fnCache = new Map();
+    static FN_CACHE_MAX = 500;
     constructor(code) {
         this.code = code.trim();
         this.isAsync = this.detectAsync(this.code);
@@ -180,21 +182,34 @@ export default class Expression {
             functionBody = `return (${codeToExecute})`;
         }
         try {
-            // Create function with context variables as parameters
-            const fn = new Function(...keys, functionBody);
+            const cacheKey = keys.join('\0') + '\0' + functionBody;
+            let fn = Expression.fnCache.get(cacheKey);
+            if (!fn) {
+                try {
+                    fn = new Function(...keys, functionBody);
+                }
+                catch (syntaxError) {
+                    if (!this.hasReturn) {
+                        try {
+                            fn = new Function(...keys, codeToExecute);
+                        }
+                        catch {
+                            throw syntaxError;
+                        }
+                    }
+                    else {
+                        throw syntaxError;
+                    }
+                }
+                if (Expression.fnCache.size >= Expression.FN_CACHE_MAX) {
+                    const firstKey = Expression.fnCache.keys().next().value;
+                    Expression.fnCache.delete(firstKey);
+                }
+                Expression.fnCache.set(cacheKey, fn);
+            }
             return fn.apply(null, values);
         }
         catch (syntaxError) {
-            // If implicit return fails, try without it (for statements)
-            if (!this.hasReturn) {
-                try {
-                    const fn = new Function(...keys, codeToExecute);
-                    return fn.apply(null, values);
-                }
-                catch {
-                    throw syntaxError;
-                }
-            }
             throw syntaxError;
         }
     }

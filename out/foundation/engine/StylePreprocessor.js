@@ -130,7 +130,8 @@ export default class StylePreprocessor {
             while (result) {
                 ast.push(result.node);
                 result = rule.walk(walker, tokens, data);
-                tokens = result.tokens;
+                if (result)
+                    tokens = result.tokens;
             }
         }
         return ast;

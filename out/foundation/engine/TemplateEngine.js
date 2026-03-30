@@ -23,7 +23,7 @@ export default class TemplateEngine {
         doWork(context) {
             context.data.set(context.refName, context.element);
             this.globalScope.set(context.refName, context.element);
-            this.engine.bindings.set(context.element, () => {
+            this.engine.addBinding(context.element, () => {
                 context.data.delete(context.refName);
                 this.globalScope.delete(context.refName);
             });
@@ -48,10 +48,12 @@ export default class TemplateEngine {
                 const of = valueExpression.eval(data);
                 const value = of instanceof Observable ? of.getObject() : of;
                 if (of instanceof Observable) {
-                    of.subscribe((newValue) => {
+                    const handler = (newValue) => {
                         this.engine.change();
                         this.doWork({ element, name: attributeName, value: newValue });
-                    });
+                    };
+                    of.subscribe(handler);
+                    this.engine.addBinding(element, () => of.unsubscribe(handler));
                 }
                 this.doWork({ element, name: attributeName, value });
             }
@@ -85,9 +87,10 @@ export default class TemplateEngine {
                 const eventName = attr.name.substring(3, attr.name.length - 1);
                 const handler = new Expression(attr.value);
                 const listener = (event) => {
-                    handler.eval(data, { event });
+                    handler.eval(data, { event, element });
                 };
                 element.addEventListener(eventName, listener);
+                this.engine.addBinding(element, () => element.removeEventListener(eventName, listener));
             }
             return false;
         }
@@ -150,11 +153,13 @@ export default class TemplateEngine {
                 const of = new Expression(vvv).eval(data);
                 const value = of instanceof Observable ? of.getObject() : of;
                 if (of instanceof Observable) {
-                    of.subscribe((newValue) => {
+                    const handler = (newValue) => {
                         element.textContent = "";
                         this.engine.change();
                         this.doWork({ element, value: newValue, allowHtmlInjection: allowHtmlInjection });
-                    });
+                    };
+                    of.subscribe(handler);
+                    this.engine.addBinding(element, () => of.unsubscribe(handler));
                 }
                 this.doWork({ element, value, allowHtmlInjection: allowHtmlInjection });
                 /*const textNode = document.createTextNode(of);
@@ -189,10 +194,12 @@ export default class TemplateEngine {
                 const of = new Expression(vvv).eval(data);
                 const iterable = of instanceof Observable ? of.getObject() : of;
                 if (of instanceof Observable) {
-                    of.subscribe((newValue) => {
+                    const handler = (newValue) => {
                         this.engine.change();
                         this.doWork({ element, iterable: newValue, index, value, walker, shadow, data });
-                    });
+                    };
+                    of.subscribe(handler);
+                    this.engine.addBinding(element, () => of.unsubscribe(handler));
                 }
                 this.doWork({ element, iterable: iterable, index, value, walker, shadow, data });
             }
@@ -208,6 +215,8 @@ export default class TemplateEngine {
             const shadow = context.shadow;
             const data = context.data;
             element.childNodes.forEach(n => this.engine.fullCleanup(n));
+            while (element.firstChild)
+                element.removeChild(element.firstChild);
             const lenght = typeof iterable === "number" ? iterable : iterable.length;
             for (let i = 0; i < lenght; i++) {
                 const z = i;
@@ -259,10 +268,12 @@ export default class TemplateEngine {
                         continue;
                     const condition = new Expression(conditionAtt).eval(data);
                     if (condition instanceof Observable) {
-                        condition.subscribe((newValue) => {
+                        const handler = (newValue) => {
                             this.engine.change();
                             this.doWork({ walker, data, allParts: allParts });
-                        });
+                        };
+                        condition.subscribe(handler);
+                        this.engine.addBinding(part.element, () => condition.unsubscribe(handler));
                     }
                 }
                 this.doWork({ walker, data, allParts: allParts });
@@ -272,9 +283,9 @@ export default class TemplateEngine {
         doWork(context) {
             const { walker, data, allParts } = context;
             allParts.forEach(part => {
-                this.engine.fullCleanup(part.element);
-                /*part.element.childNodes.forEach(n =>
-                    this.engine.fullCleanup(n));*/
+                part.element.childNodes.forEach(n => this.engine.fullCleanup(n));
+                while (part.element.firstChild)
+                    part.element.removeChild(part.element.firstChild);
             });
             for (const part of allParts) {
                 const conditionAtt = part.element.getAttribute('condition');
@@ -306,6 +317,22 @@ export default class TemplateEngine {
     bindings = new Map();
     onChangeCallbacks = [];
     processLogs = [];
+    addBinding(node, cleanup) {
+        const existing = this.bindings.get(node);
+        if (existing) {
+            existing.push(cleanup);
+        }
+        else {
+            this.bindings.set(node, [cleanup]);
+        }
+    }
+    dispose() {
+        for (const [, cleanups] of this.bindings) {
+            cleanups.forEach(cleanup => cleanup());
+        }
+        this.bindings.clear();
+        this.onChangeCallbacks.length = 0;
+    }
     static fullProcess(root, scope) {
         const engine = new TemplateEngine();
         engine.fullProcess(root, scope);
@@ -362,9 +389,11 @@ export default class TemplateEngine {
         let i = 0;
         walker.onEnterNode((node, data) => {
             const element = node;
-            const binding = this.bindings.get(element);
-            if (binding)
-                binding();
+            const bindings = this.bindings.get(element);
+            if (bindings) {
+                bindings.forEach(b => b());
+                this.bindings.delete(element);
+            }
             this.processLogs.push((" ").repeat(i) + "layer " + i + " Cleaning up Starting: " + node.nodeName);
             i++;
         });

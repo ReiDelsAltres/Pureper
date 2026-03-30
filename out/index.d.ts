@@ -8,11 +8,12 @@ export { default as Page } from './foundation/component_api/Page.js';
 export { default as Component } from './foundation/component_api/Component.js';
 export { default as Attribute } from './foundation/component_api/Attribute.js';
 export { default as Triplet, TripletStruct, AccessType } from './foundation/Triplet.js';
-export { ReComponent, RePage } from './foundation/TripletDecorator.js';
+export { ReComponent, RePage, ReImplementation } from './foundation/TripletDecorator.js';
+export { Implementation, ImplementationStruct, Placeholder } from './foundation/Injection.js';
 export { default as Fetcher } from './foundation/Fetcher.js';
 export * from './foundation/engine/TemplateEngine.js';
 export { Router } from './foundation/worker/Router.js';
-export { default as ServiceWorker } from './foundation/worker/ServiceWorker.js';
+export { default as ServiceWorker, ServiceWorkerConfig } from './foundation/worker/ServiceWorker.js';
 export * from './foundation/Hosting.js';
 export * from './foundation/Theme.js';
 //# sourceMappingURL=index.d.ts.map

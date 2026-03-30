@@ -6,13 +6,13 @@ import { TemplateHolder } from "../engine/TemplateEngine.js";
  */
 export default class UniHtml {
     _status: Observable<"constructed" | "loading" | "ready">;
+    protected _templateHolder?: TemplateHolder;
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
      * @param element Target container (usually shadowRoot.host)
      */
     load(element: HTMLElement | ShadowRoot): Promise<void>;
-    private _postInit;
     private _init;
     protected preInit(): Promise<void>;
     /**
@@ -37,5 +37,10 @@ export default class UniHtml {
      */
     protected render(holder: TemplateHolder, renderTarget: HTMLElement | DocumentFragment): Promise<void>;
     dispose(): Promise<void>;
+    /**
+     * Reload this instance: dispose current state, then re-run the full lifecycle.
+     * Called automatically when the active Implementation is switched via Placeholder.
+     */
+    reload(): Promise<void>;
 }
 //# sourceMappingURL=UniHtml.d.ts.map

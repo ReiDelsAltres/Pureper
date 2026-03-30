@@ -1,7 +1,6 @@
 import Observable from "../api/Observer.js";
 export default class Attribute extends Observable {
     component;
-    listeners = [];
     _name;
     _defaultValue;
     constructor(component, name, value) {
@@ -12,7 +11,7 @@ export default class Attribute extends Observable {
         this._defaultValue = value;
     }
     notify(oldValue, newValue) {
-        this.listeners.forEach(listener => listener(oldValue, newValue));
+        this.notifyAll(oldValue, newValue);
     }
     initialize(initValue) {
         this.value = initValue ?? this._defaultValue;
@@ -38,26 +37,31 @@ export default class Attribute extends Observable {
     setObject(val, silent = false) {
         if (val === this.object)
             return;
-        if (!silent)
-            this.notify(this.value, val);
+        const oldObject = this.object;
         this.object = val;
         if (typeof val === "boolean") {
             if (val)
                 this.component.setAttribute(this._name, "");
             else
                 this.component.removeAttribute(this._name);
-            return;
         }
-        if (typeof val === "string") {
-            if (this._defaultValue === this.value)
+        else if (typeof val === "string") {
+            if (this._defaultValue === this.object)
                 this.component.removeAttribute(this._name);
             else
                 this.component.setAttribute(this._name, val);
         }
-        if (this._defaultValue === this.value)
-            this.component.removeAttribute(this._name);
-        else
-            this.component.setAttribute(this._name, val.toString());
+        else {
+            if (this._defaultValue === this.object)
+                this.component.removeAttribute(this._name);
+            else if (this.object != null)
+                this.component.setAttribute(this._name, this.object.toString());
+            else
+                this.component.removeAttribute(this._name);
+        }
+        if (!silent) {
+            this.notifyAll(oldObject, this.object);
+        }
     }
     updateObject(updater, silent = false) {
         this.setObject(updater(this.value), silent);
@@ -69,10 +73,23 @@ export default class Attribute extends Observable {
         return this.value !== undefined && this.value !== null && this.value !== "";
     }
     subscribe(listener) {
-        this.listeners.push((_o, n) => listener(n));
+        if (listener.length <= 1) {
+            const w = (_o, n) => listener(n);
+            this._wraps.set(listener, w);
+            this._mutationObserver.subscribe(w);
+        }
+        else {
+            const w = (o, n) => listener(this._name, o, n);
+            this._wraps.set(listener, w);
+            this._mutationObserver.subscribe(w);
+        }
     }
     unsubscribe(listener) {
-        this.listeners = this.listeners.filter(l => l !== listener);
+        const w = this._wraps.get(listener);
+        if (w) {
+            this._mutationObserver.unsubscribe(w);
+            this._wraps.delete(listener);
+        }
     }
 }
 //# sourceMappingURL=Attribute.js.map

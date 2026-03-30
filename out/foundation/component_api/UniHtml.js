@@ -5,6 +5,7 @@ import Observable from "../api/Observer.js";
  */
 export default class UniHtml {
     _status = new Observable("constructed");
+    _templateHolder;
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
@@ -12,13 +13,14 @@ export default class UniHtml {
      */
     async load(element) {
         this._status.setObject("loading");
+        this._lastRenderTarget = element;
         await this.preInit();
-        const preHtml = await this._init();
-        const html = await this._postInit(preHtml);
+        const html = await this._init();
         // ВАЖНО: preLoad() вызывается ДО монтирования в DOM/Shadow DOM.
         // Для компонентов (UniHtmlComponent) на этом этапе ещё нельзя полагаться на this.shadowRoot —
         // используйте переданный localRoot для подготовки DOM, данных и навешивания обработчиков.
         // Это предпочтительный этап инициализации для компонентов.
+        this._templateHolder = html;
         await this.preLoad(html);
         // render() отвечает за помещение содержимого из localRoot в конечную цель (renderTarget).
         // В UniHtmlComponent.render() после вызова базового render() происходит добавление wrapper в shadowRoot.
@@ -27,9 +29,6 @@ export default class UniHtml {
         // внутрь shadowRoot, и можно безопасно работать с this.shadowRoot, измерениями layout и т.п.
         await this.postLoad(html);
         this._status.setObject("ready");
-    }
-    async _postInit(html) {
-        throw new Error("Method not implemented.");
     }
     async _init() {
         throw new Error("Method not implemented.");
@@ -71,13 +70,39 @@ export default class UniHtml {
                         resolve();
                     }
                 };
-                child.addEventListener("status-change", (e) => handler(e));
+                child.addEventListener("status-change", handler);
             });
             promises.push(promise);
         }
         holder.pushTo(renderTarget);
         return Promise.all(promises).then(() => { return; });
     }
-    async dispose() { }
+    async dispose() {
+        if (this._templateHolder) {
+            this._templateHolder.engine.dispose();
+            this._templateHolder = undefined;
+        }
+    }
+    /**
+     * Reload this instance: dispose current state, then re-run the full lifecycle.
+     * Called automatically when the active Implementation is switched via Placeholder.
+     */
+    async reload() {
+        const renderTarget = this.shadowRoot ?? this._lastRenderTarget;
+        await this.dispose();
+        this._status.setObject("constructed");
+        if (renderTarget) {
+            // Clear existing content
+            while (renderTarget.firstChild) {
+                renderTarget.removeChild(renderTarget.firstChild);
+            }
+            // Clear adopted stylesheets so the new implementation applies its own
+            if ('adoptedStyleSheets' in renderTarget) {
+                renderTarget.adoptedStyleSheets = [];
+            }
+            await this.load(renderTarget);
+        }
+        console.info(`[UniHtml]: Instance reloaded`);
+    }
 }
 //# sourceMappingURL=UniHtml.js.map

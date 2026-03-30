@@ -43,8 +43,8 @@ export function isObservable(value) {
  */
 export default class Observable {
     object;
-    observer = new Observer();
-    mutationObserver = new MutationObserver();
+    _mutationObserver = new MutationObserver();
+    _wraps = new Map();
     // Mark as Observable
     [OBSERVABLE_SYMBOL] = true;
     constructor(object) {
@@ -67,38 +67,39 @@ export default class Observable {
     getObject() {
         return this.object ?? null;
     }
-    getObserver() {
-        return this.observer;
-    }
-    getMutationObserver() {
-        return this.mutationObserver;
-    }
     subscribe(listener) {
-        this.observer.subscribe(listener);
+        const w = (_o, n) => listener(n);
+        this._wraps.set(listener, w);
+        this._mutationObserver.subscribe(w);
     }
     unsubscribe(listener) {
-        this.observer.unsubscribe(listener);
+        const w = this._wraps.get(listener);
+        if (w) {
+            this._mutationObserver.unsubscribe(w);
+            this._wraps.delete(listener);
+        }
     }
     subscribeMutation(listener) {
-        this.mutationObserver.subscribe(listener);
+        this._mutationObserver.subscribe(listener);
     }
     unsubscribeMutation(listener) {
-        this.mutationObserver.unsubscribe(listener);
+        this._mutationObserver.unsubscribe(listener);
+    }
+    notifyAll(oldValue, newValue) {
+        this._mutationObserver.notify(oldValue, newValue);
     }
     setObject(object, silent = false) {
         const oldObject = this.object;
         this.object = object;
         if (!silent) {
-            this.observer.notify(this.object);
-            this.mutationObserver.notify(oldObject, this.object);
+            this.notifyAll(oldObject, this.object);
         }
     }
     updateObject(updater, silent = false) {
         const oldObject = this.object;
         this.object = updater(this.object);
         if (!silent) {
-            this.observer.notify(this.object);
-            this.mutationObserver.notify(oldObject, this.object);
+            this.notifyAll(oldObject, this.object);
         }
     }
     transaction() {
