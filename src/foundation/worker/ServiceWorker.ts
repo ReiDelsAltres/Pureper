@@ -53,7 +53,7 @@ export default class ServiceWorker {
         this._bindConnectivity();
 
         const scriptURL = config?.scriptURL ?? './serviceworker.js';
-        const scope = config?.scope ?? '/';
+        const scope = config?.scope ?? './';
 
         try {
             const reg = await navigator.serviceWorker.register(scriptURL, { scope });
