@@ -46,11 +46,13 @@ export type TripletStruct = ImplementationStruct & {
  */
 export default class Triplet {
     private readonly access: AccessType;
+    private readonly path: string;
     private readonly placeholderName?: string;
     private readonly implementation: Implementation;
 
     public constructor(struct: TripletStruct, implName?: string) {
         this.access = struct.access ?? AccessType.BOTH;
+        this.path = struct.markupURL ?? "";
 
         const name = implName ?? struct.class?.name ?? "default";
         this.implementation = new Implementation(name, struct);
@@ -76,7 +78,7 @@ export default class Triplet {
         if (type === "router") {
             REGISTRY.push(() => {
                 const routePath = name;
-                Router.registerRoute("", routePath, (search) => {
+                Router.registerRoute(this.path, routePath, (search) => {
                     const impl = placeholder.getActive()!;
                     const cls = impl.uniClass ?? Page;
 
