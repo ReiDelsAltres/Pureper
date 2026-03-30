@@ -66,6 +66,12 @@ export default class Triplet {
             return;
         }
 
+        const globalCss = await this.implementation.globalStyle;
+        if (globalCss) {
+            document.adoptedStyleSheets.push(
+                await new CSSStyleSheet().replace(globalCss));
+        }
+
         // First implementation — register the placeholder shell
         if (type === "router") {
             REGISTRY.push(() => {
@@ -102,12 +108,6 @@ export default class Triplet {
                         if (cssText) {
                             document.adoptedStyleSheets.push(
                                 await new CSSStyleSheet().replace(cssText));
-                        }
-
-                        const globalCss = await activeImpl.globalStyle;
-                        if (globalCss) {
-                            document.adoptedStyleSheets.push(
-                                await new CSSStyleSheet().replace(globalCss));
                         }
 
                         return holder;
@@ -154,13 +154,6 @@ export default class Triplet {
                     if (cssText) {
                         dmc.adoptedStyleSheets.push(
                             await new CSSStyleSheet().replace(cssText));
-                    }
-
-                    // Apply global CSS  
-                    const globalCss = await impl.globalStyle;
-                    if (globalCss) {
-                        document.adoptedStyleSheets.push(
-                            await new CSSStyleSheet().replace(globalCss));
                     }
 
                     return holder;
