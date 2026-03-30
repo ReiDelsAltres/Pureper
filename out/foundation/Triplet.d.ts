@@ -1,5 +1,5 @@
 import { ImplementationStruct } from "./Injection.js";
-export declare const REGISTRY: (() => void)[];
+export declare const REGISTRY: (() => Promise<void>)[];
 export declare enum AccessType {
     NONE = 0,
     OFFLINE = 1,
@@ -34,9 +34,10 @@ export type TripletStruct = ImplementationStruct & {
  */
 export default class Triplet {
     private readonly access;
+    private readonly path;
     private readonly placeholderName?;
     private readonly implementation;
     constructor(struct: TripletStruct, implName?: string);
-    register(type: "router" | "markup", name: string): Promise<void>;
+    register(type: "router" | "markup", name: string): void;
 }
 //# sourceMappingURL=Triplet.d.ts.map

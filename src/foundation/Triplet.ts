@@ -58,7 +58,7 @@ export default class Triplet {
         this.implementation = new Implementation(name, struct);
     }
 
-    public async register(type: "router" | "markup", name: string): Promise<void> {
+    public register(type: "router" | "markup", name: string): void {
         const placeholder = Placeholder.get(name);
         placeholder.addImplementation(this.implementation);
 
@@ -67,14 +67,16 @@ export default class Triplet {
             return;
         }
 
-        const globalCss = await this.implementation.globalStyle;
-        if (globalCss) {
-            document.adoptedStyleSheets.push(
-                await new CSSStyleSheet().replace(globalCss));
-        }
+        const impl = this.implementation;
 
         if (type === "router") {
             REGISTRY.push(async () => {
+                const globalCss = await impl.globalStyle;
+                if (globalCss) {
+                    document.adoptedStyleSheets.push(
+                        await new CSSStyleSheet().replace(globalCss));
+                }
+
                 const routePath = name;
                 Router.registerRoute(this.path, routePath, (search) => {
                     const impl = placeholder.getActive()!;
@@ -120,6 +122,12 @@ export default class Triplet {
             });
         } else if (type === "markup") {
             REGISTRY.push(async () => {
+                const globalCss = await impl.globalStyle;
+                if (globalCss) {
+                    document.adoptedStyleSheets.push(
+                        await new CSSStyleSheet().replace(globalCss));
+                }
+
                 if (customElements.get(name))
                     throw new Error(`Custom element '${name}' is already defined.`);
 

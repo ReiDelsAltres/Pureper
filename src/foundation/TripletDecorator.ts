@@ -11,8 +11,7 @@ export function ReComponent(settings: TripletStruct, tag: string) {
 
         const triplet: Triplet = new Triplet(settings);
 
-        triplet.register("markup", tag)
-            .catch(err => console.error(`[ReComponent:${tag}] register failed`, err));
+        triplet.register("markup", tag);
     }
 }
 export function RePage(settings: TripletStruct, route: string) {
@@ -25,8 +24,7 @@ export function RePage(settings: TripletStruct, route: string) {
 
         const triplet: Triplet = new Triplet(settings);
 
-        triplet.register("router", route)
-            .catch(err => console.error(`[RePage:${route}] register failed`, err));
+        triplet.register("router", route);
     }
 }
 
@@ -53,8 +51,7 @@ export function ReImplementation(settings: TripletStruct, target: string) {
         const triplet: Triplet = new Triplet(settings, implName);
 
         // Register adds the implementation to the existing placeholder (or creates one)
-        triplet.register(target.includes("-") ? "markup" : "router", target)
-            .catch(err => console.error(`[ReImplementation:${target}] register failed`, err));
+        triplet.register(target.includes("-") ? "markup" : "router", target);
 
         console.info(`[ReImplementation:${target}] registered implementation "${implName}"`);
     }

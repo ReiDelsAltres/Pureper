@@ -37,26 +37,31 @@ export var AccessType;
  */
 export default class Triplet {
     access;
+    path;
     placeholderName;
     implementation;
     constructor(struct, implName) {
         this.access = struct.access ?? AccessType.BOTH;
+        this.path = struct.markupURL ?? "";
         const name = implName ?? struct.class?.name ?? "default";
         this.implementation = new Implementation(name, struct);
     }
-    async register(type, name) {
+    register(type, name) {
         const placeholder = Placeholder.get(name);
         placeholder.addImplementation(this.implementation);
-        // If the placeholder already has a registered element/route, skip re-registration
         if (placeholder.implementations.size > 1) {
             console.info(`[Triplet]: Implementation "${this.implementation.name}" added to existing placeholder "${name}"`);
             return;
         }
-        // First implementation — register the placeholder shell
+        const impl = this.implementation;
         if (type === "router") {
-            REGISTRY.push(() => {
+            REGISTRY.push(async () => {
+                const globalCss = await impl.globalStyle;
+                if (globalCss) {
+                    document.adoptedStyleSheets.push(await new CSSStyleSheet().replace(globalCss));
+                }
                 const routePath = name;
-                Router.registerRoute("", routePath, (search) => {
+                Router.registerRoute(this.path, routePath, (search) => {
                     const impl = placeholder.getActive();
                     const cls = impl.uniClass ?? Page;
                     const paramNames = (() => {
@@ -84,10 +89,6 @@ export default class Triplet {
                         if (cssText) {
                             document.adoptedStyleSheets.push(await new CSSStyleSheet().replace(cssText));
                         }
-                        const globalCss = await activeImpl.globalStyle;
-                        if (globalCss) {
-                            document.adoptedStyleSheets.push(await new CSSStyleSheet().replace(globalCss));
-                        }
                         return holder;
                     };
                     return instance;
@@ -96,7 +97,11 @@ export default class Triplet {
             });
         }
         else if (type === "markup") {
-            REGISTRY.push(() => {
+            REGISTRY.push(async () => {
+                const globalCss = await impl.globalStyle;
+                if (globalCss) {
+                    document.adoptedStyleSheets.push(await new CSSStyleSheet().replace(globalCss));
+                }
                 if (customElements.get(name))
                     throw new Error(`Custom element '${name}' is already defined.`);
                 const cls = this.implementation.uniClass ?? Component;
@@ -123,11 +128,6 @@ export default class Triplet {
                     const cssText = await impl.style;
                     if (cssText) {
                         dmc.adoptedStyleSheets.push(await new CSSStyleSheet().replace(cssText));
-                    }
-                    // Apply global CSS  
-                    const globalCss = await impl.globalStyle;
-                    if (globalCss) {
-                        document.adoptedStyleSheets.push(await new CSSStyleSheet().replace(globalCss));
                     }
                     return holder;
                 };

@@ -6,8 +6,7 @@ export function ReComponent(settings, tag) {
         if (settings.class === null || settings.class === undefined)
             settings.class = ctor;
         const triplet = new Triplet(settings);
-        triplet.register("markup", tag)
-            .catch(err => console.error(`[ReComponent:${tag}] register failed`, err));
+        triplet.register("markup", tag);
     };
 }
 export function RePage(settings, route) {
@@ -17,8 +16,7 @@ export function RePage(settings, route) {
         if (settings.class === null || settings.class === undefined)
             settings.class = ctor;
         const triplet = new Triplet(settings);
-        triplet.register("router", route)
-            .catch(err => console.error(`[RePage:${route}] register failed`, err));
+        triplet.register("router", route);
     };
 }
 /**
@@ -41,8 +39,7 @@ export function ReImplementation(settings, target) {
         const implName = ctor.name;
         const triplet = new Triplet(settings, implName);
         // Register adds the implementation to the existing placeholder (or creates one)
-        triplet.register(target.includes("-") ? "markup" : "router", target)
-            .catch(err => console.error(`[ReImplementation:${target}] register failed`, err));
+        triplet.register(target.includes("-") ? "markup" : "router", target);
         console.info(`[ReImplementation:${target}] registered implementation "${implName}"`);
     };
 }
