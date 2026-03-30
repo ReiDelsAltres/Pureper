@@ -15,7 +15,7 @@ export { default as Page } from './foundation/component_api/Page.js';
 export { default as Component } from './foundation/component_api/Component.js';
 export { default as Attribute } from './foundation/component_api/Attribute.js';
 
-export { default as Triplet, TripletStruct, AccessType } from './foundation/Triplet.js';
+export { default as Triplet, TripletStruct, AccessType, REGISTRY } from './foundation/Triplet.js';
 export { ReComponent, RePage, ReImplementation } from './foundation/TripletDecorator.js';
 
 export { Implementation, ImplementationStruct, Placeholder } from './foundation/Injection.js';
