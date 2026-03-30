@@ -8,7 +8,7 @@ import TemplateEngine, { TemplateHolder } from "./engine/TemplateEngine.js";
 import Scope from "./engine/Scope.js";
 import { Implementation, ImplementationStruct, Placeholder } from "./Injection.js";
 
-export const REGISTRY: (() => void)[] = [];
+export const REGISTRY: (() => Promise<void>)[] = [];
 
 export enum AccessType {
     NONE = 0,
@@ -62,7 +62,6 @@ export default class Triplet {
         const placeholder = Placeholder.get(name);
         placeholder.addImplementation(this.implementation);
 
-        // If the placeholder already has a registered element/route, skip re-registration
         if (placeholder.implementations.size > 1) {
             console.info(`[Triplet]: Implementation "${this.implementation.name}" added to existing placeholder "${name}"`);
             return;
@@ -74,9 +73,8 @@ export default class Triplet {
                 await new CSSStyleSheet().replace(globalCss));
         }
 
-        // First implementation — register the placeholder shell
         if (type === "router") {
-            REGISTRY.push(() => {
+            REGISTRY.push(async () => {
                 const routePath = name;
                 Router.registerRoute(this.path, routePath, (search) => {
                     const impl = placeholder.getActive()!;
@@ -121,7 +119,7 @@ export default class Triplet {
                 console.info(`[Triplet]: Router route "${name}" registered as placeholder`);
             });
         } else if (type === "markup") {
-            REGISTRY.push(() => {
+            REGISTRY.push(async () => {
                 if (customElements.get(name))
                     throw new Error(`Custom element '${name}' is already defined.`);
 
