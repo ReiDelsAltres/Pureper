@@ -90,6 +90,29 @@ export default class Triplet {
                     (instance as any)._activeImplementation = impl;
                     placeholder.trackInstance(instance);
 
+                    (instance as any)._init = async function (): Promise<TemplateHolder> {
+                        const activeImpl: Implementation = (this as any)._activeImplementation
+                            ?? placeholder.getActive();
+                        if (!activeImpl) throw new Error(`[Placeholder:${routePath}]: No active implementation.`);
+
+                        const markupText = await activeImpl.markup;
+                        const holder = TemplateEngine.createHolder(markupText, Scope.from(this));
+
+                        const cssText = await activeImpl.style;
+                        if (cssText) {
+                            document.adoptedStyleSheets.push(
+                                await new CSSStyleSheet().replace(cssText));
+                        }
+
+                        const globalCss = await activeImpl.globalStyle;
+                        if (globalCss) {
+                            document.adoptedStyleSheets.push(
+                                await new CSSStyleSheet().replace(globalCss));
+                        }
+
+                        return holder;
+                    };
+
                     return instance;
                 });
 
