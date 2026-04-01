@@ -18,6 +18,7 @@
 		"liveServer.settings.multiRootWorkspaceName": "Hellper",
 		"github-actions.workflows.pinned.workflows": [
 			"Purper/.github/workflows/publish.yml"
-		]
+		],
+		"liveServer.settings.port": 5501
 	}
 }

@@ -17,6 +17,15 @@
 const CACHE_VERSION = 'purper-v1';
 const SW_VERSION = '1.0.0';
 
+let fetchCounter = 0;
+let fetchTrackingEnabled = false;
+
+function broadcastToClients(message) {
+    self.clients.matchAll().then((clients) => {
+        clients.forEach((c) => c.postMessage(message));
+    });
+}
+
 // ── Install ─────────────────────────────────────────────────────────
 self.addEventListener('install', (event) => {
     console.log(`[ServiceWorker ${SW_VERSION}]: Installing...`);
@@ -59,6 +68,14 @@ self.addEventListener('fetch', (event) => {
     // Only handle GET requests
     if (request.method !== 'GET') return;
 
+    const tracking = fetchTrackingEnabled;
+    const fetchId = tracking ? ++fetchCounter : 0;
+    const startTime = tracking ? Date.now() : 0;
+
+    if (tracking) {
+        broadcastToClients({ type: 'FETCH_START', id: fetchId, url: request.url, timestamp: startTime });
+    }
+
     // Navigation requests (HTML pages) — network-first, fall back to cache
     if (request.mode === 'navigate') {
         event.respondWith(
@@ -68,11 +85,23 @@ self.addEventListener('fetch', (event) => {
                         const clone = response.clone();
                         caches.open(CACHE_VERSION).then((cache) => cache.put(request, clone));
                     }
+                    broadcastToClients({ type: 'PAGE_SOURCE', url: request.url, source: 'network' });
+                    if (tracking) {
+                        const duration = Date.now() - startTime;
+                        const size = parseInt(response.headers.get('Content-Length')) || -1;
+                        broadcastToClients({ type: 'FETCH_COMPLETE', id: fetchId, url: request.url, size, duration, fromCache: false, timestamp: Date.now() });
+                    }
                     return response;
                 })
                 .catch(() => {
                     return caches.match(request).then((cached) => {
-                        return cached || caches.match('/index.html');
+                        const result = cached || caches.match('/index.html');
+                        broadcastToClients({ type: 'PAGE_SOURCE', url: request.url, source: 'cache' });
+                        if (tracking) {
+                            const duration = Date.now() - startTime;
+                            broadcastToClients({ type: 'FETCH_COMPLETE', id: fetchId, url: request.url, size: -1, duration, fromCache: true, timestamp: Date.now() });
+                        }
+                        return result;
                     });
                 })
         );
@@ -82,15 +111,34 @@ self.addEventListener('fetch', (event) => {
     // Sub-resources (CSS, JS, images, fonts, JSON) — cache-first, fall back to network
     event.respondWith(
         caches.match(request).then((cached) => {
-            if (cached) return cached;
-
-            return fetch(request).then((response) => {
-                if (response.ok && response.type === 'basic') {
-                    const clone = response.clone();
-                    caches.open(CACHE_VERSION).then((cache) => cache.put(request, clone));
+            if (cached) {
+                if (tracking) {
+                    const duration = Date.now() - startTime;
+                    const size = parseInt(cached.headers.get('Content-Length')) || -1;
+                    broadcastToClients({ type: 'FETCH_COMPLETE', id: fetchId, url: request.url, size, duration, fromCache: true, timestamp: Date.now() });
                 }
-                return response;
-            });
+                return cached;
+            }
+
+            return fetch(request)
+                .then((response) => {
+                    if (response.ok && response.type === 'basic') {
+                        const clone = response.clone();
+                        caches.open(CACHE_VERSION).then((cache) => cache.put(request, clone));
+                    }
+                    if (tracking) {
+                        const duration = Date.now() - startTime;
+                        const size = parseInt(response.headers.get('Content-Length')) || -1;
+                        broadcastToClients({ type: 'FETCH_COMPLETE', id: fetchId, url: request.url, size, duration, fromCache: false, timestamp: Date.now() });
+                    }
+                    return response;
+                })
+                .catch((err) => {
+                    if (tracking) {
+                        broadcastToClients({ type: 'FETCH_ERROR', id: fetchId, url: request.url, error: err.message || String(err), timestamp: Date.now() });
+                    }
+                    throw err;
+                });
         })
     );
 });
@@ -184,6 +232,16 @@ self.addEventListener('message', (event) => {
                 });
             break;
         }
+
+        case 'ENABLE_FETCH_TRACKING':
+            fetchTrackingEnabled = true;
+            console.log('[ServiceWorker]: Fetch tracking enabled');
+            break;
+
+        case 'DISABLE_FETCH_TRACKING':
+            fetchTrackingEnabled = false;
+            console.log('[ServiceWorker]: Fetch tracking disabled');
+            break;
 
         default:
             console.warn(`[ServiceWorker]: Unknown message type "${type}"`);

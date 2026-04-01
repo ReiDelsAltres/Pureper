@@ -5,6 +5,19 @@ export type ServiceWorkerConfig = {
     scope?: string;
 };
 
+export interface FetchActivityItem {
+    id: number;
+    url: string;
+    startTime: number;
+    size?: number;
+    duration?: number;
+    fromCache?: boolean;
+    status: 'loading' | 'complete' | 'error';
+    error?: string;
+}
+
+export type PageSourceType = 'cache' | 'network' | 'unknown';
+
 /**
  * Client-side Service Worker manager for Purper SPA.
  *
@@ -26,6 +39,11 @@ export default class ServiceWorker {
 
     /** Observable connectivity state — subscribe for real-time changes. */
     static readonly online: Observable<boolean> = new Observable(navigator.onLine);
+
+    static readonly fetchActivities: Observable<FetchActivityItem[]> = new Observable([]);
+    static readonly pageSource: Observable<PageSourceType> = new Observable<PageSourceType>('unknown');
+    private static _fetchTrackingEnabled = false;
+    private static _fetchListenerBound = false;
 
     // ── Connectivity listeners (bound once) ─────────────────────────
     private static _connectivityBound = false;
@@ -225,5 +243,87 @@ export default class ServiceWorker {
     /** Current registration, if any. */
     static get registration(): ServiceWorkerRegistration | undefined {
         return this._registration;
+    }
+
+    // ── Fetch Tracking ──────────────────────────────────────────────
+
+    static enableFetchTracking(): void {
+        if (!this._fetchTrackingEnabled) {
+            this._fetchTrackingEnabled = true;
+            this._postMessage({ type: 'ENABLE_FETCH_TRACKING' });
+            this._bindFetchListener();
+        }
+    }
+
+    static disableFetchTracking(): void {
+        if (this._fetchTrackingEnabled) {
+            this._fetchTrackingEnabled = false;
+            this._postMessage({ type: 'DISABLE_FETCH_TRACKING' });
+        }
+    }
+
+    private static _bindFetchListener(): void {
+        if (this._fetchListenerBound) return;
+        this._fetchListenerBound = true;
+
+        navigator.serviceWorker?.addEventListener('message', (event) => {
+            const data = event.data;
+            if (!data || !data.type) return;
+
+            switch (data.type) {
+                case 'FETCH_START': {
+                    const item: FetchActivityItem = {
+                        id: data.id,
+                        url: data.url,
+                        startTime: data.timestamp,
+                        status: 'loading'
+                    };
+                    const current = [...this.fetchActivities.getObject()];
+                    current.push(item);
+                    this.fetchActivities.setObject(current);
+                    break;
+                }
+                case 'FETCH_COMPLETE': {
+                    const current = [...this.fetchActivities.getObject()];
+                    const idx = current.findIndex(i => i.id === data.id);
+                    if (idx !== -1) {
+                        current[idx] = {
+                            ...current[idx],
+                            size: data.size,
+                            duration: data.duration,
+                            fromCache: data.fromCache,
+                            status: 'complete'
+                        };
+                    }
+                    this.fetchActivities.setObject(current);
+                    setTimeout(() => {
+                        const list = this.fetchActivities.getObject().filter(i => i.id !== data.id);
+                        this.fetchActivities.setObject(list);
+                    }, 3000);
+                    break;
+                }
+                case 'FETCH_ERROR': {
+                    const current = [...this.fetchActivities.getObject()];
+                    const idx = current.findIndex(i => i.id === data.id);
+                    if (idx !== -1) {
+                        current[idx] = {
+                            ...current[idx],
+                            status: 'error',
+                            error: data.error
+                        };
+                    }
+                    this.fetchActivities.setObject(current);
+                    setTimeout(() => {
+                        const list = this.fetchActivities.getObject().filter(i => i.id !== data.id);
+                        this.fetchActivities.setObject(list);
+                    }, 5000);
+                    break;
+                }
+                case 'PAGE_SOURCE': {
+                    this.pageSource.setObject(data.source);
+                    break;
+                }
+            }
+        });
     }
 }

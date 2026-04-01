@@ -24,7 +24,7 @@ export { default as Fetcher } from './foundation/Fetcher.js';
 export * from './foundation/engine/TemplateEngine.js';
 
 export { Router } from './foundation/worker/Router.js';
-export { default as ServiceWorker, ServiceWorkerConfig } from './foundation/worker/ServiceWorker.js';
+export { default as ServiceWorker, ServiceWorkerConfig, FetchActivityItem, PageSourceType } from './foundation/worker/ServiceWorker.js';
 
 export * from './foundation/Hosting.js';
 export * from './foundation/Theme.js';
