@@ -20,6 +20,9 @@ const SW_VERSION = '1.0.0';
 let fetchCounter = 0;
 let fetchTrackingEnabled = false;
 
+let cacheStrategy = 'cache-first';
+let precacheMode = 'normal';
+
 function broadcastToClients(message) {
     self.clients.matchAll().then((clients) => {
         clients.forEach((c) => c.postMessage(message));
@@ -108,7 +111,63 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Sub-resources (CSS, JS, images, fonts, JSON) — cache-first, fall back to network
+    // Sub-resources (CSS, JS, images, fonts, JSON)
+    // Strategy depends on cacheStrategy and precacheMode settings.
+
+    // Disabled mode — always fetch from network, never cache
+    if (precacheMode === 'disabled') {
+        event.respondWith(
+            fetch(request)
+                .then((response) => {
+                    if (tracking) {
+                        const duration = Date.now() - startTime;
+                        const size = parseInt(response.headers.get('Content-Length')) || -1;
+                        broadcastToClients({ type: 'FETCH_COMPLETE', id: fetchId, url: request.url, size, duration, fromCache: false, timestamp: Date.now() });
+                    }
+                    return response;
+                })
+                .catch((err) => {
+                    if (tracking) {
+                        broadcastToClients({ type: 'FETCH_ERROR', id: fetchId, url: request.url, error: err.message || String(err), timestamp: Date.now() });
+                    }
+                    throw err;
+                })
+        );
+        return;
+    }
+
+    // Network-first for sub-resources
+    if (cacheStrategy === 'network-first') {
+        event.respondWith(
+            fetch(request)
+                .then((response) => {
+                    if (response.ok && response.type === 'basic') {
+                        const clone = response.clone();
+                        caches.open(CACHE_VERSION).then((cache) => cache.put(request, clone));
+                    }
+                    if (tracking) {
+                        const duration = Date.now() - startTime;
+                        const size = parseInt(response.headers.get('Content-Length')) || -1;
+                        broadcastToClients({ type: 'FETCH_COMPLETE', id: fetchId, url: request.url, size, duration, fromCache: false, timestamp: Date.now() });
+                    }
+                    return response;
+                })
+                .catch(() => {
+                    return caches.match(request).then((cached) => {
+                        if (tracking) {
+                            const duration = Date.now() - startTime;
+                            const size = cached ? (parseInt(cached.headers.get('Content-Length')) || -1) : -1;
+                            broadcastToClients({ type: 'FETCH_COMPLETE', id: fetchId, url: request.url, size, duration, fromCache: true, timestamp: Date.now() });
+                        }
+                        if (cached) return cached;
+                        throw new Error('No cached response available');
+                    });
+                })
+        );
+        return;
+    }
+
+    // Cache-first for sub-resources (default)
     event.respondWith(
         caches.match(request).then((cached) => {
             if (cached) {
@@ -241,6 +300,24 @@ self.addEventListener('message', (event) => {
         case 'DISABLE_FETCH_TRACKING':
             fetchTrackingEnabled = false;
             console.log('[ServiceWorker]: Fetch tracking disabled');
+            break;
+
+        case 'SET_CACHE_STRATEGY':
+            if (event.data.strategy === 'cache-first' || event.data.strategy === 'network-first') {
+                cacheStrategy = event.data.strategy;
+                console.log(`[ServiceWorker]: Cache strategy set to "${cacheStrategy}"`);
+            }
+            break;
+
+        case 'SET_PRECACHE_MODE':
+            if (event.data.mode === 'precache' || event.data.mode === 'normal' || event.data.mode === 'disabled') {
+                precacheMode = event.data.mode;
+                console.log(`[ServiceWorker]: Precache mode set to "${precacheMode}"`);
+            }
+            break;
+
+        case 'GET_CONFIG':
+            if (port) port.postMessage({ strategy: cacheStrategy, precacheMode: precacheMode });
             break;
 
         default:

@@ -18,6 +18,9 @@ export interface FetchActivityItem {
 
 export type PageSourceType = 'cache' | 'network' | 'unknown';
 
+export type CacheStrategy = 'cache-first' | 'network-first';
+export type PrecacheMode = 'precache' | 'normal' | 'disabled';
+
 /**
  * Client-side Service Worker manager for Purper SPA.
  *
@@ -42,6 +45,8 @@ export default class ServiceWorker {
 
     static readonly fetchActivities: Observable<FetchActivityItem[]> = new Observable([]);
     static readonly pageSource: Observable<PageSourceType> = new Observable<PageSourceType>('unknown');
+    static readonly cacheStrategy: Observable<CacheStrategy> = new Observable<CacheStrategy>('cache-first');
+    static readonly precacheMode: Observable<PrecacheMode> = new Observable<PrecacheMode>('normal');
     private static _fetchTrackingEnabled = false;
     private static _fetchListenerBound = false;
 
@@ -195,6 +200,22 @@ export default class ServiceWorker {
                 return false;
             }
         }
+    }
+
+    // ── Cache Strategy & Precache Mode ────────────────────────────
+
+    static setCacheStrategy(strategy: CacheStrategy): void {
+        this.cacheStrategy.setObject(strategy);
+        this._postMessage({ type: 'SET_CACHE_STRATEGY', strategy });
+    }
+
+    static setPrecacheMode(mode: PrecacheMode): void {
+        this.precacheMode.setObject(mode);
+        this._postMessage({ type: 'SET_PRECACHE_MODE', mode });
+    }
+
+    static async getConfig(): Promise<{ strategy: CacheStrategy; precacheMode: PrecacheMode }> {
+        return this._request<{ strategy: CacheStrategy; precacheMode: PrecacheMode }>({ type: 'GET_CONFIG' });
     }
 
     // ── Version & lifecycle ─────────────────────────────────────────
