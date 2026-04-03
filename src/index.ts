@@ -19,6 +19,7 @@ export { default as Triplet, TripletStruct, AccessType, REGISTRY } from './found
 export { ReComponent, RePage, ReImplementation } from './foundation/TripletDecorator.js';
 
 export { Implementation, ImplementationStruct, Placeholder } from './foundation/Injection.js';
+export { default as Module, ModuleStruct, ModuleManager } from './foundation/Module.js';
 export { default as Fetcher } from './foundation/Fetcher.js';
 
 export * from './foundation/engine/TemplateEngine.js';
