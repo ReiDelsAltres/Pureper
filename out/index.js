@@ -8,6 +8,7 @@ export { default as Attribute } from './foundation/component_api/Attribute.js';
 export { default as Triplet, AccessType, REGISTRY } from './foundation/Triplet.js';
 export { ReComponent, RePage, ReImplementation } from './foundation/TripletDecorator.js';
 export { Implementation, Placeholder } from './foundation/Injection.js';
+export { default as Module, ModuleManager } from './foundation/Module.js';
 export { default as Fetcher } from './foundation/Fetcher.js';
 export * from './foundation/engine/TemplateEngine.js';
 export { Router } from './foundation/worker/Router.js';

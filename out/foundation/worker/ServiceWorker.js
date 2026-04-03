@@ -19,6 +19,12 @@ export default class ServiceWorker {
     static _registration;
     /** Observable connectivity state — subscribe for real-time changes. */
     static online = new Observable(navigator.onLine);
+    static fetchActivities = new Observable([]);
+    static pageSource = new Observable('unknown');
+    static cacheStrategy = new Observable('cache-first');
+    static precacheMode = new Observable('normal');
+    static _fetchTrackingEnabled = false;
+    static _fetchListenerBound = false;
     // ── Connectivity listeners (bound once) ─────────────────────────
     static _connectivityBound = false;
     static _bindConnectivity() {
@@ -163,6 +169,18 @@ export default class ServiceWorker {
             }
         }
     }
+    // ── Cache Strategy & Precache Mode ────────────────────────────
+    static setCacheStrategy(strategy) {
+        this.cacheStrategy.setObject(strategy);
+        this._postMessage({ type: 'SET_CACHE_STRATEGY', strategy });
+    }
+    static setPrecacheMode(mode) {
+        this.precacheMode.setObject(mode);
+        this._postMessage({ type: 'SET_PRECACHE_MODE', mode });
+    }
+    static async getConfig() {
+        return this._request({ type: 'GET_CONFIG' });
+    }
     // ── Version & lifecycle ─────────────────────────────────────────
     /** Ask the waiting SW to activate immediately. */
     static skipWaiting() {
@@ -206,6 +224,84 @@ export default class ServiceWorker {
     /** Current registration, if any. */
     static get registration() {
         return this._registration;
+    }
+    // ── Fetch Tracking ──────────────────────────────────────────────
+    static enableFetchTracking() {
+        if (!this._fetchTrackingEnabled) {
+            this._fetchTrackingEnabled = true;
+            this._postMessage({ type: 'ENABLE_FETCH_TRACKING' });
+            this._bindFetchListener();
+        }
+    }
+    static disableFetchTracking() {
+        if (this._fetchTrackingEnabled) {
+            this._fetchTrackingEnabled = false;
+            this._postMessage({ type: 'DISABLE_FETCH_TRACKING' });
+        }
+    }
+    static _bindFetchListener() {
+        if (this._fetchListenerBound)
+            return;
+        this._fetchListenerBound = true;
+        navigator.serviceWorker?.addEventListener('message', (event) => {
+            const data = event.data;
+            if (!data || !data.type)
+                return;
+            switch (data.type) {
+                case 'FETCH_START': {
+                    const item = {
+                        id: data.id,
+                        url: data.url,
+                        startTime: data.timestamp,
+                        status: 'loading'
+                    };
+                    const current = [...this.fetchActivities.getObject()];
+                    current.push(item);
+                    this.fetchActivities.setObject(current);
+                    break;
+                }
+                case 'FETCH_COMPLETE': {
+                    const current = [...this.fetchActivities.getObject()];
+                    const idx = current.findIndex(i => i.id === data.id);
+                    if (idx !== -1) {
+                        current[idx] = {
+                            ...current[idx],
+                            size: data.size,
+                            duration: data.duration,
+                            fromCache: data.fromCache,
+                            status: 'complete'
+                        };
+                    }
+                    this.fetchActivities.setObject(current);
+                    setTimeout(() => {
+                        const list = this.fetchActivities.getObject().filter(i => i.id !== data.id);
+                        this.fetchActivities.setObject(list);
+                    }, 3000);
+                    break;
+                }
+                case 'FETCH_ERROR': {
+                    const current = [...this.fetchActivities.getObject()];
+                    const idx = current.findIndex(i => i.id === data.id);
+                    if (idx !== -1) {
+                        current[idx] = {
+                            ...current[idx],
+                            status: 'error',
+                            error: data.error
+                        };
+                    }
+                    this.fetchActivities.setObject(current);
+                    setTimeout(() => {
+                        const list = this.fetchActivities.getObject().filter(i => i.id !== data.id);
+                        this.fetchActivities.setObject(list);
+                    }, 5000);
+                    break;
+                }
+                case 'PAGE_SOURCE': {
+                    this.pageSource.setObject(data.source);
+                    break;
+                }
+            }
+        });
     }
 }
 //# sourceMappingURL=ServiceWorker.js.map

@@ -3,6 +3,19 @@ export type ServiceWorkerConfig = {
     scriptURL?: string;
     scope?: string;
 };
+export interface FetchActivityItem {
+    id: number;
+    url: string;
+    startTime: number;
+    size?: number;
+    duration?: number;
+    fromCache?: boolean;
+    status: 'loading' | 'complete' | 'error';
+    error?: string;
+}
+export type PageSourceType = 'cache' | 'network' | 'unknown';
+export type CacheStrategy = 'cache-first' | 'network-first';
+export type PrecacheMode = 'precache' | 'normal' | 'disabled';
 /**
  * Client-side Service Worker manager for Purper SPA.
  *
@@ -23,6 +36,12 @@ export default class ServiceWorker {
     private static _registration?;
     /** Observable connectivity state — subscribe for real-time changes. */
     static readonly online: Observable<boolean>;
+    static readonly fetchActivities: Observable<FetchActivityItem[]>;
+    static readonly pageSource: Observable<PageSourceType>;
+    static readonly cacheStrategy: Observable<CacheStrategy>;
+    static readonly precacheMode: Observable<PrecacheMode>;
+    private static _fetchTrackingEnabled;
+    private static _fetchListenerBound;
     private static _connectivityBound;
     private static _bindConnectivity;
     static register(config?: ServiceWorkerConfig): Promise<ServiceWorkerRegistration | undefined>;
@@ -40,6 +59,12 @@ export default class ServiceWorker {
     static clearCache(): Promise<boolean>;
     /** Check whether a URL exists in the SW cache. */
     static isCached(url: string): Promise<boolean>;
+    static setCacheStrategy(strategy: CacheStrategy): void;
+    static setPrecacheMode(mode: PrecacheMode): void;
+    static getConfig(): Promise<{
+        strategy: CacheStrategy;
+        precacheMode: PrecacheMode;
+    }>;
     /** Ask the waiting SW to activate immediately. */
     static skipWaiting(): void;
     /** Get the version string from the running SW. */
@@ -52,5 +77,8 @@ export default class ServiceWorker {
     static isOnline(probeURL?: string): Promise<boolean>;
     /** Current registration, if any. */
     static get registration(): ServiceWorkerRegistration | undefined;
+    static enableFetchTracking(): void;
+    static disableFetchTracking(): void;
+    private static _bindFetchListener;
 }
 //# sourceMappingURL=ServiceWorker.d.ts.map
