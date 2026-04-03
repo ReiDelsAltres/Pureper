@@ -178,10 +178,16 @@ export class ModuleManager {
         try {
             const raw = localStorage.getItem(this.STORAGE_KEY);
             if (raw) {
-                const state: Record<string, { enabled: boolean, downloaded: boolean }> = JSON.parse(raw);
+                const state: Record<string, { enabled: boolean, downloaded: boolean } | boolean> = JSON.parse(raw);
                 for (const [name, data] of Object.entries(state)) {
                     const mod = this._modules.get(name);
                     if (mod && !mod.core) {
+                        if (typeof data === 'boolean') {
+                            // Old format: value is just a boolean for enabled state
+                            mod.enabled.setObject(data);
+                            console.log(`[Module]: Migrated old format "${name}" → enabled=${data}`);
+                            continue;
+                        }
                         if (data.downloaded) {
                             mod.downloaded.setObject(true);
                         }
