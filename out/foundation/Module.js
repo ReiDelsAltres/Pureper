@@ -6,13 +6,15 @@ export default class Module {
     icon;
     core;
     enabled;
+    downloaded;
     _registrations = [];
     constructor(struct) {
         this.name = struct.name;
         this.description = struct.description;
         this.icon = struct.icon;
         this.core = struct.core ?? false;
-        this.enabled = new Observable(this.core ? true : (struct.enabled ?? true));
+        this.enabled = new Observable(this.core ? true : (struct.enabled ?? false));
+        this.downloaded = new Observable(this.core ? true : false);
     }
     addRegistration(fn) {
         this._registrations.push(fn);
@@ -50,10 +52,26 @@ export default class Module {
     isActive() {
         return this.enabled.getObject() === true;
     }
+    /** True if enabled but not downloaded — works only in the current session. */
+    get ephemeral() {
+        return this.isActive() && !this.downloaded.getObject();
+    }
+    download() {
+        this.downloaded.setObject(true);
+        console.log(`[Module]: "${this.name}" downloaded`);
+    }
+    undownload() {
+        if (this.core) {
+            throw new Error(`[Module]: Cannot remove core module "${this.name}" from downloads`);
+        }
+        this.downloaded.setObject(false);
+        console.log(`[Module]: "${this.name}" removed from downloads`);
+    }
 }
 export class ModuleManager {
     static _modules = new Map();
     static STORAGE_KEY = "purper:modules";
+    static SESSION_KEY = "purper:modules:session";
     static register(struct) {
         if (this._modules.has(struct.name)) {
             throw new Error(`[Module]: Module "${struct.name}" is already registered`);
@@ -105,14 +123,21 @@ export class ModuleManager {
         return promises;
     }
     static persistState() {
-        const state = {};
+        const localState = {};
+        const sessionState = {};
         for (const mod of this._modules.values()) {
-            if (!mod.core) {
-                state[mod.name] = mod.isActive();
+            if (mod.core)
+                continue;
+            if (mod.downloaded.getObject()) {
+                localState[mod.name] = { enabled: mod.isActive(), downloaded: true };
+            }
+            else if (mod.isActive()) {
+                sessionState[mod.name] = { enabled: true };
             }
         }
         try {
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state));
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(localState));
+            sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(sessionState));
             console.log(`[Module]: Persisted module state`);
         }
         catch (e) {
@@ -120,21 +145,48 @@ export class ModuleManager {
         }
     }
     static restoreState() {
+        // Restore from localStorage (downloaded modules)
         try {
             const raw = localStorage.getItem(this.STORAGE_KEY);
-            if (!raw)
-                return;
-            const state = JSON.parse(raw);
-            for (const [name, enabled] of Object.entries(state)) {
-                const mod = this._modules.get(name);
-                if (mod && !mod.core) {
-                    mod.enabled.setObject(enabled);
-                    console.log(`[Module]: Restored "${name}" → ${enabled ? "enabled" : "disabled"}`);
+            if (raw) {
+                const state = JSON.parse(raw);
+                for (const [name, data] of Object.entries(state)) {
+                    const mod = this._modules.get(name);
+                    if (mod && !mod.core) {
+                        if (typeof data === 'boolean') {
+                            // Old format: value is just a boolean for enabled state
+                            mod.enabled.setObject(data);
+                            console.log(`[Module]: Migrated old format "${name}" → enabled=${data}`);
+                            continue;
+                        }
+                        if (data.downloaded) {
+                            mod.downloaded.setObject(true);
+                        }
+                        mod.enabled.setObject(data.enabled);
+                        console.log(`[Module]: Restored "${name}" → downloaded=${data.downloaded}, enabled=${data.enabled}`);
+                    }
                 }
             }
         }
         catch (e) {
-            console.warn(`[Module]: Failed to restore module state`, e);
+            console.warn(`[Module]: Failed to restore localStorage state`, e);
+        }
+        // Restore from sessionStorage (ephemeral modules)
+        try {
+            const raw = sessionStorage.getItem(this.SESSION_KEY);
+            if (raw) {
+                const state = JSON.parse(raw);
+                for (const [name, data] of Object.entries(state)) {
+                    const mod = this._modules.get(name);
+                    if (mod && !mod.core && !mod.downloaded.getObject()) {
+                        mod.enabled.setObject(data.enabled);
+                        console.log(`[Module]: Restored ephemeral "${name}" → enabled=${data.enabled}`);
+                    }
+                }
+            }
+        }
+        catch (e) {
+            console.warn(`[Module]: Failed to restore sessionStorage state`, e);
         }
     }
 }

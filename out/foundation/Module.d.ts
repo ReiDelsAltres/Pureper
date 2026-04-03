@@ -12,6 +12,7 @@ export default class Module {
     readonly icon?: string;
     readonly core: boolean;
     readonly enabled: Observable<boolean>;
+    readonly downloaded: Observable<boolean>;
     private _registrations;
     constructor(struct: ModuleStruct);
     addRegistration(fn: () => Promise<void>): void;
@@ -27,10 +28,15 @@ export default class Module {
     enable(): void;
     disable(): void;
     isActive(): boolean;
+    /** True if enabled but not downloaded — works only in the current session. */
+    get ephemeral(): boolean;
+    download(): void;
+    undownload(): void;
 }
 export declare class ModuleManager {
     private static _modules;
     private static readonly STORAGE_KEY;
+    private static readonly SESSION_KEY;
     static register(struct: ModuleStruct): Module;
     static get(name: string): Module | undefined;
     static getAll(): Module[];
