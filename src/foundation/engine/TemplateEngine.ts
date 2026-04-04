@@ -57,11 +57,13 @@ export default class TemplateEngine {
             }
             return false;
         }
-        doWork(context?: { element: Element, name: string, value: string }): void {
+        doWork(context?: { element: Element, name: string, value: string | boolean }): void {
             const { element, name, value } = context!;
-            if (value === null || value === undefined) {
+            if (value === null || value === undefined || value === false) {
                 if (element.hasAttribute(name))
                     element.removeAttribute(name);
+            } else if (value === true) {
+                element.setAttribute(name, '');
             } else {
                 element.setAttribute(name, value);
             }
@@ -256,7 +258,8 @@ export default class TemplateEngine {
                     if (!point.nextSibling) break;
                     point = point.nextSibling;
                     if (!point || point.nodeType !== Node.ELEMENT_NODE) continue;
-                    if (!point || !this.acceptNode(point as Element)) break;
+                    const tag = (point as Element).tagName;
+                    if (tag !== "ELSEIF" && tag !== "ELSE") break;
                     allParts.push({ element: point as Element, shadow: TemplateEngine.transContentToShadow(point as Element) });
                 }
 

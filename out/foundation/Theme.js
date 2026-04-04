@@ -1,5 +1,6 @@
 import Fetcher from "./Fetcher.js";
 import Observable from "./api/Observer.js";
+export const DEFAULT_THEME = "Blazor";
 export let ACTIVE_THEME_KEY = "Empty";
 let activeThemeSheet = null;
 let _internalThemeSwitch = false;
@@ -19,7 +20,7 @@ export async function init() {
         await setTheme(ACTIVE_THEME_KEY);
     }
     else {
-        await setTheme("Blazor");
+        await setTheme(DEFAULT_THEME);
     }
 }
 export async function setTheme(name) {
@@ -134,5 +135,12 @@ export async function deactivateAppTheme() {
     activeAppTheme.setObject(null);
     localStorage.removeItem('appTheme');
     console.info(`[Theme]: AppTheme "${current.name}" deactivated`);
+}
+export async function resetToDefault() {
+    await deactivateAppTheme();
+    await setTheme(DEFAULT_THEME);
+    ACTIVE_THEME_KEY = DEFAULT_THEME;
+    localStorage.setItem("theme", DEFAULT_THEME);
+    console.info(`[Theme]: Reset to default theme "${DEFAULT_THEME}"`);
 }
 //# sourceMappingURL=Theme.js.map

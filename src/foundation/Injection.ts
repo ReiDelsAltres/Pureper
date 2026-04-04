@@ -165,6 +165,30 @@ export class Placeholder {
         console.info(`[Placeholder:${placeholderName}]: Reloaded ${reloads.length} instance(s)`);
     }
 
+    /** Return all registered placeholder names. */
+    public static getAllNames(): string[] {
+        return Array.from(this._all.keys());
+    }
+
+    /** Deactivate a placeholder — hides all instances. */
+    public static deactivate(name: string): void {
+        const p = this._all.get(name);
+        if (!p) return;
+        p.activeImpl.setObject(null);
+        console.info(`[Placeholder:${name}]: Deactivated`);
+    }
+
+    /** Activate a placeholder — restores the default implementation. */
+    public static activate(name: string): void {
+        const p = this._all.get(name);
+        if (!p) return;
+        const first = p.implementations.values().next().value;
+        if (first && !p.activeImpl.getObject()) {
+            p.activeImpl.setObject(first);
+            console.info(`[Placeholder:${name}]: Activated with "${first.name}"`);
+        }
+    }
+
     /**
      * Switch a single instance to a different implementation and reload it.
      * Does NOT change the global active implementation.

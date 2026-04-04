@@ -1,4 +1,4 @@
-import Triplet from "./Triplet.js";
+import Triplet, { RegistryCapture } from "./Triplet.js";
 export function ReComponent(settings, tag) {
     return (ctor) => {
         if (tag == null || tag.length === 0 || !tag.includes("-"))
@@ -7,6 +7,15 @@ export function ReComponent(settings, tag) {
             settings.class = ctor;
         const triplet = new Triplet(settings);
         triplet.register("markup", tag);
+        const paths = [];
+        if (settings.markupURL)
+            paths.push(settings.markupURL);
+        if (settings.cssURL)
+            paths.push(settings.cssURL);
+        if (settings.ltCssURL)
+            paths.push(settings.ltCssURL);
+        if (paths.length > 0)
+            RegistryCapture.capture(ctor, paths);
     };
 }
 export function RePage(settings, route) {
@@ -17,6 +26,15 @@ export function RePage(settings, route) {
             settings.class = ctor;
         const triplet = new Triplet(settings);
         triplet.register("router", route);
+        const paths = [];
+        if (settings.markupURL)
+            paths.push(settings.markupURL);
+        if (settings.cssURL)
+            paths.push(settings.cssURL);
+        if (settings.ltCssURL)
+            paths.push(settings.ltCssURL);
+        if (paths.length > 0)
+            RegistryCapture.capture(ctor, paths);
     };
 }
 /**
@@ -40,6 +58,15 @@ export function ReImplementation(settings, target) {
         const triplet = new Triplet(settings, implName);
         // Register adds the implementation to the existing placeholder (or creates one)
         triplet.register(target.includes("-") ? "markup" : "router", target);
+        const paths = [];
+        if (settings.markupURL)
+            paths.push(settings.markupURL);
+        if (settings.cssURL)
+            paths.push(settings.cssURL);
+        if (settings.ltCssURL)
+            paths.push(settings.ltCssURL);
+        if (paths.length > 0)
+            RegistryCapture.capture(ctor, paths);
         console.info(`[ReImplementation:${target}] registered implementation "${implName}"`);
     };
 }

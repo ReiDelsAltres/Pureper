@@ -1,5 +1,14 @@
 import Observable from "./api/Observer.js";
-import { REGISTRY } from "./Triplet.js";
+import { Placeholder } from "./Injection.js";
+import { REGISTRY, RegistryCapture } from "./Triplet.js";
+import CacheManager, { DownloadProgress } from "./CacheManager.js";
+
+export type SubModuleStruct = {
+    name: string;
+    description?: string;
+    inbuilt?: boolean;
+    resources?: string[];
+};
 
 export type ModuleStruct = {
     name: string;
@@ -8,51 +17,50 @@ export type ModuleStruct = {
     core?: boolean;
     enabled?: boolean;
     resources?: string[];
+    subModules?: SubModuleStruct[];
 };
 
-export type ModuleDownloadProgress = {
-    /** Total number of resources */
-    totalFiles: number;
-    /** Number of resources downloaded so far */
-    downloadedFiles: number;
-    /** Current file being downloaded */
-    currentFile: string;
-    /** Total bytes across all resources (estimated) */
-    totalBytes: number;
-    /** Bytes downloaded so far */
-    downloadedBytes: number;
-    /** Download speed in bytes/sec */
-    speed: number;
-    /** Whether download is in progress */
-    active: boolean;
-};
-
-export default class Module {
+export default class Module extends Observable<boolean> {
     public readonly name: string;
     public readonly description?: string;
     public readonly icon?: string;
     public readonly core: boolean;
-    public readonly enabled: Observable<boolean>;
     public readonly downloaded: Observable<boolean>;
     public readonly resources: string[];
     public readonly totalSize: Observable<number>;
-    public readonly downloadProgress: Observable<ModuleDownloadProgress>;
+    public readonly downloadProgress: Observable<DownloadProgress>;
+    public readonly downloadError: Observable<string>;
 
     private _registrations: (() => Promise<void>)[] = [];
+    private _placeholderNames: string[] = [];
+    private _initialized: boolean = false;
+    private _subModules: SubModule[] = [];
+    private static _claimedPlaceholders = new Set<string>();
+
+    public get enabled(): Observable<boolean> {
+        return this;
+    }
 
     public constructor(struct: ModuleStruct) {
+        super(struct.core ? true : (struct.enabled ?? false));
         this.name = struct.name;
         this.description = struct.description;
         this.icon = struct.icon;
         this.core = struct.core ?? false;
-        this.enabled = new Observable<boolean>(this.core ? true : (struct.enabled ?? false));
-        this.downloaded = new Observable<boolean>(this.core ? true : false);
+        this.downloaded = new Observable<boolean>(false);
         this.resources = struct.resources ?? [];
         this.totalSize = new Observable<number>(0);
-        this.downloadProgress = new Observable<ModuleDownloadProgress>({
-            totalFiles: 0, downloadedFiles: 0, currentFile: '',
+        this.downloadProgress = new Observable<DownloadProgress>({
+            totalFiles: 0, completedFiles: 0, currentFile: '',
             totalBytes: 0, downloadedBytes: 0, speed: 0, active: false
         });
+        this.downloadError = new Observable<string>('');
+
+        if (struct.subModules) {
+            for (const sub of struct.subModules) {
+                this.addSubModule(sub);
+            }
+        }
     }
 
     public addRegistration(fn: () => Promise<void>): void {
@@ -73,12 +81,60 @@ export default class Module {
     public captureRegistrations(registry: (() => Promise<void>)[]): void {
         const captured = registry.splice(0, registry.length);
         this._registrations.push(...captured);
-        console.log(`[Module]: "${this.name}" captured ${captured.length} registration(s)`);
+
+        // Discover placeholder names created by this module's imports
+        for (const name of Placeholder.getAllNames()) {
+            if (!Module._claimedPlaceholders.has(name)) {
+                Module._claimedPlaceholders.add(name);
+                this._placeholderNames.push(name);
+            }
+        }
+
+        console.log(`[Module]: "${this.name}" captured ${captured.length} registration(s), ${this._placeholderNames.length} placeholder(s)`);
+
+        const capturedResources = RegistryCapture.drain();
+        if (capturedResources.length > 0) {
+            this.resources.push(...capturedResources);
+            console.log(`[Module]: "${this.name}" auto-captured ${capturedResources.length} resource path(s)`);
+        }
     }
 
-    public enable(): void {
-        if (this.enabled.getObject() === true) return;
-        this.enabled.setObject(true);
+    public addPlaceholder(name: string): void {
+        this._placeholderNames.push(name);
+    }
+
+    public getPlaceholderNames(): ReadonlyArray<string> {
+        return this._placeholderNames;
+    }
+
+    public markInitialized(): void {
+        this._initialized = true;
+    }
+
+    public async enable(): Promise<void> {
+        if (this.getObject() === true) return;
+        this.setObject(true);
+
+        if (!this._initialized) {
+            this._initialized = true;
+            // Snapshot existing placeholders before running registrations
+            const before = new Set(Placeholder.getAllNames());
+            for (const reg of this._registrations) {
+                await reg();
+            }
+            // Discover which placeholders were added by this module
+            for (const name of Placeholder.getAllNames()) {
+                if (!before.has(name)) {
+                    this._placeholderNames.push(name);
+                }
+            }
+        } else {
+            // Re-activate previously registered placeholders
+            for (const name of this._placeholderNames) {
+                Placeholder.activate(name);
+            }
+        }
+
         console.log(`[Module]: "${this.name}" enabled`);
     }
 
@@ -86,13 +142,19 @@ export default class Module {
         if (this.core) {
             throw new Error(`[Module]: Cannot disable core module "${this.name}"`);
         }
-        if (this.enabled.getObject() === false) return;
-        this.enabled.setObject(false);
+        if (this.getObject() === false) return;
+        this.setObject(false);
+
+        // Deactivate placeholders
+        for (const name of this._placeholderNames) {
+            Placeholder.deactivate(name);
+        }
+
         console.log(`[Module]: "${this.name}" disabled`);
     }
 
     public isActive(): boolean {
-        return this.enabled.getObject() === true;
+        return this.getObject() === true;
     }
 
     /** True if enabled but not downloaded — works only in the current session. */
@@ -100,161 +162,63 @@ export default class Module {
         return this.isActive() && !this.downloaded.getObject();
     }
 
-    /**
-     * Download all module resources with progress tracking.
-     * Uses fetch to download each resource and tracks progress.
-     */
     public async download(): Promise<void> {
         if (this.downloaded.getObject()) return;
-        if (this.resources.length === 0) {
-            // No resources to download — just mark as downloaded
+        this.downloadError.setObject('');
+
+        const hasInbuiltSubs = this._subModules.some(s => s.inbuilt && !s.downloaded.getObject() && s.resources.length > 0);
+        if (this.resources.length === 0 && !hasInbuiltSubs) {
             this.downloaded.setObject(true);
             console.log(`[Module]: "${this.name}" downloaded (no resources)`);
             return;
         }
 
-        const resolveUrl = (url: string): string => {
-            const trimmed = url.trim();
-            if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) return trimmed;
-            if (trimmed.startsWith("//")) return `${window.location.protocol}${trimmed}`;
-            return new URL(trimmed, document.baseURI).href;
-        };
+        try {
+            // Download module's own resources
+            let totalBytes = await CacheManager.download(this.resources, this.downloadProgress);
 
-        const totalFiles = this.resources.length;
-        let downloadedFiles = 0;
-        let downloadedBytes = 0;
-        let totalBytes = 0;
-        let lastTime = performance.now();
-        let lastBytes = 0;
-        let speed = 0;
-
-        // First, try to estimate total size with HEAD requests
-        const headPromises = this.resources.map(async (url) => {
-            try {
-                const resolved = resolveUrl(url);
-                const resp = await fetch(resolved, { method: 'HEAD' });
-                const cl = resp.headers.get('content-length');
-                return cl ? parseInt(cl, 10) : 0;
-            } catch {
-                return 0;
+            // Also download all inbuilt sub-modules
+            for (const sub of this._subModules) {
+                if (sub.inbuilt && !sub.downloaded.getObject()) {
+                    const subBytes = await CacheManager.download(sub.resources, this.downloadProgress);
+                    sub.totalSize.setObject(subBytes);
+                    sub.downloaded.setObject(true);
+                    totalBytes += subBytes;
+                }
             }
-        });
 
-        const sizes = await Promise.all(headPromises);
-        totalBytes = sizes.reduce((a, b) => a + b, 0);
-        this.totalSize.setObject(totalBytes);
-
-        this.downloadProgress.setObject({
-            totalFiles, downloadedFiles: 0, currentFile: '',
-            totalBytes, downloadedBytes: 0, speed: 0, active: true
-        });
-
-        console.log(`[Module]: Starting download of "${this.name}" (${totalFiles} files, ~${this.formatBytes(totalBytes)})`);
-
-        for (let i = 0; i < this.resources.length; i++) {
-            const url = this.resources[i];
-            const resolved = resolveUrl(url);
-            const fileName = url.split('/').pop() || url;
-
-            this.downloadProgress.setObject({
-                totalFiles, downloadedFiles, currentFile: fileName,
-                totalBytes, downloadedBytes, speed, active: true
-            });
-
-            try {
-                const response = await fetch(resolved);
-                if (!response.ok) {
-                    console.warn(`[Module]: Failed to download ${url}: ${response.status}`);
-                    downloadedFiles++;
-                    continue;
-                }
-
-                // Read with progress tracking
-                const reader = response.body?.getReader();
-                const chunks: BlobPart[] = [];
-
-                if (reader) {
-                    while (true) {
-                        const { done, value } = await reader.read();
-                        if (done) break;
-                        chunks.push(value);
-                        downloadedBytes += value.byteLength;
-
-                        // Calculate speed
-                        const now = performance.now();
-                        const elapsed = (now - lastTime) / 1000;
-                        if (elapsed >= 0.5) {
-                            speed = (downloadedBytes - lastBytes) / elapsed;
-                            lastTime = now;
-                            lastBytes = downloadedBytes;
-                        }
-
-                        this.downloadProgress.setObject({
-                            totalFiles, downloadedFiles, currentFile: fileName,
-                            totalBytes, downloadedBytes, speed, active: true
-                        });
-                    }
-                }
-
-                // Cache the resource
-                if ('caches' in window) {
-                    try {
-                        const cache = await caches.open('purper-modules');
-                        const blob = new Blob(chunks);
-                        const cacheResponse = new Response(blob, {
-                            headers: response.headers
-                        });
-                        await cache.put(resolved, cacheResponse);
-                    } catch (e) {
-                        console.warn(`[Module]: Failed to cache ${url}`, e);
-                    }
-                }
-
-                downloadedFiles++;
-            } catch (e) {
-                console.warn(`[Module]: Error downloading ${url}`, e);
-                downloadedFiles++;
-            }
+            this.totalSize.setObject(totalBytes);
+            this.downloaded.setObject(true);
+            // Clear ephemeral flag if re-downloaded
+            ModuleManager.clearEphemeralCore(this.name);
+            console.log(`[Module]: "${this.name}" downloaded (${this.resources.length} files, ${CacheManager.formatBytes(totalBytes)})`);
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            this.downloadError.setObject(msg);
+            console.error(`[Module]: "${this.name}" download failed:`, msg);
         }
-
-        this.downloadProgress.setObject({
-            totalFiles, downloadedFiles, currentFile: '',
-            totalBytes, downloadedBytes, speed: 0, active: false
-        });
-
-        this.downloaded.setObject(true);
-        console.log(`[Module]: "${this.name}" downloaded (${downloadedFiles}/${totalFiles} files, ${this.formatBytes(downloadedBytes)})`);
     }
 
     public formatBytes(bytes: number): string {
-        if (bytes === 0) return '0 B';
-        const k = 1024;
-        const sizes = ['B', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        return CacheManager.formatBytes(bytes);
     }
 
     public async undownload(): Promise<void> {
-        if (this.core) {
-            throw new Error(`[Module]: Cannot remove core module "${this.name}" from downloads`);
-        }
+        this.downloadError.setObject('');
+        await CacheManager.delete(this.resources);
 
-        // Remove cached resources
-        if ('caches' in window && this.resources.length > 0) {
-            try {
-                const cache = await caches.open('purper-modules');
-                const resolveUrl = (url: string): string => {
-                    const trimmed = url.trim();
-                    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) return trimmed;
-                    if (trimmed.startsWith("//")) return `${window.location.protocol}${trimmed}`;
-                    return new URL(trimmed, document.baseURI).href;
-                };
-                for (const url of this.resources) {
-                    await cache.delete(resolveUrl(url));
+        // Also undownload all sub-modules
+        for (const sub of this._subModules) {
+            if (sub.downloaded.getObject()) {
+                if (sub.inbuilt) {
+                    // Inbuilt subs: clean up directly (bypass the guard)
+                    await CacheManager.delete(sub.resources);
+                    sub.downloaded.setObject(false);
+                    sub.totalSize.setObject(0);
+                    sub.downloadError.setObject('');
+                } else {
+                    await sub.undownload();
                 }
-                console.log(`[Module]: Cleared cache for "${this.name}"`);
-            } catch (e) {
-                console.warn(`[Module]: Failed to clear cache for "${this.name}"`, e);
             }
         }
 
@@ -262,10 +226,97 @@ export default class Module {
         this.totalSize.setObject(0);
         console.log(`[Module]: "${this.name}" removed from downloads`);
     }
+
+    public addSubModule(struct: SubModuleStruct): SubModule {
+        const sub = new SubModule(struct, this);
+        this._subModules.push(sub);
+        return sub;
+    }
+
+    public getSubModules(): ReadonlyArray<SubModule> {
+        return this._subModules;
+    }
+}
+
+export class SubModule {
+    public readonly name: string;
+    public readonly description?: string;
+    public readonly inbuilt: boolean;
+    public readonly resources: string[];
+    public readonly downloaded: Observable<boolean>;
+    public readonly parent: Module;
+    public readonly totalSize: Observable<number>;
+    public readonly downloadProgress: Observable<DownloadProgress>;
+    public readonly downloadError: Observable<string>;
+
+    constructor(struct: SubModuleStruct, parent: Module) {
+        this.name = struct.name;
+        this.description = struct.description;
+        this.inbuilt = struct.inbuilt ?? true;
+        this.resources = struct.resources ?? [];
+        this.downloaded = new Observable<boolean>(false);
+        this.parent = parent;
+        this.totalSize = new Observable<number>(0);
+        this.downloadProgress = new Observable<DownloadProgress>({
+            totalFiles: 0, completedFiles: 0, currentFile: '',
+            totalBytes: 0, downloadedBytes: 0, speed: 0, active: false
+        });
+        this.downloadError = new Observable<string>('');
+    }
+
+    private assertParentActive(): void {
+        if (!this.parent.isActive()) {
+            throw new Error(`[SubModule]: Cannot access "${this.name}" — parent module "${this.parent.name}" is disabled`);
+        }
+    }
+    private assertParentDownloaded(): void {
+        if (!this.parent.downloaded.getObject()) {
+            throw new Error(`[SubModule]: Cannot access "${this.name}" — parent module "${this.parent.name}" is not downloaded`);
+        }
+    }
+
+    public async download(): Promise<void> {
+        if (this.inbuilt) {
+            throw new Error(`[SubModule]: "${this.name}" is inbuilt and cannot be downloaded separately`);
+        }
+        this.assertParentDownloaded();
+        if (this.downloaded.getObject()) return;
+        this.downloadError.setObject('');
+
+        if (this.resources.length === 0) {
+            this.downloaded.setObject(true);
+            return;
+        }
+
+        try {
+            const bytes = await CacheManager.download(this.resources, this.downloadProgress);
+            this.totalSize.setObject(bytes);
+            this.downloaded.setObject(true);
+            console.log(`[SubModule]: "${this.name}" of "${this.parent.name}" downloaded (${CacheManager.formatBytes(bytes)})`);
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            this.downloadError.setObject(msg);
+            console.error(`[SubModule]: "${this.name}" download failed:`, msg);
+        }
+    }
+
+    public async undownload(): Promise<void> {
+        if (this.inbuilt) {
+            throw new Error(`[SubModule]: "${this.name}" is inbuilt and cannot be removed separately`);
+        }
+        if (!this.downloaded.getObject()) return;
+        this.downloadError.setObject('');
+
+        await CacheManager.delete(this.resources);
+        this.downloaded.setObject(false);
+        this.totalSize.setObject(0);
+        console.log(`[SubModule]: "${this.name}" of "${this.parent.name}" removed from downloads`);
+    }
 }
 
 export class ModuleManager {
     private static _modules: Map<string, Module> = new Map();
+    private static _userEphemeralCores = new Set<string>();
     private static readonly STORAGE_KEY = "purper:modules";
     private static readonly SESSION_KEY = "purper:modules:session";
 
@@ -306,6 +357,7 @@ export class ModuleManager {
 
         for (const mod of this._modules.values()) {
             if (mod.isActive()) {
+                mod.markInitialized();
                 console.log(`[Module]: Initializing module "${mod.name}" (${mod.getRegistrations().length} registration(s))`);
                 for (const reg of mod.getRegistrations()) {
                     promises.push(reg());
@@ -324,18 +376,50 @@ export class ModuleManager {
             }
         }
 
+        // Auto-download enabled modules that are not yet downloaded
+        // (fire-and-forget — does not block initialization)
+        this.autoDownload();
+
         return promises;
     }
 
+    private static async autoDownload(): Promise<void> {
+        for (const mod of this._modules.values()) {
+            if (mod.core && !mod.downloaded.getObject() && !this._userEphemeralCores.has(mod.name)) {
+                console.log(`[Module]: Auto-downloading "${mod.name}"...`);
+                mod.download().then(() => {
+                    this.persistState();
+                }).catch(e => {
+                    console.warn(`[Module]: Auto-download failed for "${mod.name}"`, e);
+                });
+            }
+        }
+    }
+
     static persistState(): void {
-        const localState: Record<string, { enabled: boolean, downloaded: boolean }> = {};
+        const localState: Record<string, { enabled: boolean, downloaded: boolean, size: number, subModules?: Record<string, { downloaded: boolean, size: number }> }> = {};
         const sessionState: Record<string, { enabled: boolean }> = {};
 
         for (const mod of this._modules.values()) {
-            if (mod.core) continue;
+            const subs = mod.getSubModules();
+            let subModules: Record<string, { downloaded: boolean, size: number }> | undefined;
+            if (subs.length > 0) {
+                subModules = {};
+                for (const sub of subs) {
+                    subModules[sub.name] = {
+                        downloaded: sub.downloaded.getObject() === true,
+                        size: sub.totalSize.getObject() ?? 0
+                    };
+                }
+            }
 
-            if (mod.downloaded.getObject()) {
-                localState[mod.name] = { enabled: mod.isActive(), downloaded: true };
+            if (mod.downloaded.getObject() || mod.core) {
+                localState[mod.name] = {
+                    enabled: mod.isActive(),
+                    downloaded: mod.downloaded.getObject() === true,
+                    size: mod.totalSize.getObject() ?? 0,
+                    ...(subModules ? { subModules } : {})
+                };
             } else if (mod.isActive()) {
                 sessionState[mod.name] = { enabled: true };
             }
@@ -350,25 +434,49 @@ export class ModuleManager {
         }
     }
 
+    static clearEphemeralCore(name: string): void {
+        this._userEphemeralCores.delete(name);
+    }
+
     static restoreState(): void {
         // Restore from localStorage (downloaded modules)
         try {
             const raw = localStorage.getItem(this.STORAGE_KEY);
             if (raw) {
-                const state: Record<string, { enabled: boolean, downloaded: boolean } | boolean> = JSON.parse(raw);
+                const state: Record<string, { enabled: boolean, downloaded: boolean, size?: number, subModules?: Record<string, { enabled?: boolean, downloaded: boolean, size?: number }> } | boolean> = JSON.parse(raw);
                 for (const [name, data] of Object.entries(state)) {
                     const mod = this._modules.get(name);
-                    if (mod && !mod.core) {
+                    if (mod) {
                         if (typeof data === 'boolean') {
                             // Old format: value is just a boolean for enabled state
-                            mod.enabled.setObject(data);
+                            if (!mod.core) mod.setObject(data);
                             console.log(`[Module]: Migrated old format "${name}" → enabled=${data}`);
                             continue;
                         }
                         if (data.downloaded) {
                             mod.downloaded.setObject(true);
                         }
-                        mod.enabled.setObject(data.enabled);
+                        if (data.size) {
+                            mod.totalSize.setObject(data.size);
+                        }
+                        if (!mod.core) {
+                            mod.setObject(data.enabled);
+                        }
+                        // Track core modules explicitly made ephemeral by user
+                        if (mod.core && !data.downloaded) {
+                            this._userEphemeralCores.add(name);
+                        }
+                        if (data.subModules) {
+                            for (const sub of mod.getSubModules()) {
+                                const subData = data.subModules[sub.name];
+                                if (subData) {
+                                    sub.downloaded.setObject(subData.downloaded);
+                                    if (subData.size) {
+                                        sub.totalSize.setObject(subData.size);
+                                    }
+                                }
+                            }
+                        }
                         console.log(`[Module]: Restored "${name}" → downloaded=${data.downloaded}, enabled=${data.enabled}`);
                     }
                 }
@@ -385,7 +493,7 @@ export class ModuleManager {
                 for (const [name, data] of Object.entries(state)) {
                     const mod = this._modules.get(name);
                     if (mod && !mod.core && !mod.downloaded.getObject()) {
-                        mod.enabled.setObject(data.enabled);
+                        mod.setObject(data.enabled);
                         console.log(`[Module]: Restored ephemeral "${name}" → enabled=${data.enabled}`);
                     }
                 }

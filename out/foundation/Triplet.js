@@ -5,6 +5,23 @@ import TemplateEngine from "./engine/TemplateEngine.js";
 import Scope from "./engine/Scope.js";
 import { Implementation, Placeholder } from "./Injection.js";
 export const REGISTRY = [];
+export class RegistryCapture {
+    static _unclaimed = [];
+    static _classResources = new Map();
+    /** Called by decorators to record which file paths a class uses. */
+    static capture(cls, paths) {
+        this._classResources.set(cls, paths);
+        this._unclaimed.push(...paths);
+    }
+    /** Drain all unclaimed resource paths. Called by Module.captureRegistrations(). */
+    static drain() {
+        return this._unclaimed.splice(0);
+    }
+    /** Get resource paths for a specific class. */
+    static getResources(cls) {
+        return this._classResources.get(cls) ?? [];
+    }
+}
 export var AccessType;
 (function (AccessType) {
     AccessType[AccessType["NONE"] = 0] = "NONE";

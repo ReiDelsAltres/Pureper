@@ -78,6 +78,12 @@ export declare class Placeholder {
      * All live instances of this placeholder will reload.
      */
     static switchTo(placeholderName: string, implName: string): Promise<void>;
+    /** Return all registered placeholder names. */
+    static getAllNames(): string[];
+    /** Deactivate a placeholder — hides all instances. */
+    static deactivate(name: string): void;
+    /** Activate a placeholder — restores the default implementation. */
+    static activate(name: string): void;
     /**
      * Switch a single instance to a different implementation and reload it.
      * Does NOT change the global active implementation.

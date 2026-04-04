@@ -61,9 +61,12 @@ export default class TemplateEngine {
         }
         doWork(context) {
             const { element, name, value } = context;
-            if (value === null || value === undefined) {
+            if (value === null || value === undefined || value === false) {
                 if (element.hasAttribute(name))
                     element.removeAttribute(name);
+            }
+            else if (value === true) {
+                element.setAttribute(name, '');
             }
             else {
                 element.setAttribute(name, value);
@@ -258,7 +261,8 @@ export default class TemplateEngine {
                     point = point.nextSibling;
                     if (!point || point.nodeType !== Node.ELEMENT_NODE)
                         continue;
-                    if (!point || !this.acceptNode(point))
+                    const tag = point.tagName;
+                    if (tag !== "ELSEIF" && tag !== "ELSE")
                         break;
                     allParts.push({ element: point, shadow: TemplateEngine.transContentToShadow(point) });
                 }

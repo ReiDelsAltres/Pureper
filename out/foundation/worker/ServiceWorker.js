@@ -4,14 +4,13 @@ import Observable from "../api/Observer.js";
  *
  * Provides:
  * - Registration with one call (`ServiceWorker.register()`)
- * - Cache management: add / remove / list / clear
  * - Connectivity detection with reactive `online` observable
+ * - Fetch tracking for debug NetworkStatus component
+ * - Version / lifecycle management
  *
  * Usage:
  * ```ts
  * await ServiceWorker.register();              // defaults to './serviceworker.js'
- * await ServiceWorker.addToCache('/data.json');
- * await ServiceWorker.removeFromCache('/old.css');
  * ServiceWorker.online.subscribe(v => console.log('online:', v));
  * ```
  */
@@ -21,8 +20,6 @@ export default class ServiceWorker {
     static online = new Observable(navigator.onLine);
     static fetchActivities = new Observable([]);
     static pageSource = new Observable('unknown');
-    static cacheStrategy = new Observable('cache-first');
-    static precacheMode = new Observable('normal');
     static _fetchTrackingEnabled = false;
     static _fetchListenerBound = false;
     // ── Connectivity listeners (bound once) ─────────────────────────
@@ -91,95 +88,6 @@ export default class ServiceWorker {
             mc.port1.onmessage = (ev) => resolve(ev.data);
             navigator.serviceWorker.controller.postMessage(msg, [mc.port2]);
         });
-    }
-    // ── Cache Management ────────────────────────────────────────────
-    /** Add a single URL to the SW cache. */
-    static async addToCache(url) {
-        if (navigator.serviceWorker?.controller) {
-            this._postMessage({ type: 'CACHE_URL', url });
-            return;
-        }
-        // Fallback: use Cache API directly
-        try {
-            const cache = await caches.open('purper-v1');
-            const response = await fetch(url);
-            if (response.ok) {
-                await cache.put(url, response);
-                console.log('[ServiceWorker]: Resource cached directly:', url);
-            }
-        }
-        catch (e) {
-            console.warn('[ServiceWorker]: Failed to cache resource:', url, e);
-        }
-    }
-    /** Add multiple URLs to the SW cache in one batch. */
-    static addAllToCache(urls) {
-        this._postMessage({ type: 'CACHE_URLS', urls });
-    }
-    /** Remove a URL from the SW cache. Returns true if it was found and deleted. */
-    static async removeFromCache(url) {
-        try {
-            const data = await this._request({ type: 'REMOVE_URL', url });
-            return data.deleted;
-        }
-        catch {
-            // Fallback
-            try {
-                const cache = await caches.open('purper-v1');
-                return await cache.delete(url);
-            }
-            catch {
-                return false;
-            }
-        }
-    }
-    /** Return all URLs currently in the SW cache. */
-    static async getCacheKeys() {
-        try {
-            const data = await this._request({ type: 'GET_CACHE_KEYS' });
-            return data.keys;
-        }
-        catch {
-            return [];
-        }
-    }
-    /** Wipe the entire SW cache. */
-    static async clearCache() {
-        try {
-            const data = await this._request({ type: 'CLEAR_CACHE' });
-            return data.cleared;
-        }
-        catch {
-            return false;
-        }
-    }
-    /** Check whether a URL exists in the SW cache. */
-    static async isCached(url) {
-        try {
-            const data = await this._request({ type: 'HAS_URL', url });
-            return data.cached;
-        }
-        catch {
-            // Fallback: CacheStorage directly
-            try {
-                return !!(await caches.match(url));
-            }
-            catch {
-                return false;
-            }
-        }
-    }
-    // ── Cache Strategy & Precache Mode ────────────────────────────
-    static setCacheStrategy(strategy) {
-        this.cacheStrategy.setObject(strategy);
-        this._postMessage({ type: 'SET_CACHE_STRATEGY', strategy });
-    }
-    static setPrecacheMode(mode) {
-        this.precacheMode.setObject(mode);
-        this._postMessage({ type: 'SET_PRECACHE_MODE', mode });
-    }
-    static async getConfig() {
-        return this._request({ type: 'GET_CONFIG' });
     }
     // ── Version & lifecycle ─────────────────────────────────────────
     /** Ask the waiting SW to activate immediately. */

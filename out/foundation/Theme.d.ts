@@ -1,4 +1,5 @@
 import Observable from "./api/Observer.js";
+export declare const DEFAULT_THEME = "Blazor";
 export declare let ACTIVE_THEME_KEY: string;
 export declare function loadTheme(name: string): Promise<string>;
 export declare function loadThemeAsInstant(name: string): Promise<CSSStyleSheet>;
@@ -42,4 +43,5 @@ export declare function activateAppTheme(name: string): Promise<void>;
  * - Does NOT change the color palette (that's separate)
  */
 export declare function deactivateAppTheme(): Promise<void>;
+export declare function resetToDefault(): Promise<void>;
 //# sourceMappingURL=Theme.d.ts.map

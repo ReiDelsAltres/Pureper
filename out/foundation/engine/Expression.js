@@ -96,17 +96,17 @@ export default class Expression {
     transformCode(scope) {
         const context = scope.getVariables();
         let transformedCode = this.code;
-        // Находим Observable переменные
-        const observableVars = new Set();
-        for (const [key, value] of Object.entries(context)) {
-            if (isObservable(value)) {
-                observableVars.add(key);
-            }
-        }
-        // Трансформируем Observable: user.name -> user.getObject().name
-        for (const varName of observableVars) {
-            const propRegex = new RegExp(`\\b${varName}\\.(?!getObject|setObject|subscribe|unsubscribe|getObserver|getMutationObserver|subscribeMutation|unsubscribeMutation)`, 'g');
-            transformedCode = transformedCode.replace(propRegex, `${varName}.getObject().`);
+        for (const [varName, value] of Object.entries(context)) {
+            if (!isObservable(value))
+                continue;
+            const propRegex = new RegExp(`\\b${varName}\\.(\\w+)`, 'g');
+            transformedCode = transformedCode.replace(propRegex, (match, propName) => {
+                // Не разворачиваем, если свойство/метод существует на самом экземпляре Observable
+                if (propName in value) {
+                    return match;
+                }
+                return `${varName}.getObject().${propName}`;
+            });
         }
         return transformedCode;
     }

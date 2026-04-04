@@ -15,17 +15,18 @@ export { default as Page } from './foundation/component_api/Page.js';
 export { default as Component } from './foundation/component_api/Component.js';
 export { default as Attribute } from './foundation/component_api/Attribute.js';
 
-export { default as Triplet, TripletStruct, AccessType, REGISTRY } from './foundation/Triplet.js';
+export { default as Triplet, TripletStruct, AccessType, REGISTRY, RegistryCapture } from './foundation/Triplet.js';
 export { ReComponent, RePage, ReImplementation } from './foundation/TripletDecorator.js';
 
 export { Implementation, ImplementationStruct, Placeholder } from './foundation/Injection.js';
-export { default as Module, ModuleStruct, ModuleManager, ModuleDownloadProgress } from './foundation/Module.js';
+export { default as Module, ModuleStruct, ModuleManager, SubModule, SubModuleStruct } from './foundation/Module.js';
+export { default as CacheManager, DownloadProgress } from './foundation/CacheManager.js';
 export { default as Fetcher } from './foundation/Fetcher.js';
 
 export * from './foundation/engine/TemplateEngine.js';
 
 export { Router } from './foundation/worker/Router.js';
-export { default as ServiceWorker, ServiceWorkerConfig, FetchActivityItem, PageSourceType, CacheStrategy, PrecacheMode } from './foundation/worker/ServiceWorker.js';
+export { default as ServiceWorker, ServiceWorkerConfig, FetchActivityItem, PageSourceType } from './foundation/worker/ServiceWorker.js';
 
 export * from './foundation/Hosting.js';
 export * from './foundation/Theme.js';

@@ -10,6 +10,27 @@ import { Implementation, ImplementationStruct, Placeholder } from "./Injection.j
 
 export const REGISTRY: (() => Promise<void>)[] = [];
 
+export class RegistryCapture {
+    private static _unclaimed: string[] = [];
+    private static _classResources = new Map<Function, string[]>();
+
+    /** Called by decorators to record which file paths a class uses. */
+    static capture(cls: Function, paths: string[]): void {
+        this._classResources.set(cls, paths);
+        this._unclaimed.push(...paths);
+    }
+
+    /** Drain all unclaimed resource paths. Called by Module.captureRegistrations(). */
+    static drain(): string[] {
+        return this._unclaimed.splice(0);
+    }
+
+    /** Get resource paths for a specific class. */
+    static getResources(cls: Function): string[] {
+        return this._classResources.get(cls) ?? [];
+    }
+}
+
 export enum AccessType {
     NONE = 0,
     OFFLINE = 1 << 0,

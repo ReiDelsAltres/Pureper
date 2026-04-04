@@ -1,5 +1,15 @@
 import { ImplementationStruct } from "./Injection.js";
 export declare const REGISTRY: (() => Promise<void>)[];
+export declare class RegistryCapture {
+    private static _unclaimed;
+    private static _classResources;
+    /** Called by decorators to record which file paths a class uses. */
+    static capture(cls: Function, paths: string[]): void;
+    /** Drain all unclaimed resource paths. Called by Module.captureRegistrations(). */
+    static drain(): string[];
+    /** Get resource paths for a specific class. */
+    static getResources(cls: Function): string[];
+}
 export declare enum AccessType {
     NONE = 0,
     OFFLINE = 1,

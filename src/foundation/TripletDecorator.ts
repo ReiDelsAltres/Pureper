@@ -1,5 +1,5 @@
 import { AnyConstructor, UniHtml } from "../index.js";
-import Triplet, { TripletStruct } from "./Triplet.js"
+import Triplet, { RegistryCapture, TripletStruct } from "./Triplet.js"
 
 export function ReComponent(settings: TripletStruct, tag: string) {
     return (ctor: Function) => {
@@ -12,6 +12,12 @@ export function ReComponent(settings: TripletStruct, tag: string) {
         const triplet: Triplet = new Triplet(settings);
 
         triplet.register("markup", tag);
+
+        const paths: string[] = [];
+        if (settings.markupURL) paths.push(settings.markupURL);
+        if (settings.cssURL) paths.push(settings.cssURL);
+        if (settings.ltCssURL) paths.push(settings.ltCssURL);
+        if (paths.length > 0) RegistryCapture.capture(ctor, paths);
     }
 }
 export function RePage(settings: TripletStruct, route: string) {
@@ -25,6 +31,12 @@ export function RePage(settings: TripletStruct, route: string) {
         const triplet: Triplet = new Triplet(settings);
 
         triplet.register("router", route);
+
+        const paths: string[] = [];
+        if (settings.markupURL) paths.push(settings.markupURL);
+        if (settings.cssURL) paths.push(settings.cssURL);
+        if (settings.ltCssURL) paths.push(settings.ltCssURL);
+        if (paths.length > 0) RegistryCapture.capture(ctor, paths);
     }
 }
 
@@ -52,6 +64,12 @@ export function ReImplementation(settings: TripletStruct, target: string) {
 
         // Register adds the implementation to the existing placeholder (or creates one)
         triplet.register(target.includes("-") ? "markup" : "router", target);
+
+        const paths: string[] = [];
+        if (settings.markupURL) paths.push(settings.markupURL);
+        if (settings.cssURL) paths.push(settings.cssURL);
+        if (settings.ltCssURL) paths.push(settings.ltCssURL);
+        if (paths.length > 0) RegistryCapture.capture(ctor, paths);
 
         console.info(`[ReImplementation:${target}] registered implementation "${implName}"`);
     }
