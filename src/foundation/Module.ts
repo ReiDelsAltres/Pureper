@@ -483,6 +483,10 @@ export class ModuleManager {
         return promises;
     }
 
+    private static async autoUpdate(): Promise<void> {
+
+    }
+
     private static async autoDownload(): Promise<void> {
         for (const mod of this._modules.values()) {
             if (mod.core && !mod.downloaded.getObject() && !this._userEphemeralCores.has(mod.name)) {
