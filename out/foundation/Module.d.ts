@@ -5,6 +5,9 @@ export type SubModuleStruct = {
     description?: string;
     inbuilt?: boolean;
     resources?: string[];
+    estimatedSize?: number;
+    onDownload?: (progress: Observable<DownloadProgress>) => Promise<void>;
+    onUndownload?: () => Promise<void>;
 };
 export type ModuleStruct = {
     name: string;
@@ -13,6 +16,7 @@ export type ModuleStruct = {
     core?: boolean;
     enabled?: boolean;
     resources?: string[];
+    estimatedSize?: number;
     subModules?: SubModuleStruct[];
 };
 export default class Module extends Observable<boolean> {
@@ -28,6 +32,7 @@ export default class Module extends Observable<boolean> {
     private _registrations;
     private _placeholderNames;
     private _initialized;
+    private _estimatedSize;
     private _subModules;
     private static _claimedPlaceholders;
     get enabled(): Observable<boolean>;
@@ -51,6 +56,7 @@ export default class Module extends Observable<boolean> {
     /** True if enabled but not downloaded — works only in the current session. */
     get ephemeral(): boolean;
     download(): Promise<void>;
+    refresh(): Promise<void>;
     formatBytes(bytes: number): string;
     undownload(): Promise<void>;
     addSubModule(struct: SubModuleStruct): SubModule;
@@ -66,11 +72,18 @@ export declare class SubModule {
     readonly totalSize: Observable<number>;
     readonly downloadProgress: Observable<DownloadProgress>;
     readonly downloadError: Observable<string>;
+    private readonly _onDownload?;
+    private readonly _onUndownload?;
+    private readonly _estimatedSize;
     constructor(struct: SubModuleStruct, parent: Module);
     private assertParentActive;
     private assertParentDownloaded;
     download(): Promise<void>;
     undownload(): Promise<void>;
+    get hasCustomDownload(): boolean;
+    get estimatedSize(): number;
+    runOnDownload(): Promise<number>;
+    runOnUndownload(): Promise<void>;
 }
 export declare class ModuleManager {
     private static _modules;
@@ -93,5 +106,6 @@ export declare class ModuleManager {
     static persistState(): void;
     static clearEphemeralCore(name: string): void;
     static restoreState(): void;
+    static refreshDownloadedModules(): Promise<void>;
 }
 //# sourceMappingURL=Module.d.ts.map

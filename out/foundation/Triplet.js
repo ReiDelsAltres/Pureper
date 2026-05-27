@@ -104,7 +104,9 @@ export default class Triplet {
                         const holder = TemplateEngine.createHolder(markupText, Scope.from(this));
                         const cssText = await activeImpl.style;
                         if (cssText) {
-                            document.adoptedStyleSheets.push(await new CSSStyleSheet().replace(cssText));
+                            const sheet = await new CSSStyleSheet().replace(cssText);
+                            document.adoptedStyleSheets.push(sheet);
+                            this._pageStyleSheets.push(sheet);
                         }
                         return holder;
                     };

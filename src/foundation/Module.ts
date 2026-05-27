@@ -8,6 +8,9 @@ export type SubModuleStruct = {
     description?: string;
     inbuilt?: boolean;
     resources?: string[];
+    estimatedSize?: number;
+    onDownload?: (progress: Observable<DownloadProgress>) => Promise<void>;
+    onUndownload?: () => Promise<void>;
 };
 
 export type ModuleStruct = {
@@ -17,16 +20,21 @@ export type ModuleStruct = {
     core?: boolean;
     enabled?: boolean;
     resources?: string[];
+    estimatedSize?: number;
     subModules?: SubModuleStruct[];
 };
 
 export default class Module extends Observable<boolean> {
     public readonly name: string;
     public readonly description?: string;
+
     public readonly icon?: string;
+
     public readonly core: boolean;
+
     public readonly downloaded: Observable<boolean>;
     public readonly resources: string[];
+
     public readonly totalSize: Observable<number>;
     public readonly downloadProgress: Observable<DownloadProgress>;
     public readonly downloadError: Observable<string>;
@@ -34,6 +42,7 @@ export default class Module extends Observable<boolean> {
     private _registrations: (() => Promise<void>)[] = [];
     private _placeholderNames: string[] = [];
     private _initialized: boolean = false;
+    private _estimatedSize: number = 0;
     private _subModules: SubModule[] = [];
     private static _claimedPlaceholders = new Set<string>();
 
@@ -55,6 +64,11 @@ export default class Module extends Observable<boolean> {
             totalBytes: 0, downloadedBytes: 0, speed: 0, active: false
         });
         this.downloadError = new Observable<string>('');
+        this._estimatedSize = struct.estimatedSize ?? 0;
+
+        if (struct.estimatedSize && struct.estimatedSize > 0) {
+            this.totalSize.setObject(struct.estimatedSize);
+        }
 
         if (struct.subModules) {
             for (const sub of struct.subModules) {
@@ -166,7 +180,7 @@ export default class Module extends Observable<boolean> {
         if (this.downloaded.getObject()) return;
         this.downloadError.setObject('');
 
-        const hasInbuiltSubs = this._subModules.some(s => s.inbuilt && !s.downloaded.getObject() && s.resources.length > 0);
+        const hasInbuiltSubs = this._subModules.some(s => s.inbuilt && !s.downloaded.getObject() && (s.resources.length > 0 || s.hasCustomDownload));
         if (this.resources.length === 0 && !hasInbuiltSubs) {
             this.downloaded.setObject(true);
             console.log(`[Module]: "${this.name}" downloaded (no resources)`);
@@ -180,7 +194,13 @@ export default class Module extends Observable<boolean> {
             // Also download all inbuilt sub-modules
             for (const sub of this._subModules) {
                 if (sub.inbuilt && !sub.downloaded.getObject()) {
-                    const subBytes = await CacheManager.download(sub.resources, this.downloadProgress);
+                    let subBytes = 0;
+                    if (sub.resources.length > 0) {
+                        subBytes += await CacheManager.download(sub.resources, this.downloadProgress);
+                    }
+                    if (sub.hasCustomDownload) {
+                        subBytes += await sub.runOnDownload();
+                    }
                     sub.totalSize.setObject(subBytes);
                     sub.downloaded.setObject(true);
                     totalBytes += subBytes;
@@ -199,6 +219,33 @@ export default class Module extends Observable<boolean> {
         }
     }
 
+    public async refresh(): Promise<void> {
+        if (!this.downloaded.getObject()) return;
+
+        const previousDownloaded = this.downloaded.getObject();
+        const previousSubState = this._subModules.map(sub => sub.downloaded.getObject());
+
+        this.downloadError.setObject('');
+        this.downloaded.setObject(false);
+        for (const sub of this._subModules) {
+            if (sub.downloaded.getObject()) {
+                sub.downloaded.setObject(false);
+            }
+        }
+
+        try {
+            await this.download();
+        } catch (e) {
+            this.downloaded.setObject(previousDownloaded);
+            this._subModules.forEach((sub, index) => {
+                if (previousSubState[index]) {
+                    sub.downloaded.setObject(true);
+                }
+            });
+            throw e;
+        }
+    }
+
     public formatBytes(bytes: number): string {
         return CacheManager.formatBytes(bytes);
     }
@@ -213,8 +260,9 @@ export default class Module extends Observable<boolean> {
                 if (sub.inbuilt) {
                     // Inbuilt subs: clean up directly (bypass the guard)
                     await CacheManager.delete(sub.resources);
+                    await sub.runOnUndownload();
                     sub.downloaded.setObject(false);
-                    sub.totalSize.setObject(0);
+                    sub.totalSize.setObject(sub.estimatedSize);
                     sub.downloadError.setObject('');
                 } else {
                     await sub.undownload();
@@ -223,7 +271,7 @@ export default class Module extends Observable<boolean> {
         }
 
         this.downloaded.setObject(false);
-        this.totalSize.setObject(0);
+        this.totalSize.setObject(this._estimatedSize);
         console.log(`[Module]: "${this.name}" removed from downloads`);
     }
 
@@ -248,6 +296,9 @@ export class SubModule {
     public readonly totalSize: Observable<number>;
     public readonly downloadProgress: Observable<DownloadProgress>;
     public readonly downloadError: Observable<string>;
+    private readonly _onDownload?: (progress: Observable<DownloadProgress>) => Promise<void>;
+    private readonly _onUndownload?: () => Promise<void>;
+    private readonly _estimatedSize: number;
 
     constructor(struct: SubModuleStruct, parent: Module) {
         this.name = struct.name;
@@ -262,6 +313,13 @@ export class SubModule {
             totalBytes: 0, downloadedBytes: 0, speed: 0, active: false
         });
         this.downloadError = new Observable<string>('');
+        this._onDownload = struct.onDownload;
+        this._onUndownload = struct.onUndownload;
+        this._estimatedSize = struct.estimatedSize ?? 0;
+
+        if (struct.estimatedSize && struct.estimatedSize > 0) {
+            this.totalSize.setObject(struct.estimatedSize);
+        }
     }
 
     private assertParentActive(): void {
@@ -283,14 +341,33 @@ export class SubModule {
         if (this.downloaded.getObject()) return;
         this.downloadError.setObject('');
 
-        if (this.resources.length === 0) {
+        if (this.resources.length === 0 && !this._onDownload) {
             this.downloaded.setObject(true);
             return;
         }
 
         try {
-            const bytes = await CacheManager.download(this.resources, this.downloadProgress);
-            this.totalSize.setObject(bytes);
+            let bytes = 0;
+            if (this.resources.length > 0) {
+                bytes = await CacheManager.download(this.resources, this.downloadProgress);
+            }
+            if (this._onDownload) {
+                const sizeBefore = await CacheManager.measureExternalCache();
+                const estimatedTotal = this.totalSize.getObject() ?? 0;
+                this.downloadProgress.setObject({
+                    totalFiles: 1, completedFiles: 0, currentFile: this.name,
+                    totalBytes: estimatedTotal, downloadedBytes: 0, speed: 0, active: true
+                });
+                await this._onDownload(this.downloadProgress);
+                const sizeAfter = await CacheManager.measureExternalCache();
+                const externalBytes = Math.max(0, sizeAfter - sizeBefore);
+                bytes += externalBytes > 0 ? externalBytes : this._estimatedSize;
+                this.downloadProgress.setObject({
+                    totalFiles: 1, completedFiles: 1, currentFile: '',
+                    totalBytes: bytes, downloadedBytes: bytes, speed: 0, active: false
+                });
+            }
+            this.totalSize.setObject(bytes > 0 ? bytes : this._estimatedSize);
             this.downloaded.setObject(true);
             console.log(`[SubModule]: "${this.name}" of "${this.parent.name}" downloaded (${CacheManager.formatBytes(bytes)})`);
         } catch (e) {
@@ -308,9 +385,32 @@ export class SubModule {
         this.downloadError.setObject('');
 
         await CacheManager.delete(this.resources);
+        if (this._onUndownload) {
+            await this._onUndownload();
+        }
         this.downloaded.setObject(false);
-        this.totalSize.setObject(0);
+        this.totalSize.setObject(this._estimatedSize);
         console.log(`[SubModule]: "${this.name}" of "${this.parent.name}" removed from downloads`);
+    }
+
+    public get hasCustomDownload(): boolean {
+        return !!this._onDownload;
+    }
+
+    public get estimatedSize(): number {
+        return this._estimatedSize;
+    }
+
+    public async runOnDownload(): Promise<number> {
+        if (!this._onDownload) return 0;
+        const sizeBefore = await CacheManager.measureExternalCache();
+        await this._onDownload(this.downloadProgress);
+        const sizeAfter = await CacheManager.measureExternalCache();
+        return Math.max(0, sizeAfter - sizeBefore);
+    }
+
+    public async runOnUndownload(): Promise<void> {
+        if (this._onUndownload) await this._onUndownload();
     }
 }
 
@@ -455,9 +555,9 @@ export class ModuleManager {
                         }
                         if (data.downloaded) {
                             mod.downloaded.setObject(true);
-                        }
-                        if (data.size) {
-                            mod.totalSize.setObject(data.size);
+                            if (data.size) {
+                                mod.totalSize.setObject(data.size);
+                            }
                         }
                         if (!mod.core) {
                             mod.setObject(data.enabled);
@@ -471,7 +571,7 @@ export class ModuleManager {
                                 const subData = data.subModules[sub.name];
                                 if (subData) {
                                     sub.downloaded.setObject(subData.downloaded);
-                                    if (subData.size) {
+                                    if (subData.downloaded && subData.size) {
                                         sub.totalSize.setObject(subData.size);
                                     }
                                 }
@@ -501,5 +601,24 @@ export class ModuleManager {
         } catch (e) {
             console.warn(`[Module]: Failed to restore sessionStorage state`, e);
         }
+    }
+
+    static async refreshDownloadedModules(): Promise<void> {
+        const modulesToRefresh = Array.from(this._modules.values()).filter(mod => mod.downloaded.getObject() && !mod.core);
+        if (modulesToRefresh.length === 0) {
+            console.log('[Module]: No user-downloaded modules found for refresh');
+            return;
+        }
+
+        console.log(`[Module]: Refreshing ${modulesToRefresh.length} user-downloaded module(s)`);
+        for (const mod of modulesToRefresh) {
+            try {
+                await mod.refresh();
+            } catch (e) {
+                console.warn(`[Module]: Failed to refresh "${mod.name}"`, e);
+            }
+        }
+
+        this.persistState();
     }
 }

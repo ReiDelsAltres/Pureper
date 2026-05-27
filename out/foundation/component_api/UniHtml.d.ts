@@ -7,6 +7,7 @@ import { TemplateHolder } from "../engine/TemplateEngine.js";
 export default class UniHtml {
     _status: Observable<"constructed" | "loading" | "ready">;
     protected _templateHolder?: TemplateHolder;
+    _pageStyleSheets: CSSStyleSheet[];
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.

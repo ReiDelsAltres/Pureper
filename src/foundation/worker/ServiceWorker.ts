@@ -73,9 +73,22 @@ export default class ServiceWorker {
         const scope = config?.scope ?? './';
 
         try {
+            const oldController = navigator.serviceWorker.controller;
             const reg = await navigator.serviceWorker.register(scriptURL, { scope });
             this._registration = reg;
             console.log(`[ServiceWorker]: Registered "${scriptURL}" with scope "${reg.scope}"`);
+
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (oldController && navigator.serviceWorker.controller !== oldController) {
+                    console.log('[ServiceWorker]: New service worker controller detected, reloading page.');
+                    try {
+                        sessionStorage.setItem('purper:updatePending', 'true');
+                    } catch (e) {
+                        console.warn('[ServiceWorker]: Could not set update flag in sessionStorage', e);
+                    }
+                    window.location.reload();
+                }
+            }, { once: true });
 
             reg.addEventListener('updatefound', () => {
                 const newWorker = reg.installing;
@@ -87,6 +100,17 @@ export default class ServiceWorker {
                     }
                 });
             });
+
+            if (await this.isOnline()) {
+                try {
+                    console.log('[ServiceWorker]: Online — checking for updates');
+                    await reg.update();
+                } catch (err) {
+                    console.warn('[ServiceWorker]: Update check failed', err);
+                }
+            } else {
+                console.log('[ServiceWorker]: Offline — skipping update check');
+            }
 
             // Wait for the controller to be available
             if (!navigator.serviceWorker.controller) {

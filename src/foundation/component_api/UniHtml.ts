@@ -9,6 +9,7 @@ import { TemplateHolder } from "../engine/TemplateEngine.js";
 export default class UniHtml {
     public _status: Observable<"constructed" | "loading" | "ready"> = new Observable("constructed");
     protected _templateHolder?: TemplateHolder;
+    public _pageStyleSheets: CSSStyleSheet[] = [];
 
     /**
      * Unified component lifecycle entrypoint.
@@ -91,6 +92,13 @@ export default class UniHtml {
     }
 
     public async dispose(): Promise<void> {
+        if (this._pageStyleSheets.length > 0) {
+            document.adoptedStyleSheets = document.adoptedStyleSheets.filter(
+                s => !this._pageStyleSheets.includes(s)
+            );
+            this._pageStyleSheets = [];
+        }
+
         if (this._templateHolder) {
             this._templateHolder.engine.dispose();
             this._templateHolder = undefined;

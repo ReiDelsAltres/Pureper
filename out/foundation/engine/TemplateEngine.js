@@ -61,6 +61,24 @@ export default class TemplateEngine {
         }
         doWork(context) {
             const { element, name, value } = context;
+            // If the target element is a Purper component, update via Attribute API
+            // so that reactive subscriptions fire correctly.
+            const attrs = element._attributes;
+            if (attrs) {
+                const attr = attrs.find(a => a.name === name);
+                if (attr) {
+                    if (value === null || value === undefined || value === false) {
+                        attr.setObject(attr['_defaultValue']);
+                    }
+                    else if (value === true) {
+                        attr.setObject(true);
+                    }
+                    else {
+                        attr.setObject(value);
+                    }
+                    return;
+                }
+            }
             if (value === null || value === undefined || value === false) {
                 if (element.hasAttribute(name))
                     element.removeAttribute(name);

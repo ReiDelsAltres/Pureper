@@ -6,6 +6,7 @@ import Observable from "../api/Observer.js";
 export default class UniHtml {
     _status = new Observable("constructed");
     _templateHolder;
+    _pageStyleSheets = [];
     /**
      * Unified component lifecycle entrypoint.
      * Loads HTML, then calls preLoadJS, render, and postLoadJS hooks in order.
@@ -78,6 +79,10 @@ export default class UniHtml {
         return Promise.all(promises).then(() => { return; });
     }
     async dispose() {
+        if (this._pageStyleSheets.length > 0) {
+            document.adoptedStyleSheets = document.adoptedStyleSheets.filter(s => !this._pageStyleSheets.includes(s));
+            this._pageStyleSheets = [];
+        }
         if (this._templateHolder) {
             this._templateHolder.engine.dispose();
             this._templateHolder = undefined;

@@ -148,4 +148,27 @@ export default class CacheManager {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
     }
+
+    /**
+     * Measure total size of all caches EXCEPT purper-modules.
+     * Used to estimate size after external libraries (e.g. HuggingFace) cache their data.
+     */
+    static async measureExternalCache(): Promise<number> {
+        if (!('caches' in window)) return 0;
+        let total = 0;
+        const names = await caches.keys();
+        for (const name of names) {
+            if (name === this.CACHE_NAME) continue;
+            const cache = await caches.open(name);
+            const keys = await cache.keys();
+            for (const req of keys) {
+                const resp = await cache.match(req);
+                if (resp) {
+                    const blob = await resp.blob();
+                    total += blob.size;
+                }
+            }
+        }
+        return total;
+    }
 }

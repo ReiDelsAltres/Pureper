@@ -15,6 +15,7 @@ export default class Module extends Observable {
     _registrations = [];
     _placeholderNames = [];
     _initialized = false;
+    _estimatedSize = 0;
     _subModules = [];
     static _claimedPlaceholders = new Set();
     get enabled() {
@@ -34,6 +35,10 @@ export default class Module extends Observable {
             totalBytes: 0, downloadedBytes: 0, speed: 0, active: false
         });
         this.downloadError = new Observable('');
+        this._estimatedSize = struct.estimatedSize ?? 0;
+        if (struct.estimatedSize && struct.estimatedSize > 0) {
+            this.totalSize.setObject(struct.estimatedSize);
+        }
         if (struct.subModules) {
             for (const sub of struct.subModules) {
                 this.addSubModule(sub);
@@ -129,7 +134,7 @@ export default class Module extends Observable {
         if (this.downloaded.getObject())
             return;
         this.downloadError.setObject('');
-        const hasInbuiltSubs = this._subModules.some(s => s.inbuilt && !s.downloaded.getObject() && s.resources.length > 0);
+        const hasInbuiltSubs = this._subModules.some(s => s.inbuilt && !s.downloaded.getObject() && (s.resources.length > 0 || s.hasCustomDownload));
         if (this.resources.length === 0 && !hasInbuiltSubs) {
             this.downloaded.setObject(true);
             console.log(`[Module]: "${this.name}" downloaded (no resources)`);
@@ -141,7 +146,13 @@ export default class Module extends Observable {
             // Also download all inbuilt sub-modules
             for (const sub of this._subModules) {
                 if (sub.inbuilt && !sub.downloaded.getObject()) {
-                    const subBytes = await CacheManager.download(sub.resources, this.downloadProgress);
+                    let subBytes = 0;
+                    if (sub.resources.length > 0) {
+                        subBytes += await CacheManager.download(sub.resources, this.downloadProgress);
+                    }
+                    if (sub.hasCustomDownload) {
+                        subBytes += await sub.runOnDownload();
+                    }
                     sub.totalSize.setObject(subBytes);
                     sub.downloaded.setObject(true);
                     totalBytes += subBytes;
@@ -159,6 +170,31 @@ export default class Module extends Observable {
             console.error(`[Module]: "${this.name}" download failed:`, msg);
         }
     }
+    async refresh() {
+        if (!this.downloaded.getObject())
+            return;
+        const previousDownloaded = this.downloaded.getObject();
+        const previousSubState = this._subModules.map(sub => sub.downloaded.getObject());
+        this.downloadError.setObject('');
+        this.downloaded.setObject(false);
+        for (const sub of this._subModules) {
+            if (sub.downloaded.getObject()) {
+                sub.downloaded.setObject(false);
+            }
+        }
+        try {
+            await this.download();
+        }
+        catch (e) {
+            this.downloaded.setObject(previousDownloaded);
+            this._subModules.forEach((sub, index) => {
+                if (previousSubState[index]) {
+                    sub.downloaded.setObject(true);
+                }
+            });
+            throw e;
+        }
+    }
     formatBytes(bytes) {
         return CacheManager.formatBytes(bytes);
     }
@@ -171,8 +207,9 @@ export default class Module extends Observable {
                 if (sub.inbuilt) {
                     // Inbuilt subs: clean up directly (bypass the guard)
                     await CacheManager.delete(sub.resources);
+                    await sub.runOnUndownload();
                     sub.downloaded.setObject(false);
-                    sub.totalSize.setObject(0);
+                    sub.totalSize.setObject(sub.estimatedSize);
                     sub.downloadError.setObject('');
                 }
                 else {
@@ -181,7 +218,7 @@ export default class Module extends Observable {
             }
         }
         this.downloaded.setObject(false);
-        this.totalSize.setObject(0);
+        this.totalSize.setObject(this._estimatedSize);
         console.log(`[Module]: "${this.name}" removed from downloads`);
     }
     addSubModule(struct) {
@@ -203,6 +240,9 @@ export class SubModule {
     totalSize;
     downloadProgress;
     downloadError;
+    _onDownload;
+    _onUndownload;
+    _estimatedSize;
     constructor(struct, parent) {
         this.name = struct.name;
         this.description = struct.description;
@@ -216,6 +256,12 @@ export class SubModule {
             totalBytes: 0, downloadedBytes: 0, speed: 0, active: false
         });
         this.downloadError = new Observable('');
+        this._onDownload = struct.onDownload;
+        this._onUndownload = struct.onUndownload;
+        this._estimatedSize = struct.estimatedSize ?? 0;
+        if (struct.estimatedSize && struct.estimatedSize > 0) {
+            this.totalSize.setObject(struct.estimatedSize);
+        }
     }
     assertParentActive() {
         if (!this.parent.isActive()) {
@@ -235,13 +281,32 @@ export class SubModule {
         if (this.downloaded.getObject())
             return;
         this.downloadError.setObject('');
-        if (this.resources.length === 0) {
+        if (this.resources.length === 0 && !this._onDownload) {
             this.downloaded.setObject(true);
             return;
         }
         try {
-            const bytes = await CacheManager.download(this.resources, this.downloadProgress);
-            this.totalSize.setObject(bytes);
+            let bytes = 0;
+            if (this.resources.length > 0) {
+                bytes = await CacheManager.download(this.resources, this.downloadProgress);
+            }
+            if (this._onDownload) {
+                const sizeBefore = await CacheManager.measureExternalCache();
+                const estimatedTotal = this.totalSize.getObject() ?? 0;
+                this.downloadProgress.setObject({
+                    totalFiles: 1, completedFiles: 0, currentFile: this.name,
+                    totalBytes: estimatedTotal, downloadedBytes: 0, speed: 0, active: true
+                });
+                await this._onDownload(this.downloadProgress);
+                const sizeAfter = await CacheManager.measureExternalCache();
+                const externalBytes = Math.max(0, sizeAfter - sizeBefore);
+                bytes += externalBytes > 0 ? externalBytes : this._estimatedSize;
+                this.downloadProgress.setObject({
+                    totalFiles: 1, completedFiles: 1, currentFile: '',
+                    totalBytes: bytes, downloadedBytes: bytes, speed: 0, active: false
+                });
+            }
+            this.totalSize.setObject(bytes > 0 ? bytes : this._estimatedSize);
             this.downloaded.setObject(true);
             console.log(`[SubModule]: "${this.name}" of "${this.parent.name}" downloaded (${CacheManager.formatBytes(bytes)})`);
         }
@@ -259,9 +324,30 @@ export class SubModule {
             return;
         this.downloadError.setObject('');
         await CacheManager.delete(this.resources);
+        if (this._onUndownload) {
+            await this._onUndownload();
+        }
         this.downloaded.setObject(false);
-        this.totalSize.setObject(0);
+        this.totalSize.setObject(this._estimatedSize);
         console.log(`[SubModule]: "${this.name}" of "${this.parent.name}" removed from downloads`);
+    }
+    get hasCustomDownload() {
+        return !!this._onDownload;
+    }
+    get estimatedSize() {
+        return this._estimatedSize;
+    }
+    async runOnDownload() {
+        if (!this._onDownload)
+            return 0;
+        const sizeBefore = await CacheManager.measureExternalCache();
+        await this._onDownload(this.downloadProgress);
+        const sizeAfter = await CacheManager.measureExternalCache();
+        return Math.max(0, sizeAfter - sizeBefore);
+    }
+    async runOnUndownload() {
+        if (this._onUndownload)
+            await this._onUndownload();
     }
 }
 export class ModuleManager {
@@ -392,9 +478,9 @@ export class ModuleManager {
                         }
                         if (data.downloaded) {
                             mod.downloaded.setObject(true);
-                        }
-                        if (data.size) {
-                            mod.totalSize.setObject(data.size);
+                            if (data.size) {
+                                mod.totalSize.setObject(data.size);
+                            }
                         }
                         if (!mod.core) {
                             mod.setObject(data.enabled);
@@ -408,7 +494,7 @@ export class ModuleManager {
                                 const subData = data.subModules[sub.name];
                                 if (subData) {
                                     sub.downloaded.setObject(subData.downloaded);
-                                    if (subData.size) {
+                                    if (subData.downloaded && subData.size) {
                                         sub.totalSize.setObject(subData.size);
                                     }
                                 }
@@ -439,6 +525,23 @@ export class ModuleManager {
         catch (e) {
             console.warn(`[Module]: Failed to restore sessionStorage state`, e);
         }
+    }
+    static async refreshDownloadedModules() {
+        const modulesToRefresh = Array.from(this._modules.values()).filter(mod => mod.downloaded.getObject());
+        if (modulesToRefresh.length === 0) {
+            console.log('[Module]: No downloaded modules found for refresh');
+            return;
+        }
+        console.log(`[Module]: Refreshing ${modulesToRefresh.length} downloaded module(s)`);
+        for (const mod of modulesToRefresh) {
+            try {
+                await mod.refresh();
+            }
+            catch (e) {
+                console.warn(`[Module]: Failed to refresh "${mod.name}"`, e);
+            }
+        }
+        this.persistState();
     }
 }
 //# sourceMappingURL=Module.js.map

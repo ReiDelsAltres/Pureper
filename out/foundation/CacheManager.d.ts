@@ -16,5 +16,10 @@ export default class CacheManager {
     static isCached(url: string): Promise<boolean>;
     static getCachedSize(urls: string[]): Promise<number>;
     static formatBytes(bytes: number): string;
+    /**
+     * Measure total size of all caches EXCEPT purper-modules.
+     * Used to estimate size after external libraries (e.g. HuggingFace) cache their data.
+     */
+    static measureExternalCache(): Promise<number>;
 }
 //# sourceMappingURL=CacheManager.d.ts.map
