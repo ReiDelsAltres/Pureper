@@ -1,5 +1,6 @@
 import Observable from "../api/Observer.js";
 import { TemplateHolder } from "../engine/TemplateEngine.js";
+import GlobalStyleBridge from "../GlobalStyleBridge.js";
 
 
 /**
@@ -32,6 +33,10 @@ export default class UniHtml {
         // render() отвечает за помещение содержимого из localRoot в конечную цель (renderTarget).
         // В UniHtmlComponent.render() после вызова базового render() происходит добавление wrapper в shadowRoot.
         await this.render(html, element);
+        // Глобальные листы стилей (<head>) не проникают в shadow root по спецификации.
+        // Пробрасываем их внутрь после render() (render очищает детей), чтобы работали и в компонентах.
+        // Pages рендерятся в light DOM (#page) и уже получают глобальные стили — для них шаг пропускается.
+        if (element instanceof ShadowRoot) GlobalStyleBridge.register(element);
         // postLoad() вызывается ПОСЛЕ render(). Для компонентов к этому моменту содержимое уже добавлено
         // внутрь shadowRoot, и можно безопасно работать с this.shadowRoot, измерениями layout и т.п.
         await this.postLoad(html);
@@ -69,10 +74,12 @@ export default class UniHtml {
         }
 
         const promises: Promise<void>[] = [];
-        const childrens = holder.documentFragment.childNodes;
+        const childrens = Array.from(holder.documentFragment.childNodes);
         for (const child of childrens) {
+            if (!(child instanceof UniHtml)) continue;
+
             const promise = new Promise<void>((resolve) => {
-                if ((child instanceof UniHtml) && child._status.getObject() === "ready")
+                if (child._status.getObject() === "ready")
                     return resolve();
 
                 const handler = (e) => {
