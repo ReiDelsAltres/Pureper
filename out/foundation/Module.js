@@ -12,6 +12,11 @@ export default class Module extends Observable {
     totalSize;
     downloadProgress;
     downloadError;
+    /** Declared version of this module (set in ModuleStruct). */
+    version;
+    /** Version that was current when the module was last downloaded/installed. */
+    updateAvailable;
+    _installedVersion = undefined;
     _registrations = [];
     _placeholderNames = [];
     _initialized = false;
@@ -35,6 +40,8 @@ export default class Module extends Observable {
             totalBytes: 0, downloadedBytes: 0, speed: 0, active: false
         });
         this.downloadError = new Observable('');
+        this.version = struct.version;
+        this.updateAvailable = new Observable(false);
         this._estimatedSize = struct.estimatedSize ?? 0;
         if (struct.estimatedSize && struct.estimatedSize > 0) {
             this.totalSize.setObject(struct.estimatedSize);
@@ -44,6 +51,20 @@ export default class Module extends Observable {
                 this.addSubModule(sub);
             }
         }
+    }
+    get installedVersion() {
+        return this._installedVersion;
+    }
+    /** Called by ModuleManager when restoring persisted state. Not for external use. */
+    _restoreInstalledVersion(version) {
+        this._installedVersion = version;
+        this._refreshUpdateAvailable();
+    }
+    _refreshUpdateAvailable() {
+        const mismatch = this.downloaded.getObject() === true
+            && this.version !== undefined
+            && this._installedVersion !== this.version;
+        this.updateAvailable.setObject(mismatch);
     }
     addRegistration(fn) {
         this._registrations.push(fn);
@@ -160,9 +181,11 @@ export default class Module extends Observable {
             }
             this.totalSize.setObject(totalBytes);
             this.downloaded.setObject(true);
+            this._installedVersion = this.version;
+            this._refreshUpdateAvailable();
             // Clear ephemeral flag if re-downloaded
             ModuleManager.clearEphemeralCore(this.name);
-            console.log(`[Module]: "${this.name}" downloaded (${this.resources.length} files, ${CacheManager.formatBytes(totalBytes)})`);
+            console.log(`[Module]: "${this.name}" downloaded (${this.resources.length} files, ${CacheManager.formatBytes(totalBytes)})${this.version ? ` v${this.version}` : ''}`);
         }
         catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
@@ -407,7 +430,27 @@ export class ModuleManager {
         // Auto-download enabled modules that are not yet downloaded
         // (fire-and-forget — does not block initialization)
         this.autoDownload();
+        // Check for version mismatches when online and reinstall stale modules
+        this.autoUpdate();
         return promises;
+    }
+    static async autoUpdate() {
+        if (!navigator.onLine)
+            return;
+        const stale = Array.from(this._modules.values()).filter(mod => mod.downloaded.getObject() &&
+            mod.version !== undefined &&
+            mod.installedVersion !== mod.version);
+        if (stale.length === 0)
+            return;
+        console.log(`[Module]: ${stale.length} module(s) have version mismatches — reinstalling online`);
+        for (const mod of stale) {
+            console.log(`[Module]: Updating "${mod.name}" (installed: ${mod.installedVersion ?? 'none'} → current: ${mod.version})`);
+            mod.refresh().then(() => {
+                this.persistState();
+            }).catch(e => {
+                console.warn(`[Module]: Auto-update failed for "${mod.name}"`, e);
+            });
+        }
     }
     static async autoDownload() {
         for (const mod of this._modules.values()) {
@@ -441,6 +484,8 @@ export class ModuleManager {
                     enabled: mod.isActive(),
                     downloaded: mod.downloaded.getObject() === true,
                     size: mod.totalSize.getObject() ?? 0,
+                    ...(mod.version !== undefined ? { version: mod.version } : {}),
+                    ...(mod.installedVersion !== undefined ? { installedVersion: mod.installedVersion } : {}),
                     ...(subModules ? { subModules } : {})
                 };
             }
@@ -489,6 +534,8 @@ export class ModuleManager {
                         if (mod.core && !data.downloaded) {
                             this._userEphemeralCores.add(name);
                         }
+                        // Restore installed version (used for version mismatch detection)
+                        mod._restoreInstalledVersion(data.installedVersion ?? data.version);
                         if (data.subModules) {
                             for (const sub of mod.getSubModules()) {
                                 const subData = data.subModules[sub.name];
@@ -500,7 +547,8 @@ export class ModuleManager {
                                 }
                             }
                         }
-                        console.log(`[Module]: Restored "${name}" → downloaded=${data.downloaded}, enabled=${data.enabled}`);
+                        const versionInfo = mod.version ? ` (installed: ${mod.installedVersion ?? 'none'}, current: ${mod.version})` : '';
+                        console.log(`[Module]: Restored "${name}" → downloaded=${data.downloaded}, enabled=${data.enabled}${versionInfo}`);
                     }
                 }
             }
@@ -527,12 +575,12 @@ export class ModuleManager {
         }
     }
     static async refreshDownloadedModules() {
-        const modulesToRefresh = Array.from(this._modules.values()).filter(mod => mod.downloaded.getObject());
+        const modulesToRefresh = Array.from(this._modules.values()).filter(mod => mod.downloaded.getObject() && !mod.core);
         if (modulesToRefresh.length === 0) {
-            console.log('[Module]: No downloaded modules found for refresh');
+            console.log('[Module]: No user-downloaded modules found for refresh');
             return;
         }
-        console.log(`[Module]: Refreshing ${modulesToRefresh.length} downloaded module(s)`);
+        console.log(`[Module]: Refreshing ${modulesToRefresh.length} user-downloaded module(s)`);
         for (const mod of modulesToRefresh) {
             try {
                 await mod.refresh();

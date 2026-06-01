@@ -18,6 +18,8 @@ export type ModuleStruct = {
     resources?: string[];
     estimatedSize?: number;
     subModules?: SubModuleStruct[];
+    /** Bump this string whenever the module's resources change to trigger auto-reinstall in online sessions. */
+    version?: string;
 };
 export default class Module extends Observable<boolean> {
     readonly name: string;
@@ -29,6 +31,11 @@ export default class Module extends Observable<boolean> {
     readonly totalSize: Observable<number>;
     readonly downloadProgress: Observable<DownloadProgress>;
     readonly downloadError: Observable<string>;
+    /** Declared version of this module (set in ModuleStruct). */
+    readonly version?: string;
+    /** Version that was current when the module was last downloaded/installed. */
+    readonly updateAvailable: Observable<boolean>;
+    private _installedVersion;
     private _registrations;
     private _placeholderNames;
     private _initialized;
@@ -37,6 +44,10 @@ export default class Module extends Observable<boolean> {
     private static _claimedPlaceholders;
     get enabled(): Observable<boolean>;
     constructor(struct: ModuleStruct);
+    get installedVersion(): string | undefined;
+    /** Called by ModuleManager when restoring persisted state. Not for external use. */
+    _restoreInstalledVersion(version: string | undefined): void;
+    private _refreshUpdateAvailable;
     addRegistration(fn: () => Promise<void>): void;
     getRegistrations(): ReadonlyArray<() => Promise<void>>;
     /**
@@ -102,6 +113,7 @@ export declare class ModuleManager {
      * 4. Returns all promises
      */
     static initialize(): Promise<void>[];
+    private static autoUpdate;
     private static autoDownload;
     static persistState(): void;
     static clearEphemeralCore(name: string): void;
