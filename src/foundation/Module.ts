@@ -2,6 +2,7 @@ import Observable from "./api/Observer.js";
 import { Placeholder } from "./Injection.js";
 import { REGISTRY, RegistryCapture } from "./Triplet.js";
 import CacheManager, { DownloadProgress } from "./CacheManager.js";
+import Fetcher from "./Fetcher.js";
 
 export type SubModuleStruct = {
     name: string;
@@ -22,8 +23,6 @@ export type ModuleStruct = {
     resources?: string[];
     estimatedSize?: number;
     subModules?: SubModuleStruct[];
-    /** Bump this string whenever the module's resources change to trigger auto-reinstall in online sessions. */
-    version?: string;
 };
 
 export default class Module extends Observable<boolean> {
@@ -41,12 +40,12 @@ export default class Module extends Observable<boolean> {
     public readonly downloadProgress: Observable<DownloadProgress>;
     public readonly downloadError: Observable<string>;
 
-    /** Declared version of this module (set in ModuleStruct). */
-    public readonly version?: string;
-    /** Version that was current when the module was last downloaded/installed. */
+    /** True when the installed copy is older than the version in the network manifest. */
     public readonly updateAvailable: Observable<boolean>;
 
     private _installedVersion: string | undefined = undefined;
+    /** Latest version from the network manifest — set by ModuleManager, never persisted. */
+    private _latestVersion: string | undefined = undefined;
     private _registrations: (() => Promise<void>)[] = [];
     private _placeholderNames: string[] = [];
     private _initialized: boolean = false;
@@ -72,7 +71,6 @@ export default class Module extends Observable<boolean> {
             totalBytes: 0, downloadedBytes: 0, speed: 0, active: false
         });
         this.downloadError = new Observable<string>('');
-        this.version = struct.version;
         this.updateAvailable = new Observable<boolean>(false);
         this._estimatedSize = struct.estimatedSize ?? 0;
 
@@ -94,14 +92,21 @@ export default class Module extends Observable<boolean> {
     /** Called by ModuleManager when restoring persisted state. Not for external use. */
     public _restoreInstalledVersion(version: string | undefined): void {
         this._installedVersion = version;
-        this._refreshUpdateAvailable();
     }
 
-    private _refreshUpdateAvailable(): void {
-        const mismatch = this.downloaded.getObject() === true
-            && this.version !== undefined
-            && this._installedVersion !== this.version;
+    /** Called by ModuleManager after fetching the network manifest. Not for external use. */
+    public _setLatestVersion(version: string): void {
+        this._latestVersion = version;
+        const mismatch = this.downloaded.getObject() === true && this._installedVersion !== version;
         this.updateAvailable.setObject(mismatch);
+    }
+
+    /** Called by ModuleManager after a successful refresh so installedVersion stays in sync. */
+    public _markInstalled(): void {
+        if (this._latestVersion !== undefined) {
+            this._installedVersion = this._latestVersion;
+        }
+        this.updateAvailable.setObject(false);
     }
 
     public addRegistration(fn: () => Promise<void>): void {
@@ -236,11 +241,10 @@ export default class Module extends Observable<boolean> {
 
             this.totalSize.setObject(totalBytes);
             this.downloaded.setObject(true);
-            this._installedVersion = this.version;
-            this._refreshUpdateAvailable();
-            // Clear ephemeral flag if re-downloaded
+            this._installedVersion = this._latestVersion;
+            this.updateAvailable.setObject(false);
             ModuleManager.clearEphemeralCore(this.name);
-            console.log(`[Module]: "${this.name}" downloaded (${this.resources.length} files, ${CacheManager.formatBytes(totalBytes)})${this.version ? ` v${this.version}` : ''}`);
+            console.log(`[Module]: "${this.name}" downloaded (${this.resources.length} files, ${CacheManager.formatBytes(totalBytes)})`);
         } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
             this.downloadError.setObject(msg);
@@ -449,6 +453,21 @@ export class ModuleManager {
     private static readonly STORAGE_KEY = "purper:modules";
     private static readonly SESSION_KEY = "purper:modules:session";
 
+    /**
+     * URL of a JSON file mapping `moduleName -> version`. It is fetched fresh
+     * from the network (bypassing all caches) so the app can detect new builds
+     * even though the bootstrap code is served from cache. Must NOT be listed
+     * among any module's cached resources.
+     */
+    private static _versionManifestUrl: string | undefined = undefined;
+
+    /** Configure the manager. Call before {@link initialize}. */
+    static configure(options: { versionManifestUrl?: string }): void {
+        if (options.versionManifestUrl !== undefined) {
+            this._versionManifestUrl = options.versionManifestUrl;
+        }
+    }
+
     static register(struct: ModuleStruct): Module {
         if (this._modules.has(struct.name)) {
             throw new Error(`[Module]: Module "${struct.name}" is already registered`);
@@ -514,22 +533,52 @@ export class ModuleManager {
         return promises;
     }
 
+    /**
+     * Fetches the version manifest fresh from the network, bypassing the HTTP
+     * cache and the ServiceWorker cache. Returns null when offline, unconfigured
+     * or on any error — callers must treat null as "no update info available".
+     */
+    private static async fetchVersionManifest(): Promise<Record<string, string> | null> {
+        if (!this._versionManifestUrl) return null;
+        try {
+            const base = Fetcher.resolveUrl(this._versionManifestUrl);
+            // Cache-busting query defeats any intermediary that ignores no-store.
+            const url = base + (base.includes('?') ? '&' : '?') + '__v=' + Date.now();
+            const resp = await fetch(url, { cache: 'no-store' });
+            if (!resp.ok) return null;
+            const data = await resp.json();
+            return (data && typeof data === 'object') ? data as Record<string, string> : null;
+        } catch (e) {
+            console.warn(`[Module]: Failed to fetch version manifest`, e);
+            return null;
+        }
+    }
+
     private static async autoUpdate(): Promise<void> {
         if (!navigator.onLine) return;
 
-        const stale = Array.from(this._modules.values()).filter(mod =>
-            mod.downloaded.getObject() &&
-            mod.version !== undefined &&
-            mod.installedVersion !== mod.version
-        );
+        // Pull the authoritative, fresh versions from the network. Without this
+        // the comparison below would use the stale versions baked into the
+        // cached bootstrap code, and updates would never be detected.
+        const manifest = await this.fetchVersionManifest();
+        if (!manifest) return;
+
+        for (const mod of this._modules.values()) {
+            if (Object.prototype.hasOwnProperty.call(manifest, mod.name)) {
+                mod._setLatestVersion(manifest[mod.name]);
+            }
+        }
+
+        const stale = Array.from(this._modules.values()).filter(mod => mod.updateAvailable.getObject());
 
         if (stale.length === 0) return;
 
         console.log(`[Module]: ${stale.length} module(s) have version mismatches — reinstalling online`);
 
         for (const mod of stale) {
-            console.log(`[Module]: Updating "${mod.name}" (installed: ${mod.installedVersion ?? 'none'} → current: ${mod.version})`);
+            console.log(`[Module]: Updating "${mod.name}" (installed: ${mod.installedVersion ?? 'none'} → current: ${manifest[mod.name]})`);
             mod.refresh().then(() => {
+                mod._markInstalled();
                 this.persistState();
             }).catch(e => {
                 console.warn(`[Module]: Auto-update failed for "${mod.name}"`, e);
@@ -551,7 +600,7 @@ export class ModuleManager {
     }
 
     static persistState(): void {
-        const localState: Record<string, { enabled: boolean, downloaded: boolean, size: number, version?: string, installedVersion?: string, subModules?: Record<string, { downloaded: boolean, size: number }> }> = {};
+        const localState: Record<string, { enabled: boolean, downloaded: boolean, size: number, installedVersion?: string, subModules?: Record<string, { downloaded: boolean, size: number }> }> = {};
         const sessionState: Record<string, { enabled: boolean }> = {};
 
         for (const mod of this._modules.values()) {
@@ -572,7 +621,6 @@ export class ModuleManager {
                     enabled: mod.isActive(),
                     downloaded: mod.downloaded.getObject() === true,
                     size: mod.totalSize.getObject() ?? 0,
-                    ...(mod.version !== undefined ? { version: mod.version } : {}),
                     ...(mod.installedVersion !== undefined ? { installedVersion: mod.installedVersion } : {}),
                     ...(subModules ? { subModules } : {})
                 };
@@ -599,7 +647,7 @@ export class ModuleManager {
         try {
             const raw = localStorage.getItem(this.STORAGE_KEY);
             if (raw) {
-                const state: Record<string, { enabled: boolean, downloaded: boolean, size?: number, version?: string, installedVersion?: string, subModules?: Record<string, { enabled?: boolean, downloaded: boolean, size?: number }> } | boolean> = JSON.parse(raw);
+                const state: Record<string, { enabled: boolean, downloaded: boolean, size?: number, installedVersion?: string, subModules?: Record<string, { enabled?: boolean, downloaded: boolean, size?: number }> } | boolean> = JSON.parse(raw);
                 for (const [name, data] of Object.entries(state)) {
                     const mod = this._modules.get(name);
                     if (mod) {
@@ -622,8 +670,7 @@ export class ModuleManager {
                         if (mod.core && !data.downloaded) {
                             this._userEphemeralCores.add(name);
                         }
-                        // Restore installed version (used for version mismatch detection)
-                        mod._restoreInstalledVersion(data.installedVersion ?? data.version);
+                        mod._restoreInstalledVersion(data.installedVersion);
                         if (data.subModules) {
                             for (const sub of mod.getSubModules()) {
                                 const subData = data.subModules[sub.name];
@@ -635,8 +682,8 @@ export class ModuleManager {
                                 }
                             }
                         }
-                        const versionInfo = mod.version ? ` (installed: ${mod.installedVersion ?? 'none'}, current: ${mod.version})` : '';
-                        console.log(`[Module]: Restored "${name}" → downloaded=${data.downloaded}, enabled=${data.enabled}${versionInfo}`);
+                        const installedInfo = data.installedVersion ? ` (installed: ${data.installedVersion})` : '';
+                        console.log(`[Module]: Restored "${name}" → downloaded=${data.downloaded}, enabled=${data.enabled}${installedInfo}`);
                     }
                 }
             }

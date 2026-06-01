@@ -17,10 +17,13 @@ export default class CacheManager {
         const update = (currentFile, active) => {
             progress?.setObject({ totalFiles, completedFiles, currentFile, totalBytes, downloadedBytes, speed, active });
         };
-        // Estimate total size via HEAD
+        // Estimate total size via HEAD.
+        // `cache: 'reload'` forces a fresh network hit (bypassing the HTTP cache)
+        // and signals the ServiceWorker to bypass its cache too — so a re-download
+        // always fetches the latest bytes rather than re-caching stale ones.
         const sizes = await Promise.all(urls.map(async (url) => {
             try {
-                const resp = await fetch(this.resolveUrl(url), { method: 'HEAD' });
+                const resp = await fetch(this.resolveUrl(url), { method: 'HEAD', cache: 'reload' });
                 const cl = resp.headers.get('content-length');
                 return cl ? parseInt(cl, 10) : 0;
             }
@@ -36,7 +39,7 @@ export default class CacheManager {
             const fileName = url.split('/').pop() || url;
             update(fileName, true);
             try {
-                const response = await fetch(resolved);
+                const response = await fetch(resolved, { cache: 'reload' });
                 if (!response.ok) {
                     console.warn(`[CacheManager]: Failed to download ${url}: ${response.status}`);
                     failedFiles.push(url);

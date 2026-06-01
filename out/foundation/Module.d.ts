@@ -18,8 +18,6 @@ export type ModuleStruct = {
     resources?: string[];
     estimatedSize?: number;
     subModules?: SubModuleStruct[];
-    /** Bump this string whenever the module's resources change to trigger auto-reinstall in online sessions. */
-    version?: string;
 };
 export default class Module extends Observable<boolean> {
     readonly name: string;
@@ -31,11 +29,11 @@ export default class Module extends Observable<boolean> {
     readonly totalSize: Observable<number>;
     readonly downloadProgress: Observable<DownloadProgress>;
     readonly downloadError: Observable<string>;
-    /** Declared version of this module (set in ModuleStruct). */
-    readonly version?: string;
-    /** Version that was current when the module was last downloaded/installed. */
+    /** True when the installed copy is older than the version in the network manifest. */
     readonly updateAvailable: Observable<boolean>;
     private _installedVersion;
+    /** Latest version from the network manifest — set by ModuleManager, never persisted. */
+    private _latestVersion;
     private _registrations;
     private _placeholderNames;
     private _initialized;
@@ -47,7 +45,10 @@ export default class Module extends Observable<boolean> {
     get installedVersion(): string | undefined;
     /** Called by ModuleManager when restoring persisted state. Not for external use. */
     _restoreInstalledVersion(version: string | undefined): void;
-    private _refreshUpdateAvailable;
+    /** Called by ModuleManager after fetching the network manifest. Not for external use. */
+    _setLatestVersion(version: string): void;
+    /** Called by ModuleManager after a successful refresh so installedVersion stays in sync. */
+    _markInstalled(): void;
     addRegistration(fn: () => Promise<void>): void;
     getRegistrations(): ReadonlyArray<() => Promise<void>>;
     /**
@@ -101,6 +102,17 @@ export declare class ModuleManager {
     private static _userEphemeralCores;
     private static readonly STORAGE_KEY;
     private static readonly SESSION_KEY;
+    /**
+     * URL of a JSON file mapping `moduleName -> version`. It is fetched fresh
+     * from the network (bypassing all caches) so the app can detect new builds
+     * even though the bootstrap code is served from cache. Must NOT be listed
+     * among any module's cached resources.
+     */
+    private static _versionManifestUrl;
+    /** Configure the manager. Call before {@link initialize}. */
+    static configure(options: {
+        versionManifestUrl?: string;
+    }): void;
     static register(struct: ModuleStruct): Module;
     static get(name: string): Module | undefined;
     static getAll(): Module[];
@@ -113,6 +125,12 @@ export declare class ModuleManager {
      * 4. Returns all promises
      */
     static initialize(): Promise<void>[];
+    /**
+     * Fetches the version manifest fresh from the network, bypassing the HTTP
+     * cache and the ServiceWorker cache. Returns null when offline, unconfigured
+     * or on any error — callers must treat null as "no update info available".
+     */
+    private static fetchVersionManifest;
     private static autoUpdate;
     private static autoDownload;
     static persistState(): void;
