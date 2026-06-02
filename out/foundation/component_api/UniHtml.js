@@ -66,12 +66,13 @@ export default class UniHtml {
             renderTarget.removeChild(renderTarget.firstChild);
         }
         const promises = [];
-        const childrens = Array.from(holder.documentFragment.childNodes);
+        const childrens = Array.from(holder.documentFragment.querySelectorAll('*'));
         for (const child of childrens) {
-            if (!(child instanceof UniHtml))
+            const status = child._status;
+            if (!status)
                 continue;
             const promise = new Promise((resolve) => {
-                if (child._status.getObject() === "ready")
+                if (status.getObject() === "ready")
                     return resolve();
                 const handler = (e) => {
                     if (e.detail.status === "ready") {
